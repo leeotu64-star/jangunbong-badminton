@@ -1,3 +1,4 @@
+```
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>장군봉 배드민턴</title>
@@ -46,8 +47,7 @@ function showError(err){
   }
 }
 async function get(){
-  const {data,error}=await sb.from("waiting_state").select("*").eq("id",ROOT).maybeSingle();
-  if(error) throw error;
+  const data=await sbGet();
   return data?data:cloneDef();
 }
 async function save(s){
@@ -61,8 +61,7 @@ async function save(s){
   });
 }
 async function ensure(){
-  const {data,error}=await sb.from("waiting_state").select("id").eq("id",ROOT).maybeSingle();
-  if(error) throw error;
+  const data=await sbGet();
   if(!data) await save(cloneDef());
 }
 async function advance(s){
@@ -108,6 +107,7 @@ function route(){
 }
 
 function customer(){
+  const app=document.getElementById("app");
   app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">고객에게 보이는 실시간 대기 현황</div></div><div id="clock"></div></header><div class="wrap"><div class="stats" id="stats"></div><div class="courts" id="courts"></div></div>';
   renderCustomer(cloneDef());
   sub(renderCustomer);
@@ -129,6 +129,7 @@ function renderCustomer(s){
 }
 
 function register(){
+  const app=document.getElementById("app");
   app.innerHTML='<div class="form"><div class="formhead"><h1>장군봉 배드민턴 스마트 대기</h1><div>간편하게 코트 대기를 등록하세요.</div></div><div class="formbody"><div class="field"><label>닉네임 *</label><input id="n"></div><div class="field"><label>게임 방식 *</label><select id="g"><option value="">게임 방식을 선택해주세요</option><option>4인 복식</option><option>2인 단식</option><option>난타</option></select></div><div class="field"><label>코트 선택 *</label><select id="c"><option value="">코트를 선택해주세요</option><option value="1">1번 코트</option><option value="2">2번 코트</option><option value="3">3번 코트</option><option value="4">4번 코트</option><option value="5">5번 코트</option></select></div><div class="notice">● 선택한 코트의 대기 순번이 등록됩니다.<br>● 게임 시작 전까지 대기 취소가 가능합니다.</div><div id="e" style="color:#d71920;font-weight:800"></div><button class="btn" onclick="reg()">대기 등록하기</button></div></div>';
 }
 async function reg(){
@@ -150,6 +151,7 @@ async function reg(){
 }
 
 function waiting(){
+  const app=document.getElementById("app");
   app.innerHTML='<div class="wait"><div class="waithead"><h2>장군봉 배드민턴 스마트 대기</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
   renderWaiting(cloneDef());
   sub(renderWaiting);
@@ -187,6 +189,7 @@ async function finish(){
 }
 
 function admin(){
+  const app=document.getElementById("app");
   app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 관리자</div><div class="sub">스마트 대기 관리 시스템</div></div><div><a href="?" style="color:#fff">고객 화면</a></div></header><div class="admin"><aside class="side"><h2>관리자 모드</h2><div class="nav on">코트 막기</div><div class="nav">시간 늘리기</div><div class="nav">팀 늘리기</div></aside><main class="main"><section class="panel"><h2>코트 막기</h2><div class="grid" id="cs"></div></section><section class="panel"><h2>게임 시간 설정</h2><div class="settings"><div class="setting">난타 <input id="g1" type="number" min="15" max="30">분</div><div class="setting">4인 복식 <input id="g2" type="number" min="15" max="30">분</div><div class="setting">2인 단식 <input id="g3" type="number" min="15" max="30">분</div></div></section><section class="panel"><h2>팀 늘리기</h2><input id="mx" type="number" min="1" max="20"> 팀</section><button class="save" onclick="saveAdmin()">저장</button><section class="panel"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>';
   renderAdmin(cloneDef()); sub(renderAdmin);
 }
@@ -212,3 +215,4 @@ async function force(id){try{let s=await get(),c=s.courts.find(c=>c.id===id);if(
   ensure().catch(e=>console.error(e));
 })();
 </script></body></html>
+```
