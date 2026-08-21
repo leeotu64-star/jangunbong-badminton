@@ -19,39 +19,36 @@ const SUPABASE_URL="https://jvwrwckjumnzzecazgku.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
 </script>
 <script>
-const SB_HEADERS={
-  "apikey":SUPABASE_ANON_KEY,
-  "Content-Type":"application/json",
-  "Accept":"application/json"
-};
+const SB_HEADERS={"apikey":SUPABASE_ANON_KEY,"Content-Type":"application/json","Accept":"application/json"};
 async function sbGet(){
-  const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state&select=*",{headers:SB_HEADERS,cache:"no-store"});
-  if(!r.ok){
-    let detail="";
-    try{detail=await r.text()}catch(_){}
-    throw new Error("Supabase 조회 오류: "+r.status+" "+detail);
-  }
-  const a=await r.json();
-  return a[0]||null;
+  const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state&select=*",{
+    method:"GET",
+    headers:{"apikey":SUPABASE_ANON_KEY,"Accept":"application/json"},
+    cache:"no-store"
+  });
+  const text=await r.text();
+  if(!r.ok) throw new Error("조회 오류 "+r.status+" : "+text);
+  const rows=text?JSON.parse(text):[];
+  return rows[0]||null;
 }
 async function sbUpsert(row){
   const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state",{
     method:"PATCH",
-    headers:{...SB_HEADERS,"Prefer":"return=representation"},
+    headers:{
+      "apikey":SUPABASE_ANON_KEY,
+      "Content-Type":"application/json",
+      "Accept":"application/json",
+      "Prefer":"return=minimal"
+    },
     body:JSON.stringify({
       settings:row.settings,
       max_per_court:Number(row.max_per_court||5),
       finished:row.finished||{},
-      courts:row.courts||[]
+      courts:Array.isArray(row.courts)?row.courts:[]
     })
   });
   const text=await r.text();
-  if(!r.ok) throw new Error("Supabase 저장 오류 "+r.status+" : "+text);
-  let rows=[];
-  try{rows=text?JSON.parse(text):[]}catch(_){}
-  if(Array.isArray(rows) && rows.length===0){
-    throw new Error("Supabase 저장 오류 : waiting_state 행을 수정하지 못했습니다.");
-  }
+  if(!r.ok) throw new Error("저장 오류 "+r.status+" : "+text);
   return true;
 }const ROOT="waiting_state";
 const params=new URLSearchParams(location.search);
@@ -243,14 +240,14 @@ async function reg(){
     x.queue.push({ticket:t,nickname:nn,game:gg,court:id,createdAt:Date.now()});
 
     // Normalize and start the first waiting customer if the court is empty.
-    await advance(s,false);
+    await advance(s);
     await save(s);
 
-    location.replace(location.pathname+"?page=waiting&ticket="+encodeURIComponent(t));
+    location.replace("?page=waiting&ticket="+encodeURIComponent(t));
   }catch(e){
     console.error(e);
     const msg=String(e?.message||e);
-    err(msg);
+    err(msg.includes("Supabase") ? msg.replace(/^Supabase (조회|저장) 오류:\s*/,"") : "등록 중 오류가 발생했습니다.");
   }
 }
 
