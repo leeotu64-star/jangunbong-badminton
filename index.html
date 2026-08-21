@@ -37,8 +37,7 @@ async function sbUpsert(row){
     throw new Error("Supabase 저장 오류: "+r.status+" "+detail);
   }
   return true;
-}
-const ROOT="waiting_state";
+}const ROOT="waiting_state";
 const params=new URLSearchParams(location.search);
 const REGISTER_URL=location.origin+location.pathname+"?page=register";
 const ticket=params.get("ticket")||"";
