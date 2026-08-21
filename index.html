@@ -133,24 +133,103 @@ function renderCustomer(s){
 
 function register(){
   const app=document.getElementById("app");
-  app.innerHTML='<div class="form"><div class="formhead"><h1>장군봉 배드민턴 스마트 대기</h1><div>간편하게 코트 대기를 등록하세요.</div></div><div class="formbody"><div class="field"><label>닉네임 *</label><input id="n"></div><div class="field"><label>게임 방식 *</label><select id="g"><option value="">게임 방식을 선택해주세요</option><option>4인 복식</option><option>2인 단식</option><option>난타</option></select></div><div class="field"><label>코트 선택 *</label><select id="c"><option value="">코트를 선택해주세요</option><option value="1">1번 코트</option><option value="2">2번 코트</option><option value="3">3번 코트</option><option value="4">4번 코트</option><option value="5">5번 코트</option></select></div><div class="notice">● 선택한 코트의 대기 순번이 등록됩니다.<br>● 게임 시작 전까지 대기 취소가 가능합니다.</div><div id="e" style="color:#d71920;font-weight:800"></div><button class="btn" onclick="reg()">대기 등록하기</button></div></div>';
+  app.innerHTML=`
+  <div style="min-height:100vh;background:#f4f7fb;padding:14px 12px 28px">
+    <div style="max-width:430px;margin:0 auto">
+      <div style="background:#061b4f;color:#fff;border-radius:18px 18px 0 0;padding:16px 18px 18px;text-align:center">
+        <div style="font-size:12px;color:#69a7ff;font-weight:800;margin-bottom:8px">간편하게 코트 대기 등록</div>
+        <div style="font-size:21px;font-weight:900">장군봉 배드민턴 스마트 대기</div>
+        <div style="font-size:11px;margin-top:5px">QR로 접속하여 대기 등록해주세요.</div>
+      </div>
+      <div style="background:#fff;border-radius:0 0 18px 18px;padding:20px 18px;box-shadow:0 8px 24px #001b4f18">
+        <div class="field"><label>닉네임 *</label><input id="n" placeholder="닉네임을 입력해주세요"></div>
+        <div class="field"><label>게임 방식 *</label>
+          <select id="g">
+            <option value="">게임 방식을 선택해주세요</option>
+            <option>4인 복식</option><option>2인 단식</option><option>난타</option>
+          </select>
+        </div>
+        <div class="field"><label>코트 선택 *</label>
+          <select id="c">
+            <option value="">코트를 선택해주세요</option>
+            <option value="1">1번 코트</option><option value="2">2번 코트</option>
+            <option value="3">3번 코트</option><option value="4">4번 코트</option><option value="5">5번 코트</option>
+          </select>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 2px 14px">
+          <span style="font-size:13px;font-weight:800">이용 시간</span>
+          <strong id="duration">15분</strong>
+        </div>
+        <div class="notice">
+          <b>● 안내</b><br>
+          • 대기 등록 후 현재 순번과 예상 대기시간을 확인할 수 있습니다.<br>
+          • 순번이 되면 게임이 자동으로 시작됩니다.<br>
+          • 게임 종료 후 퇴장 버튼을 눌러주세요.
+        </div>
+        <div id="e" style="display:none;color:#d71920;background:#fff1f1;border:1px solid #ffc9c9;border-radius:8px;padding:10px;font-size:12px;font-weight:800;margin-bottom:10px"></div>
+        <button class="btn" id="regBtn" onclick="reg()">대기 등록하기</button>
+        <div style="text-align:center;font-size:10px;color:#7b8494;margin-top:10px">※ 대기 등록 후 관리자가 확인할 수 있습니다.</div>
+      </div>
+    </div>
+  </div>`;
+  loadRegisterDuration();
 }
-async function reg(){
+
+async function loadRegisterDuration(){
   try{
-    let s=await get(), id=Number(document.getElementById("c").value);
-    const nn=document.getElementById("n").value.trim(), gg=document.getElementById("g").value, ee=document.getElementById("e");
-    if(!nn||!gg||!id){ee.textContent="필수 항목을 입력해주세요.";return}
-    let x=s.courts.find(x=>x.id===id);
-    if(!x){ee.textContent="코트를 찾을 수 없습니다.";return}
-    if(x.blocked){ee.textContent="현재 막혀 있는 코트입니다.";return}
-    if((x.queue||[]).length+(x.active?1:0)>=s.max_per_court){ee.textContent="대기가 가득 찼습니다.";return}
-    let t=crypto.randomUUID();
-    x.queue=x.queue||[];
+    const s=await get();
+    const game=document.getElementById("g"), out=document.getElementById("duration");
+    if(!game||!out)return;
+    const sync=()=>{out.textContent=(s.settings[game.value]||15)+"분"};
+    game.addEventListener("change",sync); sync();
+  }catch(e){}
+}
+
+async function reg(){
+  const btn=document.getElementById("regBtn"), ee=document.getElementById("e");
+  const nn=document.getElementById("n").value.trim();
+  const gg=document.getElementById("g").value;
+  const id=Number(document.getElementById("c").value);
+
+  const err=(msg)=>{
+    ee.style.display="block";
+    ee.textContent=msg;
+    btn.disabled=false; btn.style.opacity="1";
+  };
+
+  if(!nn||!gg||!id){err("닉네임, 게임 방식, 코트를 모두 선택해주세요.");return}
+  btn.disabled=true; btn.style.opacity=".65"; ee.style.display="none";
+
+  try{
+    let s=await get();
+    if(!s || !Array.isArray(s.courts)){
+      s=cloneDef();
+    }
+    s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
+    s.max_per_court=Number(s.max_per_court||5);
+    s.finished=s.finished||{};
+    const x=s.courts.find(v=>Number(v.id)===id);
+
+    if(!x){err("선택한 코트를 찾을 수 없습니다.");return}
+    if(x.blocked){err("현재 이용할 수 없는 코트입니다. 다른 코트를 선택해주세요.");return}
+
+    x.queue=Array.isArray(x.queue)?x.queue:[];
+    const total=x.queue.length+(x.active?1:0);
+    if(total>=s.max_per_court){err("선택한 코트의 대기가 마감되었습니다.");return}
+
+    let t=(crypto&&crypto.randomUUID)?crypto.randomUUID():("T"+Date.now()+Math.random().toString(36).slice(2));
     x.queue.push({ticket:t,nickname:nn,game:gg,court:id,createdAt:Date.now()});
+
+    // Normalize and start the first waiting customer if the court is empty.
     await advance(s);
     await save(s);
+
     location.href="?page=waiting&ticket="+encodeURIComponent(t);
-  }catch(e){document.getElementById("e").textContent="등록 중 오류가 발생했습니다.";showError(e)}
+  }catch(e){
+    console.error(e);
+    const msg=String(e?.message||e);
+    err(msg.includes("Supabase") ? "등록 정보를 저장하지 못했습니다. 관리자에게 문의해주세요." : "등록 중 오류가 발생했습니다.");
+  }
 }
 
 function waiting(){
