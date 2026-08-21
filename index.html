@@ -21,45 +21,27 @@ const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
 <script>
 const SB_HEADERS={"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"};
 async function sbGet(){
-  const url=SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state&select=id,settings,max_per_court,finished,courts";
-  const r=await fetch(url,{
-    method:"GET",
-    headers:SB_HEADERS,
-    cache:"no-store"
-  });
+  const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?select=*&id=eq.waiting_state",{headers:SB_HEADERS,cache:"no-store"});
   const text=await r.text();
   if(!r.ok) throw new Error("조회 오류 "+r.status+" : "+text);
-  let a=[];
-  try{a=JSON.parse(text)}catch(e){throw new Error("조회 응답 오류 : "+text)}
-  return a[0]||null;
+  const rows=text?JSON.parse(text):[];
+  return rows[0]||null;
 }
 async function sbUpsert(row){
-  const body={
-    settings:row.settings||{"난타":15,"4인 복식":15,"2인 단식":15},
+  const payload={
+    id:"waiting_state",
+    settings:row.settings,
     max_per_court:Number(row.max_per_court||5),
     finished:row.finished||{},
     courts:Array.isArray(row.courts)?row.courts:[]
   };
-
-  const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state",{
-    method:"PATCH",
-    headers:{
-      "apikey":SUPABASE_ANON_KEY,
-      "Authorization":"Bearer "+SUPABASE_ANON_KEY,
-      "Content-Type":"application/json",
-      "Prefer":"return=representation"
-    },
-    body:JSON.stringify(body)
+  const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?on_conflict=id",{
+    method:"POST",
+    headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates,return=minimal"},
+    body:JSON.stringify(payload)
   });
-
   const text=await r.text();
   if(!r.ok) throw new Error("저장 오류 "+r.status+" : "+text);
-
-  let result=[];
-  try{result=text?JSON.parse(text):[]}catch(e){result=[]}
-  if(Array.isArray(result) && result.length===0){
-    throw new Error("저장 오류 : waiting_state 행을 찾지 못했습니다.");
-  }
   return true;
 }const ROOT="waiting_state";
 const params=new URLSearchParams(location.search);
@@ -216,51 +198,28 @@ async function loadRegisterDuration(){
 }
 
 async function reg(){
-  const btn=document.getElementById("regBtn"), ee=document.getElementById("e");
-  const nn=document.getElementById("n").value.trim();
-  const gg=document.getElementById("g").value;
-  const id=Number(document.getElementById("c").value);
-
-  const err=(msg)=>{
-    ee.style.display="block";
-    ee.textContent=msg;
-    btn.disabled=false; btn.style.opacity="1";
-  };
-
+  const btn=document.getElementById("regBtn"),ee=document.getElementById("e");
+  const nn=document.getElementById("n").value.trim(),gg=document.getElementById("g").value,id=Number(document.getElementById("c").value);
+  const err=m=>{ee.style.display="block";ee.textContent=m;btn.disabled=false;btn.style.opacity="1"};
   if(!nn||!gg||!id){err("닉네임, 게임 방식, 코트를 모두 선택해주세요.");return}
-  btn.disabled=true; btn.style.opacity=".65"; ee.style.display="none";
-
+  btn.disabled=true;btn.style.opacity=".65";ee.style.display="none";
   try{
     let s=await get();
-    if(!s || !Array.isArray(s.courts)){
-      s=cloneDef();
-    }
+    if(!s||!Array.isArray(s.courts))s=cloneDef();
     s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
-    s.max_per_court=Number(s.max_per_court||5);
-    s.finished=s.finished||{};
-    const x=s.courts.find(v=>Number(v.id)===id);
-
-    if(!x){err("선택한 코트를 찾을 수 없습니다.");return}
-    if(x.blocked){err("현재 이용할 수 없는 코트입니다. 다른 코트를 선택해주세요.");return}
-
-    x.queue=Array.isArray(x.queue)?x.queue:[];
-    const total=x.queue.length+(x.active?1:0);
-    if(total>=s.max_per_court){err("선택한 코트의 대기가 마감되었습니다.");return}
-
-    let t=(crypto&&crypto.randomUUID)?crypto.randomUUID():("T"+Date.now()+Math.random().toString(36).slice(2));
-    x.queue.push({ticket:t,nickname:nn,game:gg,court:id,createdAt:Date.now()});
-
-    // Normalize and start the first waiting customer if the court is empty.
+    s.max_per_court=Number(s.max_per_court||5);s.finished=s.finished||{};
+    const c=s.courts.find(v=>Number(v.id)===id);
+    if(!c){err("선택한 코트를 찾을 수 없습니다.");return}
+    if(c.blocked){err("현재 이용할 수 없는 코트입니다. 다른 코트를 선택해주세요.");return}
+    c.queue=Array.isArray(c.queue)?c.queue:[];
+    if(c.queue.length+(c.active?1:0)>=s.max_per_court){err("선택한 코트의 대기가 마감되었습니다.");return}
+    const t=crypto&&crypto.randomUUID?crypto.randomUUID():"T"+Date.now()+Math.random().toString(36).slice(2);
+    c.queue.push({ticket:t,nickname:nn,game:gg,court:id,createdAt:Date.now()});
     await advance(s,false);
     await save(s);
-    window.location.href=location.pathname+"?page=waiting&ticket="+encodeURIComponent(t);
-  }catch(e){
-    console.error(e);
-    const msg=String(e?.message||e);
-    err(msg.includes("오류") ? msg : "등록 중 오류가 발생했습니다.");
-  }
+    window.location.replace(location.pathname+"?page=waiting&ticket="+encodeURIComponent(t));
+  }catch(e){console.error(e);err(String(e?.message||e))}
 }
-
 function waiting(){
   const app=document.getElementById("app");
   app.innerHTML='<div class="wait"><div class="waithead"><h2>장군봉 배드민턴 스마트 대기</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
