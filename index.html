@@ -398,9 +398,10 @@ function renderWaiting(s){
             }).join("")}
           </div>
 
-          <button class="btn cancel" onclick="cancelWait()">예약 대기 취소</button><script>startWaitRing(expected);</script>
+          <button class="btn cancel" onclick="cancelWait()">예약 대기 취소</button>
         </div>
       </div>`;
+    startWaitRing(expected);
     return;
   }
 
