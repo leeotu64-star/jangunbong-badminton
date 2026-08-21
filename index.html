@@ -15,9 +15,18 @@
 const SUPABASE_URL="https://jvwrwckjumnzzecazgku.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
 <script>
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const SB_HEADERS={"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"};
+async function sbGet(){
+  const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state&select=*",{headers:SB_HEADERS,cache:"no-store"});
+  if(!r.ok) throw new Error("Supabase 조회 오류: "+r.status);
+  const a=await r.json(); return a[0]||null;
+}
+async function sbUpsert(row){
+  const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?on_conflict=id",{method:"POST",headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates,return=representation"},body:JSON.stringify(row)});
+  if(!r.ok) throw new Error("Supabase 저장 오류: "+r.status);
+  return r.json();
+}
 const ROOT="waiting_state";
 const params=new URLSearchParams(location.search);
 const ticket=params.get("ticket")||"";
@@ -42,7 +51,7 @@ async function get(){
   return data?data:cloneDef();
 }
 async function save(s){
-  const {error}=await sb.from("waiting_state").upsert({
+  await sbUpsert({
     id:ROOT,
     settings:s.settings,
     max_per_court:s.max_per_court,
@@ -50,7 +59,6 @@ async function save(s){
     courts:s.courts,
     updated_at:new Date().toISOString()
   });
-  if(error) throw error;
 }
 async function ensure(){
   const {data,error}=await sb.from("waiting_state").select("id").eq("id",ROOT).maybeSingle();
@@ -77,16 +85,12 @@ async function advance(s){
   if(ch) await save(s);
   return s;
 }
-let liveChannel=null;
+let liveTimer=null;
 function sub(fn){
-  try{
-    if(liveChannel) sb.removeChannel(liveChannel);
-    liveChannel=sb.channel("jangunbong-live")
-      .on("postgres_changes",{event:"*",schema:"public",table:"waiting_state"},async()=>{
-        try{fn(await advance(await get()))}catch(e){showError(e)}
-      }).subscribe();
-  }catch(e){console.error(e)}
-  get().then(advance).then(fn).catch(showError);
+  if(liveTimer) clearInterval(liveTimer);
+  const refresh=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
+  refresh();
+  liveTimer=setInterval(refresh,2000);
 }
 
 /* GitHub Pages compatible routing:
@@ -199,20 +203,12 @@ async function saveAdmin(){
 async function block(id,b){try{let s=await get();s.courts.find(c=>c.id===id).blocked=b;await save(s)}catch(e){showError(e)}}
 async function force(id){try{let s=await get(),c=s.courts.find(c=>c.id===id);if(c.active){s.finished=s.finished||{};s.finished[c.active.ticket]={...c.active,endedAt:Date.now()};c.active=null}await advance(s);await save(s)}catch(e){showError(e)}}
 
-(async()=>{
-  try{
-    await ensure();
-    const r=route();
-    if(r==="admin")admin();
-    else if(r==="register")register();
-    else if(r==="waiting")waiting();
-    else customer();
-  }catch(e){
-    /* Always leave a visible page instead of a header-only blank screen. */
-    customer();
-    const box=document.getElementById("courts");
-    if(box)box.innerHTML='<div style="grid-column:1/-1;padding:30px;text-align:center;color:#b42318">실시간 데이터 연결을 확인하는 중입니다. 잠시 후 새로고침해주세요.<br><small>'+esc(e?.message||e)+'</small></div>';
-    console.error(e);
-  }
+(function(){
+  const r=route();
+  if(r==="admin")admin();
+  else if(r==="register")register();
+  else if(r==="waiting")waiting();
+  else customer();
+  ensure().catch(e=>console.error(e));
 })();
 </script></body></html>
