@@ -29,7 +29,12 @@ async function sbUpsert(row){
   const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?id=eq."+encodeURIComponent(ROOT),{
     method:"PATCH",
     headers:{...SB_HEADERS,"Prefer":"return=minimal"},
-    body:JSON.stringify(row)
+    body:JSON.stringify({
+      settings:row.settings,
+      max_per_court:row.max_per_court,
+      finished:row.finished||{},
+      courts:row.courts
+    })
   });
   if(!r.ok){
     let detail="";
@@ -90,7 +95,6 @@ async function advance(s){
       ch=true;
     }
   }
-  if(ch) await save(s);
   return s;
 }
 let liveTimer=null;
@@ -148,7 +152,7 @@ function register(){
         <div style="font-size:11px;margin-top:5px">QR로 접속하여 대기 등록해주세요.</div>
       </div>
       <div style="background:#fff;border-radius:0 0 18px 18px;padding:20px 18px;box-shadow:0 8px 24px #001b4f18">
-        <div class="field"><label>닉네임 *</label><input id="n" placeholder="닉네임을 입력해주세요"></div>
+        <div class="field"><label>닉네임 *</label><input id="n" name="queue_nickname" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="닉네임을 입력해주세요"></div>
         <div class="field"><label>게임 방식 *</label>
           <select id="g">
             <option value="">게임 방식을 선택해주세요</option>
@@ -256,7 +260,7 @@ function renderWaiting(s){
   if(a){
     const remain=left(a.endAt);
     w.innerHTML=`
-      <div style="font-size:12px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">ⓘ 15분 경과 후 퇴장 (자동 안내)</div>
+      <div style="font-size:12px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">ⓘ 이용시간 종료 후 퇴장 (자동 안내)</div>
       <div class="row"><span>닉네임</span><b>${esc(a.nickname)}</b></div>
       <div class="row"><span>선택 코트</span><b>${a.court}번 코트</b></div>
       <div class="row"><span>이용 시간</span><b>${tm(a.startAt)} ~ ${tm(a.endAt)}</b></div>
@@ -300,7 +304,7 @@ function renderWaiting(s){
         <small>(현재 대기 중)</small>
       </div>
       <div style="display:flex;justify-content:center;gap:28px;margin:12px 0 4px;font-size:12px">
-        <span>작 ${new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}</span>
+        <span>작 ${new Date(q.createdAt||Date.now()).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}</span>
         <span>예상 입장 ${new Date(Date.now()+expected*60000).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}</span>
       </div>
       <div class="timer">${String(expected).padStart(2,"0")}:00</div>
