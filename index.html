@@ -37,30 +37,14 @@ async function sbUpsert(row){
     finished:row.finished||{},
     courts:Array.isArray(row.courts)?row.courts:[]
   };
-
-  // 1) 기존 waiting_state 행을 수정
-  const patch=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state",{
-    method:"PATCH",
-    headers:{...SB_HEADERS,"Prefer":"return=representation"},
-    body:JSON.stringify(payload)
-  });
-  if(!patch.ok){
-    let detail=""; try{detail=await patch.text()}catch(_){}
-    throw new Error("Supabase 저장 오류: "+patch.status+" "+detail);
-  }
-
-  const changed=await patch.json();
-  if(Array.isArray(changed) && changed.length) return true;
-
-  // 2) 행이 없으면 최초 1회 생성
-  const ins=await fetch(SUPABASE_URL+"/rest/v1/waiting_state",{
+  const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?on_conflict=id",{
     method:"POST",
-    headers:{...SB_HEADERS,"Prefer":"return=representation"},
+    headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates,return=minimal"},
     body:JSON.stringify(payload)
   });
-  if(!ins.ok){
-    let detail=""; try{detail=await ins.text()}catch(_){}
-    throw new Error("Supabase 최초 저장 오류: "+ins.status+" "+detail);
+  if(!r.ok){
+    let detail=""; try{detail=await r.text()}catch(_){}
+    throw new Error("Supabase 저장 오류: "+r.status+" "+detail);
   }
   return true;
 }const ROOT="waiting_state";
@@ -99,7 +83,7 @@ async function ensure(){
   const data=await sbGet();
   if(!data) await save(cloneDef());
 }
-async function advance(s){
+async function advance(s,doSave=true){
   s.finished=s.finished||{};
   let ch=false;
   for(const c of s.courts){
@@ -116,7 +100,7 @@ async function advance(s){
       ch=true;
     }
   }
-  if(ch) await save(s);
+  if(ch && doSave) await save(s);
   return s;
 }
 let liveTimer=null;
@@ -253,9 +237,8 @@ async function reg(){
     x.queue.push({ticket:t,nickname:nn,game:gg,court:id,createdAt:Date.now()});
 
     // Normalize and start the first waiting customer if the court is empty.
-    await advance(s);
+    await advance(s,false);
     await save(s);
-
     location.replace("?page=waiting&ticket="+encodeURIComponent(t));
   }catch(e){
     console.error(e);
@@ -267,7 +250,6 @@ async function reg(){
 function waiting(){
   const app=document.getElementById("app");
   app.innerHTML='<div class="wait"><div class="waithead"><h2>장군봉 배드민턴 스마트 대기</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
-  renderWaiting(cloneDef());
   sub(renderWaiting);
 }
 function renderWaiting(s){
@@ -282,7 +264,7 @@ function renderWaiting(s){
   if(a){
     const remain=left(a.endAt);
     w.innerHTML=`
-      <div style="font-size:12px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">ⓘ 15분 경과 후 퇴장 (자동 안내)</div>
+      <div style="font-size:12px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">ⓘ 이용시간 종료 후 퇴장 (자동 안내)</div>
       <div class="row"><span>닉네임</span><b>${esc(a.nickname)}</b></div>
       <div class="row"><span>선택 코트</span><b>${a.court}번 코트</b></div>
       <div class="row"><span>이용 시간</span><b>${tm(a.startAt)} ~ ${tm(a.endAt)}</b></div>
