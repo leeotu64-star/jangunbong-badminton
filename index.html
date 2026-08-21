@@ -6,7 +6,7 @@
 .header{height:76px;background:#061b4f;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px}.brand{font-size:26px;font-weight:800}.sub{font-size:13px}.wrap{padding:16px;max-width:1500px;margin:auto}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}.stat{border:1px solid #e1e6ef;border-radius:9px;padding:12px;text-align:center}.stat b{display:block;font-size:30px;margin-top:3px}
 .courts{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.court{border:1px solid #d8dfeb;border-radius:9px;overflow:hidden}.head{height:52px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:19px;border-bottom:1px solid #e5e9f0}.num{display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;color:#fff;border-radius:6px;margin-right:7px}.badge{padding:5px 10px;border-radius:14px;color:#fff;font-size:11px}.body{padding:11px}.row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #edf0f4}.label{font-size:12px}.val{font-weight:800}.remain{font-size:26px;color:#07854b}.qbox{font-size:18px;margin-top:2px;border:1px solid #e1e6ee;border-radius:7px;overflow-y:auto;max-height:240px}.qtitle{padding:7px;background:#f6f8fb;font-weight:800;font-size:13px}.qrow{min-height:44px;font-size:17px;display:grid;grid-template-columns:28px 1fr 1fr;padding:5px 8px;border-top:1px solid #edf0f4;font-size:11px;min-height:27px;box-sizing:border-box}
-.form,.wait{max-width:900px;width:92vw;margin:12px auto;border:1px solid #dce4ef;border-radius:16px;overflow:hidden;box-shadow:0 8px 28px #0001}.wait{max-width:900px}.formhead,.waithead{background:#061b4f;color:#fff;text-align:center;padding:22px}.formbody,.waitbody{padding:18px}.field{margin-bottom:14px}.field label{display:block;font-weight:800;margin-bottom:6px}.field input,.field select{width:100%;padding:12px;border:1px solid #d6deea;border-radius:7px;font-size:15px}.btn{width:100%;padding:13px;border:0;border-radius:7px;background:#0d58df;color:#fff;font-weight:800;font-size:16px}.cancel{background:#e50914}.notice{padding:12px;background:#eef5ff;border-radius:8px;font-size:12px;line-height:1.7;margin-bottom:12px}.my{background:#eef5ff;border:1px solid #cbdcff;border-radius:8px;text-align:center;padding:10px;margin:10px 0}.my strong{display:block;color:#125fe3;font-size:38px}.timer{text-align:center;font-size:29px;font-weight:900;margin:5px}.ring{width:68px;height:68px;margin:0 auto 2px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:conic-gradient(#08a05c 360deg,#dcefe5 0deg);position:relative}.ring:before{content:'';position:absolute;width:64px;height:64px;background:#fff;border-radius:50%}.ringText{position:relative;z-index:1;text-align:center;line-height:1.05}.ringText small{display:block;font-size:9px;color:#168454;margin-bottom:2px}.ringText b{font-size:18px;color:#111}.wait-only{max-width:430px;margin:14px auto;border:0;box-shadow:none;background:transparent}
+.form,.wait{max-width:900px;width:92vw;margin:12px auto;border:1px solid #dce4ef;border-radius:16px;overflow:hidden;box-shadow:0 8px 28px #0001}.wait{max-width:430px;width:calc(100vw - 20px);margin:10px auto}.formhead,.waithead{background:#061b4f;color:#fff;text-align:center;padding:22px}.formbody,.waitbody{padding:18px}.field{margin-bottom:14px}.field label{display:block;font-weight:800;margin-bottom:6px}.field input,.field select{width:100%;padding:12px;border:1px solid #d6deea;border-radius:7px;font-size:15px}.btn{width:100%;padding:13px;border:0;border-radius:7px;background:#0d58df;color:#fff;font-weight:800;font-size:16px}.cancel{background:#e50914}.notice{padding:12px;background:#eef5ff;border-radius:8px;font-size:12px;line-height:1.7;margin-bottom:12px}.my{background:#eef5ff;border:1px solid #cbdcff;border-radius:8px;text-align:center;padding:10px;margin:10px 0}.my strong{display:block;color:#125fe3;font-size:38px}.timer{text-align:center;font-size:29px;font-weight:900;margin:5px}.ring{width:68px;height:68px;margin:0 auto 2px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:conic-gradient(#08a05c 360deg,#dcefe5 0deg);position:relative}.ring:before{content:'';position:absolute;width:64px;height:64px;background:#fff;border-radius:50%}.ringText{position:relative;z-index:1;text-align:center;line-height:1.05}.ringText small{display:block;font-size:9px;color:#168454;margin-bottom:2px}.ringText b{font-size:18px;color:#111}.wait-only{max-width:430px;margin:14px auto;border:0;box-shadow:none;background:transparent}
 .wait-only .waitbody{padding:0}
 .wait .doneScreen{font-size:15px}
 .wait .doneScreen .row{font-size:16px;margin:7px 0}
@@ -305,18 +305,14 @@ function renderWaiting(s){
   /* 3번째 화면: 15분 종료 */
   if(fin){
     w.innerHTML=`
-      <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
-        ● 15분 경과 후 퇴장 (자동 안내)
-      </div>
-      <div class="doneScreen">
-        <div class="doneIcon">✓</div>
-        <h2>장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2>
-        <p>이용 시간이 종료되었습니다.<br>다음 고객을 위해<br>퇴장 버튼을 눌러주세요.</p>
-        <div class="notice">퇴장을 눌러야<br>다시 이용 가능합니다.</div>
-        <button class="btn" onclick="finish()">퇴장하기</button>
-      </div>
-      <div style="font-size:10px;color:#777;text-align:center;margin-top:8px">
-        ※ 퇴장 버튼을 눌러야 다음 대기자가 이용을 시작합니다.
+      <div style="background:#061b4f;color:#fff;border-radius:14px;padding:16px 12px;text-align:center">
+        <div style="font-size:11px;color:#20a8ff;font-weight:900;letter-spacing:.8px;margin-bottom:8px">COURT QUEUE SYSTEM</div>
+        <div style="font-size:58px;line-height:1;margin:2px 0 10px">◷</div>
+        <h2 style="font-size:25px;line-height:1.45;margin:6px 0 14px">장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2>
+        <p style="font-size:16px;line-height:1.7;margin:0 0 14px">이용 시간이 종료되었습니다.<br>다음 고객을 위해<br>퇴장 버튼을 눌러주세요.</p>
+        <div class="notice" style="background:transparent;border:2px solid #1688ff;color:#fff;font-size:16px;font-weight:900;line-height:1.5;margin:0 0 14px;padding:12px">퇴장을 눌러야<br>다시 이용 가능합니다.</div>
+        <button class="btn cancel" style="font-size:22px;padding:16px" onclick="finish()">퇴장하기</button>
+        <div style="font-size:11px;color:#fff;margin-top:10px">※ 퇴장 시 다음 대기팀이 자동으로 입장합니다.</div>
       </div>`;
     return;
   }
@@ -325,22 +321,21 @@ function renderWaiting(s){
   if(a){
     const remain=left(a.endAt);
     w.innerHTML=`
-      <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
-        ● 15분 경과 후 퇴장 (자동 안내)
-      </div>
-      <div class="doneScreen" style="background:#061b4f;text-align:left">
-        <div style="text-align:center;font-size:12px;font-weight:800;margin-bottom:12px">장군봉 배드민턴 스마트 대기</div>
-        <div class="row"><span style="color:#fff">닉네임</span><b style="color:#fff">${esc(a.nickname)}</b></div>
-        <div class="row"><span style="color:#fff">게임 방식</span><b style="color:#fff">${esc(a.game)}</b></div>
-        <div class="row"><span style="color:#fff">선택 코트</span><b style="color:#fff">${a.court}번 코트</b></div>
-        <div class="row"><span style="color:#fff">이용 시간</span><b style="color:#fff">${tm(a.startAt)} ~ ${tm(a.endAt)}</b></div>
-        <div class="my">
-          <small style="font-size:16px;font-weight:800">현재 이용자</small>
-          <strong style="font-size:30px">${esc(a.nickname)}</strong>
-          <small>이용 잔여시간</small>
+      <div style="background:#061b4f;color:#fff;border-radius:14px;padding:18px 14px;text-align:center">
+        <div style="font-size:24px;font-weight:900;line-height:1.35;margin-bottom:14px">장군봉 배드민턴 스마트 대기</div>
+        <div style="background:#fff;color:#061b4f;border-radius:12px;padding:12px 14px;text-align:left">
+          <div class="row"><span style="font-size:18px">닉네임</span><b style="font-size:20px;color:#061b4f">${esc(a.nickname)}</b></div>
+          <div class="row"><span style="font-size:18px">게임 방식</span><b style="font-size:20px;color:#061b4f">${esc(a.game)}</b></div>
+          <div class="row"><span style="font-size:18px">선택 코트</span><b style="font-size:20px;color:#061b4f">${a.court}번 코트</b></div>
+          <div class="row"><span style="font-size:18px">이용 시간</span><b style="font-size:20px;color:#061b4f">${tm(a.startAt)} ~ ${tm(a.endAt)}</b></div>
+          <div class="my" style="background:#eef5ff;color:#061b4f;padding:16px 8px;margin:12px 0 8px">
+            <small style="font-size:18px;font-weight:900;color:#061b4f">현재 이용자</small>
+            <strong style="font-size:34px;color:#1461e8">${esc(a.nickname)}</strong>
+            <small style="font-size:15px;color:#061b4f;font-weight:900">이용 잔여시간</small>
+          </div>
         </div>
-        <div class="timer" style="color:#fff">${remain}</div>
-        <button class="btn cancel" onclick="leave()">퇴장하기</button>
+        <div class="timer" style="color:#fff;font-size:38px;font-weight:900;margin:12px 0">${remain}</div>
+        <button class="btn cancel" style="font-size:20px;padding:16px" onclick="leave()">퇴장하기</button>
       </div>`;
     return;
   }
