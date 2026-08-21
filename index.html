@@ -15,33 +15,208 @@
 const SUPABASE_URL="https://jvwrwckjumnzzecazgku.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
 <script>
+/* Supabase */
+const SUPABASE_URL="https://jvwrwckjumnzzecazgku.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
+
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-const ROOT="waiting_state",ticket=new URLSearchParams(location.search).get("ticket")||"";
+const ROOT="waiting_state";
+const params=new URLSearchParams(location.search);
+const ticket=params.get("ticket")||"";
 const colors=["#07854b","#1461e8","#6332d7","#ff7900","#e51e2a"];
 const def={id:ROOT,settings:{"난타":15,"4인 복식":15,"2인 단식":15},max_per_court:5,finished:{},courts:[1,2,3,4,5].map(id=>({id,blocked:false,active:null,queue:[]}))};
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function tm(t){return new Date(t).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}
 function left(t){let n=Math.max(0,Math.ceil((t-Date.now())/1000));return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}
-async function get(){let {data,error}=await sb.from("waiting_state").select("*").eq("id",ROOT).maybeSingle();if(error)throw error;return data?data:JSON.parse(JSON.stringify(def))}
-async function save(s){await sb.from("waiting_state").upsert({id:ROOT,settings:s.settings,max_per_court:s.max_per_court,finished:s.finished,courts:s.courts,updated_at:new Date().toISOString()})}
-async function ensure(){let {data}=await sb.from("waiting_state").select("id").eq("id",ROOT).maybeSingle();if(!data)await save(def)}
-async function advance(s){s.finished=s.finished||{};let ch=false;for(const c of s.courts){if(c.active&&Date.now()>=c.active.endAt){let a=c.active;s.finished[a.ticket]={...a,endedAt:Date.now()};c.active=null;ch=true}if(!c.active&&!c.blocked&&(c.queue||[]).length){let x=c.queue.shift(),m=Number(s.settings[x.game]||15),st=Date.now();c.active={...x,startAt:st,endAt:st+m*60000};ch=true}}if(ch)await save(s);return s}
-function sub(fn){sb.channel("jangunbong-live").on("postgres_changes",{event:"*",schema:"public",table:"waiting_state"},()=>get().then(advance).then(fn)).subscribe();get().then(advance).then(fn)}
-function customer(){app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">고객에게 보이는 실시간 대기 현황</div></div><div id="clock"></div></header><div class="wrap"><div class="stats" id="stats"></div><div class="courts" id="courts"></div></div>';sub(renderCustomer);setInterval(()=>clock.textContent=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"}),1000)}
-function renderCustomer(s){let a=s.courts.filter(c=>c.active).length,w=s.courts.reduce((n,c)=>n+(c.queue||[]).length,0);stats.innerHTML='<div class="stat">전체 코트<b>5 개</b></div><div class="stat">이용 중 코트<b>'+a+' 개</b></div><div class="stat">대기 중 팀<b>'+w+' 팀</b></div><div class="stat">전체 대기 인원<b>'+w+' 팀</b></div>';courts.innerHTML=s.courts.map((c,i)=>{let q=c.queue||[],a=c.active;return '<section class="court"><div class="head"><span><span class="num" style="background:'+colors[i]+'">'+c.id+'</span>'+c.id+'번 코트</span><span class="badge" style="background:'+(a?colors[i]:'#718096')+'">'+(c.blocked?'사용 불가':a?'이용 중':'대기 중')+'</span></div><div class="body">'+(a?'<div class="row"><span class="label">닉네임</span><span class="val">'+esc(a.nickname)+'</span></div><div class="row"><span class="label">게임 방식</span><span class="val">'+a.game+'</span></div><div class="row"><span class="label">이용 시간</span><span class="val">'+tm(a.startAt)+' ~ '+tm(a.endAt)+'</span></div><div class="row"><span class="label">남은 시간</span><span class="val remain">'+left(a.endAt)+'</span></div>':'<div class="row"><span class="label">현재 대기 팀</span><span class="val">'+q.length+'팀</span></div><div class="row"><span class="label">예상 대기 시간</span><span class="val">약 '+q.length*5+'분</span></div>')+'<div class="qbox"><div class="qtitle">'+c.id+'번 코트 대기 현황 (총 '+q.length+'팀)</div>'+q.map((x,j)=>'<div class="qrow"><b>'+(j+1)+'</b><span>'+esc(x.nickname)+'</span><span>'+x.game+'</span></div>').join('')+'</div></div></section>'}).join('')}
-function register(){app.innerHTML='<div class="form"><div class="formhead"><h1>장군봉 배드민턴 스마트 대기</h1><div>간편하게 코트 대기를 등록하세요.</div></div><div class="formbody"><div class="field"><label>닉네임 *</label><input id="n"></div><div class="field"><label>게임 방식 *</label><select id="g"><option value="">게임 방식을 선택해주세요</option><option>4인 복식</option><option>2인 단식</option><option>난타</option></select></div><div class="field"><label>코트 선택 *</label><select id="c"><option value="">코트를 선택해주세요</option><option value="1">1번 코트</option><option value="2">2번 코트</option><option value="3">3번 코트</option><option value="4">4번 코트</option><option value="5">5번 코트</option></select></div><div class="notice">● 선택한 코트의 대기 순번이 등록됩니다.<br>● 게임 시작 전까지 대기 취소가 가능합니다.</div><div id="e" style="color:#d71920;font-weight:800"></div><button class="btn" onclick="reg()">대기 등록하기</button></div></div>'}
-async function reg(){let s=await get(),id=+c.value;if(!n.value.trim()||!g.value||!id){e.textContent="필수 항목을 입력해주세요.";return}let x=s.courts.find(x=>x.id===id);if(x.blocked){e.textContent="현재 막혀 있는 코트입니다.";return}if((x.queue||[]).length+(x.active?1:0)>=s.max_per_court){e.textContent="대기가 가득 찼습니다.";return}let t=crypto.randomUUID();x.queue=x.queue||[];x.queue.push({ticket:t,nickname:n.value.trim(),game:g.value,court:id,createdAt:Date.now()});await advance(s);location="/waiting?ticket="+t}
-function waiting(){app.innerHTML='<div class="wait"><div class="waithead"><h2>장군봉 배드민턴 스마트 대기</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';sub(renderWaiting)}
-function renderWaiting(s){let a=null,q=null,c=null,fin=s.finished?.[ticket];for(const x of s.courts){if(x.active?.ticket===ticket){a=x.active;c=x}let z=(x.queue||[]).find(y=>y.ticket===ticket);if(z){q=z;c=x}}if(a){w.innerHTML='<div class="row"><span>닉네임</span><b>'+esc(a.nickname)+'</b></div><div class="row"><span>선택 코트</span><b>'+a.court+'번 코트</b></div><div class="row"><span>게임 방식</span><b>'+a.game+'</b></div><div class="my"><small>현재 상태</small><strong>이용 중</strong></div><div class="row"><span>이용 시간</span><b>'+tm(a.startAt)+' ~ '+tm(a.endAt)+'</b></div><div class="timer">'+left(a.endAt)+'</div><button class="btn cancel" onclick="leave()">퇴장하기</button>';return}if(fin){w.innerHTML='<div style="text-align:center;padding:8px"><div style="font-size:48px">✓</div><h2>장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2><p>이용 시간이 종료되었습니다.<br>다음 고객을 위해<br>퇴장 버튼을 눌러주세요.</p><div class="notice">퇴장을 눌러야 다시 이용 가능합니다.</div><button class="btn cancel" onclick="finish()">퇴장하기</button></div>';return}if(q){let arr=c.queue||[],pos=arr.findIndex(x=>x.ticket===ticket)+1;w.innerHTML='<div class="row"><span>닉네임</span><b>'+esc(q.nickname)+'</b></div><div class="row"><span>선택 코트</span><b>'+q.court+'번 코트</b></div><div class="row"><span>게임 방식</span><b>'+q.game+'</b></div><div class="row"><span>이용 시간</span><b>'+s.settings[q.game]+'분</b></div><div class="my"><small>나의 순번</small><strong>'+pos+'번</strong><small>(현재 대기 중)</small></div><div class="qbox"><div class="qtitle">'+c.id+'번 코트 대기 현황 (총 '+arr.length+'팀)</div>'+arr.map((x,i)=>'<div class="qrow"><b>'+(i+1)+'</b><span>'+esc(x.nickname)+'</span><span>'+x.game+(x.ticket===ticket?' (나)':'')+'</span></div>').join('')+'</div><button class="btn cancel" onclick="cancelWait()">예약 대기 취소</button>';return}w.innerHTML='대기 등록 정보가 없습니다.'}
-async function cancelWait(){let s=await get();for(const c of s.courts)c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);await save(s);location="/register"}
-async function leave(){let s=await get();for(const c of s.courts)if(c.active?.ticket===ticket){s.finished=s.finished||{};s.finished[ticket]={...c.active,endedAt:Date.now()};c.active=null}await advance(s);await save(s)}
-async function finish(){let s=await get();delete(s.finished||{})[ticket];await save(s);location="/register"}
-function admin(){app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 관리자</div><div class="sub">스마트 대기 관리 시스템</div></div><div><a href="/" style="color:#fff">고객 화면</a></div></header><div class="admin"><aside class="side"><h2>관리자 모드</h2><div class="nav on">코트 막기</div><div class="nav">시간 늘리기</div><div class="nav">팀 늘리기</div></aside><main class="main"><section class="panel"><h2>코트 막기</h2><div class="grid" id="cs"></div></section><section class="panel"><h2>게임 시간 설정</h2><div class="settings"><div class="setting">난타 <input id="g1" type="number" min="15" max="30">분</div><div class="setting">4인 복식 <input id="g2" type="number" min="15" max="30">분</div><div class="setting">2인 단식 <input id="g3" type="number" min="15" max="30">분</div></div></section><section class="panel"><h2>팀 늘리기</h2><input id="mx" type="number" min="1" max="20"> 팀</section><button class="save" onclick="saveAdmin()">저장</button><section class="panel"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>';sub(renderAdmin)}
-function renderAdmin(s){g1.value=s.settings["난타"];g2.value=s.settings["4인 복식"];g3.value=s.settings["2인 단식"];mx.value=s.max_per_court;cs.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'접수 막힘':'접수 가능')+'</p><button class="smallbtn" onclick="block('+c.id+','+!c.blocked+')">'+(c.blocked?'운영':'막기')+'</button></div>').join('');qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+x.game+'</p>').join('')+'</div>').join('')}
-async function saveAdmin(){let s=await get();s.settings["난타"]=Math.max(15,Math.min(30,+g1.value));s.settings["4인 복식"]=Math.max(15,Math.min(30,+g2.value));s.settings["2인 단식"]=Math.max(15,Math.min(30,+g3.value));s.max_per_court=Math.max(1,Math.min(20,+mx.value));await save(s)}
-async function block(id,b){let s=await get();s.courts.find(c=>c.id===id).blocked=b;await save(s)}
-async function force(id){let s=await get(),c=s.courts.find(c=>c.id===id);if(c.active){s.finished=s.finished||{};s.finished[c.active.ticket]={...c.active,endedAt:Date.now()};c.active=null}await advance(s);await save(s)}
-(async()=>{await ensure();if(location.pathname==="/admin")admin();else if(location.pathname==="/register")register();else if(location.pathname==="/waiting")waiting();else customer()})();
+function cloneDef(){return JSON.parse(JSON.stringify(def))}
+function showError(err){
+  const msg=err?.message||String(err||"알 수 없는 오류");
+  console.error("Supabase error:",err);
+  const box=document.getElementById("app");
+  if(box && !box.innerHTML.includes("장군봉 배드민턴")) {
+    box.innerHTML='<div style="max-width:720px;margin:60px auto;padding:28px;font-family:Arial;text-align:center"><h2>장군봉 배드민턴 스마트 대기</h2><p>데이터 연결을 준비하는 중입니다.</p><small>'+esc(msg)+'</small></div>';
+  }
+}
+async function get(){
+  const {data,error}=await sb.from("waiting_state").select("*").eq("id",ROOT).maybeSingle();
+  if(error) throw error;
+  return data?data:cloneDef();
+}
+async function save(s){
+  const {error}=await sb.from("waiting_state").upsert({
+    id:ROOT,
+    settings:s.settings,
+    max_per_court:s.max_per_court,
+    finished:s.finished||{},
+    courts:s.courts,
+    updated_at:new Date().toISOString()
+  });
+  if(error) throw error;
+}
+async function ensure(){
+  const {data,error}=await sb.from("waiting_state").select("id").eq("id",ROOT).maybeSingle();
+  if(error) throw error;
+  if(!data) await save(cloneDef());
+}
+async function advance(s){
+  s.finished=s.finished||{};
+  let ch=false;
+  for(const c of s.courts){
+    if(c.active && Date.now()>=Number(c.active.endAt)){
+      const a=c.active;
+      s.finished[a.ticket]={...a,endedAt:Date.now()};
+      c.active=null; ch=true;
+    }
+    if(!c.active && !c.blocked && (c.queue||[]).length){
+      const x=c.queue.shift();
+      const m=Number(s.settings[x.game]||15);
+      const st=Date.now();
+      c.active={...x,startAt:st,endAt:st+m*60000};
+      ch=true;
+    }
+  }
+  if(ch) await save(s);
+  return s;
+}
+let liveChannel=null;
+function sub(fn){
+  try{
+    if(liveChannel) sb.removeChannel(liveChannel);
+    liveChannel=sb.channel("jangunbong-live")
+      .on("postgres_changes",{event:"*",schema:"public",table:"waiting_state"},async()=>{
+        try{fn(await advance(await get()))}catch(e){showError(e)}
+      }).subscribe();
+  }catch(e){console.error(e)}
+  get().then(advance).then(fn).catch(showError);
+}
+
+/* GitHub Pages compatible routing:
+   /?page=register
+   /?page=admin
+   /?page=waiting&ticket=...
+   Existing /register, /admin, /waiting paths are also supported. */
+function route(){
+  const path=location.pathname.replace(/\/+$/,"");
+  const page=params.get("page")||"";
+  if(path==="/admin" || path.endsWith("/admin") || page==="admin") return "admin";
+  if(path==="/register" || path.endsWith("/register") || page==="register") return "register";
+  if(path==="/waiting" || path.endsWith("/waiting") || page==="waiting" || ticket) return "waiting";
+  return "customer";
+}
+
+function customer(){
+  app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">고객에게 보이는 실시간 대기 현황</div></div><div id="clock"></div></header><div class="wrap"><div class="stats" id="stats"></div><div class="courts" id="courts"></div></div>';
+  renderCustomer(cloneDef());
+  sub(renderCustomer);
+  setInterval(()=>{const el=document.getElementById("clock");if(el)el.textContent=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})},1000);
+}
+function renderCustomer(s){
+  const stats=document.getElementById("stats"), courts=document.getElementById("courts");
+  if(!stats||!courts)return;
+  let a=s.courts.filter(c=>c.active).length;
+  let w=s.courts.reduce((n,c)=>n+(c.queue||[]).length,0);
+  stats.innerHTML='<div class="stat">전체 코트<b>5 개</b></div><div class="stat">이용 중 코트<b>'+a+' 개</b></div><div class="stat">대기 중 팀<b>'+w+' 팀</b></div><div class="stat">전체 대기 인원<b>'+w+' 팀</b></div>';
+  courts.innerHTML=s.courts.map((c,i)=>{
+    let q=c.queue||[],a=c.active;
+    return '<section class="court"><div class="head"><span><span class="num" style="background:'+colors[i]+'">'+c.id+'</span>'+c.id+'번 코트</span><span class="badge" style="background:'+(a?colors[i]:'#718096')+'">'+(c.blocked?'사용 불가':a?'이용 중':'대기 중')+'</span></div><div class="body">'+
+    (a?'<div class="row"><span class="label">닉네임</span><span class="val">'+esc(a.nickname)+'</span></div><div class="row"><span class="label">게임 방식</span><span class="val">'+esc(a.game)+'</span></div><div class="row"><span class="label">이용 시간</span><span class="val">'+tm(a.startAt)+' ~ '+tm(a.endAt)+'</span></div><div class="row"><span class="label">남은 시간</span><span class="val remain">'+left(a.endAt)+'</span></div>':
+    '<div class="row"><span class="label">현재 대기 팀</span><span class="val">'+q.length+'팀</span></div><div class="row"><span class="label">예상 대기 시간</span><span class="val">약 '+q.length*5+'분</span></div>')+
+    '<div class="qbox"><div class="qtitle">'+c.id+'번 코트 대기 현황 (총 '+q.length+'팀)</div>'+q.map((x,j)=>'<div class="qrow"><b>'+(j+1)+'</b><span>'+esc(x.nickname)+'</span><span>'+esc(x.game)+'</span></div>').join('')+'</div></div></section>'
+  }).join('');
+}
+
+function register(){
+  app.innerHTML='<div class="form"><div class="formhead"><h1>장군봉 배드민턴 스마트 대기</h1><div>간편하게 코트 대기를 등록하세요.</div></div><div class="formbody"><div class="field"><label>닉네임 *</label><input id="n"></div><div class="field"><label>게임 방식 *</label><select id="g"><option value="">게임 방식을 선택해주세요</option><option>4인 복식</option><option>2인 단식</option><option>난타</option></select></div><div class="field"><label>코트 선택 *</label><select id="c"><option value="">코트를 선택해주세요</option><option value="1">1번 코트</option><option value="2">2번 코트</option><option value="3">3번 코트</option><option value="4">4번 코트</option><option value="5">5번 코트</option></select></div><div class="notice">● 선택한 코트의 대기 순번이 등록됩니다.<br>● 게임 시작 전까지 대기 취소가 가능합니다.</div><div id="e" style="color:#d71920;font-weight:800"></div><button class="btn" onclick="reg()">대기 등록하기</button></div></div>';
+}
+async function reg(){
+  try{
+    let s=await get(), id=Number(document.getElementById("c").value);
+    const nn=document.getElementById("n").value.trim(), gg=document.getElementById("g").value, ee=document.getElementById("e");
+    if(!nn||!gg||!id){ee.textContent="필수 항목을 입력해주세요.";return}
+    let x=s.courts.find(x=>x.id===id);
+    if(!x){ee.textContent="코트를 찾을 수 없습니다.";return}
+    if(x.blocked){ee.textContent="현재 막혀 있는 코트입니다.";return}
+    if((x.queue||[]).length+(x.active?1:0)>=s.max_per_court){ee.textContent="대기가 가득 찼습니다.";return}
+    let t=crypto.randomUUID();
+    x.queue=x.queue||[];
+    x.queue.push({ticket:t,nickname:nn,game:gg,court:id,createdAt:Date.now()});
+    await advance(s);
+    await save(s);
+    location.href="?page=waiting&ticket="+encodeURIComponent(t);
+  }catch(e){document.getElementById("e").textContent="등록 중 오류가 발생했습니다.";showError(e)}
+}
+
+function waiting(){
+  app.innerHTML='<div class="wait"><div class="waithead"><h2>장군봉 배드민턴 스마트 대기</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
+  renderWaiting(cloneDef());
+  sub(renderWaiting);
+}
+function renderWaiting(s){
+  const w=document.getElementById("w"); if(!w)return;
+  let a=null,q=null,c=null,fin=s.finished?.[ticket];
+  for(const x of s.courts){
+    if(x.active?.ticket===ticket){a=x.active;c=x}
+    let z=(x.queue||[]).find(y=>y.ticket===ticket); if(z){q=z;c=x}
+  }
+  if(a){
+    w.innerHTML='<div class="row"><span>닉네임</span><b>'+esc(a.nickname)+'</b></div><div class="row"><span>선택 코트</span><b>'+a.court+'번 코트</b></div><div class="row"><span>게임 방식</span><b>'+esc(a.game)+'</b></div><div class="my"><small>현재 상태</small><strong>이용 중</strong></div><div class="row"><span>이용 시간</span><b>'+tm(a.startAt)+' ~ '+tm(a.endAt)+'</b></div><div class="timer">'+left(a.endAt)+'</div><button class="btn cancel" onclick="leave()">퇴장하기</button>';
+    return;
+  }
+  if(fin){
+    w.innerHTML='<div style="text-align:center;padding:8px"><div style="font-size:48px">✓</div><h2>장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2><p>이용 시간이 종료되었습니다.<br>다음 고객을 위해<br>퇴장 버튼을 눌러주세요.</p><div class="notice">퇴장을 눌러야 다시 이용 가능합니다.</div><button class="btn cancel" onclick="finish()">퇴장하기</button></div>';
+    return;
+  }
+  if(q){
+    let arr=c.queue||[],pos=arr.findIndex(x=>x.ticket===ticket)+1;
+    w.innerHTML='<div class="row"><span>닉네임</span><b>'+esc(q.nickname)+'</b></div><div class="row"><span>선택 코트</span><b>'+q.court+'번 코트</b></div><div class="row"><span>게임 방식</span><b>'+esc(q.game)+'</b></div><div class="row"><span>이용 시간</span><b>'+s.settings[q.game]+'분</b></div><div class="my"><small>나의 순번</small><strong>'+pos+'번</strong><small>(현재 대기 중)</small></div><div class="qbox"><div class="qtitle">'+c.id+'번 코트 대기 현황 (총 '+arr.length+'팀)</div>'+arr.map((x,i)=>'<div class="qrow"><b>'+(i+1)+'</b><span>'+esc(x.nickname)+'</span><span>'+esc(x.game)+(x.ticket===ticket?' (나)':'')+'</span></div>').join('')+'</div><button class="btn cancel" onclick="cancelWait()">예약 대기 취소</button>';
+    return;
+  }
+  w.innerHTML='대기 등록 정보가 없습니다.';
+}
+async function cancelWait(){
+  try{let s=await get();for(const c of s.courts)c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);await save(s);location.href="?page=register"}catch(e){showError(e)}
+}
+async function leave(){
+  try{let s=await get();for(const c of s.courts)if(c.active?.ticket===ticket){s.finished=s.finished||{};s.finished[ticket]={...c.active,endedAt:Date.now()};c.active=null}await advance(s);await save(s)}catch(e){showError(e)}
+}
+async function finish(){
+  try{let s=await get();if(s.finished)delete s.finished[ticket];await save(s);location.href="?page=register"}catch(e){showError(e)}
+}
+
+function admin(){
+  app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 관리자</div><div class="sub">스마트 대기 관리 시스템</div></div><div><a href="?" style="color:#fff">고객 화면</a></div></header><div class="admin"><aside class="side"><h2>관리자 모드</h2><div class="nav on">코트 막기</div><div class="nav">시간 늘리기</div><div class="nav">팀 늘리기</div></aside><main class="main"><section class="panel"><h2>코트 막기</h2><div class="grid" id="cs"></div></section><section class="panel"><h2>게임 시간 설정</h2><div class="settings"><div class="setting">난타 <input id="g1" type="number" min="15" max="30">분</div><div class="setting">4인 복식 <input id="g2" type="number" min="15" max="30">분</div><div class="setting">2인 단식 <input id="g3" type="number" min="15" max="30">분</div></div></section><section class="panel"><h2>팀 늘리기</h2><input id="mx" type="number" min="1" max="20"> 팀</section><button class="save" onclick="saveAdmin()">저장</button><section class="panel"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>';
+  renderAdmin(cloneDef()); sub(renderAdmin);
+}
+function renderAdmin(s){
+  const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),cs=document.getElementById("cs"),qq=document.getElementById("qq");
+  if(!g1||!g2||!g3||!mx||!cs||!qq)return;
+  g1.value=s.settings["난타"];g2.value=s.settings["4인 복식"];g3.value=s.settings["2인 단식"];mx.value=s.max_per_court;
+  cs.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'접수 막힘':'접수 가능')+'</p><button class="smallbtn" onclick="block('+c.id+','+(!c.blocked)+')">'+(c.blocked?'운영':'막기')+'</button></div>').join('');
+  qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
+}
+async function saveAdmin(){
+  try{let s=await get();s.settings["난타"]=Math.max(15,Math.min(30,Number(document.getElementById("g1").value)));s.settings["4인 복식"]=Math.max(15,Math.min(30,Number(document.getElementById("g2").value)));s.settings["2인 단식"]=Math.max(15,Math.min(30,Number(document.getElementById("g3").value)));s.max_per_court=Math.max(1,Math.min(20,Number(document.getElementById("mx").value)));await save(s)}catch(e){showError(e)}
+}
+async function block(id,b){try{let s=await get();s.courts.find(c=>c.id===id).blocked=b;await save(s)}catch(e){showError(e)}}
+async function force(id){try{let s=await get(),c=s.courts.find(c=>c.id===id);if(c.active){s.finished=s.finished||{};s.finished[c.active.ticket]={...c.active,endedAt:Date.now()};c.active=null}await advance(s);await save(s)}catch(e){showError(e)}}
+
+(async()=>{
+  try{
+    await ensure();
+    const r=route();
+    if(r==="admin")admin();
+    else if(r==="register")register();
+    else if(r==="waiting")waiting();
+    else customer();
+  }catch(e){
+    /* Always leave a visible page instead of a header-only blank screen. */
+    customer();
+    const box=document.getElementById("courts");
+    if(box)box.innerHTML='<div style="grid-column:1/-1;padding:30px;text-align:center;color:#b42318">실시간 데이터 연결을 확인하는 중입니다. 잠시 후 새로고침해주세요.<br><small>'+esc(e?.message||e)+'</small></div>';
+    console.error(e);
+  }
+})();
 </script></body></html>
