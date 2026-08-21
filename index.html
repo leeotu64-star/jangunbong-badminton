@@ -31,20 +31,26 @@ async function sbGet(){
 }
 async function sbUpsert(row){
   const payload={
-    id:"waiting_state",
     settings:row.settings||{"난타":15,"4인 복식":15,"2인 단식":15},
     max_per_court:Number(row.max_per_court||5),
     finished:row.finished||{},
     courts:Array.isArray(row.courts)?row.courts:[]
   };
-  const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?on_conflict=id",{
-    method:"POST",
-    headers:{...SB_HEADERS,"Prefer":"resolution=merge-duplicates,return=minimal"},
-    body:JSON.stringify(payload)
+  const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state",{
+    method:"PATCH",
+    headers:{
+      "apikey":SUPABASE_ANON_KEY,
+      "Authorization":"Bearer "+SUPABASE_ANON_KEY,
+      "Content-Type":"application/json",
+      "Prefer":"return=minimal"
+    },
+    body:JSON.stringify(payload),
+    cache:"no-store"
   });
   if(!r.ok){
-    let detail=""; try{detail=await r.text()}catch(_){}
-    throw new Error("Supabase 저장 오류: "+r.status+" "+detail);
+    let detail="";
+    try{detail=await r.text()}catch(_){}
+    throw new Error("등록 저장 오류 ("+r.status+"): "+detail);
   }
   return true;
 }const ROOT="waiting_state";
@@ -80,8 +86,10 @@ async function save(s){
   });
 }
 async function ensure(){
-  const data=await sbGet();
-  if(!data) await save(cloneDef());
+  try{
+    const data=await sbGet();
+    if(!data) console.warn("waiting_state 행이 없습니다. Supabase에 id=waiting_state 행을 먼저 만들어주세요.");
+  }catch(e){console.error(e)}
 }
 async function advance(s,doSave=true){
   s.finished=s.finished||{};
