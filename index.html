@@ -246,85 +246,21 @@ function renderWaiting(s){
   let a=null,q=null,c=null,fin=s.finished?.[ticket];
   for(const x of s.courts){
     if(x.active?.ticket===ticket){a=x.active;c=x}
-    const z=(x.queue||[]).find(y=>y.ticket===ticket);
-    if(z){q=z;c=x}
+    let z=(x.queue||[]).find(y=>y.ticket===ticket); if(z){q=z;c=x}
   }
-
-  if(a && Number(a.endAt) <= Date.now()){
-    w.innerHTML=`
-      <div style="text-align:center;padding:8px">
-        <div style="font-size:48px">✓</div>
-        <h2>장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2>
-        <p>이용 시간이 종료되었습니다.<br>다음 고객을 위해<br>퇴장 버튼을 눌러주세요.</p>
-        <div class="notice">퇴장을 눌러야 다시 이용 가능합니다.</div>
-        <button class="btn cancel" onclick="finish()">퇴장하기</button>
-      </div>`;
-    return;
-  }
-
   if(a){
-    const remain=left(a.endAt);
-    w.innerHTML=`
-      <div style="font-size:12px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">ⓘ 15분 경과 후 퇴장 (자동 안내)</div>
-      <div class="row"><span>닉네임</span><b>${esc(a.nickname)}</b></div>
-      <div class="row"><span>선택 코트</span><b>${a.court}번 코트</b></div>
-      <div class="row"><span>이용 시간</span><b>${tm(a.startAt)} ~ ${tm(a.endAt)}</b></div>
-      <div class="my"><small>현재 이용 중</small><strong>${esc(a.nickname)}</strong></div>
-      <div style="text-align:center;color:#555">남은 시간</div>
-      <div class="timer">${remain}</div>
-      <button class="btn cancel" onclick="leave()">퇴장하기</button>`;
+    w.innerHTML='<div class="row"><span>닉네임</span><b>'+esc(a.nickname)+'</b></div><div class="row"><span>선택 코트</span><b>'+a.court+'번 코트</b></div><div class="row"><span>게임 방식</span><b>'+esc(a.game)+'</b></div><div class="my"><small>현재 상태</small><strong>이용 중</strong></div><div class="row"><span>이용 시간</span><b>'+tm(a.startAt)+' ~ '+tm(a.endAt)+'</b></div><div class="timer">'+left(a.endAt)+'</div><button class="btn cancel" onclick="leave()">퇴장하기</button>';
     return;
   }
-
   if(fin){
-    w.innerHTML=`
-      <div style="text-align:center;padding:8px">
-        <div style="font-size:48px">✓</div>
-        <h2>장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2>
-        <p>이용 시간이 종료되었습니다.<br>다음 고객을 위해<br>퇴장 버튼을 눌러주세요.</p>
-        <div class="notice">퇴장을 눌러야 다시 이용 가능합니다.</div>
-        <button class="btn cancel" onclick="finish()">퇴장하기</button>
-      </div>`;
+    w.innerHTML='<div style="text-align:center;padding:8px"><div style="font-size:48px">✓</div><h2>장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2><p>이용 시간이 종료되었습니다.<br>다음 고객을 위해<br>퇴장 버튼을 눌러주세요.</p><div class="notice">퇴장을 눌러야 다시 이용 가능합니다.</div><button class="btn cancel" onclick="finish()">퇴장하기</button></div>';
     return;
   }
-
   if(q){
-    const arr=c.queue||[];
-    const pos=arr.findIndex(x=>x.ticket===ticket)+1;
-    const duration=Number(s.settings[q.game]||15);
-
-    let activeRemain=0;
-    if(c.active && c.active.endAt) {
-      activeRemain=Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/60000));
-    }
-    const expected=Math.max(0,activeRemain+(pos-1)*duration);
-
-    w.innerHTML=`
-      <div class="row"><span>닉네임</span><b>${esc(q.nickname)}</b></div>
-      <div class="row"><span>선택 코트</span><b>${q.court}번 코트</b></div>
-      <div class="row"><span>이용 시간</span><b>${duration}분</b></div>
-      <div class="my">
-        <small>나의 순번</small>
-        <strong>${pos}번</strong>
-        <small>(현재 대기 중)</small>
-      </div>
-      <div style="display:flex;justify-content:center;gap:28px;margin:12px 0 4px;font-size:12px">
-        <span>작 ${new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}</span>
-        <span>예상 입장 ${new Date(Date.now()+expected*60000).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}</span>
-      </div>
-      <div class="timer">${String(expected).padStart(2,"0")}:00</div>
-      <div class="qbox">
-        <div class="qtitle">${c.id}번 코트 대기 현황 (총 ${arr.length}팀)</div>
-        <div class="qrow" style="font-weight:800"><span>순번</span><span>닉네임</span><span>예상 대기 시간</span></div>
-        ${arr.map((x,i)=>{
-          const wait=Math.max(0,activeRemain+i*duration);
-          return `<div class="qrow"><b>${i+1}</b><span>${esc(x.nickname)}${x.ticket===ticket?' <b>(나)</b>':''}</span><span>약 ${wait}분 후 입장</span></div>`;
-        }).join("")}
-      </div>
-      <button class="btn cancel" onclick="cancelWait()">예약 대기 취소</button>`;
+    let arr=c.queue||[],pos=arr.findIndex(x=>x.ticket===ticket)+1;
+    w.innerHTML='<div class="row"><span>닉네임</span><b>'+esc(q.nickname)+'</b></div><div class="row"><span>선택 코트</span><b>'+q.court+'번 코트</b></div><div class="row"><span>게임 방식</span><b>'+esc(q.game)+'</b></div><div class="row"><span>이용 시간</span><b>'+s.settings[q.game]+'분</b></div><div class="my"><small>나의 순번</small><strong>'+pos+'번</strong><small>(현재 대기 중)</small></div><div class="qbox"><div class="qtitle">'+c.id+'번 코트 대기 현황 (총 '+arr.length+'팀)</div>'+arr.map((x,i)=>'<div class="qrow"><b>'+(i+1)+'</b><span>'+esc(x.nickname)+'</span><span>'+esc(x.game)+(x.ticket===ticket?' (나)':'')+'</span></div>').join('')+'</div><button class="btn cancel" onclick="cancelWait()">예약 대기 취소</button>';
     return;
   }
-
   w.innerHTML='대기 등록 정보가 없습니다.';
 }
 async function cancelWait(){
