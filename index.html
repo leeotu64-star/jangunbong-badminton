@@ -10,6 +10,9 @@
 .form,.wait{max-width:560px;margin:25px auto;border:1px solid #dce4ef;border-radius:16px;overflow:hidden;box-shadow:0 8px 28px #0001}.formhead,.waithead{background:#061b4f;color:#fff;text-align:center;padding:22px}.formbody,.waitbody{padding:18px}.field{margin-bottom:14px}.field label{display:block;font-weight:800;margin-bottom:6px}.field input,.field select{width:100%;padding:12px;border:1px solid #d6deea;border-radius:7px;font-size:15px}.btn{width:100%;padding:13px;border:0;border-radius:7px;background:#0d58df;color:#fff;font-weight:800;font-size:16px}.cancel{background:#e50914}.notice{padding:12px;background:#eef5ff;border-radius:8px;font-size:12px;line-height:1.7;margin-bottom:12px}.my{background:#eef5ff;border:1px solid #cbdcff;border-radius:8px;text-align:center;padding:10px;margin:10px 0}.my strong{display:block;color:#125fe3;font-size:38px}.timer{text-align:center;font-size:29px;font-weight:900;margin:12px}
 .admin{display:grid;grid-template-columns:190px 1fr;min-height:calc(100vh - 76px)}.side{background:#071b45;color:#fff;padding:18px 10px}.side h2{font-size:16px;margin:0;padding:10px}.nav{padding:14px;border-radius:6px;margin:4px 0;font-weight:800}.nav.on{background:#0c63e8}.main{padding:25px}.panel{border:1px solid #dfe5ee;border-radius:9px;margin-bottom:18px;padding:18px}.panel h2{margin:0 0 6px}.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.card{border:1px solid #dce3ee;border-radius:8px;padding:12px}.card h3{margin:0 0 10px}.smallbtn{padding:7px 11px;border:1px solid #ccd6e4;background:#fff;border-radius:6px}.settings{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.setting{border:1px solid #dce3ee;border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center}.setting input{width:65px;padding:7px;text-align:center}.save{background:#0c63e8;color:#fff;border:0;border-radius:7px;padding:11px 28px;font-weight:800}
 @media(max-width:950px){.courts{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.admin{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}}@media(max-width:600px){.courts,.stats,.settings,.grid{grid-template-columns:1fr}.brand{font-size:18px}}
+
+.adminTop{display:flex;justify-content:space-between;align-items:center;gap:12px}.adminTop a,.customerBtn{display:inline-block;background:#0c63e8;color:#fff;text-decoration:none;border-radius:7px;padding:9px 14px;font-weight:800}.side h2{margin-bottom:12px}.nav{cursor:pointer}.adminSectionTitle{display:flex;justify-content:space-between;align-items:center;gap:10px}.controlRow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.controlBox{border:1px solid #dce3ee;border-radius:9px;padding:14px;text-align:center}.controlBox h3{margin:0 0 10px}.stepper{display:flex;justify-content:center;align-items:center;gap:8px}.stepper button{width:40px;height:36px;border:1px solid #ccd6e4;background:#fff;border-radius:7px;font-size:20px;font-weight:900}.stepper strong{min-width:54px;font-size:22px}.lockGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.lockCard{border:1px solid #dce3ee;border-radius:9px;padding:12px;text-align:center}.lockCard h3{margin:0 0 8px}.lockCard button{width:100%;padding:9px;border:0;border-radius:7px;font-weight:800}.locked{background:#e51e2a;color:#fff}.open{background:#07854b;color:#fff}.hint{font-size:12px;color:#667085;margin-top:8px}.adminSave{margin-top:14px}.adminTable p{margin:7px 0}.adminTable .card{min-height:90px}
+@media(max-width:950px){.lockGrid{grid-template-columns:repeat(2,1fr)}.controlRow{grid-template-columns:1fr}}
 </style></head><body><div id="app"></div>
 <script>
 /* Supabase 설정: 아래 2개만 본인 프로젝트 값으로 교체 */
@@ -108,7 +111,7 @@ function route(){
 
 function customer(){
   const app=document.getElementById("app");
-  app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">고객에게 보이는 실시간 대기 현황</div></div><div id="clock"></div></header><div class="wrap"><div class="stats" id="stats"></div><div class="courts" id="courts"></div></div>';
+  app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">고객에게 보이는 실시간 대기 현황</div></div><div style="display:flex;align-items:center;gap:12px"><a class="customerBtn" href="?page=admin">관리자</a><div id="clock"></div></div></header><div class="wrap"><div class="stats" id="stats"></div><div class="courts" id="courts"></div></div>';
   renderCustomer(cloneDef());
   sub(renderCustomer);
   setInterval(()=>{const el=document.getElementById("clock");if(el)el.textContent=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})},1000);
@@ -190,21 +193,51 @@ async function finish(){
 
 function admin(){
   const app=document.getElementById("app");
-  app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 관리자</div><div class="sub">스마트 대기 관리 시스템</div></div><div><a href="?" style="color:#fff">고객 화면</a></div></header><div class="admin"><aside class="side"><h2>관리자 모드</h2><div class="nav on">코트 막기</div><div class="nav">시간 늘리기</div><div class="nav">팀 늘리기</div></aside><main class="main"><section class="panel"><h2>코트 막기</h2><div class="grid" id="cs"></div></section><section class="panel"><h2>게임 시간 설정</h2><div class="settings"><div class="setting">난타 <input id="g1" type="number" min="15" max="30">분</div><div class="setting">4인 복식 <input id="g2" type="number" min="15" max="30">분</div><div class="setting">2인 단식 <input id="g3" type="number" min="15" max="30">분</div></div></section><section class="panel"><h2>팀 늘리기</h2><input id="mx" type="number" min="1" max="20"> 팀</section><button class="save" onclick="saveAdmin()">저장</button><section class="panel"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>';
+  app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 관리자</div><div class="sub">스마트 대기 관리 시스템</div></div><div class="adminTop"><a href="?page=customer">고객 화면으로</a></div></header><div class="admin"><aside class="side"><h2>관리자 모드</h2><div class="nav on">코트 관리</div><div class="nav">게임 시간 설정</div><div class="nav">대기 정원 설정</div></aside><main class="main"><section class="panel"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div></section><section class="panel"><div class="adminSectionTitle"><div><h2>대기자 최대 정원</h2><div class="hint">전체 코트에 동일하게 적용 · 4명~20명</div></div></div><div class="controlBox"><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>';
   renderAdmin(cloneDef()); sub(renderAdmin);
 }
 function renderAdmin(s){
   const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),cs=document.getElementById("cs"),qq=document.getElementById("qq");
   if(!g1||!g2||!g3||!mx||!cs||!qq)return;
-  g1.value=s.settings["난타"];g2.value=s.settings["4인 복식"];g3.value=s.settings["2인 단식"];mx.value=s.max_per_court;
-  cs.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'접수 막힘':'접수 가능')+'</p><button class="smallbtn" onclick="block('+c.id+','+(!c.blocked)+')">'+(c.blocked?'운영':'막기')+'</button></div>').join('');
-  qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
+  g1.textContent=s.settings["난타"];g2.textContent=s.settings["4인 복식"];g3.textContent=s.settings["2인 단식"];mx.textContent=s.max_per_court;
+  cs.innerHTML=s.courts.map(c=>'<div class="lockCard"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'현재 잠금':'현재 사용 가능')+'</p><button class="'+(c.blocked?'locked':'open')+'" onclick="block('+c.id+','+(!c.blocked)+')">'+(c.blocked?'잠금 해제':'코트 잠금')+'</button></div>').join('');
+  qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
+}
+function changeTime(game,delta){
+  const el=game==="난타"?document.getElementById("g1"):game==="4인 복식"?document.getElementById("g2"):document.getElementById("g3");
+  if(!el)return;
+  const v=Math.max(15,Math.min(20,Number(el.textContent||15)+delta));
+  el.textContent=v;
+}
+function changeMax(delta){
+  const el=document.getElementById("mx"); if(!el)return;
+  el.textContent=Math.max(4,Math.min(20,Number(el.textContent||5)+delta));
 }
 async function saveAdmin(){
-  try{let s=await get();s.settings["난타"]=Math.max(15,Math.min(30,Number(document.getElementById("g1").value)));s.settings["4인 복식"]=Math.max(15,Math.min(30,Number(document.getElementById("g2").value)));s.settings["2인 단식"]=Math.max(15,Math.min(30,Number(document.getElementById("g3").value)));s.max_per_court=Math.max(1,Math.min(20,Number(document.getElementById("mx").value)));await save(s)}catch(e){showError(e)}
+  try{
+    let s=await get();
+    s.settings["난타"]=Math.max(15,Math.min(20,Number(document.getElementById("g1").textContent)));
+    s.settings["4인 복식"]=Math.max(15,Math.min(20,Number(document.getElementById("g2").textContent)));
+    s.settings["2인 단식"]=Math.max(15,Math.min(20,Number(document.getElementById("g3").textContent)));
+    s.max_per_court=Math.max(4,Math.min(20,Number(document.getElementById("mx").textContent)));
+    await save(s);
+    alert("변경사항이 저장되었습니다.");
+  }catch(e){showError(e)}
 }
-async function block(id,b){try{let s=await get();s.courts.find(c=>c.id===id).blocked=b;await save(s)}catch(e){showError(e)}}
-async function force(id){try{let s=await get(),c=s.courts.find(c=>c.id===id);if(c.active){s.finished=s.finished||{};s.finished[c.active.ticket]={...c.active,endedAt:Date.now()};c.active=null}await advance(s);await save(s)}catch(e){showError(e)}}
+async function block(id,b){
+  try{
+    let s=await get();
+    s.courts.find(c=>c.id===id).blocked=b;
+    await save(s);
+  }catch(e){showError(e)}
+}
+async function force(id){
+  try{
+    let s=await get(),c=s.courts.find(c=>c.id===id);
+    if(c.active){s.finished=s.finished||{};s.finished[c.active.ticket]={...c.active,endedAt:Date.now()};c.active=null}
+    await advance(s); await save(s);
+  }catch(e){showError(e)}
+}
 
 (function(){
   const r=route();
@@ -215,4 +248,3 @@ async function force(id){try{let s=await get(),c=s.courts.find(c=>c.id===id);if(
   ensure().catch(e=>console.error(e));
 })();
 </script></body></html>
-```
