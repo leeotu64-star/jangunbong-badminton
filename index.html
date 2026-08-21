@@ -21,36 +21,44 @@ const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
 <script>
 const SB_HEADERS={"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"};
 async function sbGet(){
-  const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state&select=*",{headers:SB_HEADERS,cache:"no-store"});
-  if(!r.ok){
-    let detail=""; try{detail=await r.text()}catch(_){}
-    throw new Error("Supabase 조회 오류: "+r.status+" "+detail);
-  }
-  const a=await r.json();
+  const url=SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state&select=id,settings,max_per_court,finished,courts";
+  const r=await fetch(url,{
+    method:"GET",
+    headers:SB_HEADERS,
+    cache:"no-store"
+  });
+  const text=await r.text();
+  if(!r.ok) throw new Error("조회 오류 "+r.status+" : "+text);
+  let a=[];
+  try{a=JSON.parse(text)}catch(e){throw new Error("조회 응답 오류 : "+text)}
   return a[0]||null;
 }
 async function sbUpsert(row){
-  const payload={
+  const body={
     settings:row.settings||{"난타":15,"4인 복식":15,"2인 단식":15},
     max_per_court:Number(row.max_per_court||5),
     finished:row.finished||{},
     courts:Array.isArray(row.courts)?row.courts:[]
   };
+
   const r=await fetch(SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state",{
     method:"PATCH",
     headers:{
       "apikey":SUPABASE_ANON_KEY,
       "Authorization":"Bearer "+SUPABASE_ANON_KEY,
       "Content-Type":"application/json",
-      "Prefer":"return=minimal"
+      "Prefer":"return=representation"
     },
-    body:JSON.stringify(payload),
-    cache:"no-store"
+    body:JSON.stringify(body)
   });
-  if(!r.ok){
-    let detail="";
-    try{detail=await r.text()}catch(_){}
-    throw new Error("등록 저장 오류 ("+r.status+"): "+detail);
+
+  const text=await r.text();
+  if(!r.ok) throw new Error("저장 오류 "+r.status+" : "+text);
+
+  let result=[];
+  try{result=text?JSON.parse(text):[]}catch(e){result=[]}
+  if(Array.isArray(result) && result.length===0){
+    throw new Error("저장 오류 : waiting_state 행을 찾지 못했습니다.");
   }
   return true;
 }const ROOT="waiting_state";
@@ -86,10 +94,8 @@ async function save(s){
   });
 }
 async function ensure(){
-  try{
-    const data=await sbGet();
-    if(!data) console.warn("waiting_state 행이 없습니다. Supabase에 id=waiting_state 행을 먼저 만들어주세요.");
-  }catch(e){console.error(e)}
+  const data=await sbGet();
+  if(!data) await save(cloneDef());
 }
 async function advance(s,doSave=true){
   s.finished=s.finished||{};
@@ -247,17 +253,18 @@ async function reg(){
     // Normalize and start the first waiting customer if the court is empty.
     await advance(s,false);
     await save(s);
-    location.replace("?page=waiting&ticket="+encodeURIComponent(t));
+    window.location.href=location.pathname+"?page=waiting&ticket="+encodeURIComponent(t);
   }catch(e){
     console.error(e);
     const msg=String(e?.message||e);
-    err(msg.includes("Supabase") ? msg.replace(/^Supabase (조회|저장|최초 저장) 오류:\s*/,"") : "등록 중 오류가 발생했습니다.");
+    err(msg.includes("오류") ? msg : "등록 중 오류가 발생했습니다.");
   }
 }
 
 function waiting(){
   const app=document.getElementById("app");
   app.innerHTML='<div class="wait"><div class="waithead"><h2>장군봉 배드민턴 스마트 대기</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
+  renderWaiting(cloneDef());
   sub(renderWaiting);
 }
 function renderWaiting(s){
@@ -272,7 +279,7 @@ function renderWaiting(s){
   if(a){
     const remain=left(a.endAt);
     w.innerHTML=`
-      <div style="font-size:12px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">ⓘ 이용시간 종료 후 퇴장 (자동 안내)</div>
+      <div style="font-size:12px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">ⓘ 15분 경과 후 퇴장 (자동 안내)</div>
       <div class="row"><span>닉네임</span><b>${esc(a.nickname)}</b></div>
       <div class="row"><span>선택 코트</span><b>${a.court}번 코트</b></div>
       <div class="row"><span>이용 시간</span><b>${tm(a.startAt)} ~ ${tm(a.endAt)}</b></div>
