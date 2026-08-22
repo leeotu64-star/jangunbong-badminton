@@ -488,6 +488,60 @@ body{background:#eef3f9!important}
 }
 </style>
 
+<style id="customerRegisterCleanFinal">
+/* 고객등록 화면: 중복 노란 원 제거 + 화면 확대 + 게임방식 표시 */
+#registerPage, .register-page{
+  max-width:560px!important;
+  width:calc(100% - 24px)!important;
+  margin:0 auto!important;
+}
+.register-header{
+  min-height:112px!important;
+  padding:26px 18px!important;
+  border-radius:18px 18px 0 0!important;
+  background:#071d49!important;
+  color:#fff!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:27px!important;
+  font-weight:950!important;
+  text-align:center!important;
+}
+.register-game-choices{
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  gap:9px!important;
+  margin:12px 0 16px!important;
+}
+.register-game-choices button{
+  min-height:58px!important;
+  border:2px solid #d4deeb!important;
+  border-radius:11px!important;
+  background:#fff!important;
+  color:#071d49!important;
+  font-size:16px!important;
+  font-weight:950!important;
+  cursor:pointer!important;
+}
+.register-game-choices button.active{
+  background:#1769e8!important;
+  color:#fff!important;
+  border-color:#1769e8!important;
+  box-shadow:0 4px 10px rgba(23,105,232,.25)!important;
+}
+.register-game-label{
+  font-size:16px!important;
+  font-weight:950!important;
+  color:#071d49!important;
+  margin:12px 0 8px!important;
+}
+@media(max-width:520px){
+  #registerPage,.register-page{width:calc(100% - 14px)!important}
+  .register-header{font-size:23px!important;min-height:96px!important}
+  .register-game-choices button{min-height:54px!important;font-size:14px!important}
+}
+</style>
 <style id="removeDuplicateHeaderFinal">
 .wait{max-width:560px!important;width:calc(100% - 18px)!important;margin:0 auto!important}
 .waitbody{padding-top:10px!important}
@@ -661,6 +715,125 @@ body{background:#eef3f9!important}
 }
 </style>
 
+<style id="fullScreenWaitingFinal">
+html,body{margin:0!important;padding:0!important;width:100%!important;min-height:100%!important}
+.fullWaitScreen{
+  width:100vw!important;
+  min-height:100vh!important;
+  box-sizing:border-box!important;
+  padding:18px!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:flex-start!important;
+  background:#06183f!important;
+}
+.fullWaitCard{
+  width:100%!important;
+  max-width:900px!important;
+  min-height:calc(100vh - 36px)!important;
+  box-sizing:border-box!important;
+  padding:30px 28px 28px!important;
+  border-radius:26px!important;
+  background:#071f52!important;
+  color:#fff!important;
+  box-shadow:0 12px 40px rgba(0,0,0,.35)!important;
+}
+.waitTitle{
+  text-align:center!important;
+  font-size:32px!important;
+  font-weight:950!important;
+  margin-bottom:20px!important;
+}
+.infoRow{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  min-height:82px!important;
+  padding:8px 4px!important;
+  box-sizing:border-box!important;
+  border-bottom:2px solid rgba(255,255,255,.35)!important;
+}
+.infoRow span{
+  font-size:25px!important;
+  font-weight:900!important;
+}
+.infoRow b{
+  font-size:29px!important;
+  font-weight:950!important;
+}
+.bigCountdown{
+  margin-top:24px!important;
+  padding:20px 14px 26px!important;
+  text-align:center!important;
+  border:3px solid #2585ff!important;
+  border-radius:18px!important;
+  background:#061a46!important;
+}
+.countLabel{
+  color:#4b9cff!important;
+  font-size:27px!important;
+  font-weight:950!important;
+  margin-bottom:8px!important;
+}
+#waitCountdown{
+  font-size:88px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  letter-spacing:2px!important;
+  color:#fff!important;
+}
+.autoExitBox{
+  margin-top:22px!important;
+  padding:22px 16px!important;
+  text-align:center!important;
+  border:4px solid #ff2b2b!important;
+  border-radius:18px!important;
+  background:#fff0a6!important;
+  color:#111!important;
+}
+.autoExitTitle{
+  font-size:42px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+  color:#e00000!important;
+}
+.autoExitText{
+  margin-top:9px!important;
+  font-size:22px!important;
+  line-height:1.35!important;
+  font-weight:900!important;
+}
+.bigExitButton{
+  width:100%!important;
+  min-height:88px!important;
+  margin-top:22px!important;
+  border:0!important;
+  border-radius:15px!important;
+  background:#ed0712!important;
+  color:#fff!important;
+  font-size:31px!important;
+  font-weight:950!important;
+  cursor:pointer!important;
+}
+@media(max-width:700px){
+  .fullWaitScreen{padding:0!important}
+  .fullWaitCard{
+    max-width:none!important;
+    min-height:100vh!important;
+    border-radius:0!important;
+    padding:24px 18px 20px!important;
+  }
+  .waitTitle{font-size:27px!important}
+  .infoRow{min-height:68px!important}
+  .infoRow span{font-size:21px!important}
+  .infoRow b{font-size:24px!important}
+  #waitCountdown{font-size:72px!important}
+  .countLabel{font-size:23px!important}
+  .autoExitTitle{font-size:34px!important}
+  .autoExitText{font-size:18px!important}
+  .bigExitButton{min-height:76px!important;font-size:27px!important}
+}
+</style>
 </head><body>
 <div id="app"></div>
 <script>
@@ -911,7 +1084,19 @@ function register(){
       <div style="background:#fff;border-radius:0 0 18px 18px;padding:20px 18px;box-shadow:0 8px 24px #001b4f18">
         <div class="field"><label>닉네임 *</label><input id="n" name="queue_nickname" type="text" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="닉네임을 입력해주세요"></div>
         <div class="field"><label>게임 방식 *</label>
-          <select id="g">
+          
+<div class="register-game-label">게임 방식 선택</div>
+<div id="registerGameChoices" class="register-game-choices" aria-label="게임 방식 선택">
+  
+<div class="autoExitNotice">
+  <div class="autoExitTitle">⚠ 15분 이용 후 자동 퇴장</div>
+  <div class="autoExitSub">이용 종료 시간이 되면 자동으로 퇴장 처리됩니다.</div>
+</div>
+<button type="button" data-game="4인 복식">4인 복식</button>
+  <button type="button" data-game="2인 단식">2인 단식</button>
+  <button type="button" data-game="난타">난타</button>
+</div>
+<select id="g">
             <option value="">게임 방식을 선택해주세요</option>
             <option>4인 복식</option><option>2인 단식</option><option>난타</option>
           </select>
@@ -935,10 +1120,10 @@ function register(){
         </div>
         <div id="e" style="display:none;color:#d71920;background:#fff1f1;border:1px solid #ffc9c9;border-radius:8px;padding:10px;font-size:12px;font-weight:800;margin-bottom:10px"></div>
         <button class="btn" id="regBtn" onclick="reg()">대기 등록하기</button>
-        <div style="text-align:center;font-size:11px;color:#667085;margin-top:8px;line-height:1.45">
-          ※ 같은 스마트폰은 중복 대기 등록할 수 없습니다.<br>
-          ※ 등록 후 5분 동안 재등록이 제한됩니다.
-        </div>
+<div style="text-align:center;font-size:11px;color:#667085;margin-top:8px;line-height:1.45">
+  ※ 같은 스마트폰은 중복 대기 등록할 수 없습니다.<br>
+  ※ 등록 후 5분 동안 재등록이 제한됩니다.
+</div>
         <div style="text-align:center;font-size:10px;color:#7b8494;margin-top:10px">※ 대기 등록 후 관리자가 확인할 수 있습니다.</div>
       </div>
     </div>
@@ -1035,7 +1220,34 @@ async function reg(){
 }
 function waiting(){
   const app=document.getElementById("app");
-  app.innerHTML='<div class="wait"><div class="waitbody" id="w">불러오는 중...</div></div>';
+  app.innerHTML=`
+    <div class="fullWaitScreen">
+      <div class="fullWaitCard">
+        <div class="waitTitle">고객용 QR 스마트등록</div>
+
+        <div class="infoRow">
+          <span>닉네임</span><b id="waitNick">-</b>
+        </div>
+        <div class="infoRow">
+          <span>선택 코트</span><b id="waitCourt">-</b>
+        </div>
+        <div class="infoRow">
+          <span>게임 방식</span><b id="waitGame">-</b>
+        </div>
+
+        <div class="bigCountdown">
+          <div class="countLabel">남은 시간</div>
+          <div id="waitCountdown">15:00</div>
+        </div>
+
+        <div class="autoExitBox">
+          <div class="autoExitTitle">⚠ <span id="autoExitMinutes">15</span>분 후 자동 퇴장</div>
+          <div class="autoExitText">이용 시간이 종료되면 자동으로 퇴장 처리됩니다.</div>
+        </div>
+
+        <button class="bigExitButton" onclick="exitCurrent()">퇴장하기</button>
+      </div>
+    </div>`;
   renderWaiting(cloneDef());
   sub(renderWaiting);
 }
@@ -1338,5 +1550,61 @@ function management(){
 })();
 </script>
 
+<script id="registerGameChoiceCleanFinal">
+(function(){
+  function initGameChoices(){
+    const p=new URLSearchParams(location.search);
+    if(p.get("page")!=="register") return;
+    const wrap=document.getElementById("registerGameChoices");
+    if(!wrap) return;
+    const target=document.getElementById("g") ||
+      document.getElementById("game") ||
+      document.querySelector('select[name="game"]');
+    if(!target) return;
+    const buttons=[...wrap.querySelectorAll("button[data-game]")];
+    function sync(){
+      const v=target.value || "4인 복식";
+      buttons.forEach(b=>b.classList.toggle("active",b.dataset.game===v));
+    }
+    buttons.forEach(b=>b.addEventListener("click",()=>{
+      target.value=b.dataset.game;
+      target.dispatchEvent(new Event("change",{bubbles:true}));
+      sync();
+    }));
+    sync();
+  }
+  if(document.readyState==="loading")
+    document.addEventListener("DOMContentLoaded",initGameChoices);
+  else initGameChoices();
+})();
+</script>
 
+<script id="fullScreenWaitingDataFinal">
+(function(){
+  const oldRender = window.renderWaiting;
+  window.renderWaiting = function(state){
+    if(typeof oldRender === "function") oldRender(state);
+    try{
+      const a = state && (state.active || state.current || state);
+      if(!a) return;
+      const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v??"-"};
+      set("waitNick", a.nickname || a.nick || "-");
+      set("waitCourt", a.court ? (String(a.court).includes("코트")?a.court:String(a.court)+"번 코트"):"-");
+      set("waitGame", a.game || a.gameType || "-");
+
+      const end = a.endAt ? new Date(a.endAt).getTime() : 0;
+      if(end){
+        const left=Math.max(0, end-Date.now());
+        const sec=Math.floor(left/1000);
+        const mm=String(Math.floor(sec/60)).padStart(2,"0");
+        const ss=String(sec%60).padStart(2,"0");
+        set("waitCountdown", mm+":"+ss);
+
+        const mins=Math.max(1, Math.round((end-(a.startAt?new Date(a.startAt).getTime():Date.now()))/60000));
+        set("autoExitMinutes", mins);
+      }
+    }catch(e){}
+  };
+})();
+</script>
 </body></html>
