@@ -1025,7 +1025,29 @@ function renderAdmin(s){
   if(!g1||!g2||!g3||!mx||!cs||!qq)return;
   g1.textContent=s.settings["난타"];g2.textContent=s.settings["4인 복식"];g3.textContent=s.settings["2인 단식"];mx.textContent=s.max_per_court;
   cs.innerHTML=s.courts.map(c=>'<div class="lockCard"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'현재 잠금':'현재 사용 가능')+'</p><button class="'+(c.blocked?'locked':'open')+'" onclick="block('+c.id+','+(!c.blocked)+')">'+(c.blocked?'잠금 해제':'코트 잠금')+'</button></div>').join('');
-  qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
+  qq.innerHTML=s.courts.map(c=>{
+    const q=Array.isArray(c.queue)?c.queue:[];
+    const activeRemain=c.active&&c.active.endAt
+      ?Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/60000))
+      :0;
+    let accumulated=activeRemain;
+
+    const waitingRows=q.map((x,i)=>{
+      const duration=Number(s.settings?.[x.game]||15);
+      const expected=Math.max(0,accumulated);
+      accumulated+=duration;
+      return '<p><b>'+String(i+1)+'. '+esc(x.nickname)+'</b> / '+
+        esc(x.game)+' / 이용 '+duration+'분 / <strong>약 '+expected+'분 후 입장</strong></p>';
+    }).join('');
+
+    return '<div class="card"><h3>'+c.id+'번 코트 · 대기 '+q.length+'팀</h3>'+
+      (c.active
+        ?'<p>이용 중: '+esc(c.active.nickname)+' · '+esc(c.active.game)+
+          ' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>'
+        :'<p>이용 중 없음</p>')+
+      (waitingRows||'<p style="color:#718096">대기자가 없습니다.</p>')+
+      '</div>';
+  }).join('');
 }
 async function changeTime(game,delta){
   const el=game==="난타"?document.getElementById("g1"):game==="4인 복식"?document.getElementById("g2"):document.getElementById("g3");
