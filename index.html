@@ -175,6 +175,64 @@
   .grid{grid-template-columns:repeat(2,1fr)}
 }
 </style>
+
+<style id="customerDisplayPolish">
+/* 고객용 대기화면만 정리: 기능/배치 데이터 구조는 유지 */
+.customerDisplayPolish{}
+.stats{gap:12px!important;margin:10px 0 14px!important}
+.stat{background:#fff!important;border:1px solid #d7dfeb!important;border-radius:10px!important;box-shadow:0 2px 8px rgba(10,35,70,.06)!important;padding:10px 8px!important;font-size:13px!important;color:#53627a!important}
+.stat b{display:block!important;font-size:28px!important;color:#0a2350!important;margin-top:5px!important}
+.courts{gap:12px!important}
+.court{background:#fff!important;border:1px solid #ccd7e5!important;border-radius:10px!important;overflow:hidden!important;box-shadow:0 2px 9px rgba(10,35,70,.06)!important}
+.court .head{height:50px!important;background:#f7f9fc!important;border-bottom:2px solid #dbe3ed!important;padding:0 11px!important}
+.court .head>span:first-child{font-size:17px!important;font-weight:900!important}
+.court .body{padding:10px!important}
+.court .row{padding:7px 2px!important;border-bottom:1px solid #e5eaf1!important}
+.court .label{color:#68778d!important;font-size:11px!important}
+.court .val{font-size:13px!important;font-weight:900!important}
+.court .remain{font-size:23px!important;color:#07854b!important}
+.court .qbox{margin-top:10px!important;border:1px solid #d9e2ed!important;border-radius:8px!important;overflow:hidden!important}
+.court .qtitle{background:#eef3f8!important;border-bottom:1px solid #d9e2ed!important;padding:8px 9px!important;font-size:12px!important;font-weight:900!important}
+.court .qrow{padding:8px 9px!important;border-bottom:1px solid #edf1f5!important;font-size:11px!important}
+.court .qrow:last-child{border-bottom:0!important}
+.court .qeta{color:#1466e8!important;font-weight:900!important;text-align:right}
+.court .waitEmpty{padding:9px;color:#718096;font-size:11px}
+</style>
+
+<style id="customerMonitorMax">
+/* 고객용 대기 모니터: 기존 정보/기능 유지, 모니터용 가독성만 확대 */
+body{background:#eef2f7}
+.header{height:88px;padding:0 38px}
+.brand{font-size:30px}
+.sub{font-size:14px;margin-top:4px}
+.wrap{padding:20px 24px 28px;max-width:none;width:100%}
+.stats{gap:14px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid #cfd8e6;border-radius:10px;padding:15px 12px;font-size:16px;font-weight:800}
+.stat b{font-size:38px;line-height:1.05;margin-top:5px}
+.courts{gap:14px;align-items:stretch}
+.court{background:#fff;border:2px solid #d1dae8;border-radius:11px;box-shadow:0 3px 10px rgba(20,40,70,.07)}
+.head{height:62px;padding:10px 14px;font-size:21px;border-bottom:2px solid #dce4ee}
+.num{width:38px;height:38px;border-radius:7px;font-size:19px;margin-right:8px}
+.badge{padding:6px 11px;font-size:12px;font-weight:900}
+.body{padding:12px 14px 15px}
+.row{min-height:43px;padding:9px 2px;border-bottom:1px solid #dfe5ed;font-size:14px}
+.row .label{color:#56657b;font-weight:700}.row .value{font-size:16px;font-weight:900}
+.remain{margin:9px 0 12px;padding:11px 8px;border-radius:8px;background:#f4f8ff;border:1px solid #cbd8ea}
+.remain .label{font-size:12px;color:#637188;font-weight:800}.remain .big{font-size:34px;font-weight:900;line-height:1.05;margin-top:3px}
+.qbox{margin-top:12px;border:1px solid #cbd5e2;border-radius:8px;overflow:hidden;background:#fff}
+.qtitle{padding:10px 10px;background:#eef3f9;border-bottom:1px solid #cbd5e2;font-size:14px;font-weight:900}
+.qrow{display:grid;grid-template-columns:38px 1fr 1fr;align-items:center;min-height:38px;padding:7px 10px;border-top:1px solid #e3e8ef;font-size:13px}
+.qrow b{font-size:14px}.qrow span:nth-child(2){font-weight:800}.qeta{font-weight:800;text-align:right;color:#314b70}
+.waitEmpty{padding:14px 10px;text-align:center;color:#7b8798;font-size:13px}
+.customerBtn{padding:10px 16px!important;border-radius:7px!important;font-weight:900!important}
+@media(min-width:1600px){
+ .header{height:96px}.brand{font-size:34px}.sub{font-size:15px}
+ .wrap{padding:22px 30px 34px}.stat{padding:17px}.stat b{font-size:42px}
+ .head{height:68px;font-size:23px}.num{width:42px;height:42px}
+ .row{min-height:48px;font-size:15px}.row .value{font-size:18px}
+ .remain .big{font-size:38px}.qtitle{font-size:15px}.qrow{font-size:14px;min-height:42px}
+}
+</style>
 </head><body><div id="app"></div>
 <script>
 /* Supabase 설정: 아래 2개만 본인 프로젝트 값으로 교체 */
@@ -313,15 +371,49 @@ function customer(){
 function renderCustomer(s){
   const stats=document.getElementById("stats"), courts=document.getElementById("courts");
   if(!stats||!courts)return;
-  let a=s.courts.filter(c=>c.active).length;
-  let w=s.courts.reduce((n,c)=>n+(c.queue||[]).length,0);
-  stats.innerHTML='<div class="stat">전체 코트<b>5 개</b></div><div class="stat">이용 중 코트<b>'+a+' 개</b></div><div class="stat">대기 중 팀<b>'+w+' 팀</b></div><div class="stat">전체 대기 인원<b>'+w+' 팀</b></div>';
+  const activeCount=s.courts.filter(c=>c.active).length;
+  const waitingTeams=s.courts.reduce((n,c)=>n+(c.queue||[]).length,0);
+  const waitingPeople=s.courts.reduce((n,c)=>
+    n+(c.queue||[]).reduce((m,x)=>m+(x.game==="4인 복식"?4:x.game==="2인 단식"?2:1),0),0);
+
+  stats.innerHTML='<div class="stat">전체 코트<b>5 개</b></div>'+
+    '<div class="stat">이용 중 코트<b>'+activeCount+' 개</b></div>'+
+    '<div class="stat">대기 중 팀<b>'+waitingTeams+' 팀</b></div>'+
+    '<div class="stat">전체 대기 인원<b>'+waitingPeople+' 명</b></div>';
+
+  const gameMin=x=>Number(s.settings?.[x?.game])||15;
+  const remainMin=c=>{
+    if(!c.active||!c.active.endAt)return 0;
+    return Math.max(0,Math.ceil((new Date(c.active.endAt)-Date.now())/60000));
+  };
+  const eta=(c,index)=>{
+    let min=remainMin(c);
+    const q=c.queue||[];
+    for(let j=0;j<index;j++)min+=gameMin(q[j]);
+    return min;
+  };
+
   courts.innerHTML=s.courts.map((c,i)=>{
-    let q=c.queue||[],a=c.active;
-    return '<section class="court"><div class="head"><span><span class="num" style="background:'+colors[i]+'">'+c.id+'</span>'+c.id+'번 코트</span><span class="badge" style="background:'+(a?colors[i]:'#718096')+'">'+(c.blocked?'사용 불가':a?'이용 중':'대기 중')+'</span></div><div class="body">'+
-    (a?'<div class="row"><span class="label">닉네임</span><span class="val">'+esc(a.nickname)+'</span></div><div class="row"><span class="label">게임 방식</span><span class="val">'+esc(a.game)+'</span></div><div class="row"><span class="label">이용 시간</span><span class="val">'+tm(a.startAt)+' ~ '+tm(a.endAt)+'</span></div><div class="row"><span class="label">남은 시간</span><span class="val remain">'+left(a.endAt)+'</span></div>':
-    '<div class="row"><span class="label">현재 대기 팀</span><span class="val">'+q.length+'팀</span></div><div class="row"><span class="label">예상 대기 시간</span><span class="val">약 '+q.length*5+'분</span></div>')+
-    '<div class="qbox"><div class="qtitle">'+c.id+'번 코트 대기 현황 (총 '+q.length+'팀)</div>'+q.map((x,j)=>'<div class="qrow"><b>'+(j+1)+'</b><span>'+esc(x.nickname)+'</span><span>'+esc(x.game)+'</span></div>').join('')+'</div></div></section>'
+    const q=c.queue||[], a=c.active;
+    const status=c.blocked?'사용 불가':a?'이용 중':'대기 중';
+    const waitRows=q.map((x,j)=>
+      '<div class="qrow"><b>'+(j+1)+'</b><span>'+esc(x.nickname)+'</span><span class="qeta">약 '+eta(c,j)+'분 후</span></div>'
+    ).join('');
+
+    return '<section class="court">'+
+      '<div class="head"><span><span class="num" style="background:'+colors[i]+'">'+c.id+'</span>'+c.id+'번 코트</span>'+
+      '<span class="badge" style="background:'+(a?colors[i]:'#718096')+'">'+status+'</span></div>'+
+      '<div class="body">'+
+      (a?
+        '<div class="row"><span class="label">닉네임</span><span class="val">'+esc(a.nickname)+'</span></div>'+
+        '<div class="row"><span class="label">게임 방식</span><span class="val">'+esc(a.game)+'</span></div>'+
+        '<div class="row"><span class="label">이용 시간</span><span class="val">'+tm(a.startAt)+' ~ '+tm(a.endAt)+'</span></div>'+
+        '<div class="row"><span class="label">남은 시간</span><span class="val remain">'+left(a.endAt)+'</span></div>':
+        '<div class="row"><span class="label">현재 대기 팀</span><span class="val">'+q.length+'팀</span></div>'+
+        '<div class="row"><span class="label">예상 대기 시간</span><span class="val">'+(q.length?'약 '+eta(c,0)+'분':'약 0분')+'</span></div>')+
+      '<div class="qbox"><div class="qtitle">'+c.id+'번 코트 대기 현황 (총 '+q.length+'팀)</div>'+
+      (waitRows||'<div class="waitEmpty">대기자가 없습니다.</div>')+
+      '</div></div></section>';
   }).join('');
 }
 
