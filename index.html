@@ -901,7 +901,7 @@ function renderAdmin(s){
   cs.innerHTML=s.courts.map(c=>'<div class="lockCard"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'현재 잠금':'현재 사용 가능')+'</p><button class="'+(c.blocked?'locked':'open')+'" onclick="block('+c.id+','+(!c.blocked)+')">'+(c.blocked?'잠금 해제':'코트 잠금')+'</button></div>').join('');
   qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
 }
-async async function changeTime(game,delta){
+async function changeTime(game,delta){
   const el=game==="난타"?document.getElementById("g1"):game==="4인 복식"?document.getElementById("g2"):document.getElementById("g3");
   if(!el)return;
   const v=Math.max(1,Math.min(20,Number(el.textContent||15)+delta));
