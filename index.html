@@ -53,79 +53,50 @@
 @media(max-width:950px){.lockGrid{grid-template-columns:repeat(2,1fr)}.controlRow{grid-template-columns:1fr}}
 </style>
 <style>
-/* 장군봉 스마트 대기관리 - PC/모니터 */
 .manage-shell{min-height:100vh;background:#f4f6fa;color:#14213d}
-.manage-top{height:72px;background:#061b4f;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px;box-sizing:border-box}
-.manage-title{font-size:25px;font-weight:900}
-.manage-mode{display:flex;gap:6px}
+.manage-top{height:72px;background:#061b4f;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.manage-title{font-size:25px;font-weight:900}.manage-mode{display:flex;gap:6px}
 .manage-mode button{border:0;border-radius:7px;padding:10px 18px;font-size:14px;font-weight:900;cursor:pointer}
-.manage-mode .on{background:#1461e8;color:#fff}
-.manage-mode .off{background:#fff;color:#061b4f}
+.manage-mode .on{background:#1461e8;color:#fff}.manage-mode .off{background:#fff;color:#061b4f}
 .manage-wrap{padding:14px 18px 24px;max-width:1800px;margin:auto}
 .manage-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
 .manage-stat{background:#fff;border:1px solid #dbe2ec;border-radius:8px;padding:9px;text-align:center}
-.manage-stat small{display:block;font-size:12px;font-weight:800;color:#667085}
-.manage-stat b{display:block;font-size:30px;color:#061b4f;margin-top:2px}
+.manage-stat small{display:block;font-size:12px;font-weight:800;color:#667085}.manage-stat b{display:block;font-size:30px;color:#061b4f;margin-top:2px}
 .manage-courts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
 .manage-court{background:#fff;border:1px solid #d3dbe7;border-radius:9px;overflow:hidden;box-shadow:0 2px 7px rgba(20,40,70,.06)}
 .manage-head{height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 11px;background:#f7f9fc;border-bottom:1px solid #e4e8ef}
-.manage-head b{font-size:18px}
-.manage-badge{color:#fff;border-radius:99px;padding:5px 9px;font-size:11px;font-weight:900}
-.manage-body{padding:9px}
-.manage-current{border-radius:7px;padding:9px;text-align:center;margin-bottom:8px}
-.manage-current .state{font-size:12px;font-weight:900}
-.manage-current .time{font-size:29px;font-weight:900;line-height:1.15;margin-top:2px}
-.manage-row{display:flex;justify-content:space-between;padding:5px 1px;border-bottom:1px solid #eef1f5;font-size:12px}
-.manage-row:last-child{border-bottom:0}
-.manage-row b{font-weight:900}
+.manage-head b{font-size:18px}.manage-badge{color:#fff;border-radius:99px;padding:5px 9px;font-size:11px;font-weight:900}
+.manage-body{padding:9px}.manage-current{border-radius:7px;padding:9px;text-align:center;margin-bottom:8px}
+.manage-current .state{font-size:12px;font-weight:900}.manage-current .time{font-size:29px;font-weight:900;line-height:1.15;margin-top:2px}
+.manage-row{display:flex;justify-content:space-between;padding:5px 1px;border-bottom:1px solid #eef1f5;font-size:12px}.manage-row:last-child{border-bottom:0}
 .manage-qtitle{margin-top:8px;padding:7px;background:#f6f8fb;font-size:12px;font-weight:900}
 .manage-qrow{display:grid;grid-template-columns:32px 1fr auto;gap:5px;padding:7px 3px;border-bottom:1px solid #eef1f5;font-size:11px}
-.manage-qrow:last-child{border-bottom:0}
-.manage-admin{display:none}
-.manage-admin-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.manage-panel{background:#fff;border:1px solid #dbe2ec;border-radius:9px;padding:14px}
-.manage-panel h3{margin:0 0 10px;font-size:17px}
+.manage-admin{display:none}.manage-admin-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.manage-panel{background:#fff;border:1px solid #dbe2ec;border-radius:9px;padding:14px}.manage-panel h3{margin:0 0 10px;font-size:17px}
 .manage-control{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eef1f5;padding:9px 0}
-.manage-control:last-child{border-bottom:0}
-.manage-btn{border:0;border-radius:6px;padding:7px 11px;font-weight:900;cursor:pointer}
-.manage-red{background:#e53935;color:#fff}.manage-blue{background:#1461e8;color:#fff}.manage-gray{background:#eef2f7;color:#23324d}
-@media(max-width:900px){
- .manage-courts{grid-template-columns:1fr 1fr}
- .manage-admin-grid{grid-template-columns:1fr}
-}
+.manage-btn{border:0;border-radius:6px;padding:7px 11px;font-weight:900}.manage-red{background:#e53935;color:#fff}.manage-blue{background:#1461e8;color:#fff}.manage-gray{background:#eef2f7;color:#23324d}
+@media(max-width:900px){.manage-courts{grid-template-columns:1fr 1fr}.manage-admin-grid{grid-template-columns:1fr}}
 </style>
 </head><body>
 <div id="managementPage" style="display:none">
   <div class="manage-shell">
     <header class="manage-top">
-      <div>
-        <div class="manage-title">장군봉 배드민턴 스마트 대기관리</div>
-      </div>
+      <div class="manage-title">장군봉 배드민턴 스마트 대기관리</div>
       <div class="manage-mode">
-        <button id="mAdminBtn" class="on" onclick="setManageMode('admin')">관리자</button>
-        <button id="mDisplayBtn" class="off" onclick="setManageMode('display')">고객용</button>
+        <button id="mAdminBtn" class="off" onclick="setManageMode('admin')">관리자</button>
+        <button id="mDisplayBtn" class="on" onclick="setManageMode('display')">고객용</button>
       </div>
     </header>
-
     <main class="manage-wrap">
-      <div id="manageDisplay">
-        <div class="manage-stats" id="mStats"></div>
-        <div class="manage-courts" id="mCourts"></div>
-      </div>
-
+      <div id="manageDisplay"><div class="manage-stats" id="mStats"></div><div class="manage-courts" id="mCourts"></div></div>
       <div id="manageAdmin" class="manage-admin">
         <div class="manage-admin-grid">
-          <section class="manage-panel">
-            <h3>코트 관리</h3>
-            <div id="mCourtControls"></div>
-          </section>
-          <section class="manage-panel">
-            <h3>게임 시간</h3>
+          <section class="manage-panel"><h3>코트 관리</h3><div id="mCourtControls"></div></section>
+          <section class="manage-panel"><h3>게임 시간 설정</h3>
             <div class="manage-control"><b>기본 이용시간</b><span>15분</span></div>
             <div class="manage-control"><span>1분 단위 조절</span><span class="manage-btn manage-blue">− / +</span></div>
           </section>
-          <section class="manage-panel">
-            <h3>대기자 관리</h3>
+          <section class="manage-panel"><h3>대기자 관리</h3>
             <div class="manage-control"><b>현재 대기팀</b><span id="mWaitingTeams">0팀</span></div>
             <div class="manage-control"><b>강제 퇴장</b><span class="manage-btn manage-red">관리 화면에서 선택</span></div>
           </section>
@@ -266,14 +237,14 @@ function route(){
 
 function display(){
   const app=document.getElementById("app");
-  app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">실시간 코트 대기 현황 · QR 스캔하여 대기 등록</div></div><div style="display:flex;align-items:center;gap:8px">
+  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">실시간 코트 대기 현황 · QR 스캔하여 대기 등록</div></div><div style="display:flex;align-items:center;gap:8px">
       <a href="?page=admin" style="background:#1461e8;color:#fff;text-decoration:none;border-radius:7px;padding:8px 10px;font-size:11px;font-weight:900">관리자 모드</a>
       <div style="display:flex;align-items:center;gap:8px;background:#fff;padding:5px 8px;border-radius:8px;color:#061b4f">
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUgAAAFIAQAAAAAab1qeAAACW0lEQVR4nO1a0U7EMAyz0f7/l81DnHScBNokji4oRZwKtXRp1NSuWwoX28dV4CAH+WvIA2D0RIgCCBFCdFSjbWa0PZ8QENmL3AkQRQEQlaNtZrQ/n2DkVARAgaD/Ra3RLjN6QD6jUbFCGfXuNL712/83ktUTCEj8DvmOb/8fyAN4WYfBSaCi2mu0y4z2IqFMpr75SViXGe1FUqcuYVKCQOg8uDvOLsjDBa7SSqc8ynuqwNGf15r1kiqpFCGmeLJoonbH2QUJrQ1UXp65a8q7qyDN/nkZSacxa7sORav0+YQ4WyBzq1z0QyUxOcUhRtvMaH8+vS7thHD9IZ83tT/OLsjk91iDRUVBRvAn5/x+tR3eJEtppjGiMkMgcur9JpIk7S0RJ4YX0g59RpxPR5bulLuAyenrTro7zk5IQQAJkKJNZaYUrcrfH2cHZBx+rJpYKhRJ9TGMWZ/XkZlLNwly5Utgiqn9cXZBMuzOqvRYrKIIQhr9eRdJybUeKTQPpSXiNbo/zibIWII6pZUsNxT5sT/OFkiLpCKhoifmvurje5sZbc9nGCDrrM4058upHz66g5Rfg9A6PhiJKUGn3m+e3wFEzmzN2xLRIiTMfccNJEMwAaE9mQZIqHmekHvjbIF8ud/UovW6oOPU+z3/M3pClrj9zyj9oKnh94vt/L6uNH3cIb0YTF1mtD+f6zFdFT9TyC+TvsuMHpDPaOvR5/oFkFK0y4wek89yRuzTnS/jZv+8g8w3DXbqKHApphRTD4izAfJAEfwSSFnqYt0ZDx9da1+e0P35tw9ykD+3TxmmMYmHIhKPAAAAAElFTkSuQmCC" alt="고객 대기 등록 QR" style="width:48px;height:48px;display:block">
         <span style="font-size:11px;font-weight:900;line-height:1.25">QR 스캔<br>대기 등록</span>
       </div>
       <div id="clock"></div>
-    </div></header><div class="wrap"><div class="stats" id="stats"></div><div class="mobileCourtTabs" id="mobileCourtTabs"></div><div class="courts" id="courts"></div></div>';
+    </div></header><div class="wrap"><div class="stats" id="stats"></div><div class="mobileCourtTabs" id="mobileCourtTabs"></div><div class="courts" id="courts"></div></div>`;
   renderCustomer(cloneDef());
   sub(renderCustomer);
   setInterval(()=>{const el=document.getElementById("clock");if(el)el.textContent=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})},1000);
@@ -532,7 +503,7 @@ function renderWaiting(s){
             <div class="count-label">남은 시간</div>
             <div class="count-circle">
               <div class="small">남은 시간</div>
-              <div class="big" id="waitCountdown">${fmtDuration(expectedSec)}</div>
+              <div class="big" id="waitRemain">${fmtDuration(expectedSec)}</div>
             </div>
           </div>
 
@@ -641,8 +612,6 @@ async function force(id){
 
 (function(){
   const r=route();
-  if(r==="management"){openManagement();return;}
-  
   if(r==="admin")admin();
   else if(r==="register")register();
   else if(r==="waiting")waiting();
@@ -654,89 +623,38 @@ async function force(id){
 <script>
 (function(){
   const MG_COLORS=["#07854b","#1461e8","#6332d7","#ff7900","#e51e2a"];
-
   window.setManageMode=function(mode){
-    const d=document.getElementById("manageDisplay");
-    const a=document.getElementById("manageAdmin");
-    const db=document.getElementById("mDisplayBtn");
-    const ab=document.getElementById("mAdminBtn");
+    const d=document.getElementById("manageDisplay"),a=document.getElementById("manageAdmin");
+    const db=document.getElementById("mDisplayBtn"),ab=document.getElementById("mAdminBtn");
     if(!d||!a)return;
-    d.style.display=mode==="display"?"block":"none";
-    a.style.display=mode==="admin"?"block":"none";
-    db.className=mode==="display"?"on":"off";
-    ab.className=mode==="admin"?"on":"off";
+    d.style.display=mode==="display"?"block":"none";a.style.display=mode==="admin"?"block":"none";
+    db.className=mode==="display"?"on":"off";ab.className=mode==="admin"?"on":"off";
   };
-
   window.renderManagement=function(state){
-    const stats=document.getElementById("mStats"), courts=document.getElementById("mCourts");
-    if(!stats||!courts)return;
-    const cs=state.courts||[];
-    const active=cs.filter(c=>c.active).length;
+    const stats=document.getElementById("mStats"),courts=document.getElementById("mCourts");if(!stats||!courts)return;
+    const cs=state.courts||[],active=cs.filter(c=>c.active).length;
     const teams=cs.reduce((n,c)=>n+(c.queue||[]).length,0);
-    const people=cs.reduce((n,c)=>n+(c.queue||[]).reduce((m,x)=>{
-      return m+(x.game==="4인 복식"?4:x.game==="2인 단식"?2:1);
-    },0),0);
-
-    stats.innerHTML=
-      '<div class="manage-stat"><small>전체 코트</small><b>'+cs.length+'개</b></div>'+
-      '<div class="manage-stat"><small>이용 중 코트</small><b>'+active+'개</b></div>'+
-      '<div class="manage-stat"><small>대기 팀</small><b>'+teams+'팀</b></div>'+
-      '<div class="manage-stat"><small>대기 인원</small><b>'+people+'명</b></div>';
-
+    const people=cs.reduce((n,c)=>n+(c.queue||[]).reduce((m,x)=>m+(x.game==="4인 복식"?4:x.game==="2인 단식"?2:1),0),0);
+    stats.innerHTML='<div class="manage-stat"><small>전체 코트</small><b>'+cs.length+'개</b></div><div class="manage-stat"><small>이용 중 코트</small><b>'+active+'개</b></div><div class="manage-stat"><small>대기 중 팀</small><b>'+teams+'팀</b></div><div class="manage-stat"><small>전체 대기 인원</small><b>'+people+'명</b></div>';
     courts.innerHTML=cs.map((c,i)=>{
-      const a=c.active,q=c.queue||[];
-      const remaining=a&&a.endAt?left(a.endAt):"00:00";
-      const status=c.blocked?"사용 불가":a?"이용 중":"대기 중";
-      const bg=a?"#eef7f1":c.blocked?"#f1f3f6":"#fff7ed";
-      const fg=a?"#07854b":c.blocked?"#667085":"#c2410c";
-      const rows=q.map((x,j)=>
-        '<div class="manage-qrow"><b>'+(j+1)+'</b><span>'+esc(x.nickname)+'</span><span>'+esc(x.game||"")+'</span></div>'
-      ).join("");
-      return '<section class="manage-court">'+
-        '<div class="manage-head"><b><span style="color:'+MG_COLORS[i]+'">●</span> '+c.id+'번 코트</b>'+
-        '<span class="manage-badge" style="background:'+(a?MG_COLORS[i]:c.blocked?"#718096":"#c2410c")+'">'+status+'</span></div>'+
-        '<div class="manage-body">'+
-        (a?
-          '<div class="manage-current" style="background:'+bg+';border:1px solid '+(a?"#c8ead5":"#fed7aa")+'">'+
-          '<div class="state" style="color:'+fg+'">이용 중</div>'+
-          '<div class="time" style="color:'+fg+'">'+remaining+'</div>'+
-          '<div style="font-size:10px;color:#667085;font-weight:800">이용 잔여시간</div></div>'+
-          '<div class="manage-row"><span>현재 이용자</span><b>'+esc(a.nickname)+'</b></div>'+
-          '<div class="manage-row"><span>게임 방식</span><b>'+esc(a.game)+'</b></div>'+
-          '<div class="manage-row"><span>이용 시간</span><b>'+tm(a.startAt)+' ~ '+tm(a.endAt)+'</b></div>'
-        :
-          '<div class="manage-current" style="background:'+bg+';border:1px solid #fed7aa">'+
-          '<div class="state" style="color:'+fg+'">대기 중</div>'+
-          '<div class="time" style="color:'+fg+'">'+q.length+'팀</div>'+
-          '<div style="font-size:10px;color:#667085;font-weight:800">현재 대기</div></div>'
-        )+
-        '<div class="manage-qtitle">'+c.id+'번 코트 대기 현황</div>'+
-        (rows||'<div class="manage-qrow"><span></span><span>대기자 없음</span><span></span></div>')+
-        '</div></section>';
+      const a=c.active,q=c.queue||[],remaining=a&&a.endAt?left(a.endAt):"00:00",status=c.blocked?"사용 불가":a?"이용 중":"대기 중";
+      const bg=a?"#eef7f1":c.blocked?"#f1f3f6":"#fff7ed",fg=a?"#07854b":c.blocked?"#667085":"#c2410c";
+      const rows=q.map((x,j)=>'<div class="manage-qrow"><b>'+(j+1)+'</b><span>'+esc(x.nickname)+'</span><span>'+esc(x.game||"")+'</span></div>').join("");
+      return '<section class="manage-court"><div class="manage-head"><b><span style="color:'+MG_COLORS[i]+'">●</span> '+c.id+'번 코트</b><span class="manage-badge" style="background:'+(a?MG_COLORS[i]:c.blocked?"#718096":"#c2410c")+'">'+status+'</span></div><div class="manage-body">'+
+      (a?'<div class="manage-current" style="background:'+bg+';border:1px solid #c8ead5"><div class="state" style="color:'+fg+'">이용 중</div><div class="time" style="color:'+fg+'">'+remaining+'</div><div style="font-size:10px;color:#667085;font-weight:800">이용 잔여시간</div></div><div class="manage-row"><span>현재 이용자</span><b>'+esc(a.nickname)+'</b></div><div class="manage-row"><span>게임 방식</span><b>'+esc(a.game)+'</b></div><div class="manage-row"><span>이용 시간</span><b>'+tm(a.startAt)+' ~ '+tm(a.endAt)+'</b></div>':
+      '<div class="manage-current" style="background:'+bg+';border:1px solid #fed7aa"><div class="state" style="color:'+fg+'">'+status+'</div><div class="time" style="color:'+fg+'">'+q.length+'팀</div><div style="font-size:10px;color:#667085;font-weight:800">현재 대기</div></div>')+
+      '<div class="manage-qtitle">'+c.id+'번 코트 대기 현황</div>'+(rows||'<div class="manage-qrow"><span></span><span>대기자 없음</span><span></span></div>')+'</div></section>';
     }).join("");
-
     const controls=document.getElementById("mCourtControls");
-    if(controls){
-      controls.innerHTML=cs.map(c=>
-        '<div class="manage-control"><b>'+c.id+'번 코트</b>'+
-        '<span class="manage-btn '+(c.blocked?"manage-gray":"manage-blue")+'">'+(c.blocked?"잠금":"사용 가능")+'</span></div>'
-      ).join("");
-    }
-    const wt=document.getElementById("mWaitingTeams");
-    if(wt)wt.textContent=teams+"팀";
+    if(controls)controls.innerHTML=cs.map(c=>'<div class="manage-control"><b>'+c.id+'번 코트</b><span class="manage-btn '+(c.blocked?"manage-gray":"manage-blue")+'">'+(c.blocked?"잠금":"사용 가능")+'</span></div>').join("");
+    const wt=document.getElementById("mWaitingTeams");if(wt)wt.textContent=teams+"팀";
   };
-
-  // Use the existing app's state getter when available.
   window.openManagement=function(){
-    const app=document.getElementById("app");
-    const mp=document.getElementById("managementPage");
-    if(app)app.style.display="none";
-    if(mp)mp.style.display="block";
-    setManageMode("display");
-    if(typeof get==="function"){
-      get().then(renderManagement).catch(()=>{});
-    }
+    const app=document.getElementById("app"),mp=document.getElementById("managementPage");
+    if(app)app.style.display="none";if(mp)mp.style.display="block";setManageMode("display");
+    if(typeof get==="function"){const refresh=async()=>{try{renderManagement(await advance(await get()))}catch(e){console.error(e)}};refresh();setInterval(refresh,2000);}
   };
+  if(typeof route==="function"&&route()==="management")window.openManagement();
 })();
 </script>
 </body></html>
