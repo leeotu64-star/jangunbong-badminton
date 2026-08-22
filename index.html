@@ -231,27 +231,25 @@ body{background:#eef3f9!important}
 <style id="viewSwitchRestore">
 .view-switch{
   position:fixed;right:18px;top:14px;z-index:99999;
-  display:flex;gap:8px;
+  display:flex;gap:8px
 }
-.view-switch a{
+.view-switch button{
   display:inline-flex;align-items:center;justify-content:center;
-  min-width:92px;height:40px;padding:0 14px;
-  border-radius:8px;border:0;
-  background:#1769e8;color:#fff!important;
-  text-decoration:none!important;font-size:14px;font-weight:950;
-  box-shadow:0 3px 9px rgba(7,29,73,.22);
+  min-width:100px;height:40px;padding:0 14px;border:0;border-radius:8px;
+  background:#1769e8;color:#fff;font-size:14px;font-weight:950;
+  cursor:pointer;box-shadow:0 3px 9px rgba(7,29,73,.22)
 }
-.view-switch a:hover{background:#0e55c7}
-.view-switch .secondary{background:#071d49}
+.view-switch button.secondary{background:#071d49}
+.view-switch button:hover{filter:brightness(.94)}
 @media(max-width:700px){
   .view-switch{right:8px;top:8px}
-  .view-switch a{min-width:78px;height:36px;font-size:12px;padding:0 9px}
+  .view-switch button{min-width:82px;height:36px;font-size:12px}
 }
 </style>
 </head><body>
 <div id="viewSwitch" class="view-switch" aria-label="화면 전환">
-  <a id="switchCustomer" href="?page=management&view=display">고객용</a>
-  <a id="switchAdmin" class="secondary" href="?page=management&view=admin">관리자</a>
+  <button id="switchCustomer" type="button" onclick="switchManagementView('display')">고객용</button>
+  <button id="switchAdmin" class="secondary" type="button" onclick="switchManagementView('admin')">관리자 모드</button>
 </div>
 <div id="app"></div>
 <script>
@@ -730,26 +728,38 @@ function management(){
 </script>
 <script>
 (function(){
-  function updateViewSwitch(){
-    const p=new URLSearchParams(location.search);
-    const view=p.get("view")||"display";
-    const c=document.getElementById("switchCustomer");
-    const a=document.getElementById("switchAdmin");
-    if(!c||!a)return;
+  window.switchManagementView=function(view){
+    const display=document.getElementById("manageDisplay");
+    const admin=document.getElementById("manageAdmin");
+    if(!display||!admin)return;
+    const customer=document.getElementById("switchCustomer");
+    const adminBtn=document.getElementById("switchAdmin");
     if(view==="admin"){
-      c.style.display="inline-flex";
-      a.style.display="none";
-      c.textContent="고객용";
-      c.href="?page=management&view=display";
+      display.style.display="none";
+      admin.style.display="block";
+      if(customer)customer.style.display="inline-flex";
+      if(adminBtn)adminBtn.style.display="none";
     }else{
-      c.style.display="none";
-      a.style.display="inline-flex";
-      a.textContent="관리자 모드";
-      a.href="?page=management&view=admin";
+      display.style.display="block";
+      admin.style.display="none";
+      if(customer)customer.style.display="none";
+      if(adminBtn)adminBtn.style.display="inline-flex";
     }
+  };
+
+  function initManagementView(){
+    const mp=document.getElementById("managementPage");
+    if(!mp)return;
+    const params=new URLSearchParams(location.search);
+    const view=params.get("view")||"display";
+    switchManagementView(view==="admin"?"admin":"display");
   }
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",updateViewSwitch);
-  else updateViewSwitch();
+
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",initManagementView);
+  }else{
+    initManagementView();
+  }
 })();
 </script>
 </body></html>
