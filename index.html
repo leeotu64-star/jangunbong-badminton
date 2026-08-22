@@ -153,12 +153,13 @@ function route(){
   if(path==="/admin" || path.endsWith("/admin") || page==="admin") return "admin";
   if(path==="/register" || path.endsWith("/register") || page==="register") return "register";
   if(path==="/waiting" || path.endsWith("/waiting") || page==="waiting" || ticket) return "waiting";
-  return "customer";
+  if(page==="display") return "display";
+  return "register";
 }
 
-function customer(){
+function display(){
   const app=document.getElementById("app");
-  app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">고객에게 보이는 실시간 대기 현황</div></div><div style="display:flex;align-items:center;gap:12px"><div id="clock"></div></div></header><div class="wrap"><div class="stats" id="stats"></div><div class="courts" id="courts"></div></div>';
+  app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">고객에게 보이는 실시간 대기 현황</div></div><div style="display:flex;align-items:center;gap:12px"><a class="customerBtn" href="?page=admin">관리자 모드</a><div id="clock"></div></div></header><div class="wrap"><div class="stats" id="stats"></div><div class="courts" id="courts"></div></div>';
   renderCustomer(cloneDef());
   sub(renderCustomer);
   setInterval(()=>{const el=document.getElementById("clock");if(el)el.textContent=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})},1000);
@@ -454,7 +455,7 @@ async function finish(){
 
 function admin(){
   const app=document.getElementById("app");
-  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 배드민턴 관리자</div><div class="sub">스마트 대기 관리 시스템</div></div><div class="adminTop"><a href="?page=customer">고객 화면</a></div></header><div class="admin"><aside class="side"><h2></h2><div class="nav on">코트 관리</div><div class="nav">게임 시간 설정</div><div class="nav">대기 정원 설정</div></aside><main class="main"><section class="panel"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분 · 변경 즉시 고객 화면에 적용</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div><div style="font-size:12px;color:#07854b;font-weight:800;margin-top:10px">✓ 저장 버튼을 누르지 않아도 + / − 변경 즉시 고객 등록 화면에 적용됩니다.</div></div></section><section class="panel"><div class="adminSectionTitle"><div><h2>대기자 최대 정원</h2><div class="hint">전체 코트에 동일하게 적용 · 4명~20명</div></div></div><div class="controlBox"><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
+  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 배드민턴 관리자</div><div class="sub">스마트 대기 관리 시스템</div></div><div class="adminTop"><a href="?page=register">고객 등록 화면</a><a href="?page=display">현황 화면</a></div></header><div class="admin"><aside class="side"><h2>관리자 모드</h2><div class="nav on">코트 관리</div><div class="nav">게임 시간 설정</div><div class="nav">대기 정원 설정</div></aside><main class="main"><section class="panel"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분 · 변경 즉시 고객 화면에 적용</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div><div style="font-size:12px;color:#07854b;font-weight:800;margin-top:10px">✓ 저장 버튼을 누르지 않아도 + / − 변경 즉시 고객 등록 화면에 적용됩니다.</div></div></section><section class="panel"><div class="adminSectionTitle"><div><h2>대기자 최대 정원</h2><div class="hint">전체 코트에 동일하게 적용 · 4명~20명</div></div></div><div class="controlBox"><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
   renderAdmin(cloneDef()); sub(renderAdmin);
 }
 function renderAdmin(s){
@@ -513,7 +514,8 @@ async function force(id){
   if(r==="admin")admin();
   else if(r==="register")register();
   else if(r==="waiting")waiting();
-  else customer();
+  else if(r==="display")display();
+  else register();
   ensure().catch(e=>console.error(e));
 })();
 </script></body></html>
