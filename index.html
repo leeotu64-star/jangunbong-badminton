@@ -345,6 +345,48 @@ const REGISTER_URL=location.origin+location.pathname+"?page=register";
 const ticket=params.get("ticket")||"";
 const colors=["#07854b","#1461e8","#6332d7","#ff7900","#e51e2a"];
 const def={id:ROOT,settings:{"난타":15,"4인 복식":15,"2인 단식":15},max_per_court:5,finished:{},courts:[1,2,3,4,5].map(id=>({id,blocked:false,active:null,queue:[]}))};
+/* QR 연속등록 방지: 개인정보 대신 브라우저에 저장되는 랜덤 토큰만 사용 */
+const DEVICE_KEY="jb_anonymous_device_v1";
+const COOLDOWN_KEY="jb_register_cooldown_until";
+const REGISTER_COOLDOWN_MS=5*60*1000;
+
+function getDeviceToken(){
+  try{
+    let v=localStorage.getItem(DEVICE_KEY);
+    if(!v){
+      v=(crypto&&crypto.randomUUID)?crypto.randomUUID():
+        ("D"+Date.now()+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2));
+      localStorage.setItem(DEVICE_KEY,v);
+    }
+    return v;
+  }catch(e){
+    return (crypto&&crypto.randomUUID)?crypto.randomUUID():
+      ("D"+Date.now()+Math.random().toString(36).slice(2));
+  }
+}
+function getCooldownUntil(){
+  try{return Number(localStorage.getItem(COOLDOWN_KEY)||0)}catch(e){return 0}
+}
+function setCooldown(){
+  try{localStorage.setItem(COOLDOWN_KEY,String(Date.now()+REGISTER_COOLDOWN_MS))}catch(e){}
+}
+function clearCooldown(){
+  try{localStorage.removeItem(COOLDOWN_KEY)}catch(e){}
+}
+function cooldownMessage(until){
+  const leftMs=Math.max(0,until-Date.now());
+  const m=Math.ceil(leftMs/60000);
+  return m<=1 ? "잠시 후 다시 등록할 수 있습니다." : m+"분 후 다시 등록할 수 있습니다.";
+}
+function findDeviceRegistration(s,deviceId){
+  for(const c of (s.courts||[])){
+    if(c.active?.deviceId===deviceId) return {type:"active",court:c,entry:c.active};
+    const q=(c.queue||[]).find(x=>x.deviceId===deviceId);
+    if(q) return {type:"queue",court:c,entry:q};
+  }
+  return null;
+}
+
 
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function tm(t){return new Date(t).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}
@@ -477,6 +519,10 @@ function register(){
         </div>
         <div id="e" style="display:none;color:#d71920;background:#fff1f1;border:1px solid #ffc9c9;border-radius:8px;padding:10px;font-size:12px;font-weight:800;margin-bottom:10px"></div>
         <button class="btn" id="regBtn" onclick="reg()">대기 등록하기</button>
+<div style="text-align:center;font-size:11px;color:#667085;margin-top:8px;line-height:1.45">
+  ※ 같은 스마트폰은 중복 대기 등록할 수 없습니다.<br>
+  ※ 등록 후 5분 동안 재등록이 제한됩니다.
+</div>
         <div style="text-align:center;font-size:10px;color:#7b8494;margin-top:10px">※ 대기 등록 후 관리자가 확인할 수 있습니다.</div>
       </div>
     </div>
@@ -505,6 +551,7 @@ async function reg(){
   const nn=document.getElementById("n").value.trim();
   const gg=document.getElementById("g").value;
   const id=Number(document.getElementById("c").value);
+  const deviceId=getDeviceToken();
 
   const err=(msg)=>{
     ee.style.display="block";
@@ -513,18 +560,31 @@ async function reg(){
   };
 
   if(!nn||!gg||!id){err("닉네임, 게임 방식, 코트를 모두 선택해주세요.");return}
+
+  /* 같은 스마트폰의 5분 재등록 제한 */
+  const cooldown=getCooldownUntil();
+  if(cooldown>Date.now()){
+    err("⚠️ 이미 등록했습니다. "+cooldownMessage(cooldown));
+    return;
+  }
+
   btn.disabled=true; btn.style.opacity=".65"; ee.style.display="none";
 
   try{
     let s=await get();
-    if(!s || !Array.isArray(s.courts)){
-      s=cloneDef();
-    }
+    if(!s || !Array.isArray(s.courts)) s=cloneDef();
     s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
-    s.max_per_court=Number(s.max_per_court||5);
+    s.max_per_court=Math.max(1,Math.min(20,Number(s.max_per_court||5)));
     s.finished=s.finished||{};
-    const x=s.courts.find(v=>Number(v.id)===id);
 
+    /* 서버에 저장된 익명 기기 토큰으로 모든 코트의 중복 대기/이용 여부 검사 */
+    const existing=findDeviceRegistration(s,deviceId);
+    if(existing){
+      err("⚠️ 이미 대기 등록되어 있습니다.\n기존 대기를 취소하거나 이용을 마친 후 다시 등록해주세요.");
+      return;
+    }
+
+    const x=s.courts.find(v=>Number(v.id)===id);
     if(!x){err("선택한 코트를 찾을 수 없습니다.");return}
     if(x.blocked){err("현재 이용할 수 없는 코트입니다. 다른 코트를 선택해주세요.");return}
 
@@ -532,21 +592,31 @@ async function reg(){
     const total=x.queue.length+(x.active?1:0);
     if(total>=s.max_per_court){err("선택한 코트의 대기가 마감되었습니다.");return}
 
-    let t=(crypto&&crypto.randomUUID)?crypto.randomUUID():("T"+Date.now()+Math.random().toString(36).slice(2));
-    x.queue.push({ticket:t,nickname:nn,game:gg,court:id,createdAt:Date.now()});
+    const t=(crypto&&crypto.randomUUID)?crypto.randomUUID():
+      ("T"+Date.now()+Math.random().toString(36).slice(2));
 
-    // Normalize and start the first waiting customer if the court is empty.
+    /* QR에는 개인정보가 없고, 대기 데이터에도 익명 랜덤 토큰만 저장 */
+    x.queue.push({
+      ticket:t,
+      nickname:nn,
+      game:gg,
+      court:id,
+      createdAt:Date.now(),
+      deviceId:deviceId
+    });
+
     await advance(s,false);
     await save(s);
+
+    /* 등록 성공 후 5분 동안 같은 브라우저의 재등록 차단 */
+    setCooldown();
 
     location.replace(location.pathname+"?page=waiting&ticket="+encodeURIComponent(t));
   }catch(e){
     console.error(e);
-    const msg=String(e?.message||e);
-    err(msg);
+    err(String(e?.message||e));
   }
 }
-
 function waiting(){
   const app=document.getElementById("app");
   app.innerHTML='<div class="wait"><div class="waithead"><h2>고객용 QR 스마트등록</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
