@@ -379,6 +379,49 @@ body:not(.management-view) #viewSwitch{display:none!important}
   .remain{font-size:28px!important}
 }
 </style>
+
+<style id="adminHeaderFinalFix">
+.adminTop{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:16px!important;
+  margin-left:auto!important;
+  padding-right:18px!important;
+  white-space:nowrap!important;
+}
+.adminTop .topSwitch{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:104px!important;
+  height:42px!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  padding:0!important;
+  border-radius:8px!important;
+  text-decoration:none!important;
+  font-size:14px!important;
+  font-weight:950!important;
+  box-shadow:0 2px 7px rgba(0,0,0,.16)!important;
+}
+.adminTop .customerSwitch{background:#1769e8!important;color:#fff!important}
+.adminTop .adminSwitch{background:#071d49!important;color:#fff!important;border:1px solid rgba(255,255,255,.3)!important}
+.adminTop .topSwitch:hover{filter:brightness(.94)}
+#waitMax .stepper{min-height:58px}
+#waitMax .stepper button{
+  width:44px!important;height:40px!important;font-size:22px!important;font-weight:950!important;
+}
+#waitMax #mx{display:inline-block;min-width:48px;text-align:center;font-size:25px;font-weight:950}
+@media(max-width:900px){
+  .adminTop{gap:8px!important;padding-right:8px!important}
+  .adminTop .topSwitch{width:90px!important;height:38px!important;font-size:12px!important}
+}
+</style>
+<style id="maxPersistFix">
+#waitMax #mx{user-select:none}
+#waitMax .stepper button{touch-action:manipulation}
+</style>
 </head><body>
 <div id="app"></div>
 <script>
@@ -842,21 +885,23 @@ function setupAdminNav(){
 
 function admin(){
   const app=document.getElementById("app");
-  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=customer">고객 화면으로</a></div></header><div class="admin"><div id="viewSwitch" class="view-switch" aria-label="관리자 화면 전환">
-  <button id="switchCustomer" type="button" onclick="location.href='?page=management&view=display'">고객용</button>
-  <button id="switchAdmin" class="secondary" type="button" onclick="location.href='?page=management&view=admin'">관리자 모드</button>
-</div>
+  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop">
+  <a class="topSwitch customerSwitch" href="?page=management&view=display">고객용</a>
+  <a class="topSwitch adminSwitch" href="?page=management&view=admin">관리자 모드</a>
+</div></header><div class="admin">
 <aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기자 최대 정원</h2><div class="hint">전체 코트에 동일하게 적용 · 1명~20명</div></div></div><div class="controlBox"><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
   renderAdmin(cloneDef()); sub(renderAdmin);
 }
+let adminMaxDraft=null;
+let adminMaxSaving=false;
 function renderAdmin(s){
   const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),cs=document.getElementById("cs"),qq=document.getElementById("qq");
   if(!g1||!g2||!g3||!mx||!cs||!qq)return;
-  g1.textContent=s.settings["난타"];g2.textContent=s.settings["4인 복식"];g3.textContent=s.settings["2인 단식"];mx.textContent=s.max_per_court;
+  g1.textContent=s.settings["난타"];g2.textContent=s.settings["4인 복식"];g3.textContent=s.settings["2인 단식"];mx.textContent=(adminMaxDraft!==null?adminMaxDraft:s.max_per_court);
   cs.innerHTML=s.courts.map(c=>'<div class="lockCard"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'현재 잠금':'현재 사용 가능')+'</p><button class="'+(c.blocked?'locked':'open')+'" onclick="block('+c.id+','+(!c.blocked)+')">'+(c.blocked?'잠금 해제':'코트 잠금')+'</button></div>').join('');
   qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
 }
-async function changeTime(game,delta){
+async async function changeTime(game,delta){
   const el=game==="난타"?document.getElementById("g1"):game==="4인 복식"?document.getElementById("g2"):document.getElementById("g3");
   if(!el)return;
   const v=Math.max(1,Math.min(20,Number(el.textContent||15)+delta));
@@ -868,9 +913,41 @@ async function changeTime(game,delta){
     await save(s);
   }catch(e){showError(e)}
 }
-function changeMax(delta){
+async function changeMax(delta){
   const el=document.getElementById("mx"); if(!el)return;
-  el.textContent=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
+  const current=(adminMaxDraft!==null?Number(adminMaxDraft):Number(el.textContent||5));
+  const v=Math.max(1,Math.min(20,current+delta));
+  adminMaxDraft=v;
+  el.textContent=String(v);
+
+  // 서버 저장 중에는 실시간 새로고침이 숫자를 되돌리지 않도록 유지
+  if(adminMaxSaving)return;
+  adminMaxSaving=true;
+  try{
+    let s=await get();
+    s.max_per_court=v;
+    await save(s);
+
+    // 저장된 값을 다시 읽어 실제 서버 값까지 확인
+    const saved=await get();
+    if(Number(saved.max_per_court)===v){
+      adminMaxDraft=null;
+      el.textContent=String(v);
+    }else{
+      adminMaxDraft=Number(saved.max_per_court);
+      el.textContent=String(adminMaxDraft);
+    }
+  }catch(e){
+    showError(e);
+    // 실패하면 서버의 기존 값을 표시
+    try{
+      const latest=await get();
+      adminMaxDraft=Number(latest.max_per_court||5);
+      el.textContent=String(adminMaxDraft);
+    }catch(_){}
+  }finally{
+    adminMaxSaving=false;
+  }
 }
 async function saveAdmin(){
   try{
@@ -878,8 +955,11 @@ async function saveAdmin(){
     s.settings["난타"]=Math.max(1,Math.min(20,Number(document.getElementById("g1").textContent)));
     s.settings["4인 복식"]=Math.max(1,Math.min(20,Number(document.getElementById("g2").textContent)));
     s.settings["2인 단식"]=Math.max(1,Math.min(20,Number(document.getElementById("g3").textContent)));
-    s.max_per_court=Math.max(1,Math.min(20,Number(document.getElementById("mx").textContent)));
+    s.max_per_court=Math.max(1,Math.min(20,Number(adminMaxDraft!==null?adminMaxDraft:document.getElementById("mx").textContent)));
     await save(s);
+    const saved=await get();
+    adminMaxDraft=Number(saved.max_per_court);
+    document.getElementById("mx").textContent=String(adminMaxDraft);
     alert("변경사항이 저장되었습니다.");
   }catch(e){showError(e)}
 }
@@ -903,11 +983,11 @@ function management(){
   const view=params.get("view")||"display";
   if(view==="admin"){
     admin();
-    const top=document.querySelector('.adminTop');
+    const top=document.querySelector(".adminTop");
     if(top){
-      const links=top.querySelectorAll('a');
-      if(links[0]){links[0].href='?page=management&view=display';links[0].textContent='고객용';}
-      if(links[1]){links[1].href='?page=register';links[1].textContent='QR 등록';}
+      const links=top.querySelectorAll("a");
+      if(links[0]){links[0].href="?page=management&view=display";links[0].textContent="고객용";}
+      if(links[1]){links[1].href="?page=management&view=admin";links[1].textContent="관리자 모드";}
     }
   }else{
     customer();
