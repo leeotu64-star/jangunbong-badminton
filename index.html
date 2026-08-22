@@ -714,6 +714,41 @@ body{background:#eef3f9!important}
   .autoExitSub{font-size:14px!important}
 }
 </style>
+
+<style id="restoreRegisterScreenOriginalFinal">
+/* 고객등록 2번째 화면은 원래 화면 유지 */
+#registerPage,.register-page{
+  max-width:420px!important;
+  width:100%!important;
+  margin:0 auto!important;
+}
+.register-header{
+  min-height:78px!important;
+  padding:18px 14px!important;
+  border-radius:12px 12px 0 0!important;
+  font-size:18px!important;
+}
+.register-game-choices{
+  display:block!important;
+  margin:0!important;
+}
+.register-game-choices button{
+  min-height:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:inherit!important;
+  font-size:inherit!important;
+  font-weight:inherit!important;
+  box-shadow:none!important;
+}
+.register-game-choices button.active{
+  background:transparent!important;
+  color:inherit!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+}
+</style>
 </head><body>
 <div id="app"></div>
 <script>
@@ -965,17 +1000,6 @@ function register(){
         <div class="field"><label>닉네임 *</label><input id="n" name="queue_nickname" type="text" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="닉네임을 입력해주세요"></div>
         <div class="field"><label>게임 방식 *</label>
           
-<div class="register-game-label">게임 방식 선택</div>
-<div id="registerGameChoices" class="register-game-choices" aria-label="게임 방식 선택">
-  
-<div class="autoExitNotice">
-  <div class="autoExitTitle">⚠ 15분 이용 후 자동 퇴장</div>
-  <div class="autoExitSub">이용 종료 시간이 되면 자동으로 퇴장 처리됩니다.</div>
-</div>
-<button type="button" data-game="4인 복식">4인 복식</button>
-  <button type="button" data-game="2인 단식">2인 단식</button>
-  <button type="button" data-game="난타">난타</button>
-</div>
 <select id="g">
             <option value="">게임 방식을 선택해주세요</option>
             <option>4인 복식</option><option>2인 단식</option><option>난타</option>
@@ -1403,32 +1427,5 @@ function management(){
 })();
 </script>
 
-<script id="registerGameChoiceCleanFinal">
-(function(){
-  function initGameChoices(){
-    const p=new URLSearchParams(location.search);
-    if(p.get("page")!=="register") return;
-    const wrap=document.getElementById("registerGameChoices");
-    if(!wrap) return;
-    const target=document.getElementById("g") ||
-      document.getElementById("game") ||
-      document.querySelector('select[name="game"]');
-    if(!target) return;
-    const buttons=[...wrap.querySelectorAll("button[data-game]")];
-    function sync(){
-      const v=target.value || "4인 복식";
-      buttons.forEach(b=>b.classList.toggle("active",b.dataset.game===v));
-    }
-    buttons.forEach(b=>b.addEventListener("click",()=>{
-      target.value=b.dataset.game;
-      target.dispatchEvent(new Event("change",{bubbles:true}));
-      sync();
-    }));
-    sync();
-  }
-  if(document.readyState==="loading")
-    document.addEventListener("DOMContentLoaded",initGameChoices);
-  else initGameChoices();
-})();
-</script>
+
 </body></html>
