@@ -488,60 +488,6 @@ body{background:#eef3f9!important}
 }
 </style>
 
-<style id="customerRegisterCleanFinal">
-/* 고객등록 화면: 중복 노란 원 제거 + 화면 확대 + 게임방식 표시 */
-#registerPage, .register-page{
-  max-width:560px!important;
-  width:calc(100% - 24px)!important;
-  margin:0 auto!important;
-}
-.register-header{
-  min-height:112px!important;
-  padding:26px 18px!important;
-  border-radius:18px 18px 0 0!important;
-  background:#071d49!important;
-  color:#fff!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  font-size:27px!important;
-  font-weight:950!important;
-  text-align:center!important;
-}
-.register-game-choices{
-  display:grid!important;
-  grid-template-columns:repeat(3,1fr)!important;
-  gap:9px!important;
-  margin:12px 0 16px!important;
-}
-.register-game-choices button{
-  min-height:58px!important;
-  border:2px solid #d4deeb!important;
-  border-radius:11px!important;
-  background:#fff!important;
-  color:#071d49!important;
-  font-size:16px!important;
-  font-weight:950!important;
-  cursor:pointer!important;
-}
-.register-game-choices button.active{
-  background:#1769e8!important;
-  color:#fff!important;
-  border-color:#1769e8!important;
-  box-shadow:0 4px 10px rgba(23,105,232,.25)!important;
-}
-.register-game-label{
-  font-size:16px!important;
-  font-weight:950!important;
-  color:#071d49!important;
-  margin:12px 0 8px!important;
-}
-@media(max-width:520px){
-  #registerPage,.register-page{width:calc(100% - 14px)!important}
-  .register-header{font-size:23px!important;min-height:96px!important}
-  .register-game-choices button{min-height:54px!important;font-size:14px!important}
-}
-</style>
 <style id="removeDuplicateHeaderFinal">
 .wait{max-width:560px!important;width:calc(100% - 18px)!important;margin:0 auto!important}
 .waitbody{padding-top:10px!important}
@@ -715,40 +661,6 @@ body{background:#eef3f9!important}
 }
 </style>
 
-<style id="restoreRegisterScreenOriginalFinal">
-/* 고객등록 2번째 화면은 원래 화면 유지 */
-#registerPage,.register-page{
-  max-width:420px!important;
-  width:100%!important;
-  margin:0 auto!important;
-}
-.register-header{
-  min-height:78px!important;
-  padding:18px 14px!important;
-  border-radius:12px 12px 0 0!important;
-  font-size:18px!important;
-}
-.register-game-choices{
-  display:block!important;
-  margin:0!important;
-}
-.register-game-choices button{
-  min-height:0!important;
-  border:0!important;
-  border-radius:0!important;
-  background:transparent!important;
-  color:inherit!important;
-  font-size:inherit!important;
-  font-weight:inherit!important;
-  box-shadow:none!important;
-}
-.register-game-choices button.active{
-  background:transparent!important;
-  color:inherit!important;
-  border-color:transparent!important;
-  box-shadow:none!important;
-}
-</style>
 </head><body>
 <div id="app"></div>
 <script>
@@ -999,8 +911,7 @@ function register(){
       <div style="background:#fff;border-radius:0 0 18px 18px;padding:20px 18px;box-shadow:0 8px 24px #001b4f18">
         <div class="field"><label>닉네임 *</label><input id="n" name="queue_nickname" type="text" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="닉네임을 입력해주세요"></div>
         <div class="field"><label>게임 방식 *</label>
-          
-<select id="g">
+          <select id="g">
             <option value="">게임 방식을 선택해주세요</option>
             <option>4인 복식</option><option>2인 단식</option><option>난타</option>
           </select>
@@ -1024,10 +935,10 @@ function register(){
         </div>
         <div id="e" style="display:none;color:#d71920;background:#fff1f1;border:1px solid #ffc9c9;border-radius:8px;padding:10px;font-size:12px;font-weight:800;margin-bottom:10px"></div>
         <button class="btn" id="regBtn" onclick="reg()">대기 등록하기</button>
-<div style="text-align:center;font-size:11px;color:#667085;margin-top:8px;line-height:1.45">
-  ※ 같은 스마트폰은 중복 대기 등록할 수 없습니다.<br>
-  ※ 등록 후 5분 동안 재등록이 제한됩니다.
-</div>
+        <div style="text-align:center;font-size:11px;color:#667085;margin-top:8px;line-height:1.45">
+          ※ 같은 스마트폰은 중복 대기 등록할 수 없습니다.<br>
+          ※ 등록 후 5분 동안 재등록이 제한됩니다.
+        </div>
         <div style="text-align:center;font-size:10px;color:#7b8494;margin-top:10px">※ 대기 등록 후 관리자가 확인할 수 있습니다.</div>
       </div>
     </div>
