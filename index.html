@@ -5,7 +5,7 @@
 *{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans KR",sans-serif;color:#071633;background:#fff}
 .header{height:70px;background:#061b4f;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px}.brand{font-size:25px;font-weight:900}.sub{font-size:13px}.wrap{padding:10px 14px 18px;max-width:1600px;margin:auto}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px}.stat{border:1px solid #dfe5ef;border-radius:9px;padding:8px 10px;text-align:center;background:#fff;font-size:13px;font-weight:800}.stat b{display:block;font-size:28px;margin-top:1px;color:#071b45}
-.courts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.court{border:1px solid #cfd8e6;border-radius:8px;overflow:hidden;background:#fff}.head{height:48px;padding:8px 9px;display:flex;align-items:center;justify-content:space-between;font-weight:900;font-size:17px;border-bottom:1px solid #e5e9f0}.num{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;color:#fff;border-radius:6px;margin-right:7px}.badge{padding:5px 10px;border-radius:14px;color:#fff;font-size:11px}.body{padding:8px}.row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #edf0f4}.label{font-size:11px}.val{font-weight:900;font-size:13px}.remain{font-size:24px;color:#07854b}.qbox{font-size:18px;margin-top:2px;border:1px solid #e1e6ee;border-radius:7px;overflow-y:auto;max-height:240px}.qtitle{padding:7px;background:#f6f8fb;font-weight:900;font-size:12px}.qrow{min-height:44px;font-size:17px;display:grid;grid-template-columns:28px 1fr 1fr;padding:5px 8px;border-top:1px solid #edf0f4;font-size:11px;min-height:27px;box-sizing:border-box}
+.courts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.mobileCourtTabs{display:none}.court{border:1px solid #cfd8e6;border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 2px 6px rgba(20,40,70,.06)}.head{height:48px;padding:7px 9px;display:flex;align-items:center;justify-content:space-between;font-weight:900;font-size:17px;border-bottom:1px solid #e5e9f0;background:#f7f9fc}.num{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;color:#fff;border-radius:6px;margin-right:7px}.badge{padding:5px 10px;border-radius:14px;color:#fff;font-size:11px}.body{padding:8px}.row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #edf0f4}.label{font-size:11px}.val{font-weight:900;font-size:13px}.remain{font-size:24px;color:#07854b}.qbox{font-size:18px;margin-top:2px;border:1px solid #e1e6ee;border-radius:7px;overflow-y:auto;max-height:240px}.qtitle{padding:7px;background:#f6f8fb;font-weight:900;font-size:12px}.qrow{min-height:44px;font-size:17px;display:grid;grid-template-columns:28px 1fr 1fr;padding:5px 8px;border-top:1px solid #edf0f4;font-size:11px;min-height:27px;box-sizing:border-box}
 .form,.wait{max-width:900px;width:92vw;margin:12px auto;border:1px solid #dce4ef;border-radius:16px;overflow:hidden;box-shadow:0 8px 28px #0001}.wait{max-width:430px;width:calc(100vw - 20px);margin:10px auto}.formhead,.waithead{background:#061b4f;color:#fff;text-align:center;padding:22px}.formbody,.waitbody{padding:18px}.field{margin-bottom:14px}.field label{display:block;font-weight:800;margin-bottom:6px}.field input,.field select{width:100%;padding:12px;border:1px solid #d6deea;border-radius:7px;font-size:15px}.btn{width:100%;padding:13px;border:0;border-radius:7px;background:#0d58df;color:#fff;font-weight:800;font-size:16px}.cancel{background:#e50914}.notice{padding:12px;background:#eef5ff;border-radius:8px;font-size:12px;line-height:1.7;margin-bottom:12px}.my{background:#eef5ff;border:1px solid #cbdcff;border-radius:8px;text-align:center;padding:10px;margin:10px 0}.my strong{display:block;color:#125fe3;font-size:38px}.timer{text-align:center;font-size:29px;font-weight:900;margin:5px}.ring{width:68px;height:68px;margin:0 auto 2px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:conic-gradient(#08a05c 360deg,#dcefe5 0deg);position:relative}.ring:before{content:'';position:absolute;width:64px;height:64px;background:#fff;border-radius:50%}.ringText{position:relative;z-index:1;text-align:center;line-height:1.05}.ringText small{display:block;font-size:9px;color:#168454;margin-bottom:2px}.ringText b{font-size:18px;color:#111}.wait-only{max-width:430px;margin:14px auto;border:0;box-shadow:none;background:transparent}
 .wait-only .waitbody{padding:0}
 .wait .doneScreen{font-size:15px}
@@ -25,7 +25,29 @@
 @media(max-width:480px){.wait-only{margin:8px auto}.wait .doneScreen{font-size:16px}.wait .doneScreen .row{font-size:17px}.wait .doneScreen .row b{font-size:18px}.wait .my strong{font-size:54px}.count-circle{width:96px;height:96px}.count-circle .big{font-size:24px}}
 .doneScreen{background:#061b4f;color:#fff;border-radius:14px;padding:24px 18px;text-align:center}.doneIcon{width:54px;height:54px;border:3px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:28px}.doneScreen h2{font-size:18px;line-height:1.55;margin:8px 0 14px}.doneScreen p{font-size:12px;line-height:1.8;margin:0 0 14px}.doneScreen .notice{background:transparent;border:1px solid #0d58df;color:#fff;margin:0 0 12px}.doneScreen .btn{background:#e50914}
 .admin{display:grid;grid-template-columns:190px 1fr;min-height:calc(100vh - 76px)}.side{background:#071b45;color:#fff;padding:18px 10px}.side h2{font-size:16px;margin:0;padding:10px}.nav{padding:14px;border-radius:6px;margin:4px 0;font-weight:800}.nav.on{background:#0c63e8}.main{padding:25px}.panel{border:1px solid #dfe5ee;border-radius:9px;margin-bottom:18px;padding:18px}.panel h2{margin:0 0 6px}.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.card{border:1px solid #dce3ee;border-radius:8px;padding:12px}.card h3{margin:0 0 10px}.smallbtn{padding:7px 11px;border:1px solid #ccd6e4;background:#fff;border-radius:6px}.settings{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.setting{border:1px solid #dce3ee;border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center}.setting input{width:65px;padding:7px;text-align:center}.save{background:#0c63e8;color:#fff;border:0;border-radius:7px;padding:11px 28px;font-weight:800}
-@media(max-width:950px){.courts{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.admin{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}}@media(max-width:600px){.courts{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.settings,.grid{grid-template-columns:1fr}.brand{font-size:18px}.courts .head{font-size:15px}.qrow{font-size:10px}}
+@media(max-width:950px){.courts{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.admin{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}}@media(max-width:600px){
+      body{background:#f4f7fb}
+      .header{height:auto;min-height:64px;padding:10px 12px}
+      .brand{font-size:17px;line-height:1.25}
+      .sub{font-size:10px;margin-top:3px}
+      .wrap{padding:8px 10px 18px}
+      .stats{grid-template-columns:1fr 1fr;gap:6px}
+      .stat{padding:7px 4px;font-size:11px}
+      .stat b{font-size:22px}
+      .mobileCourtTabs{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin:8px 0}
+      .mobileCourtTabs button{border:1px solid #ccd7e8;background:#fff;border-radius:8px;padding:9px 2px;font-weight:900;font-size:13px;color:#071b45}
+      .mobileCourtTabs button.active{background:#1461e8;color:#fff;border-color:#1461e8}
+      .courts{display:block}
+      .court.mobile-court{display:none}
+      .court.mobile-court.selected{display:block}
+      .court .head{height:52px;padding:8px 10px;font-size:17px}
+      .court .body{padding:10px}
+      .court .label{font-size:12px}
+      .court .val{font-size:15px}
+      .court .remain{font-size:28px}
+      .qtitle{font-size:14px;padding:9px}
+      .qrow{grid-template-columns:34px 1fr auto!important;font-size:13px!important;padding:9px 7px!important}
+    }
 
 .adminTop{display:flex;justify-content:space-between;align-items:center;gap:12px}.adminTop a,.customerBtn{display:inline-block;background:#0c63e8;color:#fff;text-decoration:none;border-radius:7px;padding:9px 14px;font-weight:800}.side h2{margin-bottom:12px}.nav{cursor:pointer}.adminSectionTitle{display:flex;justify-content:space-between;align-items:center;gap:10px}.controlRow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.controlBox{border:1px solid #dce3ee;border-radius:9px;padding:14px;text-align:center}.controlBox h3{margin:0 0 10px}.stepper{display:flex;justify-content:center;align-items:center;gap:8px}.stepper button{width:40px;height:36px;border:1px solid #ccd6e4;background:#fff;border-radius:7px;font-size:20px;font-weight:900}.stepper strong{min-width:54px;font-size:22px}.lockGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.lockCard{border:1px solid #dce3ee;border-radius:9px;padding:12px;text-align:center}.lockCard h3{margin:0 0 8px}.lockCard button{width:100%;padding:9px;border:0;border-radius:7px;font-weight:800}.locked{background:#e51e2a;color:#fff}.open{background:#07854b;color:#fff}.hint{font-size:12px;color:#667085;margin-top:8px}.adminSave{margin-top:14px}.adminTable p{margin:7px 0}.adminTable .card{min-height:90px}
 @media(max-width:950px){.lockGrid{grid-template-columns:repeat(2,1fr)}.controlRow{grid-template-columns:1fr}}
@@ -83,6 +105,7 @@ const params=new URLSearchParams(location.search);
 const REGISTER_URL=location.origin+location.pathname+"?page=register";
 const ticket=params.get("ticket")||"";
 const colors=["#07854b","#1461e8","#6332d7","#ff7900","#e51e2a"];
+let mobileCourt=1;
 const def={id:ROOT,settings:{"난타":15,"4인 복식":15,"2인 단식":15},max_per_court:5,finished:{},courts:[1,2,3,4,5].map(id=>({id,blocked:false,active:null,queue:[]}))};
 
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
@@ -159,13 +182,14 @@ function route(){
 
 function display(){
   const app=document.getElementById("app");
-  app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">실시간 코트 대기 현황 · QR 스캔하여 대기 등록</div></div><div style="display:flex;align-items:center;gap:12px">
+  app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">실시간 코트 대기 현황 · QR 스캔하여 대기 등록</div></div><div style="display:flex;align-items:center;gap:8px">
+      <a href="?page=admin" style="background:#1461e8;color:#fff;text-decoration:none;border-radius:7px;padding:8px 10px;font-size:11px;font-weight:900">관리자 모드</a>
       <div style="display:flex;align-items:center;gap:8px;background:#fff;padding:5px 8px;border-radius:8px;color:#061b4f">
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUgAAAFIAQAAAAAab1qeAAACW0lEQVR4nO1a0U7EMAyz0f7/l81DnHScBNokji4oRZwKtXRp1NSuWwoX28dV4CAH+WvIA2D0RIgCCBFCdFSjbWa0PZ8QENmL3AkQRQEQlaNtZrQ/n2DkVARAgaD/Ra3RLjN6QD6jUbFCGfXuNL712/83ktUTCEj8DvmOb/8fyAN4WYfBSaCi2mu0y4z2IqFMpr75SViXGe1FUqcuYVKCQOg8uDvOLsjDBa7SSqc8ynuqwNGf15r1kiqpFCGmeLJoonbH2QUJrQ1UXp65a8q7qyDN/nkZSacxa7sORav0+YQ4WyBzq1z0QyUxOcUhRtvMaH8+vS7thHD9IZ83tT/OLsjk91iDRUVBRvAn5/x+tR3eJEtppjGiMkMgcur9JpIk7S0RJ4YX0g59RpxPR5bulLuAyenrTro7zk5IQQAJkKJNZaYUrcrfH2cHZBx+rJpYKhRJ9TGMWZ/XkZlLNwly5Utgiqn9cXZBMuzOqvRYrKIIQhr9eRdJybUeKTQPpSXiNbo/zibIWII6pZUsNxT5sT/OFkiLpCKhoifmvurje5sZbc9nGCDrrM4058upHz66g5Rfg9A6PhiJKUGn3m+e3wFEzmzN2xLRIiTMfccNJEMwAaE9mQZIqHmekHvjbIF8ud/UovW6oOPU+z3/M3pClrj9zyj9oKnh94vt/L6uNH3cIb0YTF1mtD+f6zFdFT9TyC+TvsuMHpDPaOvR5/oFkFK0y4wek89yRuzTnS/jZv+8g8w3DXbqKHApphRTD4izAfJAEfwSSFnqYt0ZDx9da1+e0P35tw9ykD+3TxmmMYmHIhKPAAAAAElFTkSuQmCC" alt="고객 대기 등록 QR" style="width:48px;height:48px;display:block">
         <span style="font-size:11px;font-weight:900;line-height:1.25">QR 스캔<br>대기 등록</span>
       </div>
       <div id="clock"></div>
-    </div></header><div class="wrap"><div class="stats" id="stats"></div><div class="courts" id="courts"></div></div>';
+    </div></header><div class="wrap"><div class="stats" id="stats"></div><div class="mobileCourtTabs" id="mobileCourtTabs"></div><div class="courts" id="courts"></div></div>';
   renderCustomer(cloneDef());
   sub(renderCustomer);
   setInterval(()=>{const el=document.getElementById("clock");if(el)el.textContent=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})},1000);
@@ -178,6 +202,13 @@ function renderCustomer(s){
   const waitingTeams=s.courts.reduce((n,c)=>n+(c.queue||[]).length,0);
   const peopleForGame=g=>g==="4인 복식"?4:g==="2인 단식"?2:1;
   const waitingPeople=s.courts.reduce((n,c)=>n+(c.queue||[]).reduce((m,x)=>m+peopleForGame(x.game),0),0);
+
+  const tabs=document.getElementById("mobileCourtTabs");
+  if(tabs){
+    tabs.innerHTML=s.courts.map(c=>
+      '<button class="'+(Number(c.id)===Number(mobileCourt)?'active':'')+'" onclick="mobileCourt='+Number(c.id)+';renderCustomer(cloneDef())">'+c.id+'번</button>'
+    ).join('');
+  }
 
   stats.innerHTML=
     '<div class="stat">전체 코트<b>5 개</b></div>'+
@@ -194,16 +225,25 @@ function renderCustomer(s){
       return '<div class="qrow"><b>'+(j+1)+'</b><span>'+esc(x.nickname)+'</span><span>약 '+mins+'분 후 입장</span></div>';
     }).join('');
 
-    return '<section class="court">'+
+    return '<section class="court mobile-court '+(Number(c.id)===Number(mobileCourt)?'selected':'')+'" data-court="'+c.id+'">'+
       '<div class="head"><span><span class="num" style="background:'+colors[i]+'">'+c.id+'</span>'+c.id+'번 코트</span>'+
       '<span class="badge" style="background:'+(c.blocked?'#718096':a?colors[i]:'#718096')+'">'+(c.blocked?'사용 불가':a?'이용 중':'대기 중')+'</span></div>'+
       '<div class="body">'+
       (a?
+        '<div style="background:#eef7f1;border:1px solid #c8ead5;border-radius:7px;padding:7px 9px;margin-bottom:7px;text-align:center">'+
+        '<div style="font-size:11px;color:#07854b;font-weight:900;margin-bottom:2px">이용 중</div>'+
+        '<div style="font-size:25px;line-height:1.1;color:#07854b;font-weight:900">'+left(a.endAt)+'</div>'+
+        '<div style="font-size:10px;color:#4d6b59;margin-top:2px">이용 잔여시간</div>'+
+        '</div>'+
         '<div class="row"><span class="label">닉네임</span><span class="val">'+esc(a.nickname)+'</span></div>'+
         '<div class="row"><span class="label">게임 방식</span><span class="val">'+esc(a.game)+'</span></div>'+
         '<div class="row"><span class="label">이용 시간</span><span class="val">'+tm(a.startAt)+' ~ '+tm(a.endAt)+'</span></div>'+
         '<div class="row"><span class="label">이용 잔여시간</span><span class="val remain">'+left(a.endAt)+'</span></div>'
         :
+        '<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:7px;padding:8px 9px;margin-bottom:7px;text-align:center">'+
+        '<div style="font-size:11px;color:#c2410c;font-weight:900">대기 중</div>'+
+        '<div style="font-size:20px;line-height:1.2;color:#c2410c;font-weight:900">'+q.length+'팀</div>'+
+        '</div>'+
         '<div class="row"><span class="label">현재 대기 팀</span><span class="val">'+q.length+'팀</span></div>'+
         '<div class="row"><span class="label">예상 대기시간</span><span class="val">'+(q.length?'약 '+Math.ceil(waitSec/60000+q.reduce((sum,x)=>sum+Number(s.settings[x.game]||15),0))+'분':'없음')+'</span></div>'
       )+
