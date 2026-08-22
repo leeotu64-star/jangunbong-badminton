@@ -264,26 +264,7 @@ body.register-page .customerBtn,
 body.register-page .adminTop{display:none!important}
 </style>
 
-<style id="registerGameChoices">
-.register-game-choices{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin:12px 0 16px;
-}
-.register-game-choices button{
-  min-height:52px;border:2px solid #d6e0ed;border-radius:10px;
-  background:#fff;color:#10244b;font-size:16px;font-weight:950;cursor:pointer;
-}
-.register-game-choices button.active{
-  background:#1769e8;color:#fff;border-color:#1769e8;
-  box-shadow:0 3px 8px rgba(23,105,232,.22);
-}
-@media(max-width:520px){
-  .register-game-choices{gap:7px}
-  .register-game-choices button{min-height:48px;font-size:14px}
-}
-</style>
+
 <style id="viewSwitchFlexFix">
 body.management-view #viewSwitch{display:flex!important;flex-direction:row!important}
 body.management-view #viewSwitch button{display:inline-flex!important}
@@ -504,6 +485,61 @@ body{background:#eef3f9!important}
 @media(max-width:1100px){
  .header .brand{font-size:24px!important}.stat b{font-size:31px!important}
  .head{font-size:18px!important}.val{font-size:14px!important}.remain{font-size:29px!important}
+}
+</style>
+
+<style id="customerRegisterCleanFinal">
+/* 고객등록 화면: 중복 노란 원 제거 + 화면 확대 + 게임방식 표시 */
+#registerPage, .register-page{
+  max-width:560px!important;
+  width:calc(100% - 24px)!important;
+  margin:0 auto!important;
+}
+.register-header{
+  min-height:112px!important;
+  padding:26px 18px!important;
+  border-radius:18px 18px 0 0!important;
+  background:#071d49!important;
+  color:#fff!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:27px!important;
+  font-weight:950!important;
+  text-align:center!important;
+}
+.register-game-choices{
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  gap:9px!important;
+  margin:12px 0 16px!important;
+}
+.register-game-choices button{
+  min-height:58px!important;
+  border:2px solid #d4deeb!important;
+  border-radius:11px!important;
+  background:#fff!important;
+  color:#071d49!important;
+  font-size:16px!important;
+  font-weight:950!important;
+  cursor:pointer!important;
+}
+.register-game-choices button.active{
+  background:#1769e8!important;
+  color:#fff!important;
+  border-color:#1769e8!important;
+  box-shadow:0 4px 10px rgba(23,105,232,.25)!important;
+}
+.register-game-label{
+  font-size:16px!important;
+  font-weight:950!important;
+  color:#071d49!important;
+  margin:12px 0 8px!important;
+}
+@media(max-width:520px){
+  #registerPage,.register-page{width:calc(100% - 14px)!important}
+  .register-header{font-size:23px!important;min-height:96px!important}
+  .register-game-choices button{min-height:54px!important;font-size:14px!important}
 }
 </style>
 </head><body>
@@ -756,7 +792,14 @@ function register(){
       <div style="background:#fff;border-radius:0 0 18px 18px;padding:20px 18px;box-shadow:0 8px 24px #001b4f18">
         <div class="field"><label>닉네임 *</label><input id="n" name="queue_nickname" type="text" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="닉네임을 입력해주세요"></div>
         <div class="field"><label>게임 방식 *</label>
-          <select id="g">
+          
+<div class="register-game-label">게임 방식 선택</div>
+<div id="registerGameChoices" class="register-game-choices" aria-label="게임 방식 선택">
+  <button type="button" data-game="4인 복식">4인 복식</button>
+  <button type="button" data-game="2인 단식">2인 단식</button>
+  <button type="button" data-game="난타">난타</button>
+</div>
+<select id="g">
             <option value="">게임 방식을 선택해주세요</option>
             <option>4인 복식</option><option>2인 단식</option><option>난타</option>
           </select>
@@ -1025,29 +1068,7 @@ function renderAdmin(s){
   if(!g1||!g2||!g3||!mx||!cs||!qq)return;
   g1.textContent=s.settings["난타"];g2.textContent=s.settings["4인 복식"];g3.textContent=s.settings["2인 단식"];mx.textContent=s.max_per_court;
   cs.innerHTML=s.courts.map(c=>'<div class="lockCard"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'현재 잠금':'현재 사용 가능')+'</p><button class="'+(c.blocked?'locked':'open')+'" onclick="block('+c.id+','+(!c.blocked)+')">'+(c.blocked?'잠금 해제':'코트 잠금')+'</button></div>').join('');
-  qq.innerHTML=s.courts.map(c=>{
-    const q=Array.isArray(c.queue)?c.queue:[];
-    const activeRemain=c.active&&c.active.endAt
-      ?Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/60000))
-      :0;
-    let accumulated=activeRemain;
-
-    const waitingRows=q.map((x,i)=>{
-      const duration=Number(s.settings?.[x.game]||15);
-      const expected=Math.max(0,accumulated);
-      accumulated+=duration;
-      return '<p><b>'+String(i+1)+'. '+esc(x.nickname)+'</b> / '+
-        esc(x.game)+' / 이용 '+duration+'분 / <strong>약 '+expected+'분 후 입장</strong></p>';
-    }).join('');
-
-    return '<div class="card"><h3>'+c.id+'번 코트 · 대기 '+q.length+'팀</h3>'+
-      (c.active
-        ?'<p>이용 중: '+esc(c.active.nickname)+' · '+esc(c.active.game)+
-          ' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>'
-        :'<p>이용 중 없음</p>')+
-      (waitingRows||'<p style="color:#718096">대기자가 없습니다.</p>')+
-      '</div>';
-  }).join('');
+  qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
 }
 async function changeTime(game,delta){
   const el=game==="난타"?document.getElementById("g1"):game==="4인 복식"?document.getElementById("g2"):document.getElementById("g3");
@@ -1202,6 +1223,35 @@ function management(){
   if(document.readyState==="loading")
     document.addEventListener("DOMContentLoaded",initRegisterGameChoices);
   else initRegisterGameChoices();
+})();
+</script>
+
+<script id="registerGameChoiceCleanFinal">
+(function(){
+  function initGameChoices(){
+    const p=new URLSearchParams(location.search);
+    if(p.get("page")!=="register") return;
+    const wrap=document.getElementById("registerGameChoices");
+    if(!wrap) return;
+    const target=document.getElementById("g") ||
+      document.getElementById("game") ||
+      document.querySelector('select[name="game"]');
+    if(!target) return;
+    const buttons=[...wrap.querySelectorAll("button[data-game]")];
+    function sync(){
+      const v=target.value || "4인 복식";
+      buttons.forEach(b=>b.classList.toggle("active",b.dataset.game===v));
+    }
+    buttons.forEach(b=>b.addEventListener("click",()=>{
+      target.value=b.dataset.game;
+      target.dispatchEvent(new Event("change",{bubbles:true}));
+      sync();
+    }));
+    sync();
+  }
+  if(document.readyState==="loading")
+    document.addEventListener("DOMContentLoaded",initGameChoices);
+  else initGameChoices();
 })();
 </script>
 </body></html>
