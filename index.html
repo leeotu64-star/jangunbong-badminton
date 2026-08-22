@@ -12,7 +12,170 @@
 
 .adminTop{display:flex;justify-content:space-between;align-items:center;gap:12px}.adminTop a,.customerBtn{display:inline-block;background:#0c63e8;color:#fff;text-decoration:none;border-radius:7px;padding:9px 14px;font-weight:800}.side h2{margin-bottom:12px}.nav{cursor:pointer}.adminSectionTitle{display:flex;justify-content:space-between;align-items:center;gap:10px}.controlRow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.controlBox{border:1px solid #dce3ee;border-radius:9px;padding:14px;text-align:center}.controlBox h3{margin:0 0 10px}.stepper{display:flex;justify-content:center;align-items:center;gap:8px}.stepper button{width:40px;height:36px;border:1px solid #ccd6e4;background:#fff;border-radius:7px;font-size:20px;font-weight:900}.stepper strong{min-width:54px;font-size:22px}.lockGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.lockCard{border:1px solid #dce3ee;border-radius:9px;padding:12px;text-align:center}.lockCard h3{margin:0 0 8px}.lockCard button{width:100%;padding:9px;border:0;border-radius:7px;font-weight:800}.locked{background:#e51e2a;color:#fff}.open{background:#07854b;color:#fff}.hint{font-size:12px;color:#667085;margin-top:8px}.adminSave{margin-top:14px}.adminTable p{margin:7px 0}.adminTable .card{min-height:90px}
 @media(max-width:950px){.lockGrid{grid-template-columns:repeat(2,1fr)}.controlRow{grid-template-columns:1fr}}
-</style></head><body><div id="app"></div>
+</style>
+<style id="adminPolish">
+/* 관리자 화면 정리용 디자인 - 기능/동작은 변경하지 않음 */
+.admin{
+  min-height:calc(100vh - 72px);
+  background:#f3f6fa;
+  display:grid;
+  grid-template-columns:150px 1fr;
+}
+.side{
+  background:#071b45;
+  padding:22px 10px;
+  position:sticky;
+  top:0;
+  height:calc(100vh - 72px);
+  box-sizing:border-box;
+}
+.side h2{
+  font-size:15px;
+  margin:0 0 16px;
+  padding:8px 10px;
+  color:#fff;
+}
+.nav{
+  padding:13px 12px;
+  margin:5px 0;
+  border-radius:8px;
+  font-size:14px;
+  transition:.15s;
+}
+.nav.on{background:#1466e8}
+.nav:hover{background:#123b7f}
+.main{
+  padding:20px 22px 35px;
+  max-width:1700px;
+  width:100%;
+  box-sizing:border-box;
+}
+.panel{
+  background:#fff;
+  border:1px solid #dbe3ee;
+  border-radius:12px;
+  margin-bottom:14px;
+  padding:18px;
+  box-shadow:0 2px 8px rgba(18,38,70,.05);
+}
+.panel h2{
+  font-size:20px;
+  margin:0 0 5px;
+  color:#10244b;
+}
+.hint{color:#718096;font-size:12px}
+.lockGrid,.controlRow,.grid{
+  gap:10px;
+}
+.lockCard{
+  border:1px solid #dce4ee;
+  border-radius:10px;
+  background:#fbfcfe;
+  padding:14px;
+  box-shadow:none;
+}
+.lockCard h3{
+  font-size:17px;
+  margin:0 0 8px;
+}
+.lockCard p{
+  color:#64748b;
+  margin:5px 0 12px;
+  font-size:12px;
+}
+.lockCard button{
+  width:100%;
+  min-height:38px;
+  border-radius:7px;
+  font-weight:900;
+}
+.controlBox{
+  background:#fbfcfe;
+  border:1px solid #dce4ee;
+  border-radius:10px;
+  padding:16px;
+}
+.controlBox h3{
+  margin:0 0 12px;
+  font-size:16px;
+}
+.stepper{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+}
+.stepper button{
+  width:38px;
+  height:36px;
+  border-radius:7px;
+  font-size:18px;
+  font-weight:900;
+}
+.stepper strong{
+  min-width:38px;
+  text-align:center;
+  font-size:21px;
+}
+.adminSave{
+  margin-top:13px;
+  min-width:130px;
+}
+.adminTable .grid{
+  align-items:stretch;
+}
+.adminTable .card{
+  min-height:145px;
+  background:#fbfcfe;
+  border:1px solid #d9e2ee;
+  border-radius:10px;
+  padding:13px;
+  box-sizing:border-box;
+}
+.adminTable .card h3{
+  font-size:16px;
+  color:#10244b;
+  padding-bottom:9px;
+  margin-bottom:8px;
+  border-bottom:1px solid #e6ebf2;
+}
+.adminTable .card p{
+  margin:7px 0;
+  font-size:12px;
+  line-height:1.5;
+}
+.adminTable .card p:first-of-type{
+  background:#eef4ff;
+  border-radius:7px;
+  padding:8px;
+  font-weight:800;
+}
+.adminTable .smallbtn{
+  float:right;
+  background:#e53935;
+  color:#fff;
+  border:0;
+  border-radius:6px;
+  padding:6px 9px;
+  font-size:11px;
+  font-weight:900;
+  cursor:pointer;
+}
+.adminTable .smallbtn:hover{background:#c62828}
+.adminTop a{
+  background:#1466e8;
+  border-radius:7px;
+  padding:9px 15px;
+  font-weight:900;
+}
+@media(max-width:950px){
+  .admin{grid-template-columns:1fr}
+  .side{position:relative;height:auto}
+  .main{padding:14px}
+  .grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head><body><div id="app"></div>
 <script>
 /* Supabase 설정: 아래 2개만 본인 프로젝트 값으로 교체 */
 const SUPABASE_URL="https://jvurwckjumnzzecazgku.supabase.co";
