@@ -289,6 +289,96 @@ body.management-view #viewSwitch{display:flex!important;flex-direction:row!impor
 body.management-view #viewSwitch button{display:inline-flex!important}
 body:not(.management-view) #viewSwitch{display:none!important}
 </style>
+
+<style id="customerMonitorFinal">
+/* 고객 대기 모니터: 시인성/구분/색상 강화 */
+.header{
+  height:82px!important;
+  padding:0 28px!important;
+  background:linear-gradient(105deg,#061943 0%,#0b2f6f 62%,#1555a8 100%)!important;
+  box-shadow:0 5px 18px rgba(5,25,63,.25)!important;
+}
+.header .brand{font-size:30px!important;font-weight:950!important;letter-spacing:-1.2px}
+.header .sub{font-size:14px!important;font-weight:700!important;margin-top:3px}
+.customerBtn{
+  display:inline-flex!important;align-items:center;justify-content:center;
+  min-width:112px;height:42px;padding:0 16px!important;
+  border-radius:9px!important;background:#1769e8!important;color:#fff!important;
+  text-decoration:none!important;font-size:14px!important;font-weight:950!important;
+  box-shadow:0 3px 9px rgba(0,0,0,.2)!important;
+}
+.wrap{
+  max-width:1900px!important;padding:18px 20px 26px!important;
+  background:linear-gradient(135deg,#eef4fb,#f9fbff)!important;
+}
+.stats{
+  gap:14px!important;margin-bottom:15px!important;
+}
+.stat{
+  min-height:94px!important;border:2px solid #d4dfec!important;
+  border-radius:13px!important;background:#fff!important;
+  box-shadow:0 5px 14px rgba(19,44,78,.08)!important;
+  display:flex!important;flex-direction:column!important;justify-content:center!important;
+}
+.stat b{font-size:38px!important;color:#071d49!important;font-weight:950!important}
+.stat:first-child{border-top:6px solid #1769e8!important}
+.stat:nth-child(2){border-top:6px solid #079455!important}
+.stat:nth-child(3){border-top:6px solid #f97316!important}
+.stat:nth-child(4){border-top:6px solid #6734d4!important}
+
+.courts{gap:13px!important}
+.court{
+  border:2px solid #c8d5e5!important;border-radius:14px!important;
+  background:#fff!important;box-shadow:0 7px 18px rgba(22,48,84,.09)!important;
+  overflow:hidden!important;
+}
+.head{
+  height:66px!important;padding:10px 13px!important;
+  background:linear-gradient(180deg,#f8fbff,#eef4fa)!important;
+  border-bottom:3px solid #cbd7e6!important;
+  font-size:22px!important;
+}
+.num{
+  width:40px!important;height:40px!important;border-radius:9px!important;
+  font-size:22px!important;vertical-align:middle;
+}
+.badge{font-size:13px!important;padding:7px 11px!important;font-weight:950!important}
+.body{padding:12px!important}
+.row{
+  min-height:52px!important;padding:9px 2px!important;
+  border-bottom:2px solid #e4eaf2!important;
+}
+.label{font-size:14px!important;color:#61738a!important;font-weight:800!important}
+.val{font-size:17px!important;font-weight:950!important}
+.remain{
+  font-size:34px!important;color:#079455!important;font-weight:950!important;
+}
+.qbox{
+  margin-top:12px!important;border:2px solid #cbd7e6!important;
+  border-radius:10px!important;background:#fff!important;
+}
+.qtitle{
+  padding:11px 10px!important;background:#edf3fa!important;
+  border-bottom:2px solid #cbd7e6!important;font-size:14px!important;font-weight:950!important;
+}
+.qrow{
+  min-height:46px!important;padding:8px 10px!important;
+  border-bottom:1px solid #e1e8f0!important;font-size:14px!important;
+}
+.qrow:last-child{border-bottom:0!important}
+.court:nth-child(1) .head{border-bottom-color:#079455!important}
+.court:nth-child(2) .head{border-bottom-color:#1769e8!important}
+.court:nth-child(3) .head{border-bottom-color:#6734d4!important}
+.court:nth-child(4) .head{border-bottom-color:#f97316!important}
+.court:nth-child(5) .head{border-bottom-color:#e51d35!important}
+@media(max-width:1100px){
+  .header .brand{font-size:24px!important}
+  .stat b{font-size:30px!important}
+  .head{font-size:18px!important}
+  .val{font-size:14px!important}
+  .remain{font-size:28px!important}
+}
+</style>
 </head><body>
 <div id="app"></div>
 <script>
@@ -462,7 +552,7 @@ function route(){
 
 function customer(){
   const app=document.getElementById("app");
-  app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">고객에게 보이는 실시간 대기 현황</div></div><div style="display:flex;align-items:center;gap:12px"><a class="customerBtn" href="?page=admin">관리자</a><div id="clock"></div></div></header><div class="wrap"><div class="stats" id="stats"></div><div class="courts" id="courts"></div></div>';
+  app.innerHTML='<header class="header"><div style="display:flex;align-items:center"><span style="display:inline-grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#fff;margin-right:12px;box-shadow:0 2px 8px rgba(0,0,0,.2);font-size:28px">🏸</span><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">고객에게 보이는 실시간 대기 현황</div></div></div><div style="display:flex;align-items:center;gap:12px"><a class="customerBtn" href="?page=management&view=admin">관리자 모드</a><div id="clock"></div></div></header><div class="wrap"><div class="stats" id="stats"></div><div class="courts" id="courts"></div></div>';
   renderCustomer(cloneDef());
   sub(renderCustomer);
   setInterval(()=>{const el=document.getElementById("clock");if(el)el.textContent=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})},1000);
@@ -753,8 +843,8 @@ function setupAdminNav(){
 function admin(){
   const app=document.getElementById("app");
   app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=customer">고객 화면으로</a></div></header><div class="admin"><div id="viewSwitch" class="view-switch" aria-label="관리자 화면 전환">
-  <button id="switchCustomer" type="button" onclick="switchManagementView('display')">고객용</button>
-  <button id="switchAdmin" class="secondary" type="button" onclick="switchManagementView('admin')">관리자 모드</button>
+  <button id="switchCustomer" type="button" onclick="location.href='?page=management&view=display'">고객용</button>
+  <button id="switchAdmin" class="secondary" type="button" onclick="location.href='?page=management&view=admin'">관리자 모드</button>
 </div>
 <aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기자 최대 정원</h2><div class="hint">전체 코트에 동일하게 적용 · 1명~20명</div></div></div><div class="controlBox"><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
   renderAdmin(cloneDef()); sub(renderAdmin);
@@ -842,22 +932,8 @@ function management(){
 <script>
 (function(){
   window.switchManagementView=function(view){
-    const display=document.getElementById("manageDisplay");
-    const admin=document.getElementById("manageAdmin");
-    if(!display||!admin)return;
-    const customer=document.getElementById("switchCustomer");
-    const adminBtn=document.getElementById("switchAdmin");
-    if(view==="admin"){
-      display.style.display="none";
-      admin.style.display="block";
-      if(customer)customer.style.display="inline-flex";
-      if(adminBtn)adminBtn.style.display="none";
-    }else{
-      display.style.display="block";
-      admin.style.display="none";
-      if(customer)customer.style.display="none";
-      if(adminBtn)adminBtn.style.display="inline-flex";
-    }
+    if(view==="admin") location.href="?page=management&view=admin";
+    else location.href="?page=management&view=display";
   };
 
   function initManagementView(){
