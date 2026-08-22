@@ -176,246 +176,56 @@
 }
 </style>
 
-<style id="customerDisplayPolish">
-/* 고객용 대기화면만 정리: 기능/배치 데이터 구조는 유지 */
-.customerDisplayPolish{}
-.stats{gap:12px!important;margin:10px 0 14px!important}
-.stat{background:#fff!important;border:1px solid #d7dfeb!important;border-radius:10px!important;box-shadow:0 2px 8px rgba(10,35,70,.06)!important;padding:10px 8px!important;font-size:13px!important;color:#53627a!important}
-.stat b{display:block!important;font-size:28px!important;color:#0a2350!important;margin-top:5px!important}
-.courts{gap:12px!important}
-.court{background:#fff!important;border:1px solid #ccd7e5!important;border-radius:10px!important;overflow:hidden!important;box-shadow:0 2px 9px rgba(10,35,70,.06)!important}
-.court .head{height:50px!important;background:#f7f9fc!important;border-bottom:2px solid #dbe3ed!important;padding:0 11px!important}
-.court .head>span:first-child{font-size:17px!important;font-weight:900!important}
-.court .body{padding:10px!important}
-.court .row{padding:7px 2px!important;border-bottom:1px solid #e5eaf1!important}
-.court .label{color:#68778d!important;font-size:11px!important}
-.court .val{font-size:13px!important;font-weight:900!important}
-.court .remain{font-size:23px!important;color:#07854b!important}
-.court .qbox{margin-top:10px!important;border:1px solid #d9e2ed!important;border-radius:8px!important;overflow:hidden!important}
-.court .qtitle{background:#eef3f8!important;border-bottom:1px solid #d9e2ed!important;padding:8px 9px!important;font-size:12px!important;font-weight:900!important}
-.court .qrow{padding:8px 9px!important;border-bottom:1px solid #edf1f5!important;font-size:11px!important}
-.court .qrow:last-child{border-bottom:0!important}
-.court .qeta{color:#1466e8!important;font-weight:900!important;text-align:right}
-.court .waitEmpty{padding:9px;color:#718096;font-size:11px}
-</style>
-
-<style id="customerMonitorMax">
-/* 고객용 대기 모니터: 기존 정보/기능 유지, 모니터용 가독성만 확대 */
-body{background:#eef2f7}
-.header{height:88px;padding:0 38px}
-.brand{font-size:30px}
-.sub{font-size:14px;margin-top:4px}
-.wrap{padding:20px 24px 28px;max-width:none;width:100%}
-.stats{gap:14px;margin-bottom:16px}
-.stat{background:#fff;border:1px solid #cfd8e6;border-radius:10px;padding:15px 12px;font-size:16px;font-weight:800}
-.stat b{font-size:38px;line-height:1.05;margin-top:5px}
-.courts{gap:14px;align-items:stretch}
-.court{background:#fff;border:2px solid #d1dae8;border-radius:11px;box-shadow:0 3px 10px rgba(20,40,70,.07)}
-.head{height:62px;padding:10px 14px;font-size:21px;border-bottom:2px solid #dce4ee}
-.num{width:38px;height:38px;border-radius:7px;font-size:19px;margin-right:8px}
-.badge{padding:6px 11px;font-size:12px;font-weight:900}
-.body{padding:12px 14px 15px}
-.row{min-height:43px;padding:9px 2px;border-bottom:1px solid #dfe5ed;font-size:14px}
-.row .label{color:#56657b;font-weight:700}.row .value{font-size:16px;font-weight:900}
-.remain{margin:9px 0 12px;padding:11px 8px;border-radius:8px;background:#f4f8ff;border:1px solid #cbd8ea}
-.remain .label{font-size:12px;color:#637188;font-weight:800}.remain .big{font-size:34px;font-weight:900;line-height:1.05;margin-top:3px}
-.qbox{margin-top:12px;border:1px solid #cbd5e2;border-radius:8px;overflow:hidden;background:#fff}
-.qtitle{padding:10px 10px;background:#eef3f9;border-bottom:1px solid #cbd5e2;font-size:14px;font-weight:900}
-.qrow{display:grid;grid-template-columns:38px 1fr 1fr;align-items:center;min-height:38px;padding:7px 10px;border-top:1px solid #e3e8ef;font-size:13px}
-.qrow b{font-size:14px}.qrow span:nth-child(2){font-weight:800}.qeta{font-weight:800;text-align:right;color:#314b70}
-.waitEmpty{padding:14px 10px;text-align:center;color:#7b8798;font-size:13px}
-.customerBtn{padding:10px 16px!important;border-radius:7px!important;font-weight:900!important}
-@media(min-width:1600px){
- .header{height:96px}.brand{font-size:34px}.sub{font-size:15px}
- .wrap{padding:22px 30px 34px}.stat{padding:17px}.stat b{font-size:42px}
- .head{height:68px;font-size:23px}.num{width:42px;height:42px}
- .row{min-height:48px;font-size:15px}.row .value{font-size:18px}
- .remain .big{font-size:38px}.qtitle{font-size:15px}.qrow{font-size:14px;min-height:42px}
+<style id="adminFinalDesign">
+body{background:#eef3f9!important}
+.admin{background:#eef3f9!important}
+.main{max-width:1800px!important;padding:22px 24px 40px!important}
+.panel{
+  border-radius:14px!important;
+  border:1px solid #d7e0ec!important;
+  box-shadow:0 4px 14px rgba(18,43,78,.07)!important;
 }
-</style>
-
-<style id="customerMonitorPolish">
-/* 고객 대기 모니터 화면 전용 */
-body.monitorCustomer{background:#eef3f9}
-.customerMonitorHeader{
-  display:flex;align-items:center;justify-content:space-between;
-  background:linear-gradient(135deg,#061b4f,#0b357d);
-  color:#fff;border-radius:14px;padding:13px 24px;margin-bottom:14px;
-  box-shadow:0 5px 16px rgba(6,27,79,.18)
+.panel h2{font-weight:950!important}
+.side{background:linear-gradient(180deg,#061a45,#09285f)!important}
+.nav.on{background:#1769e8!important}
+.lockGrid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px!important}
+.lockCard{
+  border-radius:12px!important;background:linear-gradient(180deg,#fff,#f8fbff)!important;
+  border:2px solid #d8e2ef!important;padding:15px!important;
 }
-.customerMonitorBrand{display:flex;align-items:center;gap:13px}
-.customerMonitorIcon{
-  width:48px;height:48px;border-radius:12px;background:#fff;color:#0d58df;
-  display:flex;align-items:center;justify-content:center;font-size:28px;
-  box-shadow:0 2px 8px rgba(0,0,0,.16)
+.lockCard:nth-child(1){border-top:5px solid #079455!important}
+.lockCard:nth-child(2){border-top:5px solid #1769e8!important}
+.lockCard:nth-child(3){border-top:5px solid #6734d4!important}
+.lockCard:nth-child(4){border-top:5px solid #f97316!important}
+.lockCard:nth-child(5){border-top:5px solid #e51d35!important}
+.lockCard h3{font-size:19px!important;font-weight:950!important}
+.lockCard button{font-size:14px!important}
+.controlRow,.grid{gap:12px!important}
+.controlBox{
+  border-radius:12px!important;background:#fff!important;
+  box-shadow:0 2px 8px rgba(18,43,78,.04)!important;
 }
-.customerMonitorTitle{font-size:28px;font-weight:950;letter-spacing:-.8px}
-.customerMonitorSub{font-size:14px;font-weight:700;opacity:.9;margin-top:2px}
-.customerMonitorGuide{
-  background:#fff;border-radius:12px;padding:10px 16px;
-  font-size:15px;font-weight:900;color:#0a2350;
+.adminTable .card{
+  border-radius:12px!important;
+  background:linear-gradient(180deg,#fff,#f8fbff)!important;
 }
-.monitorCustomerWrap{padding:12px 18px 22px;max-width:1920px;margin:auto}
-.monitorStats{gap:12px!important;margin-bottom:14px!important}
-.monitorStats .stat{
-  border:2px solid #cbd7e6!important;border-radius:12px!important;
-  padding:11px 12px!important;background:#fff!important;
-  box-shadow:0 3px 10px rgba(10,35,70,.07)
+.adminTable .card h3{font-weight:950!important}
+.adminTable .card p:first-of-type{
+  background:#eef5ff!important;border-left:4px solid #1769e8!important;
 }
-.monitorStats .stat .statLabel{display:block;font-size:16px;font-weight:900;color:#4c6079}
-.monitorStats .stat b{font-size:38px!important;color:#061b4f!important;line-height:1.05;margin-top:3px!important}
-.monitorCourts{gap:12px!important}
-.monitorCourts .court{
-  border:2px solid #bfcddd!important;border-radius:13px!important;
-  background:#fff!important;box-shadow:0 4px 14px rgba(10,35,70,.08)!important;
+.smallbtn{box-shadow:0 2px 5px rgba(229,29,53,.2)!important}
+.adminHero{
+  display:flex;align-items:center;gap:12px;margin-bottom:14px;
+  background:linear-gradient(110deg,#071d49,#123f86);
+  color:#fff;border-radius:14px;padding:14px 18px;
+  box-shadow:0 5px 14px rgba(7,29,73,.16);
 }
-.monitorCourts .court .head{
-  height:66px!important;padding:8px 13px!important;
-  background:#f4f7fb!important;border-bottom:2px solid #c9d5e4!important;
-  font-size:24px!important;
+.adminHeroIcon{
+  width:48px;height:48px;border-radius:50%;background:#fff;
+  display:grid;place-items:center;flex:0 0 48px;font-size:28px;
 }
-.monitorCourts .court .head>span:first-child{font-size:24px!important;font-weight:950!important}
-.monitorCourts .court .num{
-  width:42px!important;height:42px!important;border-radius:9px!important;
-  font-size:22px!important;margin-right:8px!important
-}
-.monitorCourts .badge{font-size:14px!important;padding:7px 12px!important;border-radius:16px!important}
-.monitorCourts .court .body{padding:13px!important}
-.monitorCourts .court .row{
-  padding:10px 2px!important;border-bottom:2px solid #e3e9f1!important
-}
-.monitorCourts .court .label{font-size:15px!important;font-weight:800!important;color:#52657d!important}
-.monitorCourts .court .val{font-size:20px!important;font-weight:950!important}
-.monitorCourts .court .remain{
-  font-size:40px!important;line-height:1!important;
-  color:#07854b!important
-}
-.monitorCourts .qbox{
-  margin-top:13px!important;border:2px solid #cbd7e5!important;
-  border-radius:9px!important;background:#fff!important
-}
-.monitorCourts .qtitle{
-  padding:11px 10px!important;background:#eaf0f7!important;
-  border-bottom:2px solid #cbd7e5!important;
-  font-size:17px!important;font-weight:950!important
-}
-.monitorCourts .qrow{
-  grid-template-columns:45px minmax(0,1fr) 115px 100px!important;
-  align-items:center!important;padding:10px 9px!important;
-  border-top:1px solid #dfe6ef!important;font-size:16px!important
-}
-.monitorCourts .qrow b{font-size:18px!important}
-.monitorCourts .qgame{
-  display:inline-block;background:#eef4ff;border:1px solid #c9d9f5;
-  border-radius:6px;padding:4px 6px;font-size:12px;font-weight:900;color:#164fbd;
-  text-align:center
-}
-.monitorCourts .qeta{font-size:16px!important;font-weight:950!important;color:#e65100!important}
-.monitorCourts .waitEmpty{
-  padding:17px!important;text-align:center!important;
-  color:#8290a2!important;font-size:15px!important;font-weight:800!important
-}
-.monitorCourts .queueHead{
-  display:grid;grid-template-columns:45px minmax(0,1fr) 115px 100px;
-  padding:8px 9px;background:#f7f9fc;border-bottom:1px solid #dfe6ef;
-  font-size:13px;font-weight:950;color:#53657c
-}
-@media(max-width:1200px){
-  .customerMonitorTitle{font-size:22px}
-  .monitorCourts .court .head,.monitorCourts .court .head>span:first-child{font-size:20px!important}
-  .monitorCourts .court .val{font-size:17px!important}
-  .monitorCourts .court .remain{font-size:32px!important}
-  .monitorCourts .qrow,.monitorCourts .queueHead{grid-template-columns:35px minmax(0,1fr) 95px 82px!important}
-}
-</style>
-
-<style id="monitorFinalPolish">
-/* 고객 대기 모니터 전용 최종 디자인 - 기능/연동 로직 변경 없음 */
-:root{
-  --navy:#071d49;--blue:#1769e8;--green:#079455;--orange:#f97316;
-  --purple:#6734d4;--red:#e51d35;--line:#c9d5e5;--soft:#f4f7fb;
-  --ink:#071b3f;
-}
-body{background:linear-gradient(135deg,#eef3f9 0%,#f8fafc 55%,#eaf0f8 100%) !important;}
-.monitor-shell{
-  min-height:100vh; padding:18px 20px 20px; box-sizing:border-box;
-  color:var(--ink);
-}
-.monitor-head{
-  background:linear-gradient(110deg,#06183e,#0b2d67 70%,#123f86);
-  border-radius:16px; color:#fff; padding:16px 24px;
-  display:flex; align-items:center; justify-content:space-between;
-  box-shadow:0 7px 22px rgba(7,29,73,.18); margin-bottom:14px;
-}
-.monitor-brand{display:flex;align-items:center;gap:15px}
-.badminton-mark{
-  width:62px;height:62px;border-radius:50%;
-  background:#fff;display:grid;place-items:center;flex:0 0 62px;
-  box-shadow:0 2px 10px rgba(0,0,0,.15)
-}
-.badminton-mark svg{width:49px;height:49px}
-.monitor-title{font-size:30px;font-weight:950;letter-spacing:-1.2px}
-.monitor-sub{font-size:15px;font-weight:700;opacity:.9;margin-top:3px}
-.monitor-clock{font-size:18px;font-weight:800;text-align:right}
-.monitor-clock b{display:block;font-size:30px;margin-top:2px}
-.monitor-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
-.monitor-stat{
-  background:#fff;border:2px solid #d6e0ed;border-radius:13px;
-  padding:12px 14px;text-align:center;box-shadow:0 4px 12px rgba(24,49,82,.07)
-}
-.monitor-stat small{display:block;font-size:15px;font-weight:900;color:#53657d}
-.monitor-stat b{display:block;font-size:37px;line-height:1.05;margin-top:3px;color:var(--navy);font-weight:950}
-.monitor-courts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
-.monitor-court{
-  background:#fff;border:2px solid var(--line);border-radius:14px;
-  overflow:hidden;box-shadow:0 5px 15px rgba(22,46,79,.09);min-width:0
-}
-.monitor-court-head{
-  height:61px;padding:0 14px;display:flex;align-items:center;
-  justify-content:space-between;background:#f6f8fb;border-bottom:2px solid var(--line)
-}
-.monitor-court-title{font-size:22px;font-weight:950}
-.monitor-court-no{
-  display:inline-grid;place-items:center;width:37px;height:37px;
-  color:#fff;border-radius:9px;font-size:21px;margin-right:8px;font-weight:950
-}
-.monitor-status{color:#fff;border-radius:999px;padding:7px 11px;font-size:13px;font-weight:950}
-.monitor-body{padding:0 12px 13px}
-.monitor-field{
-  display:flex;justify-content:space-between;align-items:center;
-  min-height:47px;border-bottom:2px solid #e4eaf2;font-size:14px
-}
-.monitor-field span:first-child{color:#5e7088;font-weight:800}
-.monitor-field b{font-size:17px;font-weight:950;text-align:right}
-.monitor-time{
-  margin:10px 0 12px;border-radius:12px;padding:10px 12px;
-  text-align:center;background:#eef5ff;border:2px solid #c9ddff
-}
-.monitor-time-label{font-size:14px;font-weight:900;color:#48617f}
-.monitor-time-value{font-size:42px;line-height:1.05;font-weight:950;color:var(--blue);margin-top:2px}
-.monitor-wait{
-  border:2px solid #cfd9e7;border-radius:10px;overflow:hidden;background:#fff
-}
-.monitor-wait-head{
-  background:#edf3fa;border-bottom:2px solid #cfd9e7;
-  padding:9px 11px;font-size:15px;font-weight:950
-}
-.monitor-wait-row{
-  display:grid;grid-template-columns:34px 1fr 82px;gap:5px;
-  align-items:center;min-height:42px;padding:0 9px;
-  border-bottom:1px solid #e3e9f1;font-size:14px
-}
-.monitor-wait-row:last-child{border-bottom:0}
-.monitor-wait-row b{font-size:17px}
-.monitor-game{font-weight:900}
-.monitor-arrival{color:#e36a00;font-weight:950;text-align:right}
-.monitor-empty{text-align:center;padding:12px;color:#8794a7;font-size:13px;font-weight:800}
-@media(max-width:1100px){
-  .monitor-title{font-size:24px}.monitor-stats{gap:8px}.monitor-stat b{font-size:30px}
-  .monitor-courts{gap:8px}.monitor-court-head{padding:0 9px}
-  .monitor-court-title{font-size:18px}.monitor-field b{font-size:14px}
-  .monitor-time-value{font-size:34px}.monitor-wait-row{grid-template-columns:28px 1fr 68px;font-size:12px}
-}
+.adminHero b{font-size:22px}.adminHero span{display:block;font-size:12px;opacity:.9;margin-top:2px}
+@media(max-width:1000px){.lockGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head><body><div id="app"></div>
 <script>
@@ -547,8 +357,7 @@ function route(){
 
 function customer(){
   const app=document.getElementById("app");
-  document.body.classList.add("monitorCustomer");
-app.innerHTML='<div class="monitorCustomerWrap"><div class="customerMonitorHeader"><div class="customerMonitorBrand"><div class="customerMonitorIcon">🏸</div><div><div class="customerMonitorTitle">장군봉 배드민턴 스마트 대기</div><div class="customerMonitorSub">고객에게 보이는 실시간 코트 · 대기 현황</div></div></div><div class="customerMonitorGuide">대기 순서와 예상 입장 시간을 확인하세요</div></div><div class="stats monitorStats" id="stats"></div><div class="courts monitorCourts" id="courts"></div></div>';
+  app.innerHTML='<header class="header"><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">고객에게 보이는 실시간 대기 현황</div></div><div style="display:flex;align-items:center;gap:12px"><a class="customerBtn" href="?page=admin">관리자</a><div id="clock"></div></div></header><div class="wrap"><div class="stats" id="stats"></div><div class="courts" id="courts"></div></div>';
   renderCustomer(cloneDef());
   sub(renderCustomer);
   setInterval(()=>{const el=document.getElementById("clock");if(el)el.textContent=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})},1000);
@@ -556,49 +365,15 @@ app.innerHTML='<div class="monitorCustomerWrap"><div class="customerMonitorHeade
 function renderCustomer(s){
   const stats=document.getElementById("stats"), courts=document.getElementById("courts");
   if(!stats||!courts)return;
-  const activeCount=s.courts.filter(c=>c.active).length;
-  const waitingTeams=s.courts.reduce((n,c)=>n+(c.queue||[]).length,0);
-  const waitingPeople=s.courts.reduce((n,c)=>
-    n+(c.queue||[]).reduce((m,x)=>m+(x.game==="4인 복식"?4:x.game==="2인 단식"?2:1),0),0);
-
-  stats.innerHTML='<div class="stat"><span class="statLabel">전체 코트</span><b>5 개</b></div>'+
-    '<div class="stat"><span class="statLabel">이용 중 코트</span><b>'+activeCount+' 개</b></div>'+
-    '<div class="stat"><span class="statLabel">대기 중 팀</span><b>'+waitingTeams+' 팀</b></div>'+
-    '<div class="stat"><span class="statLabel">전체 대기 인원</span><b>'+waitingPeople+' 명</b></div>';
-
-  const gameMin=x=>Number(s.settings?.[x?.game])||15;
-  const remainMin=c=>{
-    if(!c.active||!c.active.endAt)return 0;
-    return Math.max(0,Math.ceil((new Date(c.active.endAt)-Date.now())/60000));
-  };
-  const eta=(c,index)=>{
-    let min=remainMin(c);
-    const q=c.queue||[];
-    for(let j=0;j<index;j++)min+=gameMin(q[j]);
-    return min;
-  };
-
+  let a=s.courts.filter(c=>c.active).length;
+  let w=s.courts.reduce((n,c)=>n+(c.queue||[]).length,0);
+  stats.innerHTML='<div class="stat">전체 코트<b>5 개</b></div><div class="stat">이용 중 코트<b>'+a+' 개</b></div><div class="stat">대기 중 팀<b>'+w+' 팀</b></div><div class="stat">전체 대기 인원<b>'+w+' 팀</b></div>';
   courts.innerHTML=s.courts.map((c,i)=>{
-    const q=c.queue||[], a=c.active;
-    const status=c.blocked?'사용 불가':a?'이용 중':'대기 중';
-    const waitRows=q.map((x,j)=>
-      '<div class="qrow"><b>'+(j+1)+'</b><span><strong>'+esc(x.nickname)+'</strong></span><span class="qgame">'+esc(x.game||"")+'</span><span class="qeta">약 '+eta(c,j)+'분 후</span></div>'
-    ).join('');
-
-    return '<section class="court">'+
-      '<div class="head"><span><span class="num" style="background:'+colors[i]+'">'+c.id+'</span>'+c.id+'번 코트</span>'+
-      '<span class="badge" style="background:'+(a?colors[i]:'#718096')+'">'+status+'</span></div>'+
-      '<div class="body">'+
-      (a?
-        '<div class="row"><span class="label">닉네임</span><span class="val">'+esc(a.nickname)+'</span></div>'+
-        '<div class="row"><span class="label">게임 방식</span><span class="val">'+esc(a.game)+'</span></div>'+
-        '<div class="row"><span class="label">이용 시간</span><span class="val">'+tm(a.startAt)+' ~ '+tm(a.endAt)+'</span></div>'+
-        '<div class="row"><span class="label">남은 시간</span><span class="val remain">'+left(a.endAt)+'</span></div>':
-        '<div class="row"><span class="label">현재 대기 팀</span><span class="val">'+q.length+'팀</span></div>'+
-        '<div class="row"><span class="label">예상 대기 시간</span><span class="val">'+(q.length?'약 '+eta(c,0)+'분':'약 0분')+'</span></div>')+
-      '<div class="qbox"><div class="qtitle">'+c.id+'번 코트 대기 현황 (총 '+q.length+'팀)</div>'+
-      (waitRows?'<div class="queueHead"><span>순번</span><span>닉네임</span><span>게임 구분</span><span>예상 입장</span></div>'+waitRows:'<div class="waitEmpty">현재 대기자가 없습니다.</div>')+
-      '</div></div></section>';
+    let q=c.queue||[],a=c.active;
+    return '<section class="court"><div class="head"><span><span class="num" style="background:'+colors[i]+'">'+c.id+'</span>'+c.id+'번 코트</span><span class="badge" style="background:'+(a?colors[i]:'#718096')+'">'+(c.blocked?'사용 불가':a?'이용 중':'대기 중')+'</span></div><div class="body">'+
+    (a?'<div class="row"><span class="label">닉네임</span><span class="val">'+esc(a.nickname)+'</span></div><div class="row"><span class="label">게임 방식</span><span class="val">'+esc(a.game)+'</span></div><div class="row"><span class="label">이용 시간</span><span class="val">'+tm(a.startAt)+' ~ '+tm(a.endAt)+'</span></div><div class="row"><span class="label">남은 시간</span><span class="val remain">'+left(a.endAt)+'</span></div>':
+    '<div class="row"><span class="label">현재 대기 팀</span><span class="val">'+q.length+'팀</span></div><div class="row"><span class="label">예상 대기 시간</span><span class="val">약 '+q.length*5+'분</span></div>')+
+    '<div class="qbox"><div class="qtitle">'+c.id+'번 코트 대기 현황 (총 '+q.length+'팀)</div>'+q.map((x,j)=>'<div class="qrow"><b>'+(j+1)+'</b><span>'+esc(x.nickname)+'</span><span>'+esc(x.game)+'</span></div>').join('')+'</div></div></section>'
   }).join('');
 }
 
@@ -844,7 +619,7 @@ function setupAdminNav(){
 
 function admin(){
   const app=document.getElementById("app");
-  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=customer">고객 화면으로</a></div></header><div class="admin"><aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기자 최대 정원</h2><div class="hint">전체 코트에 동일하게 적용 · 4명~20명</div></div></div><div class="controlBox"><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
+  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=customer">고객 화면으로</a></div></header><div class="admin"><aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기자 최대 정원</h2><div class="hint">전체 코트에 동일하게 적용 · 1명~20명</div></div></div><div class="controlBox"><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
   renderAdmin(cloneDef()); sub(renderAdmin);
 }
 function renderAdmin(s){
@@ -857,7 +632,7 @@ function renderAdmin(s){
 async function changeTime(game,delta){
   const el=game==="난타"?document.getElementById("g1"):game==="4인 복식"?document.getElementById("g2"):document.getElementById("g3");
   if(!el)return;
-  const v=Math.max(15,Math.min(20,Number(el.textContent||15)+delta));
+  const v=Math.max(1,Math.min(20,Number(el.textContent||15)+delta));
   el.textContent=v;
   try{
     const s=await get();
@@ -868,15 +643,15 @@ async function changeTime(game,delta){
 }
 function changeMax(delta){
   const el=document.getElementById("mx"); if(!el)return;
-  el.textContent=Math.max(4,Math.min(20,Number(el.textContent||5)+delta));
+  el.textContent=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
 }
 async function saveAdmin(){
   try{
     let s=await get();
-    s.settings["난타"]=Math.max(15,Math.min(20,Number(document.getElementById("g1").textContent)));
-    s.settings["4인 복식"]=Math.max(15,Math.min(20,Number(document.getElementById("g2").textContent)));
-    s.settings["2인 단식"]=Math.max(15,Math.min(20,Number(document.getElementById("g3").textContent)));
-    s.max_per_court=Math.max(4,Math.min(20,Number(document.getElementById("mx").textContent)));
+    s.settings["난타"]=Math.max(1,Math.min(20,Number(document.getElementById("g1").textContent)));
+    s.settings["4인 복식"]=Math.max(1,Math.min(20,Number(document.getElementById("g2").textContent)));
+    s.settings["2인 단식"]=Math.max(1,Math.min(20,Number(document.getElementById("g3").textContent)));
+    s.max_per_court=Math.max(1,Math.min(20,Number(document.getElementById("mx").textContent)));
     await save(s);
     alert("변경사항이 저장되었습니다.");
   }catch(e){showError(e)}
