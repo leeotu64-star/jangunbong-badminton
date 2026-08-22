@@ -230,20 +230,25 @@ body{background:#eef3f9!important}
 
 <style id="viewSwitchRestore">
 .view-switch{
-  position:fixed;right:18px;top:14px;z-index:99999;
-  display:flex;gap:8px
+  position:absolute;right:18px;top:10px;z-index:9999;
+  display:flex!important;flex-direction:row!important;align-items:center;
+  gap:8px!important;white-space:nowrap;
 }
 .view-switch button{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:100px;height:40px;padding:0 14px;border:0;border-radius:8px;
-  background:#1769e8;color:#fff;font-size:14px;font-weight:950;
-  cursor:pointer;box-shadow:0 3px 9px rgba(7,29,73,.22)
+  display:inline-flex!important;align-items:center;justify-content:center;
+  width:96px!important;min-width:96px!important;height:38px!important;
+  margin:0!important;padding:0 12px!important;
+  border:0!important;border-radius:7px!important;
+  background:#1769e8!important;color:#fff!important;
+  font-size:13px!important;font-weight:950!important;
+  line-height:1!important;cursor:pointer;
+  box-shadow:0 2px 6px rgba(7,29,73,.18);
 }
-.view-switch button.secondary{background:#071d49}
+.view-switch button.secondary{background:#071d49!important}
 .view-switch button:hover{filter:brightness(.94)}
 @media(max-width:700px){
-  .view-switch{right:8px;top:8px}
-  .view-switch button{min-width:82px;height:36px;font-size:12px}
+  .view-switch{right:8px;top:8px;gap:5px!important}
+  .view-switch button{width:82px!important;min-width:82px!important;height:34px!important;font-size:12px!important}
 }
 </style>
 
@@ -257,6 +262,32 @@ body.management-view #viewSwitch{display:flex}
 body.register-page #viewSwitch,
 body.register-page .customerBtn,
 body.register-page .adminTop{display:none!important}
+</style>
+
+<style id="registerGameChoices">
+.register-game-choices{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin:12px 0 16px;
+}
+.register-game-choices button{
+  min-height:52px;border:2px solid #d6e0ed;border-radius:10px;
+  background:#fff;color:#10244b;font-size:16px;font-weight:950;cursor:pointer;
+}
+.register-game-choices button.active{
+  background:#1769e8;color:#fff;border-color:#1769e8;
+  box-shadow:0 3px 8px rgba(23,105,232,.22);
+}
+@media(max-width:520px){
+  .register-game-choices{gap:7px}
+  .register-game-choices button{min-height:48px;font-size:14px}
+}
+</style>
+<style id="viewSwitchFlexFix">
+body.management-view #viewSwitch{display:flex!important;flex-direction:row!important}
+body.management-view #viewSwitch button{display:inline-flex!important}
+body:not(.management-view) #viewSwitch{display:none!important}
 </style>
 </head><body>
 <div id="app"></div>
@@ -791,6 +822,38 @@ function management(){
 (function(){
   const p=new URLSearchParams(location.search);
   if(p.get("page")==="register") document.body.classList.add("register-page");
+})();
+</script>
+
+<script id="registerGameChoiceScript">
+(function(){
+  function initRegisterGameChoices(){
+    const p=new URLSearchParams(location.search);
+    if(p.get("page")!=="register") return;
+    const wrap=document.getElementById("registerGameChoices");
+    if(!wrap) return;
+    const target=document.getElementById("g") ||
+      document.getElementById("game") ||
+      document.querySelector('select[name="game"]');
+    if(!target) return;
+
+    const buttons=[...wrap.querySelectorAll("button[data-game]")];
+    function setActive(){
+      const value=target.value || "4인 복식";
+      buttons.forEach(b=>b.classList.toggle("active",b.dataset.game===value));
+    }
+    buttons.forEach(b=>{
+      b.addEventListener("click",()=>{
+        target.value=b.dataset.game;
+        target.dispatchEvent(new Event("change",{bubbles:true}));
+        setActive();
+      });
+    });
+    setActive();
+  }
+  if(document.readyState==="loading")
+    document.addEventListener("DOMContentLoaded",initRegisterGameChoices);
+  else initRegisterGameChoices();
 })();
 </script>
 </body></html>
