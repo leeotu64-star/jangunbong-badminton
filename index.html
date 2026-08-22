@@ -227,7 +227,33 @@ body{background:#eef3f9!important}
 .adminHero b{font-size:22px}.adminHero span{display:block;font-size:12px;opacity:.9;margin-top:2px}
 @media(max-width:1000px){.lockGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
-</head><body><div id="app"></div>
+
+<style id="viewSwitchRestore">
+.view-switch{
+  position:fixed;right:18px;top:14px;z-index:99999;
+  display:flex;gap:8px;
+}
+.view-switch a{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:92px;height:40px;padding:0 14px;
+  border-radius:8px;border:0;
+  background:#1769e8;color:#fff!important;
+  text-decoration:none!important;font-size:14px;font-weight:950;
+  box-shadow:0 3px 9px rgba(7,29,73,.22);
+}
+.view-switch a:hover{background:#0e55c7}
+.view-switch .secondary{background:#071d49}
+@media(max-width:700px){
+  .view-switch{right:8px;top:8px}
+  .view-switch a{min-width:78px;height:36px;font-size:12px;padding:0 9px}
+}
+</style>
+</head><body>
+<div id="viewSwitch" class="view-switch" aria-label="화면 전환">
+  <a id="switchCustomer" href="?page=management&view=display">고객용</a>
+  <a id="switchAdmin" class="secondary" href="?page=management&view=admin">관리자</a>
+</div>
+<div id="app"></div>
 <script>
 /* Supabase 설정: 아래 2개만 본인 프로젝트 값으로 교체 */
 const SUPABASE_URL="https://jvurwckjumnzzecazgku.supabase.co";
@@ -701,4 +727,29 @@ function management(){
   else customer();
   ensure().catch(e=>console.error(e));
 })();
-</script></body></html>
+</script>
+<script>
+(function(){
+  function updateViewSwitch(){
+    const p=new URLSearchParams(location.search);
+    const view=p.get("view")||"display";
+    const c=document.getElementById("switchCustomer");
+    const a=document.getElementById("switchAdmin");
+    if(!c||!a)return;
+    if(view==="admin"){
+      c.style.display="inline-flex";
+      a.style.display="none";
+      c.textContent="고객용";
+      c.href="?page=management&view=display";
+    }else{
+      c.style.display="none";
+      a.style.display="inline-flex";
+      a.textContent="관리자 모드";
+      a.href="?page=management&view=admin";
+    }
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",updateViewSwitch);
+  else updateViewSwitch();
+})();
+</script>
+</body></html>
