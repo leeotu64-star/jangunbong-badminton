@@ -418,10 +418,6 @@ body:not(.management-view) #viewSwitch{display:none!important}
   .adminTop .topSwitch{width:90px!important;height:38px!important;font-size:12px!important}
 }
 </style>
-<style id="maxPersistFix">
-#waitMax #mx{user-select:none}
-#waitMax .stepper button{touch-action:manipulation}
-</style>
 </head><body>
 <div id="app"></div>
 <script>
@@ -530,7 +526,7 @@ function showError(err){
   console.error("Supabase error:",err);
   const box=document.getElementById("app");
   if(box && !box.innerHTML.includes("장군봉 배드민턴")) {
-    box.innerHTML='<div style="max-width:720px;margin:60px auto;padding:28px;font-family:Arial;text-align:center"><h2>고객용 QR 스마트등록</h2><p>데이터 연결을 준비하는 중입니다.</p><small>'+esc(msg)+'</small></div>';
+    box.innerHTML='<div style="max-width:720px;margin:60px auto;padding:28px;font-family:Arial;text-align:center"><p>데이터 연결을 준비하는 중입니다.</p><small>'+esc(msg)+'</small></div>';
   }
 }
 async function get(){
@@ -595,309 +591,14 @@ function route(){
 
 function customer(){
   const app=document.getElementById("app");
-  app.innerHTML='<header class="header"><div style="display:flex;align-items:center"><span style="display:inline-grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#fff;margin-right:12px;box-shadow:0 2px 8px rgba(0,0,0,.2);font-size:28px">🏸</span><div><div class="brand">장군봉 배드민턴 코트 현황</div><div class="sub">고객에게 보이는 실시간 대기 현황</div></div></div><div style="display:flex;align-items:center;gap:12px"><a class="customerBtn" href="?page=management&view=admin">관리자 모드</a><div id="clock"></div></div></header><div class="wrap"><div class="stats" id="stats"></div><div class="courts" id="courts"></div></div>';
-  renderCustomer(cloneDef());
-  sub(renderCustomer);
-  setInterval(()=>{const el=document.getElementById("clock");if(el)el.textContent=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})},1000);
-}
-function renderCustomer(s){
-  const stats=document.getElementById("stats"), courts=document.getElementById("courts");
-  if(!stats||!courts)return;
-  let a=s.courts.filter(c=>c.active).length;
-  let w=s.courts.reduce((n,c)=>n+(c.queue||[]).length,0);
-  stats.innerHTML='<div class="stat">전체 코트<b>5 개</b></div><div class="stat">이용 중 코트<b>'+a+' 개</b></div><div class="stat">대기 중 팀<b>'+w+' 팀</b></div><div class="stat">전체 대기 인원<b>'+w+' 팀</b></div>';
-  courts.innerHTML=s.courts.map((c,i)=>{
-    let q=c.queue||[],a=c.active;
-    return '<section class="court"><div class="head"><span><span class="num" style="background:'+colors[i]+'">'+c.id+'</span>'+c.id+'번 코트</span><span class="badge" style="background:'+(a?colors[i]:'#718096')+'">'+(c.blocked?'사용 불가':a?'이용 중':'대기 중')+'</span></div><div class="body">'+
-    (a?'<div class="row"><span class="label">닉네임</span><span class="val">'+esc(a.nickname)+'</span></div><div class="row"><span class="label">게임 방식</span><span class="val">'+esc(a.game)+'</span></div><div class="row"><span class="label">이용 시간</span><span class="val">'+tm(a.startAt)+' ~ '+tm(a.endAt)+'</span></div><div class="row"><span class="label">남은 시간</span><span class="val remain">'+left(a.endAt)+'</span></div>':
-    '<div class="row"><span class="label">현재 대기 팀</span><span class="val">'+q.length+'팀</span></div><div class="row"><span class="label">예상 대기 시간</span><span class="val">약 '+q.length*5+'분</span></div>')+
-    '<div class="qbox"><div class="qtitle">'+c.id+'번 코트 대기 현황 (총 '+q.length+'팀)</div>'+q.map((x,j)=>'<div class="qrow"><b>'+(j+1)+'</b><span>'+esc(x.nickname)+'</span><span>'+esc(x.game)+'</span></div>').join('')+'</div></div></section>'
-  }).join('');
-}
-
-function register(){
-  const app=document.getElementById("app");
-  app.innerHTML=`
-  <div style="min-height:100vh;background:#f4f7fb;padding:14px 12px 28px">
-    <div style="max-width:430px;margin:0 auto">
-      <div style="background:#061b4f;color:#fff;border-radius:18px 18px 0 0;padding:16px 18px 18px;text-align:center">
-        <div style="font-size:12px;color:#69a7ff;font-weight:800;margin-bottom:8px">간편하게 코트 대기 등록</div>
-        <div style="font-size:21px;font-weight:900">고객용 QR 스마트등록</div>
-        <div style="font-size:11px;margin-top:5px">QR로 접속하여 대기 등록해주세요.</div>
-      </div>
-      <div style="background:#fff;border-radius:0 0 18px 18px;padding:20px 18px;box-shadow:0 8px 24px #001b4f18">
-        <div class="field"><label>닉네임 *</label><input id="n" name="queue_nickname" type="text" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="닉네임을 입력해주세요"></div>
-        <div class="field"><label>게임 방식 *</label>
-          <select id="g">
-            <option value="">게임 방식을 선택해주세요</option>
-            <option>4인 복식</option><option>2인 단식</option><option>난타</option>
-          </select>
-        </div>
-        <div class="field"><label>코트 선택 *</label>
-          <select id="c">
-            <option value="">코트를 선택해주세요</option>
-            <option value="1">1번 코트</option><option value="2">2번 코트</option>
-            <option value="3">3번 코트</option><option value="4">4번 코트</option><option value="5">5번 코트</option>
-          </select>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 2px 14px">
-          <span style="font-size:13px;font-weight:800">이용 시간</span>
-          <strong id="duration">15분</strong>
-        </div>
-        <div class="notice">
-          <b>● 안내</b><br>
-          • 대기 등록 후 현재 순번과 예상 대기시간을 확인할 수 있습니다.<br>
-          • 순번이 되면 게임이 자동으로 시작됩니다.<br>
-          • 게임 종료 후 퇴장 버튼을 눌러주세요.
-        </div>
-        <div id="e" style="display:none;color:#d71920;background:#fff1f1;border:1px solid #ffc9c9;border-radius:8px;padding:10px;font-size:12px;font-weight:800;margin-bottom:10px"></div>
-        <button class="btn" id="regBtn" onclick="reg()">대기 등록하기</button>
-<div style="text-align:center;font-size:11px;color:#667085;margin-top:8px;line-height:1.45">
-  ※ 같은 스마트폰은 중복 대기 등록할 수 없습니다.<br>
-  ※ 등록 후 5분 동안 재등록이 제한됩니다.
-</div>
-        <div style="text-align:center;font-size:10px;color:#7b8494;margin-top:10px">※ 대기 등록 후 관리자가 확인할 수 있습니다.</div>
-      </div>
-    </div>
-  </div>`;
-  loadRegisterDuration();
-}
-
-async function loadRegisterDuration(){
-  const game=document.getElementById("g"), out=document.getElementById("duration");
-  if(!game||!out)return;
-  let timer=null;
-  const sync=async()=>{
-    try{
-      const s=await get();
-      out.textContent=(s.settings?.[game.value]||15)+"분";
-    }catch(e){}
-  };
-  game.addEventListener("change",sync);
-  await sync();
-  timer=setInterval(sync,2000);
-  window.addEventListener("beforeunload",()=>{if(timer)clearInterval(timer)},{once:true});
-}
-
-async function reg(){
-  const btn=document.getElementById("regBtn"), ee=document.getElementById("e");
-  const nn=document.getElementById("n").value.trim();
-  const gg=document.getElementById("g").value;
-  const id=Number(document.getElementById("c").value);
-  const deviceId=getDeviceToken();
-
-  const err=(msg)=>{
-    ee.style.display="block";
-    ee.textContent=msg;
-    btn.disabled=false; btn.style.opacity="1";
-  };
-
-  if(!nn||!gg||!id){err("닉네임, 게임 방식, 코트를 모두 선택해주세요.");return}
-
-  /* 같은 스마트폰의 5분 재등록 제한 */
-  const cooldown=getCooldownUntil();
-  if(cooldown>Date.now()){
-    err("⚠️ 이미 등록했습니다. "+cooldownMessage(cooldown));
-    return;
-  }
-
-  btn.disabled=true; btn.style.opacity=".65"; ee.style.display="none";
-
-  try{
-    let s=await get();
-    if(!s || !Array.isArray(s.courts)) s=cloneDef();
-    s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
-    s.max_per_court=Math.max(1,Math.min(20,Number(s.max_per_court||5)));
-    s.finished=s.finished||{};
-
-    /* 서버에 저장된 익명 기기 토큰으로 모든 코트의 중복 대기/이용 여부 검사 */
-    const existing=findDeviceRegistration(s,deviceId);
-    if(existing){
-      err("⚠️ 이미 대기 등록되어 있습니다.\n기존 대기를 취소하거나 이용을 마친 후 다시 등록해주세요.");
-      return;
-    }
-
-    const x=s.courts.find(v=>Number(v.id)===id);
-    if(!x){err("선택한 코트를 찾을 수 없습니다.");return}
-    if(x.blocked){err("현재 이용할 수 없는 코트입니다. 다른 코트를 선택해주세요.");return}
-
-    x.queue=Array.isArray(x.queue)?x.queue:[];
-    const total=x.queue.length+(x.active?1:0);
-    if(total>=s.max_per_court){err("선택한 코트의 대기가 마감되었습니다.");return}
-
-    const t=(crypto&&crypto.randomUUID)?crypto.randomUUID():
-      ("T"+Date.now()+Math.random().toString(36).slice(2));
-
-    /* QR에는 개인정보가 없고, 대기 데이터에도 익명 랜덤 토큰만 저장 */
-    x.queue.push({
-      ticket:t,
-      nickname:nn,
-      game:gg,
-      court:id,
-      createdAt:Date.now(),
-      deviceId:deviceId
-    });
-
-    await advance(s,false);
-    await save(s);
-
-    /* 등록 성공 후 5분 동안 같은 브라우저의 재등록 차단 */
-    setCooldown();
-
-    location.replace(location.pathname+"?page=waiting&ticket="+encodeURIComponent(t));
-  }catch(e){
-    console.error(e);
-    err(String(e?.message||e));
-  }
-}
-function waiting(){
-  const app=document.getElementById("app");
-  app.innerHTML='<div class="wait"><div class="waithead"><h2>고객용 QR 스마트등록</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
-  renderWaiting(cloneDef());
-  sub(renderWaiting);
-}
-function renderWaiting(s){
-  const w=document.getElementById("w"); if(!w)return;
-  let a=null,q=null,c=null,fin=s.finished?.[ticket];
-
-  for(const x of s.courts){
-    if(x.active?.ticket===ticket){a=x.active;c=x}
-    const z=(x.queue||[]).find(y=>y.ticket===ticket);
-    if(z){q=z;c=x}
-  }
-
-  /* 3번째 화면: 15분 종료 */
-  if(fin){
-    w.innerHTML=`
-      <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
-        ● 15분 경과 후 퇴장 (자동 안내)
-      </div>
-      <div class="doneScreen">
-        <div class="doneIcon">✓</div>
-        <h2>장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2>
-        <p>이용 시간이 종료되었습니다.<br>다음 고객을 위해<br>퇴장 버튼을 눌러주세요.</p>
-        <div class="notice">퇴장을 눌러야<br>다시 이용 가능합니다.</div>
-        <button class="btn" onclick="finish()">퇴장하기</button>
-      </div>
-      <div style="font-size:10px;color:#777;text-align:center;margin-top:8px">
-        ※ 퇴장 버튼을 눌러야 다음 대기자가 이용을 시작합니다.
-      </div>`;
-    return;
-  }
-
-  /* 현재 이용 중 */
-  if(a){
-    const remain=left(a.endAt);
-    w.innerHTML=`
-      <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
-        ● 15분 경과 후 퇴장 (자동 안내)
-      </div>
-      <div class="doneScreen" style="background:#061b4f;text-align:left">
-        <div style="text-align:center;font-size:12px;font-weight:800;margin-bottom:12px">고객용 QR 스마트등록</div>
-        <div class="row"><span style="color:#fff">닉네임</span><b style="color:#fff">${esc(a.nickname)}</b></div>
-        <div class="row"><span style="color:#fff">선택 코트</span><b style="color:#fff">${a.court}번 코트</b></div>
-        <div class="row"><span style="color:#fff">이용 시간</span><b style="color:#fff">${tm(a.startAt)} ~ ${tm(a.endAt)}</b></div>
-        <div class="my">
-          <small>현재 이용 중</small>
-          <strong>${esc(a.nickname)}</strong>
-          <small>남은 시간</small>
-        </div>
-        <div class="timer" style="color:#fff">${remain}</div>
-        <button class="btn cancel" onclick="leave()">퇴장하기</button>
-      </div>`;
-    return;
-  }
-
-  /* 2번째 화면: 대기 중 */
-  if(q){
-    const arr=c.queue||[];
-    const pos=arr.findIndex(x=>x.ticket===ticket)+1;
-    const duration=Number(s.settings[q.game]||15);
-    let activeRemain=0;
-    if(c.active && c.active.endAt){
-      activeRemain=Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/60000));
-    }
-    const expected=Math.max(0,activeRemain+(pos-1)*duration);
-    const now=new Date();
-    const eta=new Date(Date.now()+expected*60000);
-
-    w.innerHTML=`
-      <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
-        ● 개선 화면 (해당 코트만 간결하게)
-      </div>
-      <div class="doneScreen" style="padding:12px 14px;background:#061b4f;text-align:left">
-        <div style="text-align:center;font-size:13px;font-weight:900;margin-bottom:10px">고객용 QR 스마트등록</div>
-        <div style="text-align:center;font-size:10px;margin-bottom:12px">간편하게 코트 대기를 확인하세요.</div>
-
-        <div style="background:#fff;color:#071633;border-radius:12px;padding:12px">
-          <div style="font-size:13px;font-weight:900;margin-bottom:8px">내 대기 정보</div>
-          <div class="row"><span>닉네임</span><b>${esc(q.nickname)}</b></div>
-          <div class="row"><span>선택 코트</span><b>${q.court}번 코트</b></div>
-          <div class="row"><span>이용 시간</span><b>${duration}분</b></div>
-
-          <div class="my" style="margin-top:12px">
-            <small>나의 순번</small>
-            <strong>${pos}번</strong>
-            <small>(현재 대기 중)</small>
-          </div>
-
-          <div style="display:flex;justify-content:space-between;font-size:11px;margin:10px 2px 4px">
-            <span>착 ${now.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}</span>
-            <span>종료 ${eta.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}</span>
-          </div>
-
-          <div style="text-align:center;font-size:11px;color:#333">남은 시간</div>
-          <div class="timer" style="color:#07854b">${String(expected).padStart(2,"0")}:00</div>
-
-          <div class="qbox">
-            <div class="qtitle">${c.id}번 코트 대기 현황 (총 ${arr.length}팀)</div>
-            <div class="qrow" style="font-weight:800"><span>순번</span><span>닉네임</span><span>예상 대기 시간</span></div>
-            ${arr.map((x,i)=>{
-              const wait=Math.max(0,activeRemain+i*duration);
-              return `<div class="qrow"><b>${i+1}</b><span>${esc(x.nickname)}${x.ticket===ticket?' <b>(나)</b>':''}</span><span>약 ${wait}분 후 입장</span></div>`;
-            }).join("")}
-          </div>
-
-          <button class="btn cancel" onclick="cancelWait()">예약 대기 취소</button>
-        </div>
-      </div>`;
-    return;
-  }
-
-  w.innerHTML='대기 등록 정보가 없습니다.';
-}
-async function cancelWait(){
-  try{let s=await get();for(const c of s.courts)c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);await save(s);location.href="?page=register"}catch(e){showError(e)}
-}
-async function leave(){
-  try{let s=await get();for(const c of s.courts)if(c.active?.ticket===ticket){s.finished=s.finished||{};s.finished[ticket]={...c.active,endedAt:Date.now()};c.active=null}await advance(s);await save(s)}catch(e){showError(e)}
-}
-async function finish(){
-  try{let s=await get();if(s.finished)delete s.finished[ticket];await save(s);location.href="?page=register"}catch(e){showError(e)}
-}
-
-function setupAdminNav(){
-  document.querySelectorAll('.side .nav').forEach(a=>a.addEventListener('click',()=>{
-    document.querySelectorAll('.side .nav').forEach(x=>x.classList.remove('on'));
-    a.classList.add('on');
-  }));
-}
-
-function admin(){
-  const app=document.getElementById("app");
-  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop">
-  <a class="topSwitch customerSwitch" href="?page=management&view=display">고객용</a>
-  <a class="topSwitch adminSwitch" href="?page=management&view=admin">관리자 모드</a>
-</div></header><div class="admin">
+  app.innerHTML='<div class="admin">
 <aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기자 최대 정원</h2><div class="hint">전체 코트에 동일하게 적용 · 1명~20명</div></div></div><div class="controlBox"><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
   renderAdmin(cloneDef()); sub(renderAdmin);
 }
-let adminMaxDraft=null;
-let adminMaxSaving=false;
 function renderAdmin(s){
   const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),cs=document.getElementById("cs"),qq=document.getElementById("qq");
   if(!g1||!g2||!g3||!mx||!cs||!qq)return;
-  g1.textContent=s.settings["난타"];g2.textContent=s.settings["4인 복식"];g3.textContent=s.settings["2인 단식"];mx.textContent=(adminMaxDraft!==null?adminMaxDraft:s.max_per_court);
+  g1.textContent=s.settings["난타"];g2.textContent=s.settings["4인 복식"];g3.textContent=s.settings["2인 단식"];mx.textContent=s.max_per_court;
   cs.innerHTML=s.courts.map(c=>'<div class="lockCard"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'현재 잠금':'현재 사용 가능')+'</p><button class="'+(c.blocked?'locked':'open')+'" onclick="block('+c.id+','+(!c.blocked)+')">'+(c.blocked?'잠금 해제':'코트 잠금')+'</button></div>').join('');
   qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
 }
@@ -915,38 +616,15 @@ async async function changeTime(game,delta){
 }
 async function changeMax(delta){
   const el=document.getElementById("mx"); if(!el)return;
-  const current=(adminMaxDraft!==null?Number(adminMaxDraft):Number(el.textContent||5));
-  const v=Math.max(1,Math.min(20,current+delta));
-  adminMaxDraft=v;
-  el.textContent=String(v);
-
-  // 서버 저장 중에는 실시간 새로고침이 숫자를 되돌리지 않도록 유지
-  if(adminMaxSaving)return;
-  adminMaxSaving=true;
+  const v=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
+  el.textContent=v;
   try{
-    let s=await get();
+    const s=await get();
     s.max_per_court=v;
     await save(s);
-
-    // 저장된 값을 다시 읽어 실제 서버 값까지 확인
-    const saved=await get();
-    if(Number(saved.max_per_court)===v){
-      adminMaxDraft=null;
-      el.textContent=String(v);
-    }else{
-      adminMaxDraft=Number(saved.max_per_court);
-      el.textContent=String(adminMaxDraft);
-    }
+    el.textContent=String(v);
   }catch(e){
     showError(e);
-    // 실패하면 서버의 기존 값을 표시
-    try{
-      const latest=await get();
-      adminMaxDraft=Number(latest.max_per_court||5);
-      el.textContent=String(adminMaxDraft);
-    }catch(_){}
-  }finally{
-    adminMaxSaving=false;
   }
 }
 async function saveAdmin(){
@@ -955,11 +633,8 @@ async function saveAdmin(){
     s.settings["난타"]=Math.max(1,Math.min(20,Number(document.getElementById("g1").textContent)));
     s.settings["4인 복식"]=Math.max(1,Math.min(20,Number(document.getElementById("g2").textContent)));
     s.settings["2인 단식"]=Math.max(1,Math.min(20,Number(document.getElementById("g3").textContent)));
-    s.max_per_court=Math.max(1,Math.min(20,Number(adminMaxDraft!==null?adminMaxDraft:document.getElementById("mx").textContent)));
+    s.max_per_court=Math.max(1,Math.min(20,Number(document.getElementById("mx").textContent)));
     await save(s);
-    const saved=await get();
-    adminMaxDraft=Number(saved.max_per_court);
-    document.getElementById("mx").textContent=String(adminMaxDraft);
     alert("변경사항이 저장되었습니다.");
   }catch(e){showError(e)}
 }
