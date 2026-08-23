@@ -1858,4 +1858,82 @@ function management(){
 }
 </style>
 
+
+<style id="JGB_WAIT_ALL_TEXT_55PX_FORCE_FINAL">
+/* ==========================================================
+   대기현황 해당 부분만 55px 강제 적용
+   - 팀명
+   - 게임 방식
+   - 예상 대기시간
+   - 대기 중인 팀이 없습니다.
+   - 대기현황 본문에 표시되는 주요 문구
+   표 머리글/이용 중 코트/상단 화면은 변경하지 않음
+   ========================================================== */
+
+/* 실제 대기 행 전체 */
+.waitRow{
+  font-size:55px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+  text-align:center!important;
+}
+
+/* 팀명 */
+.waitRow strong{
+  font-size:55px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+}
+
+/* 게임 방식 */
+.waitRow span{
+  font-size:55px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+}
+
+/* 예상 대기시간 */
+.waitRow em{
+  font-size:55px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+  font-style:normal!important;
+}
+
+/* 번호는 너무 커지지 않도록 별도 유지 */
+.waitRow b{
+  font-size:30px!important;
+}
+
+/* 대기팀 없음 문구도 55px */
+.waitEmpty{
+  font-size:55px!important;
+  font-weight:950!important;
+  line-height:1.1!important;
+  text-align:center!important;
+}
+
+/* 대기 없음 아이콘은 문구와 구분 */
+.emptyFace{
+  font-size:55px!important;
+  line-height:1!important;
+  margin-bottom:10px!important;
+}
+
+/* 대기현황 내부 정렬 */
+.waitRow > *,
+.waitEmpty{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+
+/* 55px 글씨가 잘리지 않도록 실제 대기 행 높이 확보 */
+.waitRow{
+  min-height:75px!important;
+  padding:8px 5px!important;
+}
+</style>
+
 </body></html>
