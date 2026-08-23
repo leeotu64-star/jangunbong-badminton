@@ -2284,7 +2284,7 @@ body:has(.customerHeader){
 
 /* 9:16 세로 화면 */
 body:has(.customerHeader) .customerWrap{
-  width:min(56.25vh, 100vw)!important;
+  width:100vw!important;
   max-width:none!important;
   height:100vh!important;
   min-height:100vh!important;
@@ -2441,7 +2441,7 @@ body:has(.customerHeader) .displayNotice{
 /* 가로 모니터의 실제 화면 높이에 따라 세로형 폭 자동 조절 */
 @media (min-aspect-ratio: 16/9){
   body:has(.customerHeader) .customerWrap{
-    width:56.25vh!important;
+    width:100vw!important;
   }
 }
 </style>
@@ -3189,6 +3189,220 @@ body:has(.customerHeader) .displayNotice{
     max-width:none!important;
   }
   body:has(.customerHeader) .activeCourts{
+    width:100%!important;
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  }
+}
+</style>
+
+
+<style id="JGB_CUSTOMER_HARD_LANDSCAPE_LAST">
+/* ==========================================================
+   HARD LANDSCAPE OVERRIDE
+   고객 페이지는 1920x1080 가로 화면 전체를 사용한다.
+   9:16 / 56.25vh 세로 제한을 사용하지 않는다.
+   ========================================================== */
+
+/* 페이지 전체 */
+html{
+  width:100%!important;
+  min-width:100%!important;
+  height:100%!important;
+}
+body{
+  width:100vw!important;
+  min-width:100vw!important;
+  max-width:none!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+}
+
+/* 고객 앱 */
+#app{
+  width:100vw!important;
+  min-width:100vw!important;
+  max-width:none!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  margin:0!important;
+  padding:0!important;
+}
+
+/* 고객 헤더 */
+main.customerWrap{
+  width:calc(100vw - 20px)!important;
+  max-width:none!important;
+  min-width:0!important;
+  height:calc(100vh - 80px)!important;
+  min-height:0!important;
+  margin:0 10px!important;
+  padding:8px 8px 10px!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  display:block!important;
+}
+
+/* 5개 코트 */
+main.customerWrap .activeCourts{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:10px!important;
+  margin:0!important;
+}
+
+/* 카드 */
+main.customerWrap .activeCard{
+  width:100%!important;
+  min-width:0!important;
+  height:410px!important;
+  min-height:410px!important;
+  max-height:410px!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+
+/* 카드 제목은 절대 세로 분할하지 않음 */
+main.customerWrap .activeHead{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  width:100%!important;
+  height:60px!important;
+  min-height:60px!important;
+  padding:5px 8px!important;
+  box-sizing:border-box!important;
+  font-size:24px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  word-break:keep-all!important;
+  overflow:hidden!important;
+}
+main.customerWrap .activeNum{
+  flex:0 0 auto!important;
+  width:42px!important;
+  height:42px!important;
+  font-size:27px!important;
+}
+main.customerWrap .status{
+  flex:0 0 auto!important;
+  font-size:18px!important;
+  white-space:nowrap!important;
+}
+
+/* 본문 */
+main.customerWrap .activeBody{
+  width:100%!important;
+  padding:14px 8px!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+}
+main.customerWrap .activeTeam{
+  width:100%!important;
+  min-height:48px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:34px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  word-break:keep-all!important;
+  overflow:hidden!important;
+}
+main.customerWrap .activeGame{
+  width:100%!important;
+  min-height:38px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:25px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  word-break:keep-all!important;
+}
+main.customerWrap .activeLabel{
+  width:100%!important;
+  margin-top:14px!important;
+  padding-top:9px!important;
+  font-size:17px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+}
+main.customerWrap .activeTime{
+  width:100%!important;
+  min-height:44px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:28px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  word-break:keep-all!important;
+}
+main.customerWrap .activeBody>div[style*="margin-top:10px"]{
+  width:100%!important;
+  min-height:72px!important;
+  margin:12px 0 0!important;
+  padding:7px 5px!important;
+  box-sizing:border-box!important;
+}
+main.customerWrap .activeBody>div[style*="margin-top:10px"] div:first-child{
+  font-size:14px!important;
+  white-space:nowrap!important;
+}
+main.customerWrap .activeBody>div[style*="margin-top:10px"] div:last-child{
+  font-size:32px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+}
+
+/* 대기현황 */
+main.customerWrap .waitDashboard{
+  width:100%!important;
+  max-width:none!important;
+  margin-top:7px!important;
+}
+main.customerWrap .waitCard{
+  height:115px!important;
+  min-height:115px!important;
+}
+main.customerWrap .waitCardTitle{font-size:15px!important}
+main.customerWrap .waitTableHead{font-size:10px!important}
+main.customerWrap .waitRow{font-size:13px!important}
+main.customerWrap .waitEmpty{font-size:17px!important}
+
+/* 하단 안내 */
+main.customerWrap .displayNotice{
+  width:100%!important;
+  height:58px!important;
+  min-height:58px!important;
+  margin-top:6px!important;
+  box-sizing:border-box!important;
+  font-size:13px!important;
+}
+
+/* 어떤 orientation이어도 가로 레이아웃 유지 */
+@media screen and (orientation:portrait),
+       screen and (max-width:1399px){
+  main.customerWrap{
+    width:calc(100vw - 20px)!important;
+    max-width:none!important;
+  }
+  main.customerWrap .activeCourts{
     width:100%!important;
     grid-template-columns:repeat(5,minmax(0,1fr))!important;
   }
