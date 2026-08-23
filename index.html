@@ -2747,3 +2747,74 @@ body:has(.customerHeader) .waitDashboard .waitGrid > :nth-child(5){
   align-self:start!important;
 }
 </style>
+
+
+<style id="JGB_17IN_WAIT_ONLY_FINAL">
+/* =========================================================
+   17인치 기준: 위 '이용 중 코트 현황'은 그대로 유지
+   아래 '대기 현황'만 높이를 줄여 화면을 안정적으로 사용
+   하단 이용안내 문구는 그대로 남김
+   ========================================================= */
+
+body.customer-display .waitDashboard,
+body:has(.customerHeader) .waitDashboard{
+  height:calc(100vh - 410px)!important;
+  min-height:300px!important;
+  max-height:none!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+
+/* 대기현황은 3상 / 2하 유지 */
+body.customer-display .waitDashboard .waitGrid,
+body:has(.customerHeader) .waitDashboard .waitGrid{
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  grid-template-rows:repeat(2,minmax(0,1fr))!important;
+  gap:6px!important;
+}
+
+/* 1~3번 위 */
+body.customer-display .waitDashboard .waitGrid > :nth-child(1),
+body.customer-display .waitDashboard .waitGrid > :nth-child(2),
+body.customer-display .waitDashboard .waitGrid > :nth-child(3),
+body:has(.customerHeader) .waitDashboard .waitGrid > :nth-child(1),
+body:has(.customerHeader) .waitDashboard .waitGrid > :nth-child(2),
+body:has(.customerHeader) .waitDashboard .waitGrid > :nth-child(3){
+  grid-column:span 2!important;
+  grid-row:1!important;
+  height:100%!important;
+  min-height:0!important;
+}
+
+/* 4~5번 아래 */
+body.customer-display .waitDashboard .waitGrid > :nth-child(4),
+body.customer-display .waitDashboard .waitGrid > :nth-child(5),
+body:has(.customerHeader) .waitDashboard .waitGrid > :nth-child(4),
+body:has(.customerHeader) .waitDashboard .waitGrid > :nth-child(5){
+  grid-column:span 3!important;
+  grid-row:2!important;
+  height:100%!important;
+  min-height:0!important;
+}
+
+/* 대기현황 내부 글씨는 기존 45px 유지 */
+body.customer-display .waitDashboard .waitRow,
+body:has(.customerHeader) .waitDashboard .waitRow{
+  font-size:45px!important;
+}
+body.customer-display .waitDashboard .waitEmpty,
+body:has(.customerHeader) .waitDashboard .waitEmpty{
+  font-size:45px!important;
+  min-height:0!important;
+  height:calc(100% - 45px)!important;
+}
+
+/* 하단 이용안내 영역은 숨기거나 삭제하지 않음 */
+body.customer-display .waitDashboard + *,
+body:has(.customerHeader) .waitDashboard + *{
+  display:block!important;
+  visibility:visible!important;
+}
+</style>
