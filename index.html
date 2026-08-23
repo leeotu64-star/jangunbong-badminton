@@ -1796,4 +1796,75 @@ function management(){
  }
 })();
 </script>
+
+<style id="WAIT_STATUS_ONLY_30PX_FORCE">
+/* ===== 고객용 대기현황: 본문 글씨만 30px 강제 =====
+   다른 고객화면/관리자 화면/기능은 변경하지 않음.
+   표 머리글은 기존 크기 유지.
+*/
+body:has(.customerHeader) .waitRow{
+  min-height:52px!important;
+  height:auto!important;
+  padding:6px 8px!important;
+  font-size:30px!important;
+  font-weight:950!important;
+  line-height:1.1!important;
+  text-align:center!important;
+  align-items:center!important;
+  white-space:nowrap!important;
+  word-break:keep-all!important;
+  overflow:visible!important;
+}
+
+body:has(.customerHeader) .waitRow > *{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  min-width:0!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  line-height:1.1!important;
+}
+
+body:has(.customerHeader) .waitRow b{
+  width:36px!important;
+  height:36px!important;
+  margin:auto!important;
+  font-size:22px!important;
+  flex:0 0 36px!important;
+}
+
+body:has(.customerHeader) .waitRow strong{
+  font-size:30px!important;
+  font-weight:950!important;
+  line-height:1.1!important;
+}
+
+body:has(.customerHeader) .waitRow span{
+  font-size:30px!important;
+  font-weight:900!important;
+  line-height:1.1!important;
+}
+
+body:has(.customerHeader) .waitRow em{
+  font-size:30px!important;
+  font-weight:950!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+}
+
+@media(max-width:1100px){
+  body:has(.customerHeader) .waitRow{
+    font-size:30px!important;
+    min-height:50px!important;
+  }
+  body:has(.customerHeader) .waitRow strong,
+  body:has(.customerHeader) .waitRow span,
+  body:has(.customerHeader) .waitRow em{
+    font-size:30px!important;
+  }
+}
+</style>
+
 </body></html>
