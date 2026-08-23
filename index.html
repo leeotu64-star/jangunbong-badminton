@@ -2202,4 +2202,55 @@ body:has(.customerHeader) .waitEmpty{
 }
 </style>
 
+
+<style id="JGB_WAIT_TEXT_ONLY_ALIGN_FINAL">
+/* 대기현황: 칸 크기/폭/배치는 절대 변경하지 않고 글자만 정렬 */
+
+/* 머리글 글자만 중앙 정렬 */
+body:has(.customerHeader) .waitTableHead{
+  text-align:center!important;
+  align-items:center!important;
+}
+
+body:has(.customerHeader) .waitTableHead > *{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+}
+
+/* 실제 대기 내용 글자만 중앙 정렬 */
+body:has(.customerHeader) .waitRow{
+  text-align:center!important;
+  align-items:center!important;
+}
+
+body:has(.customerHeader) .waitRow > *{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+
+/* 팀명/게임방식/예상시간 글자만 중앙 */
+body:has(.customerHeader) .waitRow strong,
+body:has(.customerHeader) .waitRow span,
+body:has(.customerHeader) .waitRow em{
+  text-align:center!important;
+  white-space:nowrap!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+
+/* 대기 없음 문구 중앙 */
+body:has(.customerHeader) .waitEmpty{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+</style>
+
 </body></html>
