@@ -599,6 +599,82 @@ body:has(.customerHeader) .waitTableHead span,
 body:has(.customerHeader) .waitRow>*{text-align:center!important}
 </style>
 
+
+<style id="JGB_CUSTOMER_TEXT_4X_FINAL">
+/* 고객 화면 글씨 4배 확대 최종 패치
+   다른 기능/관리자/등록/DB는 수정하지 않음 */
+body:has(.customerHeader) .customerWrap{
+  max-width:100%!important;
+  padding:4px!important;
+}
+body:has(.customerHeader) .activeCourts{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:4px!important;
+}
+body:has(.customerHeader) .activeCard{
+  height:360px!important;
+  min-height:360px!important;
+  max-height:360px!important;
+}
+body:has(.customerHeader) .activeHead{
+  height:55px!important;
+  min-height:55px!important;
+  font-size:24px!important;
+  padding:5px 8px!important;
+}
+body:has(.customerHeader) .activeBody{
+  padding:14px 6px!important;
+}
+body:has(.customerHeader) .activeTeam{
+  font-size:36px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+  margin:7px 0!important;
+}
+body:has(.customerHeader) .activeGame{
+  font-size:26px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+}
+body:has(.customerHeader) .activeLabel{
+  font-size:19px!important;
+  line-height:1.15!important;
+  margin-top:13px!important;
+  padding-top:10px!important;
+}
+body:has(.customerHeader) .activeTime{
+  font-size:34px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"]{
+  margin-top:14px!important;
+  padding:10px 4px!important;
+  min-height:58px!important;
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:first-child{
+  font-size:17px!important;
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+  font-size:36px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+}
+body:has(.customerHeader) .waitDashboardTitle{
+  font-size:28px!important;
+}
+body:has(.customerHeader) .waitCardTitle{
+  font-size:19px!important;
+}
+body:has(.customerHeader) .waitTableHead,
+body:has(.customerHeader) .waitRow{
+  font-size:17px!important;
+}
+body:has(.customerHeader) .notice{
+  font-size:19px!important;
+}
+</style>
+
 </head><body>
 <div id="app"></div>
 <script>
