@@ -1054,7 +1054,20 @@ body.customer-display .waitSection .grid > :nth-child(n+4) .wait-empty{
   justify-content:center!important;
 }
 
+/* 대기 없음 45pt 유지 */
+body:has(.customerHeader) .waitEmpty,
+body.customer-display .wait-empty{
+  font-size:60px!important;
+  font-weight:950!important;
+  line-height:1.1!important;
+}
 
+/* 실제 대기 데이터 45pt 유지 */
+body:has(.customerHeader) .waitRow,
+body.customer-display .wait-row{
+  font-size:60px!important;
+  font-weight:950!important;
+}
 </style>
 
 
@@ -1313,83 +1326,26 @@ body.customer-display .wait-empty{
 /* 기존 대기 글씨 크기는 유지 */
 body:has(.customerHeader) .waitEmpty,
 body.customer-display .wait-empty,
-
-</style>
-
-
-<style id="JGB_WAIT_4_5_EQUAL_TO_TOP_FINAL">
-/* =========================================================
-   최종 수정: 4번·5번을 1~3번과 동일한 가로/세로 크기로 맞춤
-   - 1/2/3: 각각 6칸 그리드 중 2칸씩
-   - 4/5: 각각 2칸씩
-   - 4번 바로 오른쪽에 5번 배치
-   - 오른쪽 남는 2칸은 빈 공간
-   - 위쪽 이용 중 코트 화면은 변경하지 않음
-   ========================================================= */
-@media(min-width:761px){
-  body:has(.customerHeader) .waitGrid,
-  body.customer-display .waitGrid,
-  body:has(.customerHeader) .waitSection .grid,
-  body.customer-display .waitSection .grid{
-    display:grid!important;
-    grid-template-columns:repeat(6,minmax(0,1fr))!important;
-    grid-template-areas:
-      "a a b b c c"
-      "d d e e . ."!important;
-    gap:5px!important;
-    width:100%!important;
-  }
-
-  body:has(.customerHeader) .waitGrid > :nth-child(1),
-  body.customer-display .waitGrid > :nth-child(1),
-  body:has(.customerHeader) .waitSection .grid > :nth-child(1),
-  body.customer-display .waitSection .grid > :nth-child(1){
-    grid-area:a!important;
-  }
-
-  body:has(.customerHeader) .waitGrid > :nth-child(2),
-  body.customer-display .waitGrid > :nth-child(2),
-  body:has(.customerHeader) .waitSection .grid > :nth-child(2),
-  body.customer-display .waitSection .grid > :nth-child(2){
-    grid-area:b!important;
-  }
-
-  body:has(.customerHeader) .waitGrid > :nth-child(3),
-  body.customer-display .waitGrid > :nth-child(3),
-  body:has(.customerHeader) .waitSection .grid > :nth-child(3),
-  body.customer-display .waitSection .grid > :nth-child(3){
-    grid-area:c!important;
-  }
-
-  body:has(.customerHeader) .waitGrid > :nth-child(4),
-  body.customer-display .waitGrid > :nth-child(4),
-  body:has(.customerHeader) .waitSection .grid > :nth-child(4),
-  body.customer-display .waitSection .grid > :nth-child(4){
-    grid-area:d!important;
-  }
-
-  body:has(.customerHeader) .waitGrid > :nth-child(5),
-  body.customer-display .waitGrid > :nth-child(5),
-  body:has(.customerHeader) .waitSection .grid > :nth-child(5),
-  body.customer-display .waitSection .grid > :nth-child(5){
-    grid-area:e!important;
-  }
-
-  body:has(.customerHeader) .waitGrid > *,
-  body.customer-display .waitGrid > *,
-  body:has(.customerHeader) .waitSection .grid > *,
-  body.customer-display .waitSection .grid > *{
-    width:100%!important;
-    min-width:0!important;
-    height:100%!important;
-    min-height:0!important;
-    max-width:none!important;
-    max-height:none!important;
-    box-sizing:border-box!important;
-  }
+body:has(.customerHeader) .waitRow,
+body.customer-display .wait-row{
+  font-size:60px!important;
+  font-weight:950!important;
 }
 </style>
 
+<style id="queueForceButtonStyle">
+.queueForceBtn{
+  background:#e51e2a!important;
+  color:#fff!important;
+  border:0!important;
+  border-radius:6px!important;
+  padding:5px 8px!important;
+  font-size:12px!important;
+  font-weight:800!important;
+  cursor:pointer!important;
+  white-space:nowrap!important;
+}
+</style>
 </head><body>
 <div id="app"></div>
 <script>
@@ -1490,6 +1446,9 @@ function findDeviceRegistration(s,deviceId){
 }
 
 
+function escAttr(v){
+  return String(v??'').replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function tm(t){return new Date(t).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}
 function left(t){let n=Math.max(0,Math.ceil((t-Date.now())/1000));return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}
@@ -2005,7 +1964,7 @@ function renderAdmin(s){
       +'</tbody></table></div>'
     : '<div style="padding:22px;text-align:center;color:#718096;border:1px dashed #cbd5e1;border-radius:10px">오늘 이용 기록이 없습니다.</div>';
 
-  qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
+  qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p style="display:flex;align-items:center;gap:8px"><b style="min-width:24px">'+String(i+1)+'.</b><button class="smallbtn queueForceBtn" onclick="forceQueue('+c.id+',\''+escAttr(x.ticket)+'\')">강제 퇴장</button><span>'+esc(x.game)+'</span></p>').join('')+'</div>').join('');
 }
 async function resetHistory(){
   if(!confirm("오늘 이용 기록을 모두 초기화할까요?\n현재 이용 중/대기 중인 팀은 삭제하지 않습니다."))return;
@@ -2104,6 +2063,26 @@ async function block(id,b){
     await save(s);
   }catch(e){showError(e)}
 }
+async function forceQueue(id,ticket){
+  try{
+    let s=await get(),c=s.courts.find(c=>c.id===id);
+    if(!c)return;
+    const idx=(c.queue||[]).findIndex(x=>x.ticket===ticket);
+    if(idx<0)return;
+    const entry=c.queue[idx];
+    if(!confirm("선택한 대기자를 강제 퇴장 처리할까요?"))return;
+    c.queue.splice(idx,1);
+    s.finished=s.finished||{};
+    resetHistoryForNewDay(s);
+    const record={...entry,court:id,endedAt:Date.now(),forced:true};
+    s.finished[ticket]=record;
+    s.finished._history=s.finished._history||{};
+    s.finished._history[ticket]=record;
+    await advance(s);
+    await save(s);
+  }catch(e){showError(e)}
+}
+
 async function force(id){
   try{
     let s=await get(),c=s.courts.find(c=>c.id===id);
