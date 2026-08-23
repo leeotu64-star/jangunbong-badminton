@@ -1836,28 +1836,3 @@ body:has(.customerHeader) .waitEmpty .emptyFace{
   .displayNotice{height:40px!important;}
 }
 </style>
-
-
-
-
-
-<style id="JGB_CUSTOMER_USE_BOTTOM_SPACE_ONLY">
-/* 고객 화면 전용: 화면 아래 남는 공간을 대기현황 카드가 사용 */
-@media (min-width:1000px){
-  body.customer-display .waitDashboard,
-  body:has(.customerHeader) .waitDashboard{
-    height:calc(100vh - 300px)!important;
-    min-height:420px!important;
-    max-height:none!important;
-    box-sizing:border-box!important;
-  }
-
-  /* 3개 위 / 2개 아래 비율 유지 */
-  body.customer-display .waitDashboard .waitGrid,
-  body:has(.customerHeader) .waitDashboard .waitGrid{
-    height:100%!important;
-    min-height:0!important;
-    grid-template-rows:repeat(2,minmax(0,1fr))!important;
-  }
-}
-</style>
