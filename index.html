@@ -1309,7 +1309,7 @@ function renderAdmin(s){
 (c.active
  ? '<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>'
  : '<p>이용 중 없음</p>')+
-(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+' <button class="smallbtn queueDeleteBtn" onclick="removeWaiting('+c.id+','+i+')">강제 삭제</button></p>').join('')+
+(c.queue||[]).map((x,i)=>'<p class="queueItem"><span>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</span><button class="smallbtn queueDeleteBtn" type="button" onclick="removeWaiting('+c.id+','+i+')">대기 삭제</button></p>').join('')+
 '</div>').join('');
 }
 async function removeWaiting(id,index){
