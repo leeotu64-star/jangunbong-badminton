@@ -675,6 +675,621 @@ body:has(.customerHeader) .notice{
 }
 </style>
 
+
+<style id="JGB_CUSTOMER_LAYOUT_FINAL">
+/* ===== 고객 화면 최종 배치 =====
+   핵심: 5개 코트의 가로 폭을 줄이고 세로를 크게 확보하여
+   핵심 글씨를 크게 표시한다.
+   관리자/등록/DB/QR 기능은 변경하지 않는다.
+*/
+
+/* 전체 고객 화면 */
+body:has(.customerHeader) .customerWrap{
+  width:100%!important;
+  max-width:1900px!important;
+  margin:0 auto!important;
+  padding:8px 10px 10px!important;
+  box-sizing:border-box!important;
+}
+
+/* 5개 코트 영역을 화면 전체 폭보다 좁게 배치 */
+body:has(.customerHeader) .activeCourts{
+  width:88%!important;
+  margin:0 auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:8px!important;
+}
+
+/* 코트 카드: 가로는 줄이고 세로는 크게 */
+body:has(.customerHeader) .activeCard{
+  width:100%!important;
+  min-width:0!important;
+  height:390px!important;
+  min-height:390px!important;
+  max-height:390px!important;
+  overflow:hidden!important;
+  border-width:3px!important;
+  border-radius:9px!important;
+}
+
+/* 코트 제목 */
+body:has(.customerHeader) .activeHead{
+  height:58px!important;
+  min-height:58px!important;
+  padding:5px 8px!important;
+  font-size:24px!important;
+  font-weight:950!important;
+}
+
+/* 코트 내부 */
+body:has(.customerHeader) .activeBody{
+  padding:16px 8px!important;
+  text-align:center!important;
+}
+
+/* 현재 이용 팀 */
+body:has(.customerHeader) .activeTeam{
+  width:100%!important;
+  min-height:48px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  font-size:38px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+  margin:8px 0!important;
+}
+
+/* 게임 방식 */
+body:has(.customerHeader) .activeGame{
+  width:100%!important;
+  min-height:34px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  font-size:27px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+}
+
+/* 이용시간 제목 */
+body:has(.customerHeader) .activeLabel{
+  width:100%!important;
+  margin-top:18px!important;
+  padding-top:12px!important;
+  border-top-width:2px!important;
+  text-align:center!important;
+  font-size:20px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+}
+
+/* 시작 ~ 종료 */
+body:has(.customerHeader) .activeTime{
+  width:100%!important;
+  min-height:42px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  font-size:32px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+  margin-top:4px!important;
+}
+
+/* 남은 시간 박스 */
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"]{
+  width:100%!important;
+  min-height:75px!important;
+  margin:16px 0 0!important;
+  padding:9px 5px!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+  border-width:2px!important;
+  border-radius:7px!important;
+}
+
+/* 남은 시간 제목 */
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:first-child{
+  font-size:18px!important;
+  line-height:1.1!important;
+  font-weight:900!important;
+}
+
+/* 남은 시간 숫자 */
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+  font-size:34px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+}
+
+/* 대기현황은 높이를 조금 줄여 위쪽 핵심정보에 공간 배정 */
+body:has(.customerHeader) .waitDashboard{
+  margin-top:8px!important;
+}
+
+body:has(.customerHeader) .waitCard{
+  min-height:125px!important;
+  height:125px!important;
+}
+
+body:has(.customerHeader) .waitCardTitle{
+  font-size:17px!important;
+}
+
+body:has(.customerHeader) .waitTableHead{
+  font-size:12px!important;
+}
+
+body:has(.customerHeader) .waitRow{
+  font-size:14px!important;
+}
+
+body:has(.customerHeader) .waitEmpty{
+  font-size:20px!important;
+}
+
+/* 하단 안내는 한 줄에 맞추되 너무 작아지지 않게 */
+body:has(.customerHeader) .notice{
+  min-height:82px!important;
+  padding:8px!important;
+  font-size:17px!important;
+  line-height:1.25!important;
+}
+
+/* 좁은 모니터에서도 5개 코트는 유지 */
+@media(max-width:1400px){
+  body:has(.customerHeader) .activeCourts{
+    width:84%!important;
+    gap:6px!important;
+  }
+  body:has(.customerHeader) .activeCard{
+    height:400px!important;
+    min-height:400px!important;
+  }
+  body:has(.customerHeader) .activeTeam{font-size:34px!important}
+  body:has(.customerHeader) .activeTime{font-size:28px!important}
+  body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+    font-size:30px!important;
+  }
+}
+</style>
+
+
+<style id="JGB_CUSTOMER_TEXT_3X_FINAL">
+/* 고객 화면: 현재 사용자가 지정한 글씨 크기 기준 약 3배
+   5개 코트 한 줄 유지 / 가로 축소 / 세로 확대
+   다른 기능은 변경하지 않음 */
+body:has(.customerHeader) .activeCourts{
+  width:76%!important;
+  margin:0 auto!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:6px!important;
+}
+body:has(.customerHeader) .activeCard{
+  height:480px!important;
+  min-height:480px!important;
+  max-height:480px!important;
+}
+body:has(.customerHeader) .activeHead{
+  height:68px!important;
+  min-height:68px!important;
+  padding:6px 8px!important;
+  font-size:30px!important;
+}
+body:has(.customerHeader) .activeBody{
+  padding:18px 8px!important;
+}
+body:has(.customerHeader) .activeTeam{
+  font-size:48px!important;
+  line-height:1.15!important;
+  min-height:58px!important;
+  margin:10px 0!important;
+}
+body:has(.customerHeader) .activeGame{
+  font-size:34px!important;
+  line-height:1.15!important;
+  min-height:42px!important;
+}
+body:has(.customerHeader) .activeLabel{
+  font-size:24px!important;
+  line-height:1.15!important;
+  margin-top:20px!important;
+  padding-top:14px!important;
+}
+body:has(.customerHeader) .activeTime{
+  font-size:42px!important;
+  line-height:1.15!important;
+  min-height:52px!important;
+  margin-top:5px!important;
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"]{
+  min-height:90px!important;
+  margin-top:18px!important;
+  padding:10px 5px!important;
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:first-child{
+  font-size:22px!important;
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+  font-size:44px!important;
+  line-height:1.05!important;
+}
+body:has(.customerHeader) .waitDashboard{
+  margin-top:6px!important;
+}
+body:has(.customerHeader) .waitCard{
+  height:110px!important;
+  min-height:110px!important;
+}
+body:has(.customerHeader) .waitCardTitle{
+  font-size:15px!important;
+}
+body:has(.customerHeader) .waitTableHead{
+  font-size:10px!important;
+}
+body:has(.customerHeader) .waitEmpty{
+  font-size:18px!important;
+}
+body:has(.customerHeader) .notice{
+  min-height:70px!important;
+  font-size:15px!important;
+}
+@media(max-width:1400px){
+  body:has(.customerHeader) .activeCourts{
+    width:72%!important;
+    gap:5px!important;
+  }
+  body:has(.customerHeader) .activeCard{
+    height:500px!important;
+    min-height:500px!important;
+  }
+  body:has(.customerHeader) .activeTeam{font-size:44px!important}
+  body:has(.customerHeader) .activeTime{font-size:38px!important}
+  body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+    font-size:40px!important;
+  }
+}
+</style>
+
+
+<style id="JGB_CUSTOMER_PORTRAIT_FINAL">
+/* ===== 고객 화면 세로형 모니터 배치 =====
+   가로를 더 줄이고 세로 공간을 크게 확보.
+   5개 코트는 한 줄 유지.
+   기존 기능/관리자/등록/DB/QR은 수정하지 않음.
+*/
+
+/* 고객 화면 전체를 세로형 비율로 사용 */
+body:has(.customerHeader) .customerWrap{
+  width:78%!important;
+  max-width:1450px!important;
+  min-height:100vh!important;
+  margin:0 auto!important;
+  padding:10px 8px 16px!important;
+  box-sizing:border-box!important;
+}
+
+/* 상단 5개 코트 영역 */
+body:has(.customerHeader) .activeCourts{
+  width:100%!important;
+  margin:0 auto!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:7px!important;
+  align-items:stretch!important;
+}
+
+/* 가로는 좁게, 세로는 크게 */
+body:has(.customerHeader) .activeCard{
+  width:100%!important;
+  min-width:0!important;
+  height:570px!important;
+  min-height:570px!important;
+  max-height:570px!important;
+  border-width:3px!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+
+/* 코트 헤더 */
+body:has(.customerHeader) .activeHead{
+  height:72px!important;
+  min-height:72px!important;
+  padding:7px 8px!important;
+  font-size:28px!important;
+  font-weight:950!important;
+}
+
+/* 카드 본문 */
+body:has(.customerHeader) .activeBody{
+  padding:22px 7px!important;
+  text-align:center!important;
+}
+
+/* 현재 이용 팀 */
+body:has(.customerHeader) .activeTeam{
+  width:100%!important;
+  min-height:68px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  font-size:46px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+  margin:12px 0!important;
+}
+
+/* 게임 방식 */
+body:has(.customerHeader) .activeGame{
+  width:100%!important;
+  min-height:46px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  font-size:32px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+}
+
+/* 이용시간/예상 대기시간 제목 */
+body:has(.customerHeader) .activeLabel{
+  width:100%!important;
+  margin-top:24px!important;
+  padding-top:15px!important;
+  text-align:center!important;
+  font-size:22px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+}
+
+/* 시작시간 ~ 종료시간 */
+body:has(.customerHeader) .activeTime{
+  width:100%!important;
+  min-height:58px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  font-size:38px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+  margin-top:6px!important;
+}
+
+/* 남은 시간 박스 */
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"]{
+  width:100%!important;
+  min-height:105px!important;
+  margin:22px 0 0!important;
+  padding:12px 4px!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+  border-width:2px!important;
+}
+
+/* 남은 시간 제목 */
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:first-child{
+  font-size:20px!important;
+  line-height:1.1!important;
+  font-weight:900!important;
+}
+
+/* 남은 시간 */
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+  font-size:43px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+}
+
+/* 대기현황은 상대적으로 압축해서 세로 공간 확보 */
+body:has(.customerHeader) .waitDashboard{
+  margin-top:7px!important;
+}
+body:has(.customerHeader) .waitCard{
+  height:115px!important;
+  min-height:115px!important;
+}
+body:has(.customerHeader) .waitCardTitle{
+  font-size:15px!important;
+}
+body:has(.customerHeader) .waitTableHead{
+  font-size:10px!important;
+}
+body:has(.customerHeader) .waitRow{
+  font-size:13px!important;
+}
+body:has(.customerHeader) .waitEmpty{
+  font-size:18px!important;
+}
+
+/* 하단 안내 */
+body:has(.customerHeader) .notice{
+  min-height:72px!important;
+  padding:8px!important;
+  font-size:15px!important;
+  line-height:1.2!important;
+}
+
+/* 세로형 모니터에서 더 좁고 크게 */
+@media (max-width:1200px){
+  body:has(.customerHeader) .customerWrap{
+    width:72%!important;
+    padding-left:6px!important;
+    padding-right:6px!important;
+  }
+  body:has(.customerHeader) .activeCard{
+    height:600px!important;
+    min-height:600px!important;
+    max-height:600px!important;
+  }
+  body:has(.customerHeader) .activeTeam{
+    font-size:42px!important;
+  }
+  body:has(.customerHeader) .activeTime{
+    font-size:34px!important;
+  }
+  body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+    font-size:40px!important;
+  }
+}
+</style>
+
+
+<style id="JGB_CUSTOMER_9X16_FINAL">
+/* ===== 고객용 세로 모니터 9:16 최종 배치 =====
+   실제 모니터를 세로 회전한 1080x1920 기준.
+   고객 화면만 수정하며 관리자/등록/DB/QR 기능은 변경하지 않음.
+*/
+body:has(.customerHeader){
+  width:100%!important;
+  min-height:100vh!important;
+  overflow-x:hidden!important;
+}
+body:has(.customerHeader) .customerWrap{
+  width:100%!important;
+  max-width:1080px!important;
+  min-height:100vh!important;
+  margin:0 auto!important;
+  padding:14px 18px 20px!important;
+  box-sizing:border-box!important;
+}
+
+/* 세로형에서는 코트 5개를 화면 폭 안에 최대한 크게 */
+body:has(.customerHeader) .activeCourts{
+  width:100%!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin:0 auto!important;
+}
+
+/* 세로 공간을 적극 사용 */
+body:has(.customerHeader) .activeCard{
+  height:620px!important;
+  min-height:620px!important;
+  max-height:620px!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  border-width:3px!important;
+}
+
+/* 코트 제목 */
+body:has(.customerHeader) .activeHead{
+  height:78px!important;
+  min-height:78px!important;
+  padding:8px 5px!important;
+  font-size:27px!important;
+  font-weight:950!important;
+}
+
+/* 본문 */
+body:has(.customerHeader) .activeBody{
+  padding:24px 5px!important;
+}
+
+/* 이용 팀 */
+body:has(.customerHeader) .activeTeam{
+  width:100%!important;
+  min-height:82px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  font-size:44px!important;
+  line-height:1.12!important;
+  font-weight:950!important;
+  word-break:keep-all!important;
+}
+
+/* 게임 방식 */
+body:has(.customerHeader) .activeGame{
+  width:100%!important;
+  min-height:55px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  font-size:29px!important;
+  line-height:1.12!important;
+  font-weight:950!important;
+}
+
+/* 이용시간 */
+body:has(.customerHeader) .activeLabel{
+  margin-top:26px!important;
+  padding-top:16px!important;
+  font-size:21px!important;
+  line-height:1.1!important;
+  font-weight:950!important;
+  text-align:center!important;
+}
+
+/* 시작시간 ~ 종료시간 */
+body:has(.customerHeader) .activeTime{
+  width:100%!important;
+  min-height:65px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  font-size:35px!important;
+  line-height:1.1!important;
+  font-weight:950!important;
+}
+
+/* 남은 시간 */
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"]{
+  width:100%!important;
+  min-height:120px!important;
+  margin-top:24px!important;
+  padding:12px 3px!important;
+  box-sizing:border-box!important;
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:first-child{
+  font-size:20px!important;
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+  font-size:40px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+}
+
+/* 아래 대기현황은 공간을 줄여 코트 정보에 집중 */
+body:has(.customerHeader) .waitDashboard{
+  margin-top:10px!important;
+}
+body:has(.customerHeader) .waitCard{
+  height:125px!important;
+  min-height:125px!important;
+}
+body:has(.customerHeader) .waitCardTitle{
+  font-size:16px!important;
+}
+body:has(.customerHeader) .waitTableHead{
+  font-size:11px!important;
+}
+body:has(.customerHeader) .waitRow{
+  font-size:14px!important;
+}
+
+/* 하단 안내 */
+body:has(.customerHeader) .notice{
+  min-height:80px!important;
+  padding:10px!important;
+  font-size:16px!important;
+  line-height:1.2!important;
+}
+</style>
+
 </head><body>
 <div id="app"></div>
 <script>
