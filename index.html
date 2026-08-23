@@ -1070,6 +1070,180 @@ body.customer-display .wait-row{
 }
 </style>
 
+
+<style id="JGB_ADMIN_BUTTON_FINAL_RESTORE">
+/* 고객 화면 관리자 버튼 복구
+   기존 코드의 후순위 display:none 규칙을 무효화 */
+body.customer-display .customerRight .customerAdminBtn,
+body:has(.customerHeader) .customerRight .customerAdminBtn{
+  display:inline-flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-shrink:0!important;
+
+  background:#1769e8!important;
+  color:#fff!important;
+  text-decoration:none!important;
+  border:0!important;
+  border-radius:6px!important;
+  padding:7px 10px!important;
+  min-width:46px!important;
+  height:32px!important;
+  box-sizing:border-box!important;
+
+  font-size:12px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  cursor:pointer!important;
+}
+
+/* 관리자 버튼이 시계에 밀리지 않도록 오른쪽 영역 확보 */
+body.customer-display .customerRight,
+body:has(.customerHeader) .customerRight{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:7px!important;
+  min-width:130px!important;
+  white-space:nowrap!important;
+}
+</style>
+
+
+<style id="JGB_WAIT_FILL_BOTTOM_SPACE_FINAL">
+/* =========================================================
+   대기화면 아래 남는 공간을 전부 대기현황 영역으로 사용
+   - 위 3개 / 아래 2개 유지
+   - 카드의 가로 비율 변경 없음
+   - 45px 대기 글씨 유지
+   - 관리자 버튼 유지
+   ========================================================= */
+
+/* 대기현황 박스 자체가 화면의 남는 세로 공간을 차지 */
+body.customer-display .waitDashboard,
+body:has(.customerHeader) .waitDashboard{
+  display:flex!important;
+  flex-direction:column!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  min-height:calc(100vh - 390px)!important;
+  height:calc(100vh - 390px)!important;
+  max-height:none!important;
+  overflow:hidden!important;
+}
+
+/* 제목은 고정, 그 아래 대기 카드 영역이 남는 공간을 전부 사용 */
+body.customer-display .waitDashboardTitle,
+body:has(.customerHeader) .waitDashboardTitle{
+  flex:0 0 auto!important;
+}
+
+/* 핵심: waitGrid가 남은 높이를 전부 차지 */
+body.customer-display .waitGrid,
+body:has(.customerHeader) .waitGrid{
+  flex:1 1 auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  grid-template-rows:165px minmax(260px,1fr)!important;
+  grid-template-areas:"a a b b c c" "d d d e e e"!important;
+  gap:5px!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:425px!important;
+  height:auto!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+}
+
+/* 위 3개 */
+body.customer-display .waitGrid > :nth-child(1),
+body.customer-display .waitGrid > :nth-child(2),
+body.customer-display .waitGrid > :nth-child(3),
+body:has(.customerHeader) .waitGrid > :nth-child(1),
+body:has(.customerHeader) .waitGrid > :nth-child(2),
+body:has(.customerHeader) .waitGrid > :nth-child(3){
+  height:100%!important;
+  min-height:165px!important;
+  max-height:none!important;
+  align-self:stretch!important;
+}
+
+/* 아래 2개는 남는 공간을 모두 사용 */
+body.customer-display .waitGrid > :nth-child(4),
+body.customer-display .waitGrid > :nth-child(5),
+body:has(.customerHeader) .waitGrid > :nth-child(4),
+body:has(.customerHeader) .waitGrid > :nth-child(5){
+  height:100%!important;
+  min-height:260px!important;
+  max-height:none!important;
+  align-self:stretch!important;
+}
+
+/* 카드 내부도 남는 높이를 사용 */
+body.customer-display .waitGrid .waitCard,
+body:has(.customerHeader) .waitGrid .waitCard{
+  width:100%!important;
+  min-width:0!important;
+  height:100%!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+
+/* 대기 없음 표시가 카드 가운데에 정렬 */
+body.customer-display .waitGrid .waitEmpty,
+body:has(.customerHeader) .waitGrid .waitEmpty{
+  height:calc(100% - 79px)!important;
+  min-height:170px!important;
+  max-height:none!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+
+/* 안내문은 대기현황 아래에 고정 */
+body.customer-display .displayNotice,
+body:has(.customerHeader) .displayNotice{
+  flex:0 0 auto!important;
+  margin-top:6px!important;
+}
+
+/* 45px 글씨 유지 */
+body.customer-display .waitRow,
+body.customer-display .waitRow > *,
+body.customer-display .waitRow strong,
+body.customer-display .waitRow span,
+body.customer-display .waitRow em,
+body:has(.customerHeader) .waitRow,
+body:has(.customerHeader) .waitRow > *,
+body:has(.customerHeader) .waitRow strong,
+body:has(.customerHeader) .waitRow span,
+body:has(.customerHeader) .waitRow em,
+body.customer-display .waitEmpty,
+body:has(.customerHeader) .waitEmpty{
+  font-size:45px!important;
+}
+
+/* 폭 때문에 화면 전체가 밀리지 않도록 */
+body.customer-display,
+body.customer-display #app,
+body.customer-display .customerWrap,
+body:has(.customerHeader),
+body:has(.customerHeader) #app,
+body:has(.customerHeader) .customerWrap{
+  width:100%!important;
+  max-width:100vw!important;
+  overflow-x:hidden!important;
+  box-sizing:border-box!important;
+}
+</style>
+
 </head><body>
 <div id="app"></div>
 <script>
