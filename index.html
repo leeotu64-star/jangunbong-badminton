@@ -537,6 +537,68 @@ body:has(.customerHeader){background:#f3f7fb!important}
 }
 </style>
 
+
+<style id="JGB_CUSTOMER_ONLY_FINAL">
+/* GitHub index.html 고객 화면 최종 수정
+   관리자 / 고객등록 / DB / QR 기능은 변경하지 않음. */
+body:has(.customerHeader){background:#f3f7fb!important}
+body:has(.customerHeader) .customerWrap{
+  width:100%!important;max-width:1120px!important;
+  margin:0 auto!important;padding:8px!important;
+  overflow:hidden!important;box-sizing:border-box!important
+}
+body:has(.customerHeader) .activeCourts{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:7px!important
+}
+body:has(.customerHeader) .activeCard{
+  min-width:0!important;width:100%!important;
+  height:250px!important;min-height:250px!important;
+  max-height:250px!important;overflow:hidden!important;
+  box-sizing:border-box!important
+}
+body:has(.customerHeader) .activeHead{
+  height:42px!important;min-height:42px!important;
+  padding:4px 6px!important;
+  display:flex!important;align-items:center!important;
+  justify-content:space-between!important;font-size:15px!important
+}
+body:has(.customerHeader) .activeBody{
+  padding:8px 5px!important;text-align:center!important
+}
+body:has(.customerHeader) .activeTeam{
+  width:100%!important;text-align:center!important;
+  font-size:21px!important;line-height:1.15!important;font-weight:950!important
+}
+body:has(.customerHeader) .activeGame{
+  width:100%!important;text-align:center!important;
+  font-size:15px!important;line-height:1.15!important;font-weight:900!important
+}
+body:has(.customerHeader) .activeLabel{
+  width:100%!important;text-align:center!important;
+  font-size:11px!important;margin-top:8px!important;padding-top:6px!important
+}
+body:has(.customerHeader) .activeTime{
+  width:100%!important;display:flex!important;
+  align-items:center!important;justify-content:center!important;
+  text-align:center!important;white-space:nowrap!important;
+  font-size:21px!important;line-height:1.15!important;font-weight:950!important
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"]{
+  width:100%!important;margin:8px 0 0!important;
+  padding:6px 4px!important;box-sizing:border-box!important;
+  text-align:center!important
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div{
+  text-align:center!important
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+  font-size:22px!important;line-height:1.1!important;font-weight:950!important
+}
+body:has(.customerHeader) .waitTableHead span,
+body:has(.customerHeader) .waitRow>*{text-align:center!important}
+</style>
+
 </head><body>
 <div id="app"></div>
 <script>
@@ -680,7 +742,8 @@ async function advance(s,doSave=true){
       const x=c.queue.shift();
       const m=Number(s.settings[x.game]||15);
       const st=Date.now();
-      c.active={...x,startAt:st,endAt:st+m*60000};
+      const en=st+m*60000;
+      c.active={...x,startAt:st,endAt:en,startTime:tm(st),endTime:tm(en)};
       ch=true;
     }
   }
@@ -781,7 +844,7 @@ function renderCustomer(s){
           <div style="font-size:11px;font-weight:800;color:#53657c;margin-top:8px">현재 대기 팀</div>
           <div class="activeTeam">없음</div>
           <div class="activeLabel">예상 대기 시간</div>
-          <div class="activeTime" style="color:${color}">약 ${Math.max(0,(c.queue||[]).length*17)}분</div>`}
+          <div class="activeTime" style="color:${color}">약 ${Math.max(0,(c.queue||[]).length*Number(s.settings?.[c.queue?.[0]?.game]||15))}분</div>`}
         <div class="courtGraphic" style="--court:${color}"><i></i><i></i><i></i>${a?'<span>🏸</span>':''}</div>
       </div>
     </article>`;
@@ -792,7 +855,7 @@ function renderCustomer(s){
       <div class="waitCardTitle">${c.id}번 코트 대기 현황 <span>(총 ${q.length}팀)</span></div>
       <div class="waitTableHead"><span>순번</span><span>팀명</span><span>게임 방식</span><span>예상 대기시간</span></div>
       ${q.length?q.slice(0,5).map((x,j)=>{
-        const mins=Math.max(0,Math.round((Number(x.waitMinutes)||((j+1)*17))));
+        const mins=Math.max(0,Math.round((Number(x.waitMinutes)||((j+1)*Number(s.settings?.[x.game]||15)))));
         return `<div class="waitRow"><b style="background:${color}22;color:${color}">${j+1}</b><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>약 ${mins}분</em></div>`;
       }).join(""):`<div class="waitEmpty"><div class="emptyFace" style="color:${color}">☺</div><b>대기 중인 팀이 없습니다.</b></div>`}
     </article>`;
