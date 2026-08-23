@@ -1054,20 +1054,7 @@ body.customer-display .waitSection .grid > :nth-child(n+4) .wait-empty{
   justify-content:center!important;
 }
 
-/* 대기 없음 45pt 유지 */
-body:has(.customerHeader) .waitEmpty,
-body.customer-display .wait-empty{
-  font-size:60px!important;
-  font-weight:950!important;
-  line-height:1.1!important;
-}
 
-/* 실제 대기 데이터 45pt 유지 */
-body:has(.customerHeader) .waitRow,
-body.customer-display .wait-row{
-  font-size:60px!important;
-  font-weight:950!important;
-}
 </style>
 
 
@@ -1326,11 +1313,7 @@ body.customer-display .wait-empty{
 /* 기존 대기 글씨 크기는 유지 */
 body:has(.customerHeader) .waitEmpty,
 body.customer-display .wait-empty,
-body:has(.customerHeader) .waitRow,
-body.customer-display .wait-row{
-  font-size:60px!important;
-  font-weight:950!important;
-}
+
 </style>
 
 </head><body>
@@ -2397,30 +2380,71 @@ body:has(.customerHeader) .waitEmpty .emptyFace{
 </style>
 
 
-<style id="JGB_ONLY_4_5_EQUAL_FINAL">
-/* 최종: 1·2·3번은 현재 배치 그대로 유지.
-   4·5번만 1·2·3번과 동일한 가로 폭으로 변경.
-   4번=2칸, 5번=2칸, 오른쪽 2칸은 빈 공간.
-*/
+<style id="JGB_WAIT_ALL_5_EQUAL_FINAL">
+/* 대기 현황 5개 카드만 동일 크기.
+   1·2·3·4·5 모두 2칸 폭, 동일 높이.
+   이용 중 코트 화면과 기존 기능은 변경하지 않음. */
 @media (min-width:901px){
-  .waitGrid{
+  body:has(.customerHeader) .waitGrid,
+  body.customer-display .waitGrid,
+  body:has(.customerHeader) .waitSection .grid,
+  body.customer-display .waitSection .grid{
+    display:grid!important;
     grid-template-columns:repeat(6,minmax(0,1fr))!important;
-    grid-template-areas:
-      "a a b b c c"
-      "d d e e . ."!important;
-    gap:8px!important;
+    grid-template-rows:165px 165px!important;
+    gap:4px!important;
   }
 
-  .waitCard:nth-child(1){grid-area:a!important}
-  .waitCard:nth-child(2){grid-area:b!important}
-  .waitCard:nth-child(3){grid-area:c!important}
-  .waitCard:nth-child(4){grid-area:d!important}
-  .waitCard:nth-child(5){grid-area:e!important}
+  body:has(.customerHeader) .waitGrid > :nth-child(1),
+  body.customer-display .waitGrid > :nth-child(1),
+  body:has(.customerHeader) .waitSection .grid > :nth-child(1),
+  body.customer-display .waitSection .grid > :nth-child(1){
+    grid-column:1 / span 2!important;
+    grid-row:1!important;
+  }
 
-  /* 4·5번 세로도 1·2·3번과 동일 */
-  .waitCard:nth-child(4),
-  .waitCard:nth-child(5){
-    height:147px!important;
+  body:has(.customerHeader) .waitGrid > :nth-child(2),
+  body.customer-display .waitGrid > :nth-child(2),
+  body:has(.customerHeader) .waitSection .grid > :nth-child(2),
+  body.customer-display .waitSection .grid > :nth-child(2){
+    grid-column:3 / span 2!important;
+    grid-row:1!important;
+  }
+
+  body:has(.customerHeader) .waitGrid > :nth-child(3),
+  body.customer-display .waitGrid > :nth-child(3),
+  body:has(.customerHeader) .waitSection .grid > :nth-child(3),
+  body.customer-display .waitSection .grid > :nth-child(3){
+    grid-column:5 / span 2!important;
+    grid-row:1!important;
+  }
+
+  body:has(.customerHeader) .waitGrid > :nth-child(4),
+  body.customer-display .waitGrid > :nth-child(4),
+  body:has(.customerHeader) .waitSection .grid > :nth-child(4),
+  body.customer-display .waitSection .grid > :nth-child(4){
+    grid-column:1 / span 2!important;
+    grid-row:2!important;
+  }
+
+  body:has(.customerHeader) .waitGrid > :nth-child(5),
+  body.customer-display .waitGrid > :nth-child(5),
+  body:has(.customerHeader) .waitSection .grid > :nth-child(5),
+  body.customer-display .waitSection .grid > :nth-child(5){
+    grid-column:3 / span 2!important;
+    grid-row:2!important;
+  }
+
+  body:has(.customerHeader) .waitGrid > *,
+  body.customer-display .waitGrid > *,
+  body:has(.customerHeader) .waitSection .grid > *,
+  body.customer-display .waitSection .grid > *{
+    width:100%!important;
+    min-width:0!important;
+    height:165px!important;
+    min-height:165px!important;
+    max-height:165px!important;
+    box-sizing:border-box!important;
   }
 }
 </style>
