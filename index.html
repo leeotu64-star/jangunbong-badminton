@@ -1244,6 +1244,95 @@ body:has(.customerHeader) .customerWrap{
 }
 </style>
 
+
+<style id="JGB_WAIT_BALANCED_RATIO_FINAL">
+/* =========================================================
+   대기현황 비율 균형
+   위 3개 / 아래 2개는 유지하되
+   두 줄의 세로 높이를 동일하게 맞춤
+   ========================================================= */
+
+body:has(.customerHeader) .waitGrid,
+body.customer-display .waitGrid,
+body:has(.customerHeader) .waitSection .grid,
+body.customer-display .waitSection .grid{
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  grid-template-rows:1fr 1fr!important;
+  gap:5px!important;
+  width:100%!important;
+  height:calc(100vh - 250px)!important;
+  min-height:420px!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+}
+
+/* 위 3개 */
+body:has(.customerHeader) .waitGrid > :nth-child(1),
+body:has(.customerHeader) .waitGrid > :nth-child(2),
+body:has(.customerHeader) .waitGrid > :nth-child(3),
+body.customer-display .waitGrid > :nth-child(1),
+body.customer-display .waitGrid > :nth-child(2),
+body.customer-display .waitGrid > :nth-child(3),
+body:has(.customerHeader) .waitSection .grid > :nth-child(1),
+body:has(.customerHeader) .waitSection .grid > :nth-child(2),
+body:has(.customerHeader) .waitSection .grid > :nth-child(3),
+body.customer-display .waitSection .grid > :nth-child(1),
+body.customer-display .waitSection .grid > :nth-child(2),
+body.customer-display .waitSection .grid > :nth-child(3){
+  grid-row:1!important;
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+}
+
+/* 아래 2개 */
+body:has(.customerHeader) .waitGrid > :nth-child(4),
+body:has(.customerHeader) .waitGrid > :nth-child(5),
+body.customer-display .waitGrid > :nth-child(4),
+body.customer-display .waitGrid > :nth-child(5),
+body:has(.customerHeader) .waitSection .grid > :nth-child(4),
+body:has(.customerHeader) .waitSection .grid > :nth-child(5),
+body.customer-display .waitSection .grid > :nth-child(4),
+body.customer-display .waitSection .grid > :nth-child(5){
+  grid-row:2!important;
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+}
+
+/* 카드 자체가 행 높이를 꽉 채움 */
+body:has(.customerHeader) .waitGrid > *,
+body.customer-display .waitGrid > *,
+body:has(.customerHeader) .waitSection .grid > *,
+body.customer-display .waitSection .grid > *{
+  align-self:stretch!important;
+  min-height:0!important;
+  box-sizing:border-box!important;
+}
+
+/* 카드 내부 빈 공간도 균형 */
+body:has(.customerHeader) .waitEmpty,
+body.customer-display .wait-empty{
+  min-height:0!important;
+  height:calc(100% - 45px)!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+/* 기존 대기 글씨 크기는 유지 */
+body:has(.customerHeader) .waitEmpty,
+body.customer-display .wait-empty,
+body:has(.customerHeader) .waitRow,
+body.customer-display .wait-row{
+  font-size:60px!important;
+  font-weight:950!important;
+}
+</style>
+
 </head><body>
 <div id="app"></div>
 <script>
