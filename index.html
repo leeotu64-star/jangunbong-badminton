@@ -2735,3 +2735,15 @@ body:has(.customerHeader) .waitDashboard .waitEmpty{
   }
 }
 </style>
+
+
+<style id="JGB_WAIT_ROW2_REDUCE_FINAL">
+/* 아래 2개(4·5번) 카드만 높이를 줄임 */
+body.customer-display .waitDashboard .waitGrid > :nth-child(4),
+body.customer-display .waitDashboard .waitGrid > :nth-child(5),
+body:has(.customerHeader) .waitDashboard .waitGrid > :nth-child(4),
+body:has(.customerHeader) .waitDashboard .waitGrid > :nth-child(5){
+  height:88%!important;
+  align-self:start!important;
+}
+</style>
