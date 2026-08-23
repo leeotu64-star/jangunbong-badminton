@@ -2684,3 +2684,54 @@ body:has(.customerHeader) .waitDashboard .waitEmpty{
   justify-content:center!important;
 }
 </style>
+
+
+<style id="JGB_WAIT_SIZE_REDUCE_FINAL">
+/* 대기현황 카드 크기만 한 단계 축소
+   - 위 3개 / 아래 2개 유지
+   - 화면 아래 공간은 일부 여유로 남김
+   - 글씨 45px 유지
+*/
+body.customer-display .waitDashboard,
+body:has(.customerHeader) .waitDashboard{
+  height:calc(100vh - 150px)!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+
+body.customer-display .waitDashboard .waitGrid,
+body:has(.customerHeader) .waitDashboard .waitGrid{
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  grid-template-rows:repeat(2,minmax(0,1fr))!important;
+  gap:6px!important;
+}
+
+body.customer-display .waitDashboard .waitGrid > *,
+body:has(.customerHeader) .waitDashboard .waitGrid > *{
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+}
+
+body.customer-display .waitDashboard .waitEmpty,
+body:has(.customerHeader) .waitDashboard .waitEmpty{
+  height:calc(100% - 45px)!important;
+  min-height:0!important;
+  max-height:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+@media (max-height:800px){
+  body.customer-display .waitDashboard,
+  body:has(.customerHeader) .waitDashboard{
+    height:calc(100vh - 120px)!important;
+  }
+}
+</style>
