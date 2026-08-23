@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>장군봉 배드민턴 - 고객용 최종</title>
+<title>장군봉 배드민턴</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans KR",sans-serif;color:#071633;background:#fff}
 .header{height:76px;background:#061b4f;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px}.brand{font-size:26px;font-weight:800}.sub{font-size:13px}.wrap{padding:16px;max-width:1500px;margin:auto}
@@ -280,68 +280,544 @@ body.management-view #viewSwitch button{display:inline-flex!important}
 body:not(.management-view) #viewSwitch{display:none!important}
 </style>
 
+<style id="customerThreeTwoLayout">
+.customerHeader{height:82px!important;background:#061b4f!important;color:#fff!important;display:flex!important;align-items:center!important;padding:7px 18px!important;gap:12px!important;border-bottom:4px solid #1769e8!important;box-sizing:border-box!important}
+.customerBrand{display:flex!important;align-items:center!important;gap:7px!important;min-width:250px!important}
+.customerBrand .brandIcon{font-size:26px!important}.customerBrand .brand{font-size:24px!important;font-weight:950!important}.customerBrand .sub{font-size:10px!important;color:#dce8ff!important}
+.customerStats{display:grid!important;grid-template-columns:repeat(4,1fr)!important;height:57px!important;flex:1!important;min-width:0!important;background:#d9e2ef!important;border-radius:6px!important;overflow:hidden!important}
+.topStat{background:#fff!important;color:#071633!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;border-right:1px solid #c7d3e3!important}
+.topStat>span{font-size:23px!important}.topStat small{font-size:9px!important;font-weight:900!important;text-align:center!important;display:block!important}.topStat b{font-size:22px!important;line-height:1!important;text-align:center!important;display:block!important}
+.topStat.green>span{color:#07854b!important}.topStat.blue>span{color:#145fe5!important}.topStat.orange>span{color:#ff7900!important}.topStat.purple>span{color:#6332d7!important}
+.customerRight{white-space:nowrap!important;font-size:13px!important;font-weight:900!important}
+.customerWrap{width:100%!important;max-width:none!important;box-sizing:border-box!important;overflow-x:hidden!important;background:#f4f7fb!important;padding:7px 12px 12px!important;margin:0!important}
+.displaySectionTitle{color:#071d52!important;font-size:25px!important;font-weight:950!important;padding:3px 5px 6px!important;border-bottom:3px solid #102d63!important;margin-bottom:6px!important}
+.activeCourts{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:6px!important;width:100%!important}
+.activeCard{min-width:0!important;background:#fff!important;border:3px solid var(--court)!important;border-radius:8px!important;overflow:hidden!important;height:225px!important}
+.activeHead{height:38px!important;padding:4px 6px!important;box-sizing:border-box!important;font-size:15px!important}
+.activeNum{width:27px!important;height:27px!important;border-radius:5px!important}.status{padding:4px 8px!important;font-size:10px!important}
+.activeBody{padding:6px!important}.activeTeam{font-size:25px!important}.activeGame{font-size:16px!important}.activeLabel{font-size:11px!important;margin-top:4px!important}.activeTime{font-size:29px!important}
+.emptyActive{font-size:24px!important;margin:28px 0!important}.courtGraphic{height:55px!important;margin:3px 5px 0!important}
+.waitDashboard{margin-top:6px!important;background:#fff!important;border:2px solid #b9cbe0!important;border-radius:8px!important;padding:6px!important;box-sizing:border-box!important}
+.waitDashboardTitle{color:#071d52!important;font-size:29px!important;font-weight:950!important;padding:2px 5px 6px!important;border-bottom:3px solid #102d63!important;margin-bottom:7px!important;display:flex!important;align-items:baseline!important;gap:8px!important}
+.waitDashboardTitle small{font-size:11px!important;font-weight:800!important;color:#53657c!important}
+.waitGrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;width:100%!important}
+.waitCard{min-width:0!important;min-height:205px!important;border:3px solid var(--court)!important;border-radius:8px!important;overflow:hidden!important;background:#fff!important}
+.waitCard:nth-child(4){grid-column:1 / 2}.waitCard:nth-child(5){grid-column:2 / 3}
+.waitCardTitle{height:40px!important;background:var(--court)!important;color:#fff!important;font-size:18px!important;font-weight:950!important;padding:5px 8px!important;box-sizing:border-box!important;display:flex!important;align-items:center!important}
+.waitTableHead,.waitRow{display:grid!important;grid-template-columns:48px 1.25fr 1fr 1.05fr!important;align-items:center!important}
+.waitTableHead{height:32px!important;background:#f1f5f9!important;font-size:10px!important;font-weight:950!important;padding:3px 5px!important}
+.waitRow{min-height:42px!important;border-top:1px solid #d9e1eb!important;padding:4px 5px!important;font-size:12px!important}
+.waitRow b{width:27px!important;height:27px!important;border-radius:5px!important;background:#edf2f7!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:14px!important}
+.waitRow strong{font-size:14px!important}.waitRow span{font-size:12px!important}.waitRow em{font-style:normal!important;font-size:16px!important;font-weight:950!important;color:var(--court)!important}
+.waitEmpty{height:130px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;font-size:18px!important}
+.emptyFace{font-size:44px!important;line-height:1!important;margin-bottom:8px!important}
+.displayNotice{margin-top:7px!important;border:1px solid #b9cbe0!important;background:#f4f8fd!important;border-radius:7px!important;padding:8px!important;display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:12px!important;box-sizing:border-box!important}
+.displayNotice>div{min-width:0!important;font-size:13px!important;line-height:1.35!important;font-weight:800!important;color:#243650!important;text-align:center!important}
+.displayNotice b{display:block!important;color:#0a2b70!important;font-size:14px!important;margin-bottom:2px!important}
+.displayNotice span{display:block!important}
+@media(max-width:1050px){
+ .customerBrand{min-width:210px!important}.customerBrand .brand{font-size:19px!important}
+ .customerStats{height:50px!important}.topStat b{font-size:18px!important}
+ .activeCard{height:205px!important}.activeTeam{font-size:21px!important}.activeTime{font-size:25px!important}
+ .waitCardTitle{font-size:15px!important}.waitRow strong{font-size:12px!important}.waitRow em{font-size:13px!important}
+ .displayNotice>div{font-size:11px!important}.displayNotice b{font-size:12px!important}
+}
+@media(max-width:760px){
+ .customerHeader{height:auto!important;flex-wrap:wrap!important}.customerBrand{min-width:100%!important}.customerStats{width:100%!important;flex:none!important}
+ .activeCourts{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .waitGrid{grid-template-columns:1fr 1fr!important}.waitCard:nth-child(4),.waitCard:nth-child(5){grid-column:auto!important}
+ .displayNotice{grid-template-columns:repeat(2,1fr)!important}
+}
 
-<style id="customerDisplayFinal">
-body.customer-display{margin:0!important;background:#fff!important;color:#071633!important;overflow-x:hidden!important}
-body.customer-display .header{height:82px!important;padding:7px 12px!important;background:#061b4f!important;border-bottom:3px solid #0c58d8!important;display:grid!important;grid-template-columns:260px 1fr 220px!important;gap:10px!important;align-items:center!important}
-body.customer-display .customerBrand{display:flex!important;align-items:center!important;gap:8px!important;min-width:0!important}
-body.customer-display .brandIcon{width:36px!important;height:36px!important;display:grid!important;place-items:center!important;flex:0 0 36px!important}
-body.customer-display .brand{font-size:23px!important;font-weight:950!important;color:#fff!important;white-space:nowrap!important}
-body.customer-display .sub{font-size:11px!important;color:#dbe8ff!important;margin-top:2px!important}
-body.customer-display .headerStats{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:2px!important;height:62px!important;background:#d9e2ef!important;border-radius:6px!important;overflow:hidden!important}
-body.customer-display .headerStats .stat{border:0!important;border-radius:0!important;background:#fff!important;box-shadow:none!important;padding:5px 4px!important;min-height:62px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:1px!important;font-size:10px!important;font-weight:800!important;line-height:1.05!important}
-body.customer-display .headerStats .stat b{font-size:23px!important;line-height:1!important;color:#071633!important}
-body.customer-display .customerClock{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:8px!important;color:#fff!important;font-size:14px!important;font-weight:900!important;white-space:nowrap!important}
-body.customer-display .customerClock .customerBtn{background:#1461e8!important;color:#fff!important;text-decoration:none!important;border-radius:6px!important;padding:6px 9px!important;font-size:11px!important;font-weight:950!important;display:inline-block!important}
-body.customer-display .wrap{width:100%!important;max-width:none!important;margin:0!important;padding:8px 14px 9px!important}
-body.customer-display .displaySectionTitle{height:31px!important;display:flex!important;align-items:center!important;width:max-content!important;padding:0 12px!important;margin:0 0 5px!important;background:#0d58df!important;color:#fff!important;border-radius:6px!important;border:0!important;font-size:14px!important;font-weight:950!important}
-body.customer-display .courts{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:9px!important;margin:0 0 8px!important}
-body.customer-display .court{min-height:238px!important;background:#fff!important;border:2px solid #d5deea!important;border-radius:8px!important;overflow:hidden!important;box-shadow:none!important}
-body.customer-display .court:nth-child(1){border-color:#07854b!important}.court:nth-child(2){border-color:#145fe5!important}.court:nth-child(3){border-color:#6a2cc7!important}.court:nth-child(4){border-color:#ff7100!important}.court:nth-child(5){border-color:#ed1827!important}
-body.customer-display .head{height:42px!important;padding:6px 8px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;border-bottom:1px solid #dfe6ef!important;font-size:16px!important;font-weight:950!important}
-body.customer-display .num{width:29px!important;height:29px!important;margin-right:6px!important;border-radius:5px!important;color:#fff!important;font-size:17px!important;font-weight:950!important}
-body.customer-display .badge{padding:5px 9px!important;border-radius:14px!important;color:#fff!important;font-size:10px!important;font-weight:950!important}
-body.customer-display .body{padding:8px 10px!important}
-body.customer-display .court-main{text-align:center!important;padding-top:7px!important}
-body.customer-display .court-main .small-label,.empty-main .small-label{display:block!important;font-size:10px!important;font-weight:800!important;color:#182b4b!important;margin-bottom:4px!important}
-body.customer-display .court-main .team{font-size:20px!important;font-weight:950!important;line-height:1.1!important;margin-bottom:2px!important}
-body.customer-display .court-main .game{font-size:12px!important;font-weight:800!important}
-body.customer-display .court-divider{height:1px!important;background:#b9c7d8!important;margin:9px 7px!important}
-body.customer-display .time-label{text-align:center!important;font-size:10px!important;font-weight:800!important;margin-bottom:3px!important}
-body.customer-display .time-value{text-align:center!important;font-size:18px!important;font-weight:950!important;margin-bottom:9px!important}
-body.customer-display .remain-box,body.customer-display .queue-box{height:43px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;border-radius:6px!important;font-size:16px!important;font-weight:950!important}
-body.customer-display .remain-box{background:#eff8f3!important;border:1px solid #b8dfc8!important}
-body.customer-display .queue-box{background:#f8f1ff!important;border:1px solid #d9bdf1!important;margin-top:14px!important}
-body.customer-display .people-icon{width:27px!important;height:27px!important;flex:0 0 27px!important}
-body.customer-display .empty-main{text-align:center!important;padding-top:12px!important}
-body.customer-display .empty-main .none{font-size:18px!important;font-weight:950!important}
-body.customer-display .empty-main .wait-label{margin-top:15px!important;font-size:10px!important;font-weight:800!important}
-body.customer-display .empty-main .wait-value{margin-top:3px!important;font-size:21px!important;font-weight:950!important}
-body.customer-display .wait-dashboard{background:#fff!important;border:2px solid #b9cbe0!important;border-radius:8px!important;padding:7px!important;margin-top:0!important;box-shadow:none!important}
-body.customer-display .wait-dashboard-title{height:34px!important;min-height:34px!important;display:flex!important;align-items:center!important;gap:10px!important;padding:0 7px!important;margin:0 0 6px!important;border-bottom:3px solid #17356e!important;color:#071d52!important;font-size:25px!important;font-weight:950!important}
-body.customer-display .wait-dashboard-title span{font-size:10px!important;color:#50627a!important;font-weight:800!important}
-body.customer-display .wait-grid{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-template-rows:auto auto!important;gap:8px!important}
-body.customer-display .wait-card{min-height:132px!important;background:#fff!important;border:1px solid #c8d5e5!important;border-radius:6px!important;overflow:hidden!important}
-body.customer-display .wait-card:nth-child(1){grid-column:span 2;border-color:#07854b!important}.wait-card:nth-child(2){grid-column:span 2;border-color:#145fe5!important}.wait-card:nth-child(3){grid-column:span 2;border-color:#6a2cc7!important}.wait-card:nth-child(4){grid-column:span 3;border-color:#ff7100!important}.wait-card:nth-child(5){grid-column:span 3;border-color:#ed1827!important}
-body.customer-display .wait-card-title{height:27px!important;display:flex!important;align-items:center!important;padding:4px 7px!important;color:#fff!important;font-size:11px!important;font-weight:950!important}
-body.customer-display .wait-card:nth-child(1) .wait-card-title{background:#07854b!important}.wait-card:nth-child(2) .wait-card-title{background:#145fe5!important}.wait-card:nth-child(3) .wait-card-title{background:#6a2cc7!important}.wait-card:nth-child(4) .wait-card-title{background:#ff7100!important}.wait-card:nth-child(5) .wait-card-title{background:#ed1827!important}
-body.customer-display .wait-head,body.customer-display .wait-row{display:grid!important;grid-template-columns:38px 1.25fr .9fr 1fr!important;align-items:center!important;padding:3px 6px!important}
-body.customer-display .wait-head{min-height:24px!important;background:#f2f5f9!important;border-bottom:1px solid #cfd9e5!important;font-size:8px!important;font-weight:950!important}
-body.customer-display .wait-row{min-height:25px!important;border-bottom:1px solid #e0e6ee!important;font-size:9px!important}
-body.customer-display .wait-row b{width:20px!important;height:20px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:4px!important;font-size:10px!important}
-body.customer-display .wait-row strong{font-size:10px!important}
-body.customer-display .wait-eta{font-size:11px!important;font-weight:950!important}
-body.customer-display .wait-card:nth-child(1) .wait-eta{color:#07854b!important}.wait-card:nth-child(2) .wait-eta{color:#145fe5!important}.wait-card:nth-child(3) .wait-eta{color:#6a2cc7!important}.wait-card:nth-child(4) .wait-eta{color:#ff7100!important}.wait-card:nth-child(5) .wait-eta{color:#ed1827!important}
-body.customer-display .wait-empty{min-height:94px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-direction:column!important;gap:3px!important;text-align:center!important;font-size:13px!important;font-weight:950!important}
-body.customer-display .wait-empty .smile{font-size:35px!important;line-height:1!important}
-body.customer-display .displayNotice{margin-top:7px!important;padding:7px 5px!important;min-height:43px!important;display:grid!important;grid-template-columns:repeat(4,1fr)!important;align-items:center!important;background:#fff!important;border:1px solid #cbd8e8!important;border-radius:6px!important;color:#34445b!important;font-size:9px!important;font-weight:800!important;text-align:center!important;line-height:1.35!important}
-body.customer-display .notice-item{min-height:30px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;padding:0 8px!important;border-right:1px solid #cbd5e1!important}
-body.customer-display .notice-item:last-child{border-right:0!important}
-body.customer-display .notice-icon{font-size:24px!important;line-height:1!important;flex:0 0 auto!important}
-@media(max-width:1250px){body.customer-display .header{grid-template-columns:230px 1fr 180px!important}.brand{font-size:20px!important}.customerClock{font-size:11px!important}}
-@media(max-width:900px){body.customer-display .header{height:auto!important;grid-template-columns:1fr!important}.headerStats{order:2}.customerClock{order:3;justify-content:flex-end}.courts{grid-template-columns:repeat(5,minmax(180px,1fr))!important;overflow-x:auto!important}}
+
+
+
+
+<style id="referenceCustomerSkin">
+.refDisplay{min-height:100vh;background:#f4f8fc;color:#071633;font-family:Arial,"Noto Sans KR",sans-serif;overflow-x:hidden}
+.refHeader{height:86px;background:#061b4f;color:#fff;border-radius:0 0 14px 14px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;box-shadow:0 2px 0 #dbe5f2}
+.refBrand{display:flex;align-items:center;gap:9px}.refLogo{font-size:30px}.refBrandName{font-size:28px;font-weight:950;letter-spacing:-1.2px}.refSub{font-size:12px;margin-top:2px;color:#dbe7ff}.refClock{font-size:17px;font-weight:900}
+.refMain{width:100%;max-width:1500px;margin:0 auto;padding:16px 28px 18px;box-sizing:border-box}
+.refStats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}.refStat{height:76px;background:#fff;border:1px solid #d7e1ee;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 2px 7px #1d35570a}.refStat small{display:block;font-size:13px;font-weight:900;color:#071633;margin-bottom:1px}.refStat strong{display:block;font-size:30px;font-weight:950;line-height:1}.refStatIcon{width:45px;height:45px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900}.refStatIcon.blue{color:#145fe5}.refStatIcon.green{color:#08a653}.refStatIcon.orange{color:#ff7900}.refStatIcon.purple{color:#6b2bd9}
+.refActiveGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.refActiveCard{background:#fff;border:1.5px solid var(--c);border-radius:11px;min-width:0;height:310px;overflow:hidden;box-shadow:0 2px 8px #1d35570a}.refCardHead{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 9px;font-size:17px;font-weight:950;border-bottom:1px solid #e3e9f1}.refCardHead em{font-style:normal;color:#fff;border-radius:13px;padding:5px 10px;font-size:11px}.refNum{display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;border-radius:6px;color:#fff;margin-right:5px;font-size:19px}.refCardBody{padding:11px 14px;text-align:left}.refLabel{font-size:12px;font-weight:700;color:#25395d;margin:0 0 4px}.refTeam{font-size:20px;font-weight:950;color:var(--c);margin-bottom:2px}.refGame{font-size:16px;font-weight:900;color:var(--c)}.refDivider{height:1px;background:#dce5f0;margin:9px 0 8px}.refTime{font-size:19px;font-weight:950;margin-top:3px;white-space:nowrap}.refRemain{margin-top:9px;background:#edf8f2;border-radius:12px;padding:7px 10px}.refRemain small{display:block;font-size:10px}.refRemain strong{display:block;font-size:23px;color:var(--c);line-height:1.1}.refEmptyLine{height:16px}.refWaitBig{font-size:25px;font-weight:950;color:var(--c);margin-top:2px}.refQueueBadge{margin-top:10px;height:34px;border:1px solid var(--c);background:#f4fbf7;color:var(--c);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:950;font-size:15px}.refQueueBadge span{margin-right:5px}
+.refNotice{height:48px;background:#e8f3ff;border-radius:10px;margin:14px 0 13px;display:flex;align-items:center;gap:15px;padding:0 15px;font-size:11px;font-weight:700;color:#30445f;white-space:nowrap;overflow:hidden}.refNotice b{font-size:14px;color:#145fe5;flex:none}.refNotice span{flex:none}
+.refWaitGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.refWaitCard{height:205px;background:#fff;border:1.5px solid #d8e1ec;border-radius:10px;overflow:hidden;min-width:0}.refWaitTitle{height:38px;background:#fff7f7;border-top:5px solid var(--c);padding:5px 9px 0;color:var(--c);font-size:15px;font-weight:950;white-space:nowrap}.refWaitTitle span{font-size:12px}.refTableHead,.refRow{display:grid;grid-template-columns:42px 1.15fr 1fr 1.2fr;align-items:center}.refTableHead{height:29px;background:#f4f7fa;font-size:9px;font-weight:950;border-top:1px solid #e1e7ef;border-bottom:1px solid #e1e7ef}.refTableHead span,.refRow>*{text-align:center}.refRow{min-height:34px;border-bottom:1px solid #e4e9ef;font-size:10px}.refRow b{width:20px;height:20px;margin:auto;border-radius:4px;background:#eef2f6;display:flex;align-items:center;justify-content:center}.refRow strong{font-size:11px}.refRow em{font-style:normal;font-weight:950;color:var(--c);font-size:11px;white-space:nowrap}.refNoWait{height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:13px}.refFace{font-size:38px}
+@media(max-width:1100px){.refMain{padding-left:12px;padding-right:12px}.refBrandName{font-size:22px}.refClock{font-size:13px}.refStat{height:66px}.refStat strong{font-size:24px}.refActiveCard{height:285px}.refCardHead{font-size:14px}.refTeam{font-size:18px}.refTime{font-size:17px}.refNotice{gap:9px;font-size:9px}.refWaitTitle{font-size:12px}.refTableHead{font-size:8px}.refRow{font-size:9px}.refRow strong,.refRow em{font-size:9px}}
+@media(max-width:760px){.refHeader{height:auto;padding:10px 14px;gap:10px}.refBrandName{font-size:18px}.refClock{font-size:10px}.refStats{grid-template-columns:repeat(2,1fr)}.refActiveGrid{grid-template-columns:repeat(2,1fr)}.refWaitGrid{grid-template-columns:repeat(2,1fr)}.refNotice{height:auto;min-height:70px;white-space:normal;flex-wrap:wrap;padding:8px}.refActiveCard{height:270px}}
 </style>
 
+
+<style id="customerFinalSkin">
+body.customer-display, body:has(.customerHeader){background:#eef4fb!important;color:#071633!important}
+.customerHeader{height:88px!important;background:#061b4f!important;color:#fff!important;display:flex!important;align-items:center!important;gap:12px!important;padding:8px 18px!important;border-bottom:4px solid #1769e8!important;box-sizing:border-box!important}
+.customerBrand{display:flex!important;align-items:center!important;gap:9px!important;min-width:300px!important}.customerBrand .brand{font-size:27px!important;font-weight:950!important}.customerBrand .sub{font-size:11px!important;color:#dce8ff!important}.customerBrand .brandIcon{font-size:31px!important}
+.customerStats{display:grid!important;grid-template-columns:repeat(4,1fr)!important;flex:1!important;height:68px!important;background:#d8e1ee!important;border-radius:6px!important;overflow:hidden!important}.topStat{background:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;border-right:1px solid #b8c8dc!important}.topStat>span{font-size:27px!important}.topStat small{font-size:10px!important;font-weight:950!important;display:block;text-align:center}.topStat b{font-size:25px!important;display:block;text-align:center}.customerRight{display:flex!important;align-items:center!important;gap:8px!important;white-space:nowrap!important}.customerRight #clock{font-size:13px!important;font-weight:900!important}.customerAdminBtn{background:#1769e8!important;color:#fff!important;text-decoration:none!important;padding:9px 11px!important;border-radius:6px!important;font-size:10px!important;font-weight:900!important}
+.customerWrap{width:100%!important;box-sizing:border-box!important;margin:0!important;padding:10px 16px 14px!important;background:#eef4fb!important;overflow:hidden!important}
+.displaySectionTitle{font-size:27px!important;font-weight:950!important;color:#071d52!important;padding:3px 6px 6px!important;border-bottom:3px solid #102d63!important;margin-bottom:7px!important}
+.activeCourts{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:9px!important;width:100%!important}
+.activeCard{min-width:0!important;height:318px!important;background:#fff!important;border:2px solid var(--court)!important;border-radius:10px!important;overflow:hidden!important;box-shadow:0 2px 8px rgba(31,60,100,.08)!important}
+.activeHead{height:48px!important;padding:5px 9px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;font-size:17px!important;border-bottom:1px solid #dce5f0!important}.activeNum{width:32px!important;height:32px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;border-radius:6px!important;color:#fff!important;font-size:19px!important}.status{font-size:11px!important;padding:6px 10px!important;border-radius:15px!important;color:#fff!important}
+.activeBody{padding:12px 14px!important;text-align:left!important}.activeTeam{font-size:23px!important;font-weight:950!important;color:var(--court)!important;margin-top:4px!important}.activeGame{font-size:16px!important;font-weight:900!important;color:var(--court)!important;margin-top:3px!important}.activeLabel{font-size:12px!important;font-weight:800!important;margin-top:12px!important;padding-top:9px!important;border-top:1px solid #d6dfeb!important}.activeTime{font-size:24px!important;font-weight:950!important;margin-top:4px!important}.emptyActive{font-size:24px!important;font-weight:950!important;text-align:center!important;margin:55px 0 45px!important}.courtGraphic{height:58px!important;margin:9px 4px 0!important;position:relative!important}.courtGraphic span{position:absolute!important;right:26%!important;top:7px!important;font-size:29px!important}
+.waitDashboard{margin-top:9px!important;padding:9px!important;background:#fff!important;border:2px solid #b9cbe0!important;border-radius:9px!important;box-shadow:0 2px 8px rgba(31,60,100,.06)!important}
+.waitDashboardTitle{font-size:34px!important;font-weight:950!important;color:#071d52!important;padding:2px 6px 7px!important;border-bottom:3px solid #102d63!important;margin-bottom:8px!important}.waitDashboardTitle small{font-size:11px!important;color:#53657c!important;margin-left:10px!important}
+.waitGrid{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-template-areas:"a a b b c c" "d d d e e e"!important;gap:9px!important;width:100%!important}
+.waitCard{min-width:0!important;height:245px!important;background:#fff!important;border:2px solid var(--court)!important;border-radius:8px!important;overflow:hidden!important}.waitCard:nth-child(1){grid-area:a}.waitCard:nth-child(2){grid-area:b}.waitCard:nth-child(3){grid-area:c}.waitCard:nth-child(4){grid-area:d}.waitCard:nth-child(5){grid-area:e}
+.waitCardTitle{height:43px!important;background:var(--court)!important;color:#fff!important;font-size:18px!important;font-weight:950!important;padding:6px 10px!important;display:flex!important;align-items:center!important}
+.waitTableHead{height:31px!important;display:grid!important;grid-template-columns:48px 1.35fr 1fr 1.05fr!important;align-items:center!important;background:#f0f4f8!important;border-bottom:1px solid #cbd6e3!important;font-size:10px!important;font-weight:950!important;padding:2px 7px!important}.waitRow{min-height:42px!important;display:grid!important;grid-template-columns:48px 1.35fr 1fr 1.05fr!important;align-items:center!important;border-top:1px solid #dbe3ec!important;padding:3px 7px!important;font-size:13px!important}.waitRow b{width:28px!important;height:28px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#edf2f7!important;border-radius:5px!important;font-size:14px!important}.waitRow strong{font-size:14px!important;font-weight:950!important}.waitRow em{font-size:16px!important;font-style:normal!important;font-weight:950!important;color:var(--court)!important}.waitEmpty{height:165px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;font-size:18px!important;font-weight:900!important}.emptyFace{font-size:48px!important;margin-bottom:8px!important}
+.displayNotice{margin-top:9px!important;border:2px solid #c4d6ea!important;background:#e8f3ff!important;border-radius:8px!important;padding:10px 13px!important;font-size:13px!important;line-height:1.55!important;color:#253653!important;display:grid!important;grid-template-columns:1.15fr 1fr 1fr!important;gap:14px!important}.displayNotice b{font-size:15px!important;color:#145fe5!important}
+@media(max-width:1200px){.customerBrand{min-width:250px!important}.customerBrand .brand{font-size:22px!important}.customerStats{height:60px!important}.topStat b{font-size:21px!important}.activeCard{height:285px!important}.activeTeam{font-size:20px!important}.activeTime{font-size:23px!important}.waitCard{height:220px!important}.waitCardTitle{font-size:15px!important}.waitRow strong{font-size:12px!important}.waitRow em{font-size:14px!important}}
+@media(max-width:900px){.customerHeader{height:auto!important;flex-wrap:wrap!important}.customerBrand{min-width:100%!important}.customerStats{width:100%!important}.customerRight{position:absolute!important;right:12px!important;top:10px!important}.waitGrid{grid-template-columns:1fr 1fr!important;grid-template-areas:none!important}.waitCard{grid-area:auto!important}.displayNotice{grid-template-columns:1fr!important}}
+</style>
+
+
+<style id="customerReferenceExactOverride">
+/* 고객용 화면: 사용자가 제공한 기준 화면에 맞춘 최종 배치
+   데이터/QR/관리자/Supabase 로직은 변경하지 않음 */
+body:has(.customerHeader){background:#f3f7fb!important}
+.customerHeader{
+  height:76px!important;
+  background:#061b4f!important;
+  padding:6px 14px!important;
+  gap:10px!important;
+  border-bottom:0!important;
+}
+.customerBrand{min-width:260px!important;gap:7px!important}
+.customerBrand .brandIcon{font-size:29px!important}
+.customerBrand .brand{font-size:24px!important;line-height:1.05!important}
+.customerBrand .sub{font-size:10px!important;margin-top:2px!important}
+.customerStats{
+  height:56px!important;
+  gap:5px!important;
+  background:transparent!important;
+  border-radius:5px!important;
+  overflow:visible!important;
+}
+.topStat{
+  border:1px solid #d8e0ea!important;
+  border-radius:5px!important;
+  gap:6px!important;
+  box-shadow:0 1px 3px rgba(0,0,0,.08)!important;
+}
+.topStat>span{font-size:25px!important}
+.topStat small{font-size:9px!important;line-height:1.1!important}
+.topStat b{font-size:22px!important;line-height:1.05!important}
+.customerRight{gap:7px!important}
+.customerRight #clock{font-size:12px!important}
+.customerAdminBtn{padding:7px 9px!important;font-size:10px!important}
+
+.customerWrap{
+  padding:8px 13px 10px!important;
+  background:#f3f7fb!important;
+}
+.displaySectionTitle{
+  display:inline-block!important;
+  font-size:15px!important;
+  line-height:1!important;
+  color:#fff!important;
+  background:#0b3d9c!important;
+  border:0!important;
+  border-radius:6px 6px 0 0!important;
+  padding:7px 13px!important;
+  margin:0 0 4px 3px!important;
+}
+.activeCourts{
+  gap:8px!important;
+}
+.activeCard{
+  height:225px!important;
+  border-width:1.5px!important;
+  border-radius:6px!important;
+  box-shadow:none!important;
+}
+.activeHead{
+  height:42px!important;
+  padding:4px 8px!important;
+  font-size:15px!important;
+}
+.activeNum{
+  width:30px!important;height:30px!important;
+  font-size:18px!important;
+}
+.status{font-size:10px!important;padding:5px 8px!important}
+.activeBody{padding:7px 10px!important;text-align:center!important}
+.activeTeam{font-size:20px!important;margin-top:2px!important}
+.activeGame{font-size:14px!important}
+.activeLabel{
+  font-size:10px!important;
+  margin-top:7px!important;
+  padding-top:7px!important;
+}
+.activeTime{font-size:20px!important;margin-top:2px!important}
+.courtGraphic{display:none!important}
+.activeBody>div[style*="margin-top:10px"]{
+  margin-top:8px!important;
+  padding:6px 8px!important;
+  border-radius:6px!important;
+}
+.activeBody>div[style*="margin-top:10px"] div:first-child{font-size:9px!important}
+.activeBody>div[style*="margin-top:10px"] div:last-child{font-size:20px!important}
+.activeCard:not(:has(.activeGame)){
+  /* no-op fallback */
+}
+
+.waitDashboard{
+  margin-top:7px!important;
+  padding:6px!important;
+  border:1px solid #b8c9df!important;
+  border-radius:6px!important;
+  box-shadow:none!important;
+}
+.waitDashboardTitle{
+  font-size:15px!important;
+  padding:2px 5px 5px!important;
+  border-bottom:2px solid #183a78!important;
+  margin-bottom:5px!important;
+}
+.waitDashboardTitle small{font-size:9px!important;margin-left:7px!important}
+.waitGrid{
+  gap:7px!important;
+}
+.waitCard{
+  height:140px!important;
+  border-width:1px!important;
+  border-radius:5px!important;
+}
+.waitCardTitle{
+  height:26px!important;
+  font-size:12px!important;
+  padding:4px 7px!important;
+}
+.waitTableHead{
+  height:22px!important;
+  font-size:8px!important;
+  padding:1px 4px!important;
+}
+.waitRow{
+  min-height:24px!important;
+  font-size:9px!important;
+  padding:2px 4px!important;
+}
+.waitRow b{
+  width:20px!important;height:20px!important;
+  font-size:10px!important;
+}
+.waitRow strong{font-size:10px!important}
+.waitRow span{font-size:9px!important}
+.waitRow em{font-size:11px!important}
+.waitEmpty{
+  height:90px!important;
+  font-size:12px!important;
+}
+.emptyFace{font-size:30px!important}
+.displayNotice{
+  margin-top:6px!important;
+  padding:5px 7px!important;
+  gap:6px!important;
+  grid-template-columns:repeat(4,1fr)!important;
+  border:1px solid #b9cbe0!important;
+  border-radius:5px!important;
+}
+.displayNotice>div{
+  font-size:9px!important;
+  line-height:1.25!important;
+  border-right:1px solid #b9cbe0!important;
+  padding:0 5px!important;
+}
+.displayNotice>div:last-child{border-right:0!important}
+.displayNotice b{font-size:10px!important}
+@media(max-width:1100px){
+  .customerBrand{min-width:235px!important}
+  .customerBrand .brand{font-size:20px!important}
+  .topStat b{font-size:18px!important}
+  .activeCard{height:205px!important}
+  .activeTeam{font-size:18px!important}
+  .activeTime{font-size:18px!important}
+  .waitCard{height:125px!important}
+  .displayNotice>div{font-size:8px!important}
+}
+</style>
+
+
+<style id="FINAL_REFERENCE_LOCK">
+/* ===== 고객용 기준 이미지 최종 고정 ===== */
+@media(min-width:1101px){
+  body:has(.customerHeader){min-width:0!important;background:#f3f7fb!important}
+  .customerHeader{
+    height:76px!important;
+    padding:6px 14px!important;
+    gap:10px!important;
+    border-bottom:0!important;
+  }
+  .customerBrand{min-width:260px!important;gap:7px!important}
+  .customerBrand .brandIcon{font-size:29px!important}
+  .customerBrand .brand{font-size:24px!important;line-height:1.05!important}
+  .customerBrand .sub{font-size:10px!important}
+  .customerStats{height:56px!important;gap:5px!important}
+  .topStat{border:1px solid #d8e0ea!important;border-radius:5px!important;gap:6px!important}
+  .topStat>span{font-size:25px!important}
+  .topStat small{font-size:9px!important}
+  .topStat b{font-size:22px!important}
+  .customerRight{gap:7px!important}
+  .customerRight #clock{font-size:12px!important}
+  .customerAdminBtn{display:none!important}
+
+  .customerWrap{
+    padding:8px 13px 10px!important;
+    background:#f3f7fb!important;
+  }
+  .displaySectionTitle{
+    display:inline-block!important;
+    font-size:15px!important;
+    line-height:1!important;
+    color:#fff!important;
+    background:#0b3d9c!important;
+    border:0!important;
+    border-radius:6px 6px 0 0!important;
+    padding:7px 13px!important;
+    margin:0 0 4px 3px!important;
+  }
+  .activeCourts{gap:8px!important}
+  .activeCard{
+    height:225px!important;
+    border-width:1.5px!important;
+    border-radius:6px!important;
+    box-shadow:none!important;
+  }
+  .activeHead{height:42px!important;padding:4px 8px!important;font-size:15px!important}
+  .activeNum{width:30px!important;height:30px!important;font-size:18px!important}
+  .status{font-size:10px!important;padding:5px 8px!important}
+  .activeBody{padding:7px 10px!important;text-align:center!important}
+  .activeTeam{font-size:20px!important;margin-top:2px!important}
+  .activeGame{font-size:14px!important}
+  .activeLabel{font-size:10px!important;margin-top:7px!important;padding-top:7px!important}
+  .activeTime{font-size:20px!important;margin-top:2px!important}
+  .courtGraphic{display:none!important}
+  .activeBody>div[style*="margin-top:10px"]{
+    margin-top:8px!important;padding:6px 8px!important;border-radius:6px!important
+  }
+  .activeBody>div[style*="margin-top:10px"] div:first-child{font-size:9px!important}
+  .activeBody>div[style*="margin-top:10px"] div:last-child{font-size:20px!important}
+
+  .waitDashboard{
+    margin-top:7px!important;padding:6px!important;
+    border:1px solid #b8c9df!important;border-radius:6px!important;box-shadow:none!important
+  }
+  .waitDashboardTitle{
+    font-size:15px!important;padding:2px 5px 5px!important;
+    border-bottom:2px solid #183a78!important;margin-bottom:5px!important
+  }
+  .waitDashboardTitle small{font-size:9px!important;margin-left:7px!important}
+  .waitGrid{gap:7px!important}
+  .waitCard{
+    height:140px!important;border-width:1px!important;border-radius:5px!important
+  }
+  .waitCardTitle{height:26px!important;font-size:12px!important;padding:4px 7px!important}
+  .waitTableHead{height:22px!important;font-size:8px!important;padding:1px 4px!important}
+  .waitRow{min-height:24px!important;font-size:9px!important;padding:2px 4px!important}
+  .waitRow b{width:20px!important;height:20px!important;font-size:10px!important}
+  .waitRow strong{font-size:10px!important}
+  .waitRow span{font-size:9px!important}
+  .waitRow em{font-size:11px!important}
+  .waitEmpty{height:90px!important;font-size:12px!important}
+  .emptyFace{font-size:30px!important}
+  .displayNotice{
+    margin-top:6px!important;padding:5px 7px!important;gap:6px!important;
+    grid-template-columns:repeat(4,1fr)!important;
+    border:1px solid #b9cbe0!important;border-radius:5px!important
+  }
+  .displayNotice>div{
+    font-size:9px!important;line-height:1.25!important;
+    border-right:1px solid #b9cbe0!important;padding:0 5px!important
+  }
+  .displayNotice>div:last-child{border-right:0!important}
+  .displayNotice b{font-size:10px!important}
+}
+</style>
+
+<style id="customerImageExactFinal">
+/* ===== 고객용: 사용자가 제공한 1180x817 기준 화면과 동일한 배치 ===== */
+body:has(.customerHeader){background:#f3f7fb!important;overflow-x:hidden!important}
+.customerHeader{height:84px!important;padding:6px 10px!important;background:#061b4f!important;border-bottom:0!important;gap:9px!important}
+.customerBrand{min-width:292px!important;gap:7px!important}
+.customerBrand .brandIcon{font-size:31px!important;line-height:1!important}
+.customerBrand .brand{font-size:25px!important;line-height:1.02!important;letter-spacing:-.7px!important}
+.customerBrand .sub{font-size:10px!important;margin-top:3px!important}
+.customerStats{height:64px!important;gap:7px!important;background:transparent!important;overflow:visible!important}
+.topStat{border:1px solid #d7e0eb!important;border-radius:6px!important;box-shadow:0 1px 3px rgba(0,0,0,.10)!important;gap:7px!important}
+.topStat>span{font-size:28px!important;line-height:1!important}
+.topStat small{font-size:10px!important;line-height:1.1!important}
+.topStat b{font-size:24px!important;line-height:1.05!important}
+.customerRight{gap:5px!important;min-width:205px!important}
+.customerRight #clock{font-size:14px!important;white-space:nowrap!important}
+.customerAdminBtn{display:none!important}
+.customerWrap{padding:10px 13px 8px!important;background:#f3f7fb!important}
+.displaySectionTitle{font-size:15px!important;line-height:1!important;padding:7px 13px!important;margin:0 0 5px 2px!important;background:#0b3d9c!important;color:#fff!important;border-radius:6px 6px 0 0!important;border:0!important;display:inline-block!important}
+.activeCourts{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:9px!important}
+.activeCard{height:261px!important;border:1.5px solid var(--court)!important;border-radius:7px!important;box-shadow:none!important;background:#fff!important}
+.activeHead{height:43px!important;padding:4px 8px!important;font-size:16px!important;border-bottom:1px solid #dce5f0!important}
+.activeNum{width:31px!important;height:31px!important;font-size:19px!important;border-radius:6px!important}
+.status{font-size:11px!important;padding:6px 9px!important;border-radius:15px!important}
+.activeBody{padding:8px 10px!important;text-align:center!important}
+.activeTeam{font-size:23px!important;line-height:1.05!important;margin-top:3px!important}
+.activeGame{font-size:16px!important;line-height:1.05!important;margin-top:3px!important}
+.activeLabel{font-size:11px!important;margin-top:9px!important;padding-top:8px!important;border-top:1px solid #b9c6d6!important}
+.activeTime{font-size:22px!important;line-height:1.05!important;margin-top:3px!important}
+.activeBody>div[style*="margin-top:10px"]{margin-top:10px!important;padding:7px 8px!important;border-radius:7px!important}
+.activeBody>div[style*="margin-top:10px"] div:first-child{font-size:10px!important}
+.activeBody>div[style*="margin-top:10px"] div:last-child{font-size:22px!important}
+.courtGraphic{display:none!important}
+.waitDashboard{margin-top:8px!important;padding:6px!important;border:1px solid #b7c9df!important;border-radius:7px!important;box-shadow:none!important;background:#fff!important}
+.waitDashboardTitle{font-size:16px!important;padding:2px 5px 6px!important;margin-bottom:5px!important;border-bottom:2px solid #173a78!important}
+.waitDashboardTitle small{font-size:9px!important;margin-left:8px!important}
+.waitGrid{grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-template-areas:"a a b b c c" "d d d e e e"!important;gap:8px!important}
+.waitCard{height:147px!important;border:1px solid var(--court)!important;border-radius:5px!important;background:#fff!important}
+.waitCard:nth-child(1){grid-area:a}.waitCard:nth-child(2){grid-area:b}.waitCard:nth-child(3){grid-area:c}.waitCard:nth-child(4){grid-area:d}.waitCard:nth-child(5){grid-area:e}
+.waitCardTitle{height:25px!important;font-size:12px!important;padding:4px 7px!important}
+.waitTableHead{height:22px!important;font-size:8px!important;padding:1px 4px!important}
+.waitRow{min-height:24px!important;font-size:10px!important;padding:2px 4px!important}
+.waitRow b{width:20px!important;height:20px!important;font-size:10px!important}
+.waitRow strong{font-size:11px!important}.waitRow span{font-size:10px!important}.waitRow em{font-size:12px!important}
+.waitEmpty{height:99px!important;font-size:12px!important}.emptyFace{font-size:36px!important;margin-bottom:4px!important}
+.displayNotice{margin-top:8px!important;padding:6px 7px!important;gap:5px!important;grid-template-columns:repeat(4,1fr)!important;border:1px solid #b9cbe0!important;border-radius:5px!important;background:#fff!important;height:62px!important;align-items:center!important}
+.displayNotice>div{font-size:9px!important;line-height:1.25!important;padding:0 7px!important;border-right:1px solid #b9cbe0!important;text-align:center!important}
+.displayNotice>div:last-child{border-right:0!important}.displayNotice b{font-size:11px!important}
+@media(max-width:1100px){
+ .customerBrand{min-width:245px!important}.customerBrand .brand{font-size:21px!important}.customerStats{height:56px!important}.topStat b{font-size:19px!important}.activeCard{height:235px!important}.activeTeam{font-size:20px!important}.activeTime{font-size:19px!important}.waitCard{height:132px!important}
+}
+</style>
+
+
+<style id="customerReferenceFinal20260823">
+/* ===== 장군봉 고객용 최종 기준 화면: 1122x741 기준 ===== */
+body:has(.customerHeader){background:#f3f6fa!important;overflow-x:hidden!important;overflow-y:auto!important}
+.customerHeader{height:72px!important;background:#061b4f!important;color:#fff!important;display:flex!important;align-items:center!important;gap:10px!important;padding:6px 12px!important;border-bottom:0!important;box-sizing:border-box!important}
+.customerBrand{display:flex!important;align-items:center!important;gap:8px!important;min-width:255px!important;flex:0 0 255px!important}
+.customerBrand .brandIcon{font-size:0!important;line-height:1!important;width:35px!important;height:35px!important;display:grid!important;place-items:center!important}
+.customerBrand .brand{font-size:23px!important;line-height:1.03!important;font-weight:950!important;letter-spacing:-1px!important;white-space:nowrap!important}
+.customerBrand .sub{font-size:10px!important;line-height:1.1!important;margin-top:3px!important;color:#dbe7ff!important}
+.customerStats{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:5px!important;height:58px!important;flex:1 1 auto!important;min-width:0!important;background:transparent!important;overflow:visible!important}
+.topStat{height:58px!important;background:#fff!important;border:1px solid #d4deeb!important;border-radius:5px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;box-shadow:0 1px 3px rgba(0,0,0,.10)!important;color:#071633!important}
+.topStat>span{font-size:28px!important;line-height:1!important;width:35px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+.topStat small{font-size:9px!important;font-weight:950!important;line-height:1.1!important;display:block!important;text-align:center!important;white-space:nowrap!important}
+.topStat b{font-size:23px!important;line-height:1.05!important;font-weight:950!important;display:block!important;text-align:center!important;white-space:nowrap!important}
+.customerRight{display:flex!important;align-items:center!important;justify-content:flex-end!important;min-width:190px!important;gap:4px!important;white-space:nowrap!important}
+.customerRight #clock{font-size:13px!important;font-weight:900!important;white-space:nowrap!important}
+.customerAdminBtn{display:none!important}
+.customerWrap{width:100%!important;max-width:none!important;margin:0!important;padding:8px 13px 8px!important;background:#f3f6fa!important;box-sizing:border-box!important;overflow:hidden!important}
+.displaySectionTitle{display:inline-block!important;font-size:15px!important;line-height:1!important;color:#fff!important;background:#0b3d9c!important;border:0!important;border-radius:6px 6px 0 0!important;padding:7px 13px!important;margin:0 0 4px 2px!important;font-weight:950!important}
+.activeCourts{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important;width:100%!important}
+.activeCard{min-width:0!important;min-height:0!important;height:239px!important;background:#fff!important;border:1.5px solid var(--court)!important;border-radius:7px!important;overflow:hidden!important;box-shadow:none!important}
+.activeHead{height:42px!important;padding:4px 8px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;font-size:16px!important;font-weight:950!important;border-bottom:1px solid #dce5f0!important;box-sizing:border-box!important}
+.activeNum{width:31px!important;height:31px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;border-radius:6px!important;color:#fff!important;font-size:19px!important;margin-right:5px!important}
+.status{font-size:10px!important;padding:6px 9px!important;border-radius:15px!important;color:#fff!important;font-weight:950!important}
+.activeBody{padding:8px 10px!important;text-align:center!important}
+.activeBody>div:first-child{font-size:11px!important;font-weight:800!important;color:#53657c!important}
+.activeTeam{font-size:22px!important;line-height:1.05!important;font-weight:950!important;color:var(--court)!important;margin-top:3px!important}
+.activeGame{font-size:15px!important;line-height:1.05!important;font-weight:900!important;color:#071633!important;margin-top:3px!important}
+.activeLabel{font-size:11px!important;font-weight:800!important;color:#243653!important;margin-top:9px!important;padding-top:8px!important;border-top:1px solid #b9c6d6!important}
+.activeTime{font-size:21px!important;line-height:1.05!important;font-weight:950!important;margin-top:3px!important;white-space:nowrap!important}
+.activeBody>div[style*="margin-top:10px"]{margin-top:9px!important;padding:7px 8px!important;border-radius:7px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important}
+.activeBody>div[style*="margin-top:10px"] div:first-child{font-size:10px!important;color:#53657c!important}
+.activeBody>div[style*="margin-top:10px"] div:last-child{font-size:22px!important;line-height:1.05!important}
+.activeBody>div[style*="margin-top:10px"] .personIcon{width:34px!important;height:34px!important;flex:0 0 34px!important}
+.activeBody .activeQueueBox{margin-top:10px!important;padding:6px 8px!important;border-radius:7px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;font-weight:950!important}
+.activeBody .activeQueueBox .personIcon{width:30px!important;height:30px!important;flex:0 0 30px!important}
+.courtGraphic{display:none!important}
+.waitDashboard{margin-top:7px!important;padding:6px!important;background:#fff!important;border:1px solid #b7c9df!important;border-radius:7px!important;box-shadow:none!important;box-sizing:border-box!important}
+.waitDashboardTitle{font-size:15px!important;font-weight:950!important;color:#071d52!important;padding:2px 5px 5px!important;border-bottom:2px solid #183a78!important;margin-bottom:6px!important;display:flex!important;align-items:baseline!important;gap:7px!important;line-height:1!important}
+.waitDashboardTitle small{font-size:9px!important;font-weight:800!important;color:#53657c!important;margin-left:0!important}
+.waitGrid{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-template-areas:"a a b b c c" "d d d e e e"!important;gap:8px!important;width:100%!important}
+.waitCard{min-width:0!important;min-height:0!important;height:132px!important;background:#fff!important;border:1px solid var(--court)!important;border-radius:5px!important;overflow:hidden!important}
+.waitCard:nth-child(1){grid-area:a}.waitCard:nth-child(2){grid-area:b}.waitCard:nth-child(3){grid-area:c}.waitCard:nth-child(4){grid-area:d}.waitCard:nth-child(5){grid-area:e}
+.waitCardTitle{height:25px!important;background:var(--court)!important;color:#fff!important;font-size:12px!important;font-weight:950!important;padding:4px 7px!important;display:flex!important;align-items:center!important;box-sizing:border-box!important;white-space:nowrap!important}
+.waitTableHead{height:22px!important;display:grid!important;grid-template-columns:42px 1.25fr 1fr 1.1fr!important;align-items:center!important;background:#f0f4f8!important;border-bottom:1px solid #cbd6e3!important;font-size:8px!important;font-weight:950!important;padding:1px 4px!important;box-sizing:border-box!important}
+.waitRow{min-height:24px!important;display:grid!important;grid-template-columns:42px 1.25fr 1fr 1.1fr!important;align-items:center!important;border-top:1px solid #dbe3ec!important;padding:2px 4px!important;font-size:10px!important;box-sizing:border-box!important}
+.waitRow b{width:20px!important;height:20px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#edf2f7!important;border-radius:4px!important;font-size:10px!important;margin:auto!important}
+.waitRow strong{font-size:11px!important;font-weight:950!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;text-align:center!important}
+.waitRow span{font-size:10px!important;text-align:center!important;white-space:nowrap!important}
+.waitRow em{font-size:12px!important;font-style:normal!important;font-weight:950!important;color:var(--court)!important;white-space:nowrap!important;text-align:center!important}
+.waitEmpty{height:83px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;font-size:12px!important;font-weight:900!important;gap:3px!important}
+.emptyFace{font-size:34px!important;line-height:1!important;margin:0!important}
+.displayNotice{margin-top:8px!important;padding:6px 7px!important;gap:0!important;grid-template-columns:repeat(4,1fr)!important;border:1px solid #b9cbe0!important;border-radius:5px!important;background:#fff!important;height:60px!important;align-items:center!important;box-sizing:border-box!important}
+.displayNotice>div{min-width:0!important;font-size:9px!important;line-height:1.3!important;padding:0 9px!important;border-right:1px solid #b9cbe0!important;text-align:center!important;color:#243653!important;font-weight:800!important}
+.displayNotice>div:last-child{border-right:0!important}.displayNotice b{font-size:11px!important;color:#145fe5!important}.displayNotice strong{font-weight:950!important}
+@media(max-width:1100px){
+ .customerBrand{min-width:235px!important;flex-basis:235px!important}.customerBrand .brand{font-size:20px!important}.customerStats{height:52px!important}.topStat{height:52px!important}.topStat>span{font-size:24px!important}.topStat b{font-size:19px!important}.customerRight{min-width:155px!important}.customerRight #clock{font-size:11px!important}.activeCard{height:225px!important}.activeTeam{font-size:20px!important}.activeTime{font-size:19px!important}.waitCard{height:125px!important}.displayNotice{height:56px!important}.displayNotice>div{font-size:8px!important}.displayNotice b{font-size:10px!important}}
+@media(max-width:760px){
+ .customerHeader{height:auto!important;flex-wrap:wrap!important;padding:8px!important}.customerBrand{min-width:100%!important;flex-basis:100%!important}.customerStats{width:100%!important;flex:none!important}.customerRight{position:absolute!important;right:10px!important;top:9px!important}.activeCourts{grid-template-columns:repeat(2,minmax(0,1fr))!important}.waitGrid{grid-template-columns:1fr 1fr!important;grid-template-areas:none!important}.waitCard{grid-area:auto!important}.displayNotice{height:auto!important;grid-template-columns:repeat(2,1fr)!important;gap:0!important}.displayNotice>div:nth-child(2){border-right:0!important}.displayNotice>div{padding:5px}}
+</style>
+
+<style id="waitingFinishFit">
+.waitbody{padding:12px!important}.doneScreen{padding:18px 16px!important}.doneScreen h2{font-size:18px!important;line-height:1.45!important;margin:7px 0 10px!important}.doneScreen p{font-size:12px!important;line-height:1.6!important;margin:0 0 10px!important}.doneScreen .notice{padding:9px!important;margin-bottom:10px!important}.doneScreen .btn{min-height:44px!important}
+</style>
+
+<style id="customerFinalTarget">
+body:has(.customerHeader){background:#f5f8fc!important}
+.customerHeader{height:72px!important;padding:5px 14px!important;gap:10px!important;background:#061b4f!important}
+.customerBrand{min-width:265px!important;gap:8px!important}.customerBrand .brand{font-size:24px!important;line-height:1.05!important}.customerBrand .sub{font-size:10px!important}.customerBrand .brandIcon svg{width:34px!important;height:34px!important}
+.customerStats{height:58px!important;gap:5px!important}.topStat{border:1px solid #d5deea!important;border-radius:5px!important;gap:7px!important}.topStat>span svg{width:32px!important;height:32px!important}.topStat small{font-size:9px!important}.topStat b{font-size:21px!important}
+.customerWrap{padding:9px 18px 10px!important}.displaySectionTitle{font-size:15px!important;padding:7px 13px!important;margin-left:3px!important;margin-bottom:5px!important}
+.activeCourts{gap:8px!important}.activeCard{height:238px!important;border-width:1.5px!important;border-radius:7px!important}.activeHead{height:42px!important;padding:4px 9px!important;font-size:15px!important}.activeNum{width:30px!important;height:30px!important;font-size:18px!important}.status{font-size:10px!important;padding:5px 8px!important}.activeBody{padding:8px 10px!important;text-align:center!important}.activeBody>div:first-child{font-size:11px!important}.activeTeam{font-size:21px!important;margin-top:3px!important}.activeGame{font-size:14px!important}.activeLabel{font-size:11px!important;margin-top:9px!important;padding-top:8px!important}.activeTime{font-size:20px!important;margin-top:3px!important}.activeBody>div[style*="margin-top:10px"]{margin-top:9px!important;padding:6px 8px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important}.activeBody>div[style*="margin-top:10px"] .personIcon{width:34px!important;height:34px!important}.activeBody>div[style*="margin-top:10px"] div:last-child{font-size:21px!important}.activeQueueBox{margin:10px 0 0!important;padding:7px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;border-radius:7px!important;font-size:14px!important;font-weight:900!important}.activeQueueBox .personIcon{width:31px!important;height:31px!important}
+.waitDashboard{margin-top:8px!important;padding:6px!important}.waitDashboardTitle{font-size:15px!important;padding:2px 5px 5px!important;margin-bottom:5px!important}.waitDashboardTitle small{font-size:9px!important}.waitGrid{gap:7px!important}.waitCard{height:132px!important}.waitCardTitle{height:26px!important;font-size:12px!important}.waitTableHead{height:22px!important;font-size:8px!important}.waitRow{min-height:24px!important;font-size:10px!important}.waitRow b{width:20px!important;height:20px!important}.waitRow strong{font-size:10px!important}.waitRow em{font-size:11px!important}.waitEmpty{height:82px!important}.emptyFace{font-size:31px!important}
+.displayNotice{margin-top:6px!important;padding:6px 8px!important;grid-template-columns:repeat(4,1fr)!important;background:#fff!important}.displayNotice>div{font-size:9px!important;line-height:1.3!important}.displayNotice b{font-size:11px!important}
+</style>
+
+<style id="customerReadableFinal">
+/* 고객 모니터 최종 가독성 보강: 데이터/연동/고객등록 기능은 변경하지 않음 */
+body:has(.customerHeader) .displaySectionTitle{
+  border:2px solid #0b3d9c!important;
+  border-bottom:3px solid #0b3d9c!important;
+}
+body:has(.customerHeader) .activeCard{
+  border-width:2px!important;
+}
+body:has(.customerHeader) .activeHead{
+  border-bottom:2px solid #9fb2ca!important;
+  font-size:17px!important;
+}
+body:has(.customerHeader) .activeLabel{
+  border-top:2px solid #a9bad0!important;
+}
+body:has(.customerHeader) .waitDashboard{
+  border:2px solid #8fa8c7!important;
+}
+body:has(.customerHeader) .waitDashboardTitle{
+  border-bottom:3px solid #102d63!important;
+}
+body:has(.customerHeader) .waitCard{
+  border-width:2px!important;
+}
+body:has(.customerHeader) .waitTableHead{
+  border-bottom:2px solid #a9bad0!important;
+}
+body:has(.customerHeader) .waitRow{
+  border-top:2px solid #d2dbe7!important;
+}
+body:has(.customerHeader) .displayNotice{
+  border:2px solid #8fa8c7!important;
+  background:#eef6ff!important;
+  padding:9px 10px!important;
+}
+body:has(.customerHeader) .displayNotice>div{
+  border-right:2px solid #a9bad0!important;
+  font-size:13px!important;
+  line-height:1.5!important;
+  padding:0 10px!important;
+}
+body:has(.customerHeader) .displayNotice b{
+  font-size:16px!important;
+}
+body:has(.customerHeader) .displayNotice strong{
+  display:inline-block!important;
+  margin-top:3px!important;
+  font-size:16px!important;
+  color:#071d52!important;
+}
+@media(max-width:1100px){
+  body:has(.customerHeader) .displayNotice>div{font-size:12px!important}
+  body:has(.customerHeader) .displayNotice b{font-size:15px!important}
+}
+</style>
 </head><body>
 <div id="app"></div>
 <script>
@@ -369,17 +845,14 @@ async function sbGet(){
 }
 async function sbUpsert(row){
   const payload={
-    id:ROOT,
     settings:row.settings||{"난타":15,"4인 복식":15,"2인 단식":15},
     max_per_court:Number(row.max_per_court||5),
     re_register_minutes:Math.max(1,Math.min(20,Number(row.re_register_minutes||5))),
     finished:row.finished||{},
     courts:Array.isArray(row.courts)?row.courts:[]
   };
-
-  /* 기존 행이 있으면 PATCH */
-  const patchUrl=SUPABASE_URL+"/rest/v1/waiting_state?id=eq."+encodeURIComponent(ROOT);
-  const patch=await fetch(patchUrl,{
+  const url=SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state";
+  const r=await fetch(url,{
     method:"PATCH",
     headers:{
       "apikey":SUPABASE_ANON_KEY,
@@ -388,47 +861,29 @@ async function sbUpsert(row){
       "Accept":"application/json",
       "Prefer":"return=representation"
     },
-    body:JSON.stringify(payload),
-    cache:"no-store"
+    body:JSON.stringify(payload)
   });
-  const patchText=await patch.text();
-
-  if(patch.ok){
-    const rows=patchText?JSON.parse(patchText):[];
-    if(Array.isArray(rows)&&rows.length>0) return rows[0];
-  }
-
-  /* 행이 없거나 PATCH 결과가 비어 있으면 upsert로 생성 */
-  const upsertUrl=SUPABASE_URL+"/rest/v1/waiting_state?on_conflict=id";
-  const upsert=await fetch(upsertUrl,{
-    method:"POST",
-    headers:{
-      "apikey":SUPABASE_ANON_KEY,
-      "Authorization":"Bearer "+SUPABASE_ANON_KEY,
-      "Content-Type":"application/json",
-      "Accept":"application/json",
-      "Prefer":"resolution=merge-duplicates,return=representation"
-    },
-    body:JSON.stringify(payload),
-    cache:"no-store"
-  });
-  const upsertText=await upsert.text();
-
-  if(!upsert.ok){
-    throw new Error("저장 오류 "+upsert.status+" : "+upsertText+(patchText?(" / PATCH: "+patchText):""));
-  }
-
-  const rows=upsertText?JSON.parse(upsertText):[];
-  if(!Array.isArray(rows)||rows.length===0){
-    throw new Error("저장 오류 : waiting_state 데이터를 확인할 수 없습니다.");
-  }
-  return rows[0];
+  const text=await r.text();
+  if(!r.ok) throw new Error("저장 오류 "+r.status+" : "+text);
+  const rows=text?JSON.parse(text):[];
+  if(!Array.isArray(rows)||rows.length===0)
+    throw new Error("저장 오류 : waiting_state가 수정되지 않았습니다.");
+  return true;
 }const ROOT="waiting_state";
 const params=new URLSearchParams(location.search);
 const REGISTER_URL=location.origin+location.pathname+"?page=register";
 const ticket=params.get("ticket")||"";
 const colors=["#07854b","#1461e8","#6332d7","#ff7900","#e51e2a"];
 const def={id:ROOT,settings:{"난타":15,"4인 복식":15,"2인 단식":15},max_per_court:5,re_register_minutes:5,finished:{},courts:[1,2,3,4,5].map(id=>({id,blocked:false,active:null,queue:[]}))};
+const PREVIEW_MODE=params.get("preview")==="1";
+const previewState={id:ROOT,settings:{"난타":15,"4인 복식":15,"2인 단식":15},max_per_court:5,re_register_minutes:5,finished:{},courts:[
+  {id:1,blocked:false,active:{ticket:"p1",nickname:"강한팀",game:"4인 복식",court:1,startTime:"14:20",endTime:"14:37",startAt:Date.now()-15*60000,endAt:Date.now()+135000,deviceId:"p1"},queue:[{ticket:"q11",nickname:"파워팀",game:"4인 복식",people:2,waitMinutes:3},{ticket:"q12",nickname:"점프스매시",game:"4인 복식",people:1,waitMinutes:20}]},
+  {id:2,blocked:false,active:{ticket:"p2",nickname:"스매싱",game:"2인 단식",court:2,startTime:"14:25",endTime:"14:39",startAt:Date.now()-10*60000,endAt:Date.now()+255000,deviceId:"p2"},queue:[{ticket:"q21",nickname:"민턴여신",game:"2인 단식",people:2,waitMinutes:5}]},
+  {id:3,blocked:false,active:null,queue:[{ticket:"q31",nickname:"배드민턴짱",game:"4인 복식",people:2,waitMinutes:8},{ticket:"q32",nickname:"민턴스타",game:"4인 복식",people:2,waitMinutes:25}]},
+  {id:4,blocked:false,active:null,queue:[{ticket:"q41",nickname:"스매시파워",game:"2인 단식",people:1,waitMinutes:14}]},
+  {id:5,blocked:false,active:null,queue:[]},
+]};
+
 /* QR 연속등록 방지: 개인정보 대신 브라우저에 저장되는 랜덤 토큰만 사용 */
 const DEVICE_KEY="jb_anonymous_device_v1";
 const COOLDOWN_KEY="jb_register_cooldown_until";
@@ -472,6 +927,14 @@ function findDeviceRegistration(s,deviceId){
 }
 
 
+
+function personIcon(color){
+  return `<svg class="personIcon" viewBox="0 0 64 64" aria-hidden="true" style="color:${color}"><circle cx="23" cy="20" r="9" fill="currentColor"/><circle cx="43" cy="24" r="8" fill="currentColor"/><path d="M7 49c1-12 8-19 16-19s15 7 16 19H7Z" fill="currentColor"/><path d="M31 49c1-10 6-16 13-16 7 0 12 6 13 16H31Z" fill="currentColor"/></svg>`;
+}
+function courtIcon(color){
+  return `<svg viewBox="0 0 64 64" aria-hidden="true" style="width:38px;height:38px;color:${color}"><circle cx="22" cy="22" r="9" fill="currentColor"/><circle cx="43" cy="25" r="8" fill="currentColor"/><path d="M7 52c1-12 7-19 15-19s14 7 15 19H7Z" fill="currentColor"/><path d="M31 52c1-10 6-16 13-16 7 0 12 6 13 16H31Z" fill="currentColor"/></svg>`;
+}
+
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function tm(t){return new Date(t).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}
 function left(t){let n=Math.max(0,Math.ceil((t-Date.now())/1000));return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}
@@ -485,6 +948,7 @@ function showError(err){
   }
 }
 async function get(){
+  if(PREVIEW_MODE) return JSON.parse(JSON.stringify(previewState));
   const data=await sbGet();
   return data?data:cloneDef();
 }
@@ -499,6 +963,7 @@ async function save(s){
   });
 }
 async function ensure(){
+  if(PREVIEW_MODE) return;
   const data=await sbGet();
   if(!data) await save(cloneDef());
 }
@@ -525,32 +990,9 @@ async function advance(s,doSave=true){
 let liveTimer=null;
 function sub(fn){
   if(liveTimer) clearInterval(liveTimer);
-
-  let busy=false;
-  const refresh=async()=>{
-    if(busy)return;
-    busy=true;
-    try{
-      const s=await advance(await get());
-      fn(s);
-    }catch(e){
-      console.error("실시간 연동 오류:",e);
-    }finally{
-      busy=false;
-    }
-  };
-
-  /* 최초 즉시 반영 */
+  const refresh=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
   refresh();
-
-  /* 고객 등록 후 최대 1초 안에 고객 모니터에 반영 */
-  liveTimer=setInterval(refresh,1000);
-
-  /* 다른 화면에서 고객 모니터로 돌아왔을 때 즉시 반영 */
-  window.addEventListener("focus",refresh);
-  document.addEventListener("visibilitychange",()=>{
-    if(document.visibilityState==="visible") refresh();
-  });
+  liveTimer=setInterval(refresh,2000);
 }
 
 /* GitHub Pages compatible routing:
@@ -570,94 +1012,95 @@ function route(){
 
 function customer(){
   const app=document.getElementById("app");
-  document.body.classList.add("customer-display");
-  app.innerHTML=
-    '<header class="header">'+
-      '<div class="customerBrand"><div class="brandIcon"><svg viewBox="0 0 64 64" aria-hidden="true" style="width:34px;height:34px"><path d="M13 49c11-2 23-12 30-29 3-7 8-10 12-10 1 0 2 1 2 2 0 4-3 9-9 13-10 7-19 17-25 27z" fill="#fff"/><path d="M20 51c8-1 17-5 25-13" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/></svg></div><div><div class="brand">장군봉 실내배드민턴장</div><div class="sub">실시간 대기 현황</div></div></div>'+
-      '<div class="headerStats" id="stats"></div>'+
-      '<div class="customerClock"><span id="clock"></span><a class="customerBtn" href="?page=admin">관리자</a></div>'+
-    '</header>'+
-    '<div class="wrap">'+
-      '<div class="displaySectionTitle">👥 이용 중 코트</div>'+
-      '<div class="courts" id="courts"></div>'+
-      '<div id="waitDashboard"></div>'+
-    '</div>';
+  app.innerHTML=`
+  <header class="customerHeader">
+    <div class="customerBrand">
+      <div class="brandIcon"><svg viewBox="0 0 64 64" aria-hidden="true" style="width:34px;height:34px"><path d="M13 49c11-2 23-12 30-29 3-7 8-10 12-10 1 0 2 1 2 2 0 4-3 9-9 13-10 7-19 17-25 27z" fill="#fff"/><path d="M20 51c8-1 17-5 25-13" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/></svg></div>
+      <div><div class="brand">장군봉 실내배드민턴장</div><div class="sub">실시간 대기 현황</div></div>
+    </div>
+    <div class="customerStats" id="stats"></div>
+    <div class="customerRight"><div id="clock"></div><a class="customerAdminBtn" href="?page=admin">관리자</a></div>
+  </header>
+  <main class="customerWrap">
+    <section>
+      <div class="displaySectionTitle">이용 중 코트 현황</div>
+      <div class="activeCourts" id="activeCourts"></div>
+    </section>
+    <section class="waitDashboard">
+      <div class="waitDashboardTitle">대기 현황
+        <small>대기 순서는 등록 순서이며, 게임 완료 또는 취소 시 자동으로 다음 대기가 적용됩니다.</small>
+      </div>
+      <div class="waitGrid" id="waitGrid"></div>
+      <div class="displayNotice">
+        <div><b>ⓘ 안내사항</b><br>게임 완료 후 퇴장 버튼을 눌러주셔야<br>다음 대기가 자동으로 진행됩니다.</div>
+        <div><b>◫ 대기 예상 시간</b><br>평균 게임 시간(약 17분) 기준으로 산정됩니다.</div>
+        <div><b>⟳ 대기 시간</b><br>상황에 따라 변동될 수 있습니다.</div>
+        <div><b>❗ 이용 문의</b><br>이용에 불편 사항이나 문의사항은<br>사무실로 문의 부탁드립니다.<br><strong>02-2015-2771</strong></div>
+      </div>
+    </section>
+  </main>`;
   renderCustomer(cloneDef());
   sub(renderCustomer);
-  setInterval(()=>{
+  const tick=()=>{
     const el=document.getElementById("clock");
-    if(el)el.textContent=new Date().toLocaleString("ko-KR",{year:"numeric",month:"2-digit",day:"2-digit",weekday:"short",hour:"2-digit",minute:"2-digit",hour12:false});
-  },1000);
+    if(el) el.textContent=new Date().toLocaleString("ko-KR",{year:"numeric",month:"2-digit",day:"2-digit",weekday:"short",hour:"2-digit",minute:"2-digit"});
+  };
+  tick(); setInterval(tick,1000);
 }
-
-function peopleSvg(color){
-  return '<svg class="people-icon" viewBox="0 0 48 32" aria-hidden="true" style="fill:'+color+'">'+
-    '<circle cx="15" cy="9" r="7"></circle><circle cx="33" cy="9" r="7"></circle>'+
-    '<path d="M3 29c1-7 6-11 12-11s11 4 12 11H3z"></path>'+
-    '<path d="M21 29c1-6 5-10 11-10s10 4 11 10H21z"></path></svg>';
-}
-function gamePlayers(game){return game==="4인 복식"?4:game==="2인 단식"?2:1}
 function renderCustomer(s){
-  const stats=document.getElementById("stats"), courts=document.getElementById("courts"), wd=document.getElementById("waitDashboard");
-  if(!stats||!courts||!wd)return;
+  const stats=document.getElementById("stats"), activeEl=document.getElementById("activeCourts"), waitEl=document.getElementById("waitGrid");
+  if(!stats||!activeEl||!waitEl)return;
   const activeCount=s.courts.filter(c=>c.active).length;
-  const waitingTeams=s.courts.reduce((n,c)=>n+(c.queue||[]).length,0);
-  const waitingPeople=s.courts.reduce((n,c)=>n+(c.queue||[]).reduce((m,x)=>m+gamePlayers(x.game),0),0);
-
-  stats.innerHTML=
-    '<div class="stat"><span style="color:#145fe5">▣ 전체 코트</span><b>5개</b></div>'+
-    '<div class="stat"><span style="color:#07854b">👥 이용 중 코트</span><b>'+activeCount+'개</b></div>'+
-    '<div class="stat"><span style="color:#ff7100">👥 대기 중 팀</span><b>'+waitingTeams+'팀</b></div>'+
-    '<div class="stat"><span style="color:#6a2cc7">👥 전체 대기 인원</span><b>'+waitingPeople+'명</b></div>';
-
-  courts.innerHTML=s.courts.map((c,i)=>{
-    const q=c.queue||[], ac=c.active, color=colors[i];
-    if(ac){
-      return '<section class="court">'+
-        '<div class="head"><span><span class="num" style="background:'+color+'">'+c.id+'</span>'+c.id+'번 코트</span><span class="badge" style="background:'+color+'">이용중</span></div>'+
-        '<div class="body"><div class="court-main">'+
-        '<span class="small-label">현재 이용 팀</span><div class="team" style="color:'+color+'">'+esc(ac.nickname)+'</div><div class="game">'+esc(ac.game)+'</div>'+
-        '</div><div class="court-divider"></div><div class="time-label">이용 시간</div>'+
-        '<div class="time-value">'+tm(ac.startAt)+' ~ '+tm(ac.endAt)+'</div>'+
-        '<div class="remain-box" style="color:'+color+';background:'+color+'10;border-color:'+color+'55">'+peopleSvg(color)+'<span>남은 시간&nbsp; '+left(ac.endAt)+'</span></div>'+
-        '</div></section>';
-    }
-    const expected=q.length ? Math.max(0, q.reduce((sum,x)=>sum+Number(s.settings?.[x.game]||15),0)) : 0;
-    return '<section class="court">'+
-      '<div class="head"><span><span class="num" style="background:'+color+'">'+c.id+'</span>'+c.id+'번 코트</span><span class="badge" style="background:'+color+'">대기중</span></div>'+
-      '<div class="body"><div class="empty-main"><span class="small-label">현재 대기 팀</span><div class="none">없음</div>'+
-      '<div class="court-divider"></div><div class="wait-label">예상 대기 시간</div><div class="wait-value" style="color:'+color+'">약 '+String(expected).padStart(2,"0")+'분</div></div>'+
-      '<div class="queue-box" style="color:'+color+';background:'+color+'10;border-color:'+color+'55">'+peopleSvg(color)+'<span>대기 '+q.length+'팀</span></div>'+
-      '</div></section>';
-  }).join('');
-
-  wd.innerHTML='<section class="wait-dashboard">'+
-    '<div class="wait-dashboard-title"><b>대기 현황</b><span>대기 순서는 등록 순서이며, 게임 완료 또는 취소 시 자동으로 다음 대기가 적용됩니다.</span></div>'+
-    '<div class="wait-grid">'+
-    s.courts.map((c,i)=>{
-      const q=c.queue||[], color=colors[i];
-      const activeRemain=c.active?.endAt?Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/60000)):0;
-      return '<div class="wait-card"><div class="wait-card-title">'+c.id+'번 코트 대기 현황 (총 '+q.length+'팀)</div>'+
-        (q.length?
-          '<div class="wait-head"><span>순번</span><span>팀명</span><span>게임 방식</span><span>예상 대기시간</span></div>'+
-          q.slice(0,5).map((x,j)=>{
-            const wait=Math.max(0,activeRemain+q.slice(0,j).reduce((sum,z)=>sum+Number(s.settings?.[z.game]||15),0));
-            return '<div class="wait-row"><b style="background:'+color+';color:#fff">'+(j+1)+'</b><strong>'+esc(x.nickname)+'</strong><span>'+esc(x.game)+'</span><span class="wait-eta">약 '+wait+'분</span></div>';
-          }).join('')
-        :
-          '<div class="wait-empty"><div class="smile" style="color:'+color+'">☺</div><div>대기 중인 팀이 없습니다.</div></div>'
-        )+'</div>';
-    }).join('')+
-    '</div><div class="displayNotice">'+
-      '<div class="notice-item"><span class="notice-icon" style="color:#125fe5">ⓘ</span><span><b>안내사항</b><br>게임 완료 후 퇴장 버튼을 눌러주셔야<br>다음 대기가 자동으로 진행됩니다.</span></div>'+
-      '<div class="notice-item"><span class="notice-icon">⇄</span><span>대기 예상 시간은 평균 게임 시간<br>기준으로 산정됩니다.</span></div>'+
-      '<div class="notice-item"><span class="notice-icon">◷</span><span>대기 시간은 상황에 따라<br>변동될 수 있습니다.</span></div>'+
-      '<div class="notice-item"><span class="notice-icon" style="color:#e50914">!</span><span>이용에 불편 사항이나 문의사항은<br>사무실로 문의 부탁드립니다.</span></div>'+
-    '</div></section>';
+  const waitCount=s.courts.filter(c=>(c.queue||[]).length>0).length;
+  const peopleCount=s.courts.reduce((n,c)=>
+    n+(c.queue||[]).reduce((m,x)=>m+Number(x.people||x.count||1),0),0);
+  stats.innerHTML=`
+    <div class="topStat"><span style="color:#145fe5"><svg viewBox="0 0 64 64" style="width:30px;height:30px"><rect x="10" y="10" width="44" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="5"/><path d="M32 10v44M10 32h44" stroke="currentColor" stroke-width="3"/></svg></span><div><small>전체 코트</small><b>5 개</b></div></div>
+    <div class="topStat"><span style="color:#07854b">${personIcon('#07854b')}</span><div><small>이용 중 코트</small><b>${activeCount} 개</b></div></div>
+    <div class="topStat"><span style="color:#ff7900">${personIcon('#ff7900')}</span><div><small>대기 중 팀</small><b>${waitCount} 팀</b></div></div>
+    <div class="topStat"><span style="color:#6332d7">${personIcon('#6332d7')}</span><div><small>전체 대기 인원</small><b>${peopleCount} 명</b></div></div>`;
+  activeEl.innerHTML=s.courts.map((c,i)=>{
+    const a=c.active,color=colors[i];
+    return `<article class="activeCard" style="--court:${color}">
+      <div class="activeHead">
+        <span><b class="activeNum" style="background:${color}">${c.id}</b> ${c.id}번 코트</span>
+        <strong class="status" style="background:${a?color:'#718096'}">${a?'이용중':'대기중'}</strong>
+      </div>
+      <div class="activeBody">
+        ${a?`
+          <div style="font-size:11px;font-weight:800;color:#53657c">현재 이용 팀</div>
+          <div class="activeTeam">${esc(a.nickname)}</div>
+          <div class="activeGame">${esc(a.game)}</div>
+          <div class="activeLabel">이용 시간</div>
+          <div class="activeTime" style="color:${color}">${a.startTime||''} ~ ${a.endTime||tm(a.endAt)}</div>
+          <div style="margin-top:10px;padding:9px;background:${color}12;border:1px solid ${color}55;border-radius:9px">
+            ${personIcon(color)}
+            <div><div style="font-size:10px;color:#53657c">남은 시간</div>
+            <div style="font-size:23px;font-weight:950;color:${color}">${left(a.endAt)}</div></div>
+          </div>`
+        :`
+          <div style="font-size:11px;font-weight:800;color:#53657c;margin-top:8px">현재 대기 팀</div>
+          <div class="activeTeam">없음</div>
+          <div class="activeLabel">예상 대기 시간</div>
+          <div class="activeTime" style="color:${color}">약 ${Math.max(0,Number((c.queue||[])[0]?.waitMinutes)||0)}분</div>
+          <div class="activeQueueBox" style="background:${color}12;border:1px solid ${color}55;color:${color}">${personIcon(color)}<span>대기 ${(c.queue||[]).length}팀</span></div>`}
+      </div>
+    </article>`;
+  }).join("");
+  waitEl.innerHTML=s.courts.map((c,i)=>{
+    const q=c.queue||[],color=colors[i];
+    return `<article class="waitCard" style="--court:${color}">
+      <div class="waitCardTitle">${c.id}번 코트 대기 현황 <span>(총 ${q.length}팀)</span></div>
+      <div class="waitTableHead"><span>순번</span><span>팀명</span><span>게임 방식</span><span>예상 대기시간</span></div>
+      ${q.length?q.slice(0,5).map((x,j)=>{
+        const mins=Math.max(0,Math.round((Number(x.waitMinutes)||((j+1)*17))));
+        return `<div class="waitRow"><b style="background:${color}22;color:${color}">${j+1}</b><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>약 ${mins}분</em></div>`;
+      }).join(""):`<div class="waitEmpty"><div class="emptyFace" style="color:${color}">☺</div><b>대기 중인 팀이 없습니다.</b></div>`}
+    </article>`;
+  }).join("");
 }
 
 function register(){
-  document.body.classList.remove("customer-display");
   const app=document.getElementById("app");
   app.innerHTML=`
   <div style="min-height:100vh;background:#f4f7fb;padding:14px 12px 28px">
@@ -786,16 +1229,6 @@ async function reg(){
     await advance(s,false);
     await save(s);
 
-    /* 저장 직후 서버 상태를 다시 읽어 고객 모니터와 같은 데이터를 확인 */
-    const savedState=await get();
-    const savedHere=savedState.courts.some(c=>
-      (c.active&&c.active.ticket===t) ||
-      (c.queue||[]).some(q=>q.ticket===t)
-    );
-    if(!savedHere){
-      throw new Error("대기 등록 정보가 서버에 저장되지 않았습니다. 잠시 후 다시 시도해주세요.");
-    }
-
     /* 등록 성공 후 관리자에서 설정한 시간 동안 같은 브라우저의 재등록 차단 */
     setCooldown(Number(s.re_register_minutes)||5);
 
@@ -806,7 +1239,6 @@ async function reg(){
   }
 }
 function waiting(){
-  document.body.classList.remove("customer-display");
   const app=document.getElementById("app");
   app.innerHTML='<div class="wait"><div class="waithead"><h2>고객용 QR 스마트등록</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
   renderWaiting(cloneDef());
@@ -879,7 +1311,7 @@ function renderWaiting(s){
 
     w.innerHTML=`
       <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
-        ● 개선 화면 (해당 코트만 간결하게)
+        ● 현재 대기 현황
       </div>
       <div class="doneScreen" style="padding:12px 14px;background:#061b4f;text-align:left">
         <div style="text-align:center;font-size:13px;font-weight:900;margin-bottom:10px">고객용 QR 스마트등록</div>
@@ -940,13 +1372,12 @@ function setupAdminNav(){
 }
 
 function admin(){
-  document.body.classList.remove("customer-display");
   const app=document.getElementById("app");
   app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=customer">고객 화면으로</a></div></header><div class="admin"><div id="viewSwitch" class="view-switch" aria-label="관리자 화면 전환">
   <button id="switchCustomer" type="button" onclick="switchManagementView('display')">고객용</button>
   <button id="switchAdmin" class="secondary" type="button" onclick="switchManagementView('admin')">관리자 모드</button>
 </div>
-<aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기 정원 설정</h2><div class="hint">전체 코트에 동일하게 적용됩니다.</div></div></div><div class="controlRow"><div class="controlBox"><h3>대기자 최대 정원</h3><div class="hint" style="margin-bottom:10px">전체 코트 동일 적용 · 1명~20명</div><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div></div><button class="save adminSave" onclick="saveAdmin('wait')">변경사항 저장</button></section><section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절하며 +/− 변경 즉시 저장합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveAdmin('cooldown')">변경사항 저장</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
+<aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기 정원 설정</h2><div class="hint">전체 코트에 동일하게 적용됩니다.</div></div></div><div class="controlRow"><div class="controlBox"><h3>대기자 최대 정원</h3><div class="hint" style="margin-bottom:10px">전체 코트 동일 적용 · 1명~20명</div><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></section><section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
   renderAdmin(cloneDef()); sub(renderAdmin);
 }
 function renderAdmin(s){
@@ -968,41 +1399,15 @@ async function changeTime(game,delta){
     await save(s);
   }catch(e){showError(e)}
 }
-async function changeMax(delta){
+function changeMax(delta){
   const el=document.getElementById("mx"); if(!el)return;
-  const oldValue=Math.max(1,Math.min(20,Number(el.textContent||5)));
-  const value=Math.max(1,Math.min(20,oldValue+delta));
-  if(value===oldValue)return;
-  el.textContent=value;
-  try{
-    let s=await get();
-    s.max_per_court=value;
-    await save(s);
-    const saved=await get();
-    renderAdmin(saved);
-  }catch(e){
-    el.textContent=oldValue;
-    showError(e);
-  }
+  el.textContent=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
 }
-async function changeCooldown(delta){
+function changeCooldown(delta){
   const el=document.getElementById("rc"); if(!el)return;
-  const oldValue=Math.max(1,Math.min(20,Number(el.textContent||5)));
-  const value=Math.max(1,Math.min(20,oldValue+delta));
-  if(value===oldValue)return;
-  el.textContent=value;
-  try{
-    let s=await get();
-    s.re_register_minutes=value;
-    await save(s);
-    const saved=await get();
-    renderAdmin(saved);
-  }catch(e){
-    el.textContent=oldValue;
-    showError(e);
-  }
+  el.textContent=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
 }
-async function saveAdmin(kind){
+async function saveAdmin(){
   try{
     let s=await get();
     const reRegisterMinutes=Math.max(1,Math.min(20,Number(document.getElementById("rc").textContent||5)));
@@ -1012,16 +1417,14 @@ async function saveAdmin(kind){
     s.settings["2인 단식"]=Math.max(1,Math.min(20,Number(document.getElementById("g3").textContent||15)));
     s.max_per_court=Math.max(1,Math.min(20,Number(document.getElementById("mx").textContent||5)));
     s.re_register_minutes=reRegisterMinutes;
+
+    // 게임시간/정원과 함께 재등록 제한시간도 waiting_state에 확실히 저장
     await save(s);
+
+    // 저장 직후 DB에서 다시 읽어 화면을 갱신하여 5분으로 되돌아가는 현상 방지
     const saved=await get();
     renderAdmin(saved);
-    if(kind==="wait"){
-      alert("변경사항이 저장되었습니다. 코트 정원: "+(Number(saved.max_per_court)||5)+"명");
-    }else if(kind==="cooldown"){
-      alert("변경사항이 저장되었습니다. 재등록 제한시간: "+(Number(saved.re_register_minutes)||5)+"분");
-    }else{
-      alert("변경사항이 저장되었습니다.");
-    }
+    alert("변경사항이 저장되었습니다. 재등록 제한시간: "+(Number(saved.re_register_minutes)||5)+"분");
   }catch(e){showError(e)}
 }
 async function block(id,b){
@@ -1126,4 +1529,18 @@ function management(){
 })();
 </script>
 
+<script>
+(function(){
+ if(typeof PREVIEW_MODE!=="undefined" && PREVIEW_MODE){
+   const apply=()=>{
+     const cards=document.querySelectorAll('.activeCard');
+     if(cards[0]){const e=cards[0].querySelector('.activeTime');if(e)e.textContent='14:20 ~ 14:37'; const t=cards[0].querySelector('[style*="font-size:23px"], [style*="font-size:20px"]');}
+     if(cards[1]){const e=cards[1].querySelector('.activeTime');if(e)e.textContent='14:25 ~ 14:39';}
+     const stat=document.querySelectorAll('.topStat b'); if(stat[2])stat[2].textContent='3 팀';
+     const rem=()=>{const r=document.querySelectorAll('.activeBody>div[style*="margin-top:10px"] div:last-child');if(r[0])r[0].textContent='02:15';if(r[1])r[1].textContent='04:15';}; rem();
+   };
+   setTimeout(apply,200); setTimeout(apply,800);
+ }
+})();
+</script>
 </body></html>
