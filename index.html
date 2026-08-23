@@ -1907,4 +1907,153 @@ function management(){
 }
 </style>
 
+
+<style id="JGB_WAIT_HEADER_REAL_45_FINAL">
+/* ==========================================================
+   대기현황 최종 정리
+   - 위쪽 표 머리글도 실제 45px
+   - 머리글 4칸을 정확히 중앙 정렬
+   - 세로 구분선 + 가로 구분선 명확하게 표시
+   - '대기 중인 팀이 없습니다.'는 기존 큰 글씨 유지
+   - 다른 화면/기능은 건드리지 않음
+   ========================================================== */
+
+/* 표 머리글 자체 */
+body:has(.customerHeader) .waitTableHead{
+  display:grid!important;
+  grid-template-columns:48px 1.35fr 1fr 1.05fr!important;
+  align-items:center!important;
+  justify-items:center!important;
+
+  height:70px!important;
+  min-height:70px!important;
+  padding:0!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+
+  background:#eef3f8!important;
+  border-top:4px solid #8798aa!important;
+  border-bottom:4px solid #8798aa!important;
+
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+
+/* 머리글 각 칸 */
+body:has(.customerHeader) .waitTableHead > *{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  box-sizing:border-box!important;
+  padding:0 6px!important;
+
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+
+  border-left:2px solid #a5b2c0!important;
+}
+
+/* 첫 번째 칸은 왼쪽 선 제거 */
+body:has(.customerHeader) .waitTableHead > *:first-child{
+  border-left:0!important;
+}
+
+/* 실제 대기 데이터도 같은 칸 폭으로 맞춤 */
+body:has(.customerHeader) .waitRow{
+  display:grid!important;
+  grid-template-columns:48px 1.35fr 1fr 1.05fr!important;
+  align-items:center!important;
+
+  min-height:82px!important;
+  height:82px!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+
+  border-top:3px solid #9aa8b7!important;
+  border-bottom:2px solid #c8d1db!important;
+
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+}
+
+/* 데이터 각 칸 */
+body:has(.customerHeader) .waitRow > *{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  box-sizing:border-box!important;
+  padding:0 6px!important;
+
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+
+  border-left:2px solid #c2ccd7!important;
+}
+
+/* 첫 번째 칸 */
+body:has(.customerHeader) .waitRow > *:first-child{
+  border-left:0!important;
+}
+
+/* 번호는 너무 크지 않게 */
+body:has(.customerHeader) .waitRow b{
+  width:32px!important;
+  height:32px!important;
+  min-height:32px!important;
+  margin:auto!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  font-size:22px!important;
+  font-weight:950!important;
+}
+
+/* 팀명/게임방식/예상시간은 정확히 45px */
+body:has(.customerHeader) .waitRow strong,
+body:has(.customerHeader) .waitRow span,
+body:has(.customerHeader) .waitRow em{
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  font-style:normal!important;
+}
+
+/* 카드 제목과 표 사이도 굵게 */
+body:has(.customerHeader) .waitCardTitle{
+  border-bottom:4px solid rgba(0,0,0,.25)!important;
+}
+
+/* 대기 없음 영역은 그대로 중앙 정렬 */
+body:has(.customerHeader) .waitEmpty{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  font-weight:950!important;
+}
+</style>
+
 </body></html>
