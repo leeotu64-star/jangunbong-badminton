@@ -13,6 +13,16 @@
 .adminTop{display:flex;justify-content:space-between;align-items:center;gap:12px}.adminTop a,.customerBtn{display:inline-block;background:#0c63e8;color:#fff;text-decoration:none;border-radius:7px;padding:9px 14px;font-weight:800}.side h2{margin-bottom:12px}.nav{cursor:pointer}.adminSectionTitle{display:flex;justify-content:space-between;align-items:center;gap:10px}.controlRow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.controlBox{border:1px solid #dce3ee;border-radius:9px;padding:14px;text-align:center}.controlBox h3{margin:0 0 10px}.stepper{display:flex;justify-content:center;align-items:center;gap:8px}.stepper button{width:40px;height:36px;border:1px solid #ccd6e4;background:#fff;border-radius:7px;font-size:20px;font-weight:900}.stepper strong{min-width:54px;font-size:22px}.lockGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.lockCard{border:1px solid #dce3ee;border-radius:9px;padding:12px;text-align:center}.lockCard h3{margin:0 0 8px}.lockCard button{width:100%;padding:9px;border:0;border-radius:7px;font-weight:800}.locked{background:#e51e2a;color:#fff}.open{background:#07854b;color:#fff}.hint{font-size:12px;color:#667085;margin-top:8px}.adminSave{margin-top:14px}.adminTable p{margin:7px 0}.adminTable .card{min-height:90px}
 @media(max-width:950px){.lockGrid{grid-template-columns:repeat(2,1fr)}.controlRow{grid-template-columns:1fr}}
 </style>
+<style id="cooldownPanelPolish">
+.cooldownPanel{border:2px solid #e51e2a!important;background:#fffdfd;position:relative}
+.cooldownPanel .cooldownInner{display:grid;grid-template-columns:minmax(360px,1fr) minmax(320px,540px);gap:20px;align-items:center}
+.cooldownPanel .cooldownTitle{font-size:20px;font-weight:900;margin-bottom:5px}
+.cooldownPanel .cooldownHint{font-size:12px;color:#667085;margin-bottom:14px}
+.cooldownPanel .cooldownBox{border:1px solid #dce3ee;border-radius:9px;padding:16px;text-align:center}
+.cooldownPanel .cooldownInfo{background:#eef5ff;border:1px solid #cbdcff;border-radius:9px;padding:16px;font-size:13px;line-height:1.75}
+.cooldownPanel .cooldownInfo b{font-size:15px}
+@media(max-width:950px){.cooldownPanel .cooldownInner{grid-template-columns:1fr}}
+</style>
 <style id="adminPolish">
 /* 관리자 화면 정리용 디자인 - 기능/동작은 변경하지 않음 */
 .admin{
@@ -298,6 +308,7 @@ async function sbUpsert(row){
   const payload={
     settings:row.settings||{"난타":15,"4인 복식":15,"2인 단식":15},
     max_per_court:Number(row.max_per_court||5),
+    re_register_minutes:Math.max(1,Math.min(20,Number(row.re_register_minutes||5))),
     finished:row.finished||{},
     courts:Array.isArray(row.courts)?row.courts:[]
   };
@@ -324,11 +335,10 @@ const params=new URLSearchParams(location.search);
 const REGISTER_URL=location.origin+location.pathname+"?page=register";
 const ticket=params.get("ticket")||"";
 const colors=["#07854b","#1461e8","#6332d7","#ff7900","#e51e2a"];
-const def={id:ROOT,settings:{"난타":15,"4인 복식":15,"2인 단식":15},max_per_court:5,finished:{},courts:[1,2,3,4,5].map(id=>({id,blocked:false,active:null,queue:[]}))};
+const def={id:ROOT,settings:{"난타":15,"4인 복식":15,"2인 단식":15},max_per_court:5,re_register_minutes:5,finished:{},courts:[1,2,3,4,5].map(id=>({id,blocked:false,active:null,queue:[]}))};
 /* QR 연속등록 방지: 개인정보 대신 브라우저에 저장되는 랜덤 토큰만 사용 */
 const DEVICE_KEY="jb_anonymous_device_v1";
 const COOLDOWN_KEY="jb_register_cooldown_until";
-const REGISTER_COOLDOWN_MS=5*60*1000;
 
 function getDeviceToken(){
   try{
@@ -347,8 +357,9 @@ function getDeviceToken(){
 function getCooldownUntil(){
   try{return Number(localStorage.getItem(COOLDOWN_KEY)||0)}catch(e){return 0}
 }
-function setCooldown(){
-  try{localStorage.setItem(COOLDOWN_KEY,String(Date.now()+REGISTER_COOLDOWN_MS))}catch(e){}
+function setCooldown(minutes){
+  const ms=Math.max(1,Math.min(20,Number(minutes||5)))*60*1000;
+  try{localStorage.setItem(COOLDOWN_KEY,String(Date.now()+ms))}catch(e){}
 }
 function clearCooldown(){
   try{localStorage.removeItem(COOLDOWN_KEY)}catch(e){}
@@ -389,6 +400,7 @@ async function save(s){
     id:ROOT,
     settings:s.settings,
     max_per_court:s.max_per_court,
+    re_register_minutes:Math.max(1,Math.min(20,Number(s.re_register_minutes||5))),
     finished:s.finished||{},
     courts:s.courts
   });
@@ -499,9 +511,9 @@ function register(){
         </div>
         <div id="e" style="display:none;color:#d71920;background:#fff1f1;border:1px solid #ffc9c9;border-radius:8px;padding:10px;font-size:12px;font-weight:800;margin-bottom:10px"></div>
         <button class="btn" id="regBtn" onclick="reg()">대기 등록하기</button>
-<div style="text-align:center;font-size:11px;color:#667085;margin-top:8px;line-height:1.45">
+<div id="registerCooldownNotice" style="text-align:center;font-size:11px;color:#667085;margin-top:8px;line-height:1.45">
   ※ 같은 스마트폰은 중복 대기 등록할 수 없습니다.<br>
-  ※ 등록 후 5분 동안 재등록이 제한됩니다.
+  ※ 등록 후 <b id="cooldownMinutes">5분</b> 동안 재등록이 제한됩니다.
 </div>
         <div style="text-align:center;font-size:10px;color:#7b8494;margin-top:10px">※ 대기 등록 후 관리자가 확인할 수 있습니다.</div>
       </div>
@@ -518,6 +530,8 @@ async function loadRegisterDuration(){
     try{
       const s=await get();
       out.textContent=(s.settings?.[game.value]||15)+"분";
+      const cm=document.getElementById("cooldownMinutes");
+      if(cm) cm.textContent=(Number(s.re_register_minutes)||5)+"분";
     }catch(e){}
   };
   game.addEventListener("change",sync);
@@ -555,6 +569,7 @@ async function reg(){
     if(!s || !Array.isArray(s.courts)) s=cloneDef();
     s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
     s.max_per_court=Math.max(1,Math.min(20,Number(s.max_per_court||5)));
+    s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
     s.finished=s.finished||{};
 
     /* 서버에 저장된 익명 기기 토큰으로 모든 코트의 중복 대기/이용 여부 검사 */
@@ -588,8 +603,8 @@ async function reg(){
     await advance(s,false);
     await save(s);
 
-    /* 등록 성공 후 5분 동안 같은 브라우저의 재등록 차단 */
-    setCooldown();
+    /* 등록 성공 후 관리자에서 설정한 시간 동안 같은 브라우저의 재등록 차단 */
+    setCooldown(Number(s.re_register_minutes)||5);
 
     location.replace(location.pathname+"?page=waiting&ticket="+encodeURIComponent(t));
   }catch(e){
@@ -736,13 +751,13 @@ function admin(){
   <button id="switchCustomer" type="button" onclick="switchManagementView('display')">고객용</button>
   <button id="switchAdmin" class="secondary" type="button" onclick="switchManagementView('admin')">관리자 모드</button>
 </div>
-<aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기자 최대 정원</h2><div class="hint">전체 코트에 동일하게 적용 · 1명~20명</div></div></div><div class="controlBox"><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
+<aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기 정원 설정</h2><div class="hint">전체 코트에 동일하게 적용됩니다.</div></div></div><div class="controlRow"><div class="controlBox"><h3>대기자 최대 정원</h3><div class="hint" style="margin-bottom:10px">전체 코트 동일 적용 · 1명~20명</div><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></section><section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
   renderAdmin(cloneDef()); sub(renderAdmin);
 }
 function renderAdmin(s){
-  const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),cs=document.getElementById("cs"),qq=document.getElementById("qq");
-  if(!g1||!g2||!g3||!mx||!cs||!qq)return;
-  g1.textContent=s.settings["난타"];g2.textContent=s.settings["4인 복식"];g3.textContent=s.settings["2인 단식"];mx.textContent=s.max_per_court;
+  const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),rc=document.getElementById("rc"),cs=document.getElementById("cs"),qq=document.getElementById("qq");
+  if(!g1||!g2||!g3||!mx||!rc||!cs||!qq)return;
+  g1.textContent=s.settings["난타"];g2.textContent=s.settings["4인 복식"];g3.textContent=s.settings["2인 단식"];mx.textContent=s.max_per_court;rc.textContent=Number(s.re_register_minutes||5);
   cs.innerHTML=s.courts.map(c=>'<div class="lockCard"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'현재 잠금':'현재 사용 가능')+'</p><button class="'+(c.blocked?'locked':'open')+'" onclick="block('+c.id+','+(!c.blocked)+')">'+(c.blocked?'잠금 해제':'코트 잠금')+'</button></div>').join('');
   qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
 }
@@ -762,6 +777,10 @@ function changeMax(delta){
   const el=document.getElementById("mx"); if(!el)return;
   el.textContent=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
 }
+function changeCooldown(delta){
+  const el=document.getElementById("rc"); if(!el)return;
+  el.textContent=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
+}
 async function saveAdmin(){
   try{
     let s=await get();
@@ -769,6 +788,7 @@ async function saveAdmin(){
     s.settings["4인 복식"]=Math.max(1,Math.min(20,Number(document.getElementById("g2").textContent)));
     s.settings["2인 단식"]=Math.max(1,Math.min(20,Number(document.getElementById("g3").textContent)));
     s.max_per_court=Math.max(1,Math.min(20,Number(document.getElementById("mx").textContent)));
+    s.re_register_minutes=Math.max(1,Math.min(20,Number(document.getElementById("rc").textContent)));
     await save(s);
     alert("변경사항이 저장되었습니다.");
   }catch(e){showError(e)}
