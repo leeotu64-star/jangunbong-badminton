@@ -2056,4 +2056,150 @@ body:has(.customerHeader) .waitEmpty{
 }
 </style>
 
+
+<style id="JGB_WAIT_FINAL_CLEAN">
+/* 대기현황 최종 정리
+   - 표 머리글: 20px
+   - 실제 대기 내용: 45px
+   - 선명한 가로/세로 구분선
+   - 대기현황 부분만 적용
+*/
+
+/* 카드 전체 외곽선 */
+body:has(.customerHeader) .waitCard{
+  border:3px solid currentColor!important;
+  overflow:hidden!important;
+}
+
+/* 카드 제목 */
+body:has(.customerHeader) .waitCardTitle{
+  border-bottom:3px solid rgba(0,0,0,.25)!important;
+}
+
+/* 표 머리글 */
+body:has(.customerHeader) .waitTableHead{
+  display:grid!important;
+  grid-template-columns:48px 1.2fr 1fr 1fr!important;
+  height:48px!important;
+  min-height:48px!important;
+  padding:0!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+
+  background:#eef3f8!important;
+  border-top:3px solid #8798aa!important;
+  border-bottom:3px solid #8798aa!important;
+
+  font-size:20px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  text-align:center!important;
+  align-items:center!important;
+  justify-items:center!important;
+}
+
+/* 머리글 각 칸 */
+body:has(.customerHeader) .waitTableHead > *{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  padding:0 4px!important;
+  font-size:20px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+
+  border-left:2px solid #9aa9b8!important;
+}
+
+body:has(.customerHeader) .waitTableHead > *:first-child{
+  border-left:0!important;
+}
+
+/* 실제 대기 데이터 */
+body:has(.customerHeader) .waitRow{
+  display:grid!important;
+  grid-template-columns:48px 1.2fr 1fr 1fr!important;
+  height:78px!important;
+  min-height:78px!important;
+  padding:0!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+
+  border-top:3px solid #9aa9b8!important;
+  border-bottom:2px solid #c4ced8!important;
+
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  text-align:center!important;
+  align-items:center!important;
+}
+
+/* 실제 대기 데이터 각 칸 */
+body:has(.customerHeader) .waitRow > *{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  padding:0 5px!important;
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+
+  border-left:2px solid #c4ced8!important;
+}
+
+body:has(.customerHeader) .waitRow > *:first-child{
+  border-left:0!important;
+}
+
+/* 번호 */
+body:has(.customerHeader) .waitRow b{
+  width:32px!important;
+  height:32px!important;
+  min-height:32px!important;
+  margin:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:22px!important;
+  font-weight:950!important;
+}
+
+/* 팀명 / 게임 방식 / 예상 대기시간 */
+body:has(.customerHeader) .waitRow strong,
+body:has(.customerHeader) .waitRow span,
+body:has(.customerHeader) .waitRow em{
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  font-style:normal!important;
+}
+
+/* 대기 없음 */
+body:has(.customerHeader) .waitEmpty{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  font-weight:950!important;
+}
+</style>
+
 </body></html>
