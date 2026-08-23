@@ -911,7 +911,7 @@ function customer(){
       <div><div class="brand">장군봉 실내배드민턴장</div><div class="sub">실시간 대기 현황</div></div>
     </div>
     <div class="customerStats" id="stats"></div>
-    <div class="customerRight"><div id="clock"></div><a class="customerAdminBtn" href="?page=admin">관리자</a></div>
+    <div class="customerRight"><div id="clock"></div><a class="customerAdminBtn" href="?page=management&view=admin">관리자</a></div>
   </header>
   <main class="customerWrap">
     <section>
@@ -1281,7 +1281,7 @@ function setupAdminNav(){
 
 function admin(){
   const app=document.getElementById("app");
-  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=customer">고객 화면으로</a></div></header><div class="admin"><div id="viewSwitch" class="view-switch" aria-label="관리자 화면 전환">
+  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=management&view=display">고객 화면으로</a></div></header><div class="admin"><div id="viewSwitch" class="view-switch" aria-label="관리자 화면 전환">
   <button id="switchCustomer" type="button" onclick="switchManagementView('display')">고객용</button>
   <button id="switchAdmin" class="secondary" type="button" onclick="switchManagementView('admin')">관리자 모드</button>
 </div>
@@ -1834,5 +1834,46 @@ body:has(.customerHeader) .waitEmpty .emptyFace{
   .waitEmpty{height:68px!important;font-size:34px!important;}
   .emptyFace{font-size:24px!important;}
   .displayNotice{height:40px!important;}
+}
+</style>
+
+
+<style id="JGB_SWITCH_BUTTONS_FINAL_ONLY">
+/* 화면 전환 버튼만 복구 — 기존 화면 크기/배치/기능은 변경하지 않음 */
+body:has(.customerHeader) .customerAdminBtn{
+  display:inline-flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#1769e8!important;
+  color:#fff!important;
+  text-decoration:none!important;
+  padding:9px 13px!important;
+  border-radius:6px!important;
+  font-size:12px!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+  cursor:pointer!important;
+}
+body:has(.header) .adminTop{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+body:has(.header) .adminTop a{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#1769e8!important;
+  color:#fff!important;
+  text-decoration:none!important;
+  padding:9px 14px!important;
+  border-radius:6px!important;
+  font-size:12px!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
 }
 </style>
