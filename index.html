@@ -1069,6 +1069,72 @@ body:has(.customerHeader) .displayNotice strong{
   .customerRight{min-width:170px!important}
   .customerAdminBtn{min-width:72px!important;height:34px!important;font-size:12px!important}
 }
+
+<style id="JGB_WAIT_45PX_FINAL">
+/* 대기현황 데이터 부분만 최종 강제: 45px / 굵은 선 / 딱 맞는 정렬 */
+body:has(.waitDashboard) .waitRow{
+  min-height:76px!important;
+  height:76px!important;
+  display:grid!important;
+  grid-template-columns:52px 1.25fr 1fr 1.05fr!important;
+  align-items:center!important;
+  justify-items:center!important;
+  box-sizing:border-box!important;
+  padding:5px 8px!important;
+  border-top:3px solid #9aaabd!important;
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+  text-align:center!important;
+}
+body:has(.waitDashboard) .waitRow b{
+  width:34px!important;height:34px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  margin:0!important;border-radius:5px!important;
+  font-size:30px!important;font-weight:950!important;
+}
+body:has(.waitDashboard) .waitRow strong,
+body:has(.waitDashboard) .waitRow span,
+body:has(.waitDashboard) .waitRow em{
+  width:100%!important;
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+body:has(.waitDashboard) .waitRow em{
+  font-style:normal!important;
+  color:var(--court)!important;
+}
+body:has(.waitDashboard) .waitEmpty{
+  height:180px!important;
+  display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;
+  text-align:center!important;
+  font-size:45px!important;font-weight:950!important;line-height:1.1!important;
+}
+body:has(.waitDashboard) .waitEmpty .emptyFace{
+  font-size:52px!important;line-height:1!important;margin-bottom:10px!important;
+}
+/* 대기현황 카드 테두리/행 선을 굵게 */
+body:has(.waitDashboard) .waitCard{border-width:3px!important}
+body:has(.waitDashboard) .waitTableHead{
+  border-bottom:3px solid #9aaabd!important;
+}
+body:has(.waitDashboard) .waitCardTitle{
+  font-weight:950!important;
+}
+/* 작은 화면용 기존 미디어쿼리가 45px를 덮어쓰지 못하게 강제 */
+@media(max-width:1100px){
+  body:has(.waitDashboard) .waitRow{height:76px!important;min-height:76px!important;font-size:45px!important}
+  body:has(.waitDashboard) .waitRow strong,
+  body:has(.waitDashboard) .waitRow span,
+  body:has(.waitDashboard) .waitRow em{font-size:45px!important}
+}
+</style>
 </style>
 
 </head><body>
@@ -1796,144 +1862,4 @@ function management(){
  }
 })();
 </script>
-
-<style id="JGB_WAIT_BODY_45PX_FINAL">
-/* ==========================================================
-   장군봉 고객화면 - 대기현황 본문 45px 강제
-   팀명 / 게임 방식 / 예상 대기시간 등 대기현황 본문만 확대
-   표 머리글과 다른 화면은 건드리지 않음
-   ========================================================== */
-
-/* 실제 대기현황 데이터 행 */
-.waitRow{
-  font-size:45px!important;
-  font-weight:950!important;
-  line-height:1.05!important;
-  text-align:center!important;
-  align-items:center!important;
-}
-
-/* 팀명 */
-.waitRow strong{
-  font-size:45px!important;
-  font-weight:950!important;
-  line-height:1.05!important;
-}
-
-/* 게임 방식 */
-.waitRow span{
-  font-size:45px!important;
-  font-weight:950!important;
-  line-height:1.05!important;
-}
-
-/* 예상 대기시간 */
-.waitRow em{
-  font-size:45px!important;
-  font-weight:950!important;
-  line-height:1.05!important;
-  font-style:normal!important;
-}
-
-/* 번호 */
-.waitRow b{
-  font-size:30px!important;
-  font-weight:950!important;
-}
-
-/* 셀 내부 중앙 정렬 */
-.waitRow > *{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  text-align:center!important;
-  min-width:0!important;
-  white-space:nowrap!important;
-}
-
-/* 대기현황이 실제 등록 전에도 균형 있게 보이도록 */
-.waitRow{
-  min-height:65px!important;
-  padding:8px 5px!important;
-}
-</style>
-
-
-<style id="JGB_WAIT_ALL_TEXT_55PX_FORCE_FINAL">
-/* ==========================================================
-   대기현황 해당 부분만 55px 강제 적용
-   - 팀명
-   - 게임 방식
-   - 예상 대기시간
-   - 대기 중인 팀이 없습니다.
-   - 대기현황 본문에 표시되는 주요 문구
-   표 머리글/이용 중 코트/상단 화면은 변경하지 않음
-   ========================================================== */
-
-/* 실제 대기 행 전체 */
-.waitRow{
-  font-size:55px!important;
-  font-weight:950!important;
-  line-height:1.05!important;
-  text-align:center!important;
-}
-
-/* 팀명 */
-.waitRow strong{
-  font-size:55px!important;
-  font-weight:950!important;
-  line-height:1.05!important;
-}
-
-/* 게임 방식 */
-.waitRow span{
-  font-size:55px!important;
-  font-weight:950!important;
-  line-height:1.05!important;
-}
-
-/* 예상 대기시간 */
-.waitRow em{
-  font-size:55px!important;
-  font-weight:950!important;
-  line-height:1.05!important;
-  font-style:normal!important;
-}
-
-/* 번호는 너무 커지지 않도록 별도 유지 */
-.waitRow b{
-  font-size:30px!important;
-}
-
-/* 대기팀 없음 문구도 55px */
-.waitEmpty{
-  font-size:55px!important;
-  font-weight:950!important;
-  line-height:1.1!important;
-  text-align:center!important;
-}
-
-/* 대기 없음 아이콘은 문구와 구분 */
-.emptyFace{
-  font-size:55px!important;
-  line-height:1!important;
-  margin-bottom:10px!important;
-}
-
-/* 대기현황 내부 정렬 */
-.waitRow > *,
-.waitEmpty{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  text-align:center!important;
-}
-
-/* 55px 글씨가 잘리지 않도록 실제 대기 행 높이 확보 */
-.waitRow{
-  min-height:75px!important;
-  padding:8px 5px!important;
-}
-</style>
-
 </body></html>
