@@ -3619,4 +3619,896 @@ body:has(.customerHeader) .waitDashboard .waitEmpty{
 /* 하단 안내는 기존처럼 유지 */
 </style>
 
+
+<style id="JGB_WAIT_PREBUILT_SAME_STYLE_FINAL">
+/* ==========================================================
+   대기현황을 위 코트 화면과 같은 큰 카드 느낌으로 미리 배치
+   - 대기팀이 없어도 5개 카드가 항상 같은 크기로 표시
+   - 1~3번 상단 / 4~5번 하단
+   - 코트 화면과 비슷한 큰 제목/큰 중앙 문구
+   - 데이터/등록/관리자/DB 로직은 변경하지 않음
+   ========================================================== */
+
+body:has(.customerHeader) .waitDashboard{
+  width:100%!important;
+  box-sizing:border-box!important;
+  margin-top:8px!important;
+  padding:5px!important;
+  overflow:visible!important;
+}
+
+/* 대기 현황 제목 */
+body:has(.customerHeader) .waitDashboardTitle{
+  font-size:32px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+  padding:5px 8px!important;
+  margin:0 0 6px!important;
+}
+
+/* 5개 대기 카드 영역 */
+body:has(.customerHeader) .waitCards{
+  width:100%!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:7px!important;
+  align-items:stretch!important;
+}
+
+/* 카드 1~3: 2칸씩 = 3개 */
+body:has(.customerHeader) .waitCard:nth-child(1),
+body:has(.customerHeader) .waitCard:nth-child(2),
+body:has(.customerHeader) .waitCard:nth-child(3){
+  grid-column:span 2!important;
+}
+
+/* 카드 4~5: 3칸씩 = 2개 */
+body:has(.customerHeader) .waitCard:nth-child(4),
+body:has(.customerHeader) .waitCard:nth-child(5){
+  grid-column:span 3!important;
+}
+
+/* 위 코트 카드처럼 충분한 세로 공간을 미리 확보 */
+body:has(.customerHeader) .waitCard{
+  width:100%!important;
+  height:180px!important;
+  min-height:180px!important;
+  max-height:180px!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  border-width:3px!important;
+}
+
+/* 대기 카드 제목 */
+body:has(.customerHeader) .waitCardTitle{
+  height:38px!important;
+  min-height:38px!important;
+  padding:5px 8px!important;
+  box-sizing:border-box!important;
+  font-size:22px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+}
+
+/* 표 머리글 */
+body:has(.customerHeader) .waitTableHead{
+  height:28px!important;
+  min-height:28px!important;
+  padding:5px 4px!important;
+  box-sizing:border-box!important;
+  font-size:13px!important;
+  line-height:1!important;
+  font-weight:900!important;
+}
+
+/* 실제 대기 행 */
+body:has(.customerHeader) .waitRow{
+  min-height:34px!important;
+  padding:5px!important;
+  box-sizing:border-box!important;
+  font-size:18px!important;
+  line-height:1.05!important;
+  font-weight:900!important;
+}
+
+/* 대기팀 없음: 위 코트의 '없음'처럼 중앙에 크게 */
+body:has(.customerHeader) .waitEmpty{
+  height:105px!important;
+  min-height:105px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  font-size:25px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+  padding:5px!important;
+  box-sizing:border-box!important;
+}
+
+/* 웃는 얼굴도 중앙에서 크게 */
+body:has(.customerHeader) .emptyFace{
+  font-size:30px!important;
+  line-height:1!important;
+  margin-bottom:4px!important;
+}
+
+/* 긴 팀명/게임방식이 있어도 카드 밖으로 튀어나가지 않게 */
+body:has(.customerHeader) .waitCard *{
+  box-sizing:border-box!important;
+}
+body:has(.customerHeader) .waitCardTitle,
+body:has(.customerHeader) .waitTableHead,
+body:has(.customerHeader) .waitRow,
+body:has(.customerHeader) .waitEmpty{
+  word-break:keep-all!important;
+}
+
+/* 화면이 좁아져도 5개 카드 구조 유지 */
+@media (max-width:1200px){
+  body:has(.customerHeader) .waitCard{
+    height:165px!important;
+    min-height:165px!important;
+    max-height:165px!important;
+  }
+  body:has(.customerHeader) .waitCardTitle{
+    font-size:19px!important;
+  }
+  body:has(.customerHeader) .waitEmpty{
+    font-size:22px!important;
+  }
+}
+</style>
+
+
+<style id="JGB_CUSTOMER_WAIT_PRIORITY_FINAL">
+/* ==========================================================
+   고객 화면 공간 비율 최종
+   이용 중 = 1명 중심 → 최소 공간
+   대기 현황 = 최대 5명 중심 → 훨씬 크게
+   ========================================================== */
+
+/* ===== 이용 중 코트 영역: 최대한 압축 ===== */
+body:has(.customerHeader) .activeCard{
+  height:235px!important;
+  min-height:235px!important;
+  max-height:235px!important;
+}
+
+body:has(.customerHeader) .activeHead{
+  height:42px!important;
+  min-height:42px!important;
+  padding:4px 6px!important;
+  font-size:20px!important;
+}
+
+body:has(.customerHeader) .activeNum{
+  width:34px!important;
+  height:34px!important;
+  font-size:22px!important;
+}
+
+body:has(.customerHeader) .status{
+  font-size:15px!important;
+  padding:5px 7px!important;
+}
+
+body:has(.customerHeader) .activeBody{
+  padding:7px 6px!important;
+}
+
+body:has(.customerHeader) .activeTeam{
+  min-height:30px!important;
+  font-size:27px!important;
+  margin:4px 0!important;
+}
+
+body:has(.customerHeader) .activeGame{
+  min-height:25px!important;
+  font-size:19px!important;
+}
+
+body:has(.customerHeader) .activeLabel{
+  margin-top:5px!important;
+  padding-top:5px!important;
+  font-size:13px!important;
+}
+
+body:has(.customerHeader) .activeTime{
+  min-height:28px!important;
+  font-size:21px!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"]{
+  min-height:45px!important;
+  margin-top:5px!important;
+  padding:3px!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:first-child{
+  font-size:11px!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+  font-size:23px!important;
+}
+
+/* ===== 대기 현황: 이용자보다 훨씬 크게 ===== */
+body:has(.customerHeader) .waitDashboard{
+  margin-top:6px!important;
+}
+
+body:has(.customerHeader) .waitDashboardTitle{
+  font-size:42px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+  padding:6px 10px!important;
+}
+
+/* 대기 카드 전체를 크게 */
+body:has(.customerHeader) .waitCard{
+  height:250px!important;
+  min-height:250px!important;
+  max-height:250px!important;
+  border-width:4px!important;
+}
+
+/* 대기 카드 제목 */
+body:has(.customerHeader) .waitCardTitle{
+  height:52px!important;
+  min-height:52px!important;
+  padding:7px 10px!important;
+  font-size:28px!important;
+  line-height:1!important;
+  font-weight:950!important;
+}
+
+/* 표 제목 */
+body:has(.customerHeader) .waitTableHead{
+  height:36px!important;
+  min-height:36px!important;
+  padding:7px 5px!important;
+  font-size:16px!important;
+  font-weight:950!important;
+}
+
+/* 실제 대기 팀 */
+body:has(.customerHeader) .waitRow{
+  min-height:48px!important;
+  padding:7px!important;
+  font-size:24px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+}
+
+/* 대기팀 없음 */
+body:has(.customerHeader) .waitEmpty{
+  height:155px!important;
+  min-height:155px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:32px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+}
+
+/* 웃는 얼굴 */
+body:has(.customerHeader) .emptyFace{
+  font-size:42px!important;
+  margin-bottom:8px!important;
+}
+
+/* 1~3번 대기 카드도 크게 */
+body:has(.customerHeader) .waitCard:nth-child(1),
+body:has(.customerHeader) .waitCard:nth-child(2),
+body:has(.customerHeader) .waitCard:nth-child(3){
+  grid-column:span 2!important;
+}
+
+/* 4~5번은 더 넓게 */
+body:has(.customerHeader) .waitCard:nth-child(4),
+body:has(.customerHeader) .waitCard:nth-child(5){
+  grid-column:span 3!important;
+}
+</style>
+
+
+<style id="JGB_WAIT_MAXIMUM_PRIORITY_FINAL">
+/* ==========================================================
+   장군봉 고객화면 최종 공간 배치
+   이용 중 = 최소 공간
+   대기 현황 = 최대 공간
+   대기자가 없어도 처음부터 큰 카드가 보이도록 고정 배치
+   등록/관리자/DB/QR 로직은 수정하지 않음
+   ========================================================== */
+
+/* ---------- 이용 중 코트 : 초소형 ---------- */
+body:has(.customerHeader) .activeCourts{
+  gap:6px!important;
+  margin-bottom:4px!important;
+}
+
+body:has(.customerHeader) .activeCard{
+  height:190px!important;
+  min-height:190px!important;
+  max-height:190px!important;
+  border-width:3px!important;
+  overflow:hidden!important;
+}
+
+body:has(.customerHeader) .activeHead{
+  height:36px!important;
+  min-height:36px!important;
+  padding:3px 5px!important;
+  font-size:17px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeNum{
+  width:28px!important;
+  height:28px!important;
+  font-size:18px!important;
+}
+
+body:has(.customerHeader) .status{
+  font-size:12px!important;
+  padding:4px 6px!important;
+}
+
+body:has(.customerHeader) .activeBody{
+  padding:5px 5px!important;
+}
+
+body:has(.customerHeader) .activeTeam{
+  min-height:24px!important;
+  margin:2px 0!important;
+  font-size:22px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeGame{
+  min-height:20px!important;
+  font-size:16px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeLabel{
+  margin-top:4px!important;
+  padding-top:3px!important;
+  font-size:11px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeTime{
+  min-height:24px!important;
+  font-size:18px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"]{
+  min-height:34px!important;
+  margin-top:3px!important;
+  padding:2px!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:first-child{
+  font-size:9px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+  font-size:19px!important;
+  line-height:1!important;
+}
+
+/* ---------- 대기 현황 : 처음부터 최대 크기 ---------- */
+body:has(.customerHeader) .waitDashboard{
+  width:100%!important;
+  margin-top:5px!important;
+  padding:5px!important;
+  box-sizing:border-box!important;
+}
+
+body:has(.customerHeader) .waitDashboardTitle{
+  font-size:38px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  padding:5px 8px!important;
+  margin-bottom:5px!important;
+}
+
+/* 1~3 / 4~5 구조를 처음부터 고정 */
+body:has(.customerHeader) .waitCards{
+  width:100%!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:8px!important;
+}
+
+/* 1,2,3번은 각각 1/3 */
+body:has(.customerHeader) .waitCard:nth-child(1),
+body:has(.customerHeader) .waitCard:nth-child(2),
+body:has(.customerHeader) .waitCard:nth-child(3){
+  grid-column:span 2!important;
+}
+
+/* 4,5번은 각각 1/2 */
+body:has(.customerHeader) .waitCard:nth-child(4),
+body:has(.customerHeader) .waitCard:nth-child(5){
+  grid-column:span 3!important;
+}
+
+/* 등록 전에도 큰 빈 카드가 항상 존재 */
+body:has(.customerHeader) .waitCard{
+  height:300px!important;
+  min-height:300px!important;
+  max-height:300px!important;
+  border-width:4px!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+
+/* 카드 제목 */
+body:has(.customerHeader) .waitCardTitle{
+  height:55px!important;
+  min-height:55px!important;
+  padding:8px 10px!important;
+  font-size:30px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+
+/* 표 제목 */
+body:has(.customerHeader) .waitTableHead{
+  height:40px!important;
+  min-height:40px!important;
+  padding:8px 5px!important;
+  font-size:17px!important;
+  font-weight:950!important;
+  line-height:1!important;
+}
+
+/* 대기팀 행 */
+body:has(.customerHeader) .waitRow{
+  min-height:52px!important;
+  padding:8px!important;
+  font-size:25px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+}
+
+/* 대기자가 없을 때도 처음부터 크게 표시 */
+body:has(.customerHeader) .waitEmpty{
+  height:200px!important;
+  min-height:200px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:8px!important;
+  font-size:34px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+}
+
+/* 웃는 얼굴 */
+body:has(.customerHeader) .emptyFace{
+  font-size:44px!important;
+  line-height:1!important;
+  margin-bottom:8px!important;
+}
+
+/* 대기현황 안쪽 모든 핵심 문구도 처음부터 크게 */
+body:has(.customerHeader) .waitDashboard .waitCardTitle,
+body:has(.customerHeader) .waitDashboard .waitRow,
+body:has(.customerHeader) .waitDashboard .waitEmpty{
+  font-weight:950!important;
+}
+
+/* 하단 안내는 대기영역과 충돌하지 않게 축소 */
+body:has(.customerHeader) .displayNotice{
+  height:52px!important;
+  min-height:52px!important;
+  margin-top:5px!important;
+  padding:5px!important;
+  font-size:12px!important;
+}
+</style>
+
+
+<style id="JGB_CUSTOMER_FINAL_1_3_ACTIVE_WAIT_MAX">
+/* ==========================================================
+   장군봉 고객화면 - 강제 최종 배치
+   이용 중 영역 = 현재의 약 1/3
+   대기 현황 = 처음부터 최대 크기로 확보
+   대기자가 없어도 큰 카드가 항상 미리 표시됨
+   ========================================================== */
+
+/* ---------- 이용 중: 현재 190px → 약 1/3 ---------- */
+body:has(.customerHeader) .activeCard{
+  height:64px!important;
+  min-height:64px!important;
+  max-height:64px!important;
+  overflow:hidden!important;
+  border-width:2px!important;
+}
+
+body:has(.customerHeader) .activeHead{
+  height:30px!important;
+  min-height:30px!important;
+  padding:2px 4px!important;
+  font-size:14px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeNum{
+  width:24px!important;
+  height:24px!important;
+  font-size:15px!important;
+}
+
+body:has(.customerHeader) .status{
+  font-size:10px!important;
+  padding:3px 5px!important;
+}
+
+body:has(.customerHeader) .activeBody{
+  padding:2px 4px!important;
+}
+
+body:has(.customerHeader) .activeTeam{
+  min-height:12px!important;
+  margin:1px 0!important;
+  font-size:13px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeGame{
+  min-height:10px!important;
+  font-size:11px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeLabel{
+  margin-top:1px!important;
+  padding-top:1px!important;
+  font-size:8px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeTime{
+  min-height:12px!important;
+  font-size:11px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"]{
+  min-height:16px!important;
+  margin-top:1px!important;
+  padding:1px!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:first-child{
+  font-size:7px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+  font-size:10px!important;
+  line-height:1!important;
+}
+
+/* ---------- 대기 현황: 처음부터 최대 공간 ---------- */
+body:has(.customerHeader) .waitDashboard{
+  width:100%!important;
+  margin-top:4px!important;
+  padding:5px!important;
+  box-sizing:border-box!important;
+}
+
+body:has(.customerHeader) .waitDashboardTitle{
+  font-size:46px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  padding:7px 10px!important;
+  margin-bottom:6px!important;
+}
+
+/* 대기 카드 영역 */
+body:has(.customerHeader) .waitCards{
+  width:100%!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:10px!important;
+}
+
+/* 1~3번: 상단 3개 */
+body:has(.customerHeader) .waitCard:nth-child(1),
+body:has(.customerHeader) .waitCard:nth-child(2),
+body:has(.customerHeader) .waitCard:nth-child(3){
+  grid-column:span 2!important;
+}
+
+/* 4~5번: 하단 2개 */
+body:has(.customerHeader) .waitCard:nth-child(4),
+body:has(.customerHeader) .waitCard:nth-child(5){
+  grid-column:span 3!important;
+}
+
+/* 등록 전에도 처음부터 큰 카드 */
+body:has(.customerHeader) .waitCard{
+  height:360px!important;
+  min-height:360px!important;
+  max-height:360px!important;
+  border-width:4px!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+
+/* 대기 카드 제목 */
+body:has(.customerHeader) .waitCardTitle{
+  height:62px!important;
+  min-height:62px!important;
+  padding:9px 12px!important;
+  font-size:32px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+}
+
+/* 표 머리글 */
+body:has(.customerHeader) .waitTableHead{
+  height:42px!important;
+  min-height:42px!important;
+  padding:8px 6px!important;
+  font-size:18px!important;
+  line-height:1!important;
+  font-weight:950!important;
+}
+
+/* 실제 대기팀 */
+body:has(.customerHeader) .waitRow{
+  min-height:58px!important;
+  padding:9px!important;
+  font-size:28px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+}
+
+/* 대기자가 없어도 처음부터 크게 */
+body:has(.customerHeader) .waitEmpty{
+  height:250px!important;
+  min-height:250px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:10px!important;
+  font-size:38px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+}
+
+/* 빈 대기 아이콘 */
+body:has(.customerHeader) .emptyFace{
+  font-size:50px!important;
+  line-height:1!important;
+  margin-bottom:10px!important;
+}
+
+/* 대기현황 전체 안쪽도 강제 */
+body:has(.customerHeader) .waitDashboard .waitCardTitle,
+body:has(.customerHeader) .waitDashboard .waitRow,
+body:has(.customerHeader) .waitDashboard .waitEmpty{
+  font-weight:950!important;
+}
+
+/* 하단 안내는 최소화하여 대기 공간 확보 */
+body:has(.customerHeader) .displayNotice{
+  height:42px!important;
+  min-height:42px!important;
+  margin-top:4px!important;
+  padding:3px!important;
+  font-size:10px!important;
+}
+</style>
+
+
+<style id="JGB_ACTIVE_HALF_WAIT_BIGGER_FORCE">
+/* ==========================================================
+   장군봉 고객화면 강제 최종
+   현재 화면 기준:
+   - 이용 중 영역: 현재 크기의 약 절반
+   - 대기 현황: 그만큼 확보된 공간을 더 크게 사용
+   - 대기자가 없어도 처음부터 큰 카드 유지
+   - 기존 기능/등록/관리자/DB/QR 로직 변경 없음
+   ========================================================== */
+
+/* ===== 이용 중: 현재 64px → 약 절반인 34px ===== */
+body:has(.customerHeader) .activeCard{
+  height:34px!important;
+  min-height:34px!important;
+  max-height:34px!important;
+  overflow:hidden!important;
+  border-width:2px!important;
+}
+
+body:has(.customerHeader) .activeHead{
+  height:27px!important;
+  min-height:27px!important;
+  padding:2px 4px!important;
+  font-size:12px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeNum{
+  width:22px!important;
+  height:22px!important;
+  font-size:14px!important;
+}
+
+body:has(.customerHeader) .status{
+  font-size:9px!important;
+  padding:3px 5px!important;
+}
+
+body:has(.customerHeader) .activeBody{
+  padding:1px 3px!important;
+}
+
+body:has(.customerHeader) .activeTeam{
+  min-height:8px!important;
+  margin:0!important;
+  font-size:10px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeGame{
+  min-height:8px!important;
+  font-size:9px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeLabel{
+  margin-top:0!important;
+  padding-top:0!important;
+  font-size:7px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeTime{
+  min-height:8px!important;
+  font-size:9px!important;
+  line-height:1!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"]{
+  min-height:10px!important;
+  height:10px!important;
+  margin-top:0!important;
+  padding:0!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:first-child{
+  font-size:6px!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+  font-size:8px!important;
+}
+
+/* ===== 대기 현황: 처음부터 더 크게 ===== */
+body:has(.customerHeader) .waitDashboard{
+  width:100%!important;
+  margin-top:3px!important;
+  padding:5px!important;
+  box-sizing:border-box!important;
+}
+
+body:has(.customerHeader) .waitDashboardTitle{
+  font-size:50px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  padding:8px 10px!important;
+  margin-bottom:7px!important;
+}
+
+/* 5개 대기 카드를 가로폭 최대 사용 */
+body:has(.customerHeader) .waitCards{
+  width:100%!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:10px!important;
+}
+
+body:has(.customerHeader) .waitCard:nth-child(1),
+body:has(.customerHeader) .waitCard:nth-child(2),
+body:has(.customerHeader) .waitCard:nth-child(3){
+  grid-column:span 2!important;
+}
+
+body:has(.customerHeader) .waitCard:nth-child(4),
+body:has(.customerHeader) .waitCard:nth-child(5){
+  grid-column:span 3!important;
+}
+
+/* 대기 카드 자체 확대 */
+body:has(.customerHeader) .waitCard{
+  height:430px!important;
+  min-height:430px!important;
+  max-height:430px!important;
+  border-width:4px!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+
+/* 카드 제목 */
+body:has(.customerHeader) .waitCardTitle{
+  height:68px!important;
+  min-height:68px!important;
+  padding:10px 12px!important;
+  font-size:34px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+
+/* 표 머리글 */
+body:has(.customerHeader) .waitTableHead{
+  height:45px!important;
+  min-height:45px!important;
+  padding:9px 6px!important;
+  font-size:19px!important;
+  font-weight:950!important;
+  line-height:1!important;
+}
+
+/* 실제 대기 팀 */
+body:has(.customerHeader) .waitRow{
+  min-height:62px!important;
+  padding:10px!important;
+  font-size:30px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+}
+
+/* 대기자가 없어도 처음부터 큰 영역 */
+body:has(.customerHeader) .waitEmpty{
+  height:310px!important;
+  min-height:310px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:10px!important;
+  font-size:42px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+}
+
+/* 빈 상태 아이콘 */
+body:has(.customerHeader) .emptyFace{
+  font-size:54px!important;
+  line-height:1!important;
+  margin-bottom:10px!important;
+}
+
+/* 하단 안내는 최소 공간 */
+body:has(.customerHeader) .displayNotice{
+  height:36px!important;
+  min-height:36px!important;
+  margin-top:3px!important;
+  padding:2px!important;
+  font-size:9px!important;
+}
+</style>
+
 </body></html>
