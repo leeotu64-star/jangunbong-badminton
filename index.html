@@ -3494,4 +3494,129 @@ main.customerWrap .displayNotice{
 }
 </style>
 
+
+<style id="JGB_CUSTOMER_COURT_SHORT_WAIT_3X_FINAL">
+/* ==========================================================
+   최종 고객화면 조정
+   ① 위 5개 코트 영역은 더 낮게 축소
+   ② 아래 대기현황(두 번째 화면)은 현재보다 약 3배 크게
+   ③ 5개 코트 한 줄 유지
+   ④ 기존 등록/관리자/DB/QR 기능은 변경하지 않음
+   ========================================================== */
+
+/* ===== ① 코트 카드 세로 높이 더 축소 ===== */
+body:has(.customerHeader) .activeCard{
+  height:330px!important;
+  min-height:330px!important;
+  max-height:330px!important;
+  overflow:hidden!important;
+}
+
+body:has(.customerHeader) .activeHead{
+  height:52px!important;
+  min-height:52px!important;
+  padding:5px 7px!important;
+}
+
+body:has(.customerHeader) .activeBody{
+  padding:10px 7px!important;
+}
+
+body:has(.customerHeader) .activeTeam{
+  min-height:42px!important;
+  font-size:34px!important;
+  margin:8px 0!important;
+}
+
+body:has(.customerHeader) .activeGame{
+  min-height:32px!important;
+  font-size:24px!important;
+}
+
+body:has(.customerHeader) .activeLabel{
+  margin-top:10px!important;
+  padding-top:7px!important;
+  font-size:16px!important;
+}
+
+body:has(.customerHeader) .activeTime{
+  min-height:38px!important;
+  font-size:26px!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"]{
+  min-height:58px!important;
+  margin-top:8px!important;
+  padding:5px!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:first-child{
+  font-size:13px!important;
+}
+
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+  font-size:28px!important;
+}
+
+/* ===== ② 두 번째 사진의 대기현황을 강제로 약 3배 확대 ===== */
+
+/* 대기현황 전체 제목 */
+body:has(.customerHeader) .waitDashboardTitle{
+  font-size:36px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+}
+
+/* 각 코트 대기현황 제목 */
+body:has(.customerHeader) .waitCardTitle{
+  font-size:27px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+  white-space:nowrap!important;
+}
+
+/* 표 머리글 */
+body:has(.customerHeader) .waitTableHead{
+  font-size:22px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+}
+
+/* 실제 대기 행 */
+body:has(.customerHeader) .waitRow{
+  font-size:27px!important;
+  font-weight:950!important;
+  line-height:1.1!important;
+}
+
+/* 대기 중인 팀이 없습니다 */
+body:has(.customerHeader) .waitEmpty{
+  font-size:30px!important;
+  font-weight:950!important;
+  line-height:1.05!important;
+}
+
+/* 대기 없음 얼굴 */
+body:has(.customerHeader) .emptyFace{
+  font-size:34px!important;
+}
+
+/* 대기현황 박스 높이 */
+body:has(.customerHeader) .waitCard{
+  height:145px!important;
+  min-height:145px!important;
+  overflow:hidden!important;
+}
+
+/* 대기현황 안쪽 글씨도 강제 적용 */
+body:has(.customerHeader) .waitDashboard .waitCardTitle,
+body:has(.customerHeader) .waitDashboard .waitTableHead,
+body:has(.customerHeader) .waitDashboard .waitRow,
+body:has(.customerHeader) .waitDashboard .waitEmpty{
+  font-weight:950!important;
+}
+
+/* 하단 안내는 기존처럼 유지 */
+</style>
+
 </body></html>
