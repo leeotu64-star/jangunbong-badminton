@@ -812,17 +812,49 @@ async function save(s){
     courts:s.courts
   });
 }
+
+/* 이용 기록 완전 초기화: 과거 이용기록만 비우고 현재 코트/대기는 유지 */
+async function resetUsageHistory(){
+  try{
+    const s=await get();
+    s.finished={};
+    await save(s);
+    return true;
+  }catch(e){
+    console.error("이용 기록 초기화 오류:",e);
+    return false;
+  }
+}
+
 async function ensure(){
   const data=await sbGet();
   if(!data) await save(cloneDef());
 }
+function kstDateKey(t=Date.now()){
+  return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Seoul",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(t));
+}
+function resetHistoryForNewDay(s){
+  s.finished=s.finished||{};
+  const today=kstDateKey();
+  if(s.finished._historyDate!==today){
+    s.finished._historyDate=today;
+    s.finished._history={};
+    return true;
+  }
+  if(!s.finished._history) s.finished._history={};
+  return false;
+}
 async function advance(s,doSave=true){
   s.finished=s.finished||{};
-  let ch=false;
+  let ch=resetHistoryForNewDay(s);
   for(const c of s.courts){
     if(c.active && Date.now()>=Number(c.active.endAt)){
       const a=c.active;
-      s.finished[a.ticket]={...a,endedAt:Date.now()};
+      const endedAt=Date.now();
+      const record={...a,endedAt};
+      s.finished[a.ticket]=record;
+      s.finished._history=s.finished._history||{};
+      s.finished._history[a.ticket]=record;
       c.active=null; ch=true;
     }
     if(!c.active && !c.blocked && (c.queue||[]).length){
@@ -1215,7 +1247,22 @@ async function cancelWait(){
   try{let s=await get();for(const c of s.courts)c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);await save(s);location.href="?page=register"}catch(e){showError(e)}
 }
 async function leave(){
-  try{let s=await get();for(const c of s.courts)if(c.active?.ticket===ticket){s.finished=s.finished||{};s.finished[ticket]={...c.active,endedAt:Date.now()};c.active=null}await advance(s);await save(s)}catch(e){showError(e)}
+  try{
+    let s=await get();
+    s.finished=s.finished||{};
+    resetHistoryForNewDay(s);
+    for(const c of s.courts){
+      if(c.active?.ticket===ticket){
+        const record={...c.active,endedAt:Date.now()};
+        s.finished[ticket]=record;
+        s.finished._history=s.finished._history||{};
+        s.finished._history[ticket]=record;
+        c.active=null;
+      }
+    }
+    await advance(s);
+    await save(s);
+  }catch(e){showError(e)}
 }
 async function finish(){
   try{let s=await get();if(s.finished)delete s.finished[ticket];await save(s);location.href="?page=register"}catch(e){showError(e)}
@@ -1234,19 +1281,39 @@ function admin(){
   <button id="switchCustomer" type="button" onclick="switchManagementView('display')">고객용</button>
   <button id="switchAdmin" class="secondary" type="button" onclick="switchManagementView('admin')">관리자 모드</button>
 </div>
-<aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div><button class="save adminSave" onclick="saveGameTime()">게임 시간 변경사항 저장</button></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기 정원 설정</h2><div class="hint">전체 코트에 동일하게 적용됩니다.</div></div></div><div class="controlRow"><div class="controlBox"><h3>대기자 최대 정원</h3><div class="hint" style="margin-bottom:10px">전체 코트 동일 적용 · 1명~20명 (사람 수)</div><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div></div><button class="save adminSave" onclick="saveWaitMax()">변경사항 저장</button></section><section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveCooldown()">변경사항 저장</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
+<aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div><button class="save adminSave" onclick="saveGameTime()">게임 시간 변경사항 저장</button></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기 정원 설정</h2><div class="hint">전체 코트에 동일하게 적용됩니다.</div></div></div><div class="controlRow"><div class="controlBox"><h3>대기자 최대 정원</h3><div class="hint" style="margin-bottom:10px">전체 코트 동일 적용 · 1명~20명 (사람 수)</div><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div></div><button class="save adminSave" onclick="saveWaitMax()">변경사항 저장</button></section><section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveCooldown()">변경사항 저장</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section>
+<section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
   renderAdmin(cloneDef()); sub(renderAdmin);
 }
 function renderAdmin(s){
-  const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),rc=document.getElementById("rc"),cs=document.getElementById("cs"),qq=document.getElementById("qq");
-  if(!g1||!g2||!g3||!mx||!rc||!cs||!qq)return;
+  const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),rc=document.getElementById("rc"),cs=document.getElementById("cs"),qq=document.getElementById("qq"),hr=document.getElementById("historyRows");
+  if(!g1||!g2||!g3||!mx||!rc||!cs||!qq||!hr)return;
   g1.textContent=Math.max(1,Math.min(20,Number(s.settings["난타"]||15)));
   g2.textContent=Math.max(1,Math.min(20,Number(s.settings["4인 복식"]||15)));
   g3.textContent=Math.max(1,Math.min(20,Number(s.settings["2인 단식"]||15)));
   mx.textContent=Math.max(1,Math.min(20,Number(s.max_per_court||5)));
   rc.textContent=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
   cs.innerHTML=s.courts.map(c=>'<div class="lockCard"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'현재 잠금':'현재 사용 가능')+'</p><button class="'+(c.blocked?'locked':'open')+'" onclick="block('+c.id+','+(!c.blocked)+')">'+(c.blocked?'잠금 해제':'코트 잠금')+'</button></div>').join('');
+  const hist=Object.values((s.finished&&s.finished._history)||{}).sort((a,b)=>Number(b.endedAt||0)-Number(a.endedAt||0));
+  hr.innerHTML=hist.length
+    ? '<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">코트</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">팀명</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">게임</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">시작</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">종료</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">비고</th></tr></thead><tbody>'
+      +hist.map(x=>'<tr><td style="padding:9px;border:1px solid #d5dfeb;text-align:center">'+esc(x.court)+'번</td><td style="padding:9px;border:1px solid #d5dfeb;font-weight:800">'+esc(x.nickname)+'</td><td style="padding:9px;border:1px solid #d5dfeb">'+esc(x.game)+'</td><td style="padding:9px;border:1px solid #d5dfeb;text-align:center">'+esc(x.startTime||tm(x.startAt))+'</td><td style="padding:9px;border:1px solid #d5dfeb;text-align:center">'+esc(x.endTime||tm(x.endAt))+'</td><td style="padding:9px;border:1px solid #d5dfeb;text-align:center">'+(x.forced?'강제 퇴장':'정상 종료')+'</td></tr>').join('')
+      +'</tbody></table></div>'
+    : '<div style="padding:22px;text-align:center;color:#718096;border:1px dashed #cbd5e1;border-radius:10px">오늘 이용 기록이 없습니다.</div>';
+
   qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
+}
+async function resetHistory(){
+  if(!confirm("오늘 이용 기록을 모두 초기화할까요?\n현재 이용 중/대기 중인 팀은 삭제하지 않습니다."))return;
+  try{
+    const s=await get();
+    s.finished=s.finished||{};
+    s.finished._history={};
+    s.finished._historyDate=kstDateKey();
+    await save(s);
+    renderAdmin(await get());
+    alert("이용 기록이 초기화되었습니다.");
+  }catch(e){showError(e)}
 }
 function changeTime(game,delta){
   const el=game==="난타"?document.getElementById("g1"):game==="4인 복식"?document.getElementById("g2"):document.getElementById("g3");
@@ -1336,7 +1403,15 @@ async function block(id,b){
 async function force(id){
   try{
     let s=await get(),c=s.courts.find(c=>c.id===id);
-    if(c.active){s.finished=s.finished||{};s.finished[c.active.ticket]={...c.active,endedAt:Date.now()};c.active=null}
+    if(c.active){
+      s.finished=s.finished||{};
+      resetHistoryForNewDay(s);
+      const record={...c.active,endedAt:Date.now(),forced:true};
+      s.finished[c.active.ticket]=record;
+      s.finished._history=s.finished._history||{};
+      s.finished._history[c.active.ticket]=record;
+      c.active=null;
+    }
     await advance(s); await save(s);
   }catch(e){showError(e)}
 }
@@ -1466,6 +1541,211 @@ function management(){
 .customerStatusPanel{
   width:100%!important;
   box-sizing:border-box!important;
+}
+</style>
+
+<style id="JGB_HISTORY_STYLE">
+#historyRows table th,#historyRows table td{vertical-align:middle}
+#history .save{white-space:nowrap}
+</style>
+
+
+<script id="JGB_USAGE_HISTORY_RESET">
+/* 기존 이용 관련 기록을 사이트 상태에서 제거 */
+(async function(){
+  try{
+    const data=await sbGet();
+    if(data && data.finished && Object.keys(data.finished).length){
+      data.finished={};
+      await sbUpsert({
+        id:ROOT,
+        settings:data.settings,
+        max_per_court:data.max_per_court,
+        re_register_minutes:data.re_register_minutes,
+        finished:{},
+        courts:data.courts
+      });
+    }
+  }catch(e){ console.warn("usage history reset skipped",e); }
+})();
+</script>
+
+
+<style id="JGB_WAIT_FINAL_45PX">
+/* =========================================================
+   장군봉 대기현황 최종 표시
+   - 관리자 버튼/기능 유지
+   - 대기현황 4칸 균등 정렬
+   - 머리글 20px
+   - 실제 대기 데이터 45px
+   - 대기 없음 문구 45px
+   - 세로/가로 구분선 강화
+   - 코트 카드 전체 크기/기능은 변경하지 않음
+   ========================================================= */
+
+/* 대기현황 카드 안의 표 머리글 */
+body:has(.customerHeader) .waitTableHead{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  height:48px!important;
+  min-height:48px!important;
+  margin:0!important;
+  padding:0!important;
+  align-items:center!important;
+  justify-items:center!important;
+  overflow:hidden!important;
+
+  background:#eef3f8!important;
+  border-top:3px solid #8a9aaa!important;
+  border-bottom:3px solid #8a9aaa!important;
+
+  font-size:20px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+
+/* 머리글 4칸 */
+body:has(.customerHeader) .waitTableHead > *{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  padding:0 6px!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+
+  border-left:2px solid #9aa9b8!important;
+
+  font-size:20px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+
+body:has(.customerHeader) .waitTableHead > *:first-child{
+  border-left:0!important;
+}
+
+/* 실제 대기자 행 */
+body:has(.customerHeader) .waitRow{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+
+  min-height:78px!important;
+  height:78px!important;
+  margin:0!important;
+  padding:0!important;
+
+  align-items:center!important;
+
+  border-top:3px solid #9aa9b8!important;
+  border-bottom:2px solid #c7d0da!important;
+
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  text-align:center!important;
+  overflow:hidden!important;
+}
+
+/* 실제 대기자 각 칸 */
+body:has(.customerHeader) .waitRow > *{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  padding:0 6px!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+
+  border-left:2px solid #c2ccd6!important;
+
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+
+body:has(.customerHeader) .waitRow > *:first-child{
+  border-left:0!important;
+}
+
+/* 순번 */
+body:has(.customerHeader) .waitRow b{
+  width:38px!important;
+  height:38px!important;
+  min-width:38px!important;
+  min-height:38px!important;
+  margin:auto!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  font-size:24px!important;
+  font-weight:950!important;
+}
+
+/* 팀명 / 게임 방식 / 예상 대기시간 */
+body:has(.customerHeader) .waitRow strong,
+body:has(.customerHeader) .waitRow span,
+body:has(.customerHeader) .waitRow em{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  max-width:100%!important;
+  margin:0 auto!important;
+  padding:0 4px!important;
+  box-sizing:border-box!important;
+
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  font-style:normal!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+}
+
+/* 대기 중인 팀이 없을 때 */
+body:has(.customerHeader) .waitEmpty{
+  min-height:165px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1.15!important;
+  text-align:center!important;
+}
+
+body:has(.customerHeader) .waitEmpty .emptyFace{
+  font-size:48px!important;
+  margin-bottom:10px!important;
+}
+
+/* 관리자 모드 버튼은 항상 기존 기능대로 표시 */
+#switchAdmin{
+  display:inline-flex!important;
 }
 </style>
 
