@@ -2397,49 +2397,30 @@ body:has(.customerHeader) .waitEmpty .emptyFace{
 </style>
 
 
-<style id="JGB_FINAL_CUSTOMER_WAIT_LAYOUT">
-/* 고객용 대기 현황 최종 배치
-   1·2·3번과 4·5번의 카드 가로/세로 크기를 동일하게 유지.
-   4번 바로 오른쪽에 5번 배치하고 오른쪽 2칸은 빈 공간.
-   이용 중 코트 영역 및 관리자 화면은 건드리지 않음.
+<style id="JGB_ONLY_4_5_EQUAL_FINAL">
+/* 최종: 1·2·3번은 현재 배치 그대로 유지.
+   4·5번만 1·2·3번과 동일한 가로 폭으로 변경.
+   4번=2칸, 5번=2칸, 오른쪽 2칸은 빈 공간.
 */
 @media (min-width:901px){
-  body:has(.customerHeader) .waitGrid,
-  body.customer-display .waitGrid{
-    display:grid!important;
+  .waitGrid{
     grid-template-columns:repeat(6,minmax(0,1fr))!important;
     grid-template-areas:
       "a a b b c c"
       "d d e e . ."!important;
     gap:8px!important;
-    width:100%!important;
   }
 
-  body:has(.customerHeader) .waitGrid > .waitCard:nth-child(1),
-  body.customer-display .waitGrid > .waitCard:nth-child(1){grid-area:a!important}
-  body:has(.customerHeader) .waitGrid > .waitCard:nth-child(2),
-  body.customer-display .waitGrid > .waitCard:nth-child(2){grid-area:b!important}
-  body:has(.customerHeader) .waitGrid > .waitCard:nth-child(3),
-  body.customer-display .waitGrid > .waitCard:nth-child(3){grid-area:c!important}
-  body:has(.customerHeader) .waitGrid > .waitCard:nth-child(4),
-  body.customer-display .waitGrid > .waitCard:nth-child(4){grid-area:d!important}
-  body:has(.customerHeader) .waitGrid > .waitCard:nth-child(5),
-  body.customer-display .waitGrid > .waitCard:nth-child(5){grid-area:e!important}
+  .waitCard:nth-child(1){grid-area:a!important}
+  .waitCard:nth-child(2){grid-area:b!important}
+  .waitCard:nth-child(3){grid-area:c!important}
+  .waitCard:nth-child(4){grid-area:d!important}
+  .waitCard:nth-child(5){grid-area:e!important}
 
-  body:has(.customerHeader) .waitGrid > .waitCard,
-  body.customer-display .waitGrid > .waitCard{
-    width:100%!important;
-    min-width:0!important;
-    max-width:none!important;
-    box-sizing:border-box!important;
-  }
-
-  /* 아래 4·5번도 위 1·2·3번과 같은 높이 */
-  body:has(.customerHeader) .waitGrid > .waitCard:nth-child(4),
-  body:has(.customerHeader) .waitGrid > .waitCard:nth-child(5),
-  body.customer-display .waitGrid > .waitCard:nth-child(4),
-  body.customer-display .waitGrid > .waitCard:nth-child(5){
-    height:100%!important;
+  /* 4·5번 세로도 1·2·3번과 동일 */
+  .waitCard:nth-child(4),
+  .waitCard:nth-child(5){
+    height:147px!important;
   }
 }
 </style>
