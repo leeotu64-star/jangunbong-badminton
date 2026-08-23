@@ -4511,4 +4511,142 @@ body:has(.customerHeader) .displayNotice{
 }
 </style>
 
+
+<style id="JGB_FONT_ALIGNMENT_CLEAN_FINAL">
+/* ==========================================================
+   장군봉 고객화면 - 글씨 크기/정렬 정돈 최종
+   핵심: 무조건 크게가 아니라 '읽기 좋은 크기 + 중앙 정렬'
+   이용중은 작게, 대기는 크게 유지
+   ========================================================== */
+
+/* ===== 이용 중 코트 ===== */
+body:has(.customerHeader) .activeHead{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+}
+
+body:has(.customerHeader) .activeTeam,
+body:has(.customerHeader) .activeGame,
+body:has(.customerHeader) .activeLabel,
+body:has(.customerHeader) .activeTime{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  word-break:keep-all!important;
+}
+
+body:has(.customerHeader) .activeTeam{
+  font-size:24px!important;
+  font-weight:900!important;
+}
+
+body:has(.customerHeader) .activeGame{
+  font-size:18px!important;
+  font-weight:900!important;
+}
+
+body:has(.customerHeader) .activeLabel{
+  font-size:12px!important;
+  font-weight:800!important;
+}
+
+body:has(.customerHeader) .activeTime{
+  font-size:19px!important;
+  font-weight:950!important;
+}
+
+/* ===== 대기현황 제목 ===== */
+body:has(.customerHeader) .waitDashboardTitle{
+  display:flex!important;
+  align-items:center!important;
+  text-align:left!important;
+  font-size:34px!important;
+  font-weight:950!important;
+  line-height:1.1!important;
+}
+
+/* ===== 대기 카드 제목 ===== */
+body:has(.customerHeader) .waitCardTitle{
+  display:flex!important;
+  align-items:center!important;
+  text-align:left!important;
+  font-size:24px!important;
+  font-weight:950!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+}
+
+/* ===== 대기 표 머리글 ===== */
+body:has(.customerHeader) .waitTableHead{
+  display:grid!important;
+  align-items:center!important;
+  text-align:center!important;
+  font-size:15px!important;
+  font-weight:900!important;
+  line-height:1.1!important;
+}
+
+/* ===== 실제 대기팀 행 ===== */
+body:has(.customerHeader) .waitRow{
+  display:grid!important;
+  align-items:center!important;
+  text-align:center!important;
+  font-size:24px!important;
+  font-weight:900!important;
+  line-height:1.15!important;
+}
+
+/* 행 내부 모든 셀 중앙 정렬 */
+body:has(.customerHeader) .waitRow > *,
+body:has(.customerHeader) .waitTableHead > *{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  min-width:0!important;
+}
+
+/* ===== 대기자가 없을 때 ===== */
+body:has(.customerHeader) .waitEmpty{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  font-size:30px!important;
+  font-weight:950!important;
+  line-height:1.2!important;
+  white-space:nowrap!important;
+}
+
+body:has(.customerHeader) .emptyFace{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:42px!important;
+  line-height:1!important;
+  margin:0 0 10px!important;
+}
+
+/* 대기 카드 내부 여백 정돈 */
+body:has(.customerHeader) .waitCard{
+  box-sizing:border-box!important;
+}
+
+body:has(.customerHeader) .waitCardTitle,
+body:has(.customerHeader) .waitTableHead,
+body:has(.customerHeader) .waitRow,
+body:has(.customerHeader) .waitEmpty{
+  overflow:hidden!important;
+  word-break:keep-all!important;
+  overflow-wrap:normal!important;
+}
+</style>
+
 </body></html>
