@@ -3409,4 +3409,89 @@ main.customerWrap .displayNotice{
 }
 </style>
 
+
+<style id="JGB_WAIT_TEXT_4X_FORCE_FINAL">
+/* ==========================================================
+   장군봉 고객화면 - 대기현황 글씨 4배 강제 확대
+   대기현황 부분만 수정.
+   코트/스마트폰 등록/관리자/DB/QR 기능은 건드리지 않음.
+   ========================================================== */
+
+/* 대기현황 제목 */
+.waitDashboardTitle{
+  font-size:4em!important;
+  font-weight:900!important;
+  line-height:1.1!important;
+}
+
+/* 각 코트 대기현황 제목 */
+.waitCardTitle{
+  font-size:4em!important;
+  font-weight:900!important;
+  line-height:1.1!important;
+}
+
+/* 표 머리글 */
+.waitTableHead{
+  font-size:4em!important;
+  font-weight:900!important;
+  line-height:1.1!important;
+}
+
+/* 대기 팀 행 */
+.waitRow{
+  font-size:4em!important;
+  font-weight:900!important;
+  line-height:1.1!important;
+}
+
+/* 대기 팀 없음 */
+.waitEmpty{
+  font-size:4em!important;
+  font-weight:900!important;
+  line-height:1.1!important;
+}
+
+/* 대기 없음 아이콘 */
+.emptyFace{
+  font-size:4em!important;
+}
+
+/* 대기현황 안쪽 텍스트까지 강제 확대 */
+.waitDashboard .waitCardTitle,
+.waitDashboard .waitTableHead,
+.waitDashboard .waitRow,
+.waitDashboard .waitEmpty,
+.waitDashboard .waitEmpty *{
+  font-size:4em!important;
+  font-weight:900!important;
+  line-height:1.1!important;
+}
+
+/* 글씨가 확대되어도 박스 밖으로 잘리지 않도록 높이 확보 */
+.waitDashboard{
+  overflow:visible!important;
+}
+
+.waitCard{
+  min-height:220px!important;
+  height:220px!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+
+/* 표 영역 */
+.waitTable{
+  overflow:visible!important;
+}
+
+/* 화면 폭에 맞춰 긴 문장은 줄바꿈 */
+.waitCardTitle,
+.waitTableHead,
+.waitRow,
+.waitEmpty{
+  word-break:keep-all!important;
+}
+</style>
+
 </body></html>
