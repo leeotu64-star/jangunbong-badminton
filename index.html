@@ -784,13 +784,21 @@ function changeCooldown(delta){
 async function saveAdmin(){
   try{
     let s=await get();
-    s.settings["난타"]=Math.max(1,Math.min(20,Number(document.getElementById("g1").textContent)));
-    s.settings["4인 복식"]=Math.max(1,Math.min(20,Number(document.getElementById("g2").textContent)));
-    s.settings["2인 단식"]=Math.max(1,Math.min(20,Number(document.getElementById("g3").textContent)));
-    s.max_per_court=Math.max(1,Math.min(20,Number(document.getElementById("mx").textContent)));
-    s.re_register_minutes=Math.max(1,Math.min(20,Number(document.getElementById("rc").textContent)));
+    const reRegisterMinutes=Math.max(1,Math.min(20,Number(document.getElementById("rc").textContent||5)));
+    s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
+    s.settings["난타"]=Math.max(1,Math.min(20,Number(document.getElementById("g1").textContent||15)));
+    s.settings["4인 복식"]=Math.max(1,Math.min(20,Number(document.getElementById("g2").textContent||15)));
+    s.settings["2인 단식"]=Math.max(1,Math.min(20,Number(document.getElementById("g3").textContent||15)));
+    s.max_per_court=Math.max(1,Math.min(20,Number(document.getElementById("mx").textContent||5)));
+    s.re_register_minutes=reRegisterMinutes;
+
+    // 게임시간/정원과 함께 재등록 제한시간도 waiting_state에 확실히 저장
     await save(s);
-    alert("변경사항이 저장되었습니다.");
+
+    // 저장 직후 DB에서 다시 읽어 화면을 갱신하여 5분으로 되돌아가는 현상 방지
+    const saved=await get();
+    renderAdmin(saved);
+    alert("변경사항이 저장되었습니다. 재등록 제한시간: "+(Number(saved.re_register_minutes)||5)+"분");
   }catch(e){showError(e)}
 }
 async function block(id,b){
