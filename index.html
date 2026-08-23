@@ -1316,6 +1316,21 @@ body.customer-display .wait-empty,
 
 </style>
 
+
+<style id="JGB_HISTORY_MANUAL_BUTTON">
+#reRegister .jgbHistoryManual{
+  display:block!important;
+  margin-top:10px!important;
+  background:#e11d2e!important;
+  border-color:#e11d2e!important;
+  color:#fff!important;
+  font-weight:900!important;
+}
+#reRegister .jgbHistoryManual:hover{
+  filter:brightness(.94)!important;
+}
+</style>
+
 </head><body>
 <div id="app"></div>
 <script>
@@ -1467,6 +1482,12 @@ function resetHistoryForNewDay(s){
   s.finished=s.finished||{};
   const today=kstDateKey();
   if(s.finished._historyDate!==today){
+    const keep={};
+    for(const [k,v] of Object.entries(s.finished)){
+      if(k==="_historyDate"||k==="_history")continue;
+      if(v && typeof v==="object" && v.source!=="qr") keep[k]=v;
+    }
+    s.finished=keep;
     s.finished._historyDate=today;
     s.finished._history={};
     return true;
@@ -1481,7 +1502,7 @@ async function advance(s,doSave=true){
     if(c.active && Date.now()>=Number(c.active.endAt)){
       const a=c.active;
       const endedAt=Date.now();
-      const record={...a,endedAt};
+      const record={...a,source:"qr",endedAt};
       s.finished[a.ticket]=record;
       s.finished._history=s.finished._history||{};
       s.finished._history[a.ticket]=record;
@@ -1756,7 +1777,8 @@ async function reg(){
       game:gg,
       court:id,
       createdAt:Date.now(),
-      deviceId:deviceId
+      deviceId:deviceId,
+      source:"qr"
     });
 
     // 1번 등록자는 즉시 이용 중(active), 이후 등록자는 대기열(queue)로 들어감
@@ -1900,7 +1922,7 @@ async function leave(){
     resetHistoryForNewDay(s);
     for(const c of s.courts){
       if(c.active?.ticket===ticket){
-        const record={...c.active,endedAt:Date.now()};
+        const record={...c.active,source:"qr",endedAt:Date.now()};
         s.finished[ticket]=record;
         s.finished._history=s.finished._history||{};
         s.finished._history[ticket]=record;
@@ -1928,7 +1950,7 @@ function admin(){
   <button id="switchCustomer" type="button" onclick="switchManagementView('display')">고객용</button>
   <button id="switchAdmin" class="secondary" type="button" onclick="switchManagementView('admin')">관리자 모드</button>
 </div>
-<aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div><button class="save adminSave" onclick="saveGameTime()">게임 시간 변경사항 저장</button></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기 정원 설정</h2><div class="hint">전체 코트에 동일하게 적용됩니다.</div></div></div><div class="controlRow"><div class="controlBox"><h3>대기자 최대 정원</h3><div class="hint" style="margin-bottom:10px">전체 코트 동일 적용 · 1명~20명 (사람 수)</div><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div></div><button class="save adminSave" onclick="saveWaitMax()">변경사항 저장</button></section><section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveCooldown()">변경사항 저장</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section>
+<aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div><button class="save adminSave" onclick="saveGameTime()">게임 시간 변경사항 저장</button></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기 정원 설정</h2><div class="hint">전체 코트에 동일하게 적용됩니다.</div></div></div><div class="controlRow"><div class="controlBox"><h3>대기자 최대 정원</h3><div class="hint" style="margin-bottom:10px">전체 코트 동일 적용 · 1명~20명 (사람 수)</div><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div></div><button class="save adminSave" onclick="saveWaitMax()">변경사항 저장</button></section><section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveCooldown()">변경사항 저장</button><button class="save adminSave jgbHistoryManual" type="button" onclick="resetHistoryOnServer()">이용 기록 수동 삭제</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section>
 <section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
   renderAdmin(cloneDef()); sub(renderAdmin);
 }
@@ -2197,25 +2219,7 @@ function management(){
 </style>
 
 
-<script id="JGB_USAGE_HISTORY_RESET">
-/* 기존 이용 관련 기록을 사이트 상태에서 제거 */
-(async function(){
-  try{
-    const data=await sbGet();
-    if(data && data.finished && Object.keys(data.finished).length){
-      data.finished={};
-      await sbUpsert({
-        id:ROOT,
-        settings:data.settings,
-        max_per_court:data.max_per_court,
-        re_register_minutes:data.re_register_minutes,
-        finished:{},
-        courts:data.courts
-      });
-    }
-  }catch(e){ console.warn("usage history reset skipped",e); }
-})();
-</script>
+
 
 
 <style id="JGB_WAIT_FINAL_45PX">
@@ -2695,5 +2699,31 @@ body:has(.customerHeader) .waitControl b{
   min-height:38px!important;
 }
 </style>
+
+
+<script id="JGB_SERVER_HISTORY_RPC">
+async function resetHistoryOnServer(){
+  if(!confirm("QR로 등록되어 완료된 이용 기록만 서버에서 삭제할까요?\n현재 이용 중/대기 중인 팀은 삭제하지 않습니다."))return;
+  try{
+    const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/reset_qr_usage_history",{
+      method:"POST",
+      headers:{
+        "apikey":SUPABASE_ANON_KEY,
+        "Authorization":"Bearer "+SUPABASE_ANON_KEY,
+        "Content-Type":"application/json"
+      },
+      body:"{}"
+    });
+    const t=await r.text();
+    if(!r.ok)throw new Error(t||("RPC 오류 "+r.status));
+    const s=await get();
+    renderAdmin(s);
+    alert("QR 이용 기록만 삭제되었습니다.");
+  }catch(e){
+    alert("서버 기능 설정이 필요합니다. Supabase SQL을 먼저 실행해주세요.");
+    console.error(e);
+  }
+}
+</script>
 
 </body></html>
