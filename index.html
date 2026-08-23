@@ -1333,6 +1333,62 @@ body.customer-display .wait-row{
 }
 </style>
 
+
+<style id="JGB_WAIT_RATIO_FINAL_FIX">
+/* ===== 최종 비율 수정: 위 3개 / 아래 2개를 정확히 50:50 ===== */
+body.customer-display .waitDashboard,
+body:has(.customerHeader) .waitDashboard{
+  display:flex!important;
+  flex-direction:column!important;
+  height:calc(100vh - 390px)!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow:hidden!important;
+}
+
+body.customer-display .waitGrid,
+body:has(.customerHeader) .waitGrid{
+  flex:1 1 auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  grid-template-rows:minmax(0,1fr) minmax(0,1fr)!important;
+  grid-template-areas:"a a b b c c" "d d d e e e"!important;
+  gap:5px!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:auto!important;
+  max-height:none!important;
+}
+
+body.customer-display .waitGrid > *,
+body:has(.customerHeader) .waitGrid > *{
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  align-self:stretch!important;
+}
+
+body.customer-display .waitGrid .waitCard,
+body:has(.customerHeader) .waitGrid .waitCard{
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+}
+
+body.customer-display .waitGrid .waitEmpty,
+body:has(.customerHeader) .waitGrid .waitEmpty{
+  height:calc(100% - 47px)!important;
+  min-height:0!important;
+  max-height:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+</style>
 </head><body>
 <div id="app"></div>
 <script>
