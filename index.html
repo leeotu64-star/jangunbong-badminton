@@ -926,6 +926,150 @@ body.customer-display .wait-row{
 }
 </style>
 
+
+<style id="JGB_WAIT_VERTICAL_COMPACT">
+/* 대기현황의 세로 비율만 줄여서 45pt 글씨가 카드 안에 들어오게 함 */
+/* 가로 배치: 위 3개 / 아래 2개는 그대로 유지 */
+
+body:has(.customerHeader) .waitGrid,
+body.customer-display .waitGrid,
+body:has(.customerHeader) .waitSection .grid,
+body.customer-display .waitSection .grid{
+  grid-auto-rows:minmax(0,1fr)!important;
+  row-gap:4px!important;
+}
+
+/* 위쪽 3개 */
+body:has(.customerHeader) .waitGrid > :nth-child(-n+3),
+body.customer-display .waitGrid > :nth-child(-n+3),
+body:has(.customerHeader) .waitSection .grid > :nth-child(-n+3),
+body.customer-display .waitSection .grid > :nth-child(-n+3){
+  min-height:165px!important;
+  height:165px!important;
+  max-height:165px!important;
+}
+
+/* 아래쪽 2개 */
+body:has(.customerHeader) .waitGrid > :nth-child(n+4),
+body.customer-display .waitGrid > :nth-child(n+4),
+body:has(.customerHeader) .waitSection .grid > :nth-child(n+4),
+body.customer-display .waitSection .grid > :nth-child(n+4){
+  min-height:165px!important;
+  height:165px!important;
+  max-height:165px!important;
+}
+
+/* 빈 대기 안내도 카드 안에서 잘리지 않도록 */
+body:has(.customerHeader) .waitEmpty,
+body.customer-display .wait-empty{
+  min-height:120px!important;
+  height:120px!important;
+  max-height:120px!important;
+  padding:8px!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+}
+
+/* 45pt(60px) 글씨는 그대로 유지하되 줄바꿈/잘림 방지 */
+body:has(.customerHeader) .waitEmpty,
+body.customer-display .wait-empty{
+  font-size:60px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+
+/* 실제 데이터 행은 한 줄 높이로 정리 */
+body:has(.customerHeader) .waitRow,
+body.customer-display .wait-row{
+  min-height:72px!important;
+  height:72px!important;
+  max-height:72px!important;
+  overflow:hidden!important;
+}
+</style>
+
+
+<style id="JGB_WAIT_USE_BOTTOM_SPACE">
+/* 화면 아래 남는 공간까지 대기현황이 사용하도록 높이 재배치 */
+/* 위 3개는 적당히, 아래 2개는 남는 공간을 더 크게 사용 */
+
+body:has(.customerHeader) .waitGrid,
+body.customer-display .waitGrid,
+body:has(.customerHeader) .waitSection .grid,
+body.customer-display .waitSection .grid{
+  grid-template-rows:165px minmax(220px,1fr)!important;
+  height:calc(100vh - 330px)!important;
+  min-height:385px!important;
+  max-height:calc(100vh - 330px)!important;
+  gap:5px!important;
+}
+
+/* 위 3개 */
+body:has(.customerHeader) .waitGrid > :nth-child(1),
+body:has(.customerHeader) .waitGrid > :nth-child(2),
+body:has(.customerHeader) .waitGrid > :nth-child(3),
+body.customer-display .waitGrid > :nth-child(1),
+body.customer-display .waitGrid > :nth-child(2),
+body.customer-display .waitGrid > :nth-child(3),
+body:has(.customerHeader) .waitSection .grid > :nth-child(1),
+body:has(.customerHeader) .waitSection .grid > :nth-child(2),
+body:has(.customerHeader) .waitSection .grid > :nth-child(3),
+body.customer-display .waitSection .grid > :nth-child(1),
+body.customer-display .waitSection .grid > :nth-child(2),
+body.customer-display .waitSection .grid > :nth-child(3){
+  grid-row:1!important;
+  min-height:165px!important;
+  height:165px!important;
+  max-height:165px!important;
+}
+
+/* 아래 2개: 남는 세로 공간을 모두 사용 */
+body:has(.customerHeader) .waitGrid > :nth-child(4),
+body:has(.customerHeader) .waitGrid > :nth-child(5),
+body.customer-display .waitGrid > :nth-child(4),
+body.customer-display .waitGrid > :nth-child(5),
+body:has(.customerHeader) .waitSection .grid > :nth-child(4),
+body:has(.customerHeader) .waitSection .grid > :nth-child(5),
+body.customer-display .waitSection .grid > :nth-child(4),
+body.customer-display .waitSection .grid > :nth-child(5){
+  grid-row:2!important;
+  min-height:220px!important;
+  height:100%!important;
+  max-height:none!important;
+}
+
+/* 아래 2개 카드 내부도 남는 공간을 사용 */
+body:has(.customerHeader) .waitGrid > :nth-child(n+4) .waitEmpty,
+body.customer-display .waitGrid > :nth-child(n+4) .wait-empty,
+body:has(.customerHeader) .waitSection .grid > :nth-child(n+4) .waitEmpty,
+body.customer-display .waitSection .grid > :nth-child(n+4) .wait-empty{
+  min-height:220px!important;
+  height:calc(100% - 45px)!important;
+  max-height:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+/* 대기 없음 45pt 유지 */
+body:has(.customerHeader) .waitEmpty,
+body.customer-display .wait-empty{
+  font-size:60px!important;
+  font-weight:950!important;
+  line-height:1.1!important;
+}
+
+/* 실제 대기 데이터 45pt 유지 */
+body:has(.customerHeader) .waitRow,
+body.customer-display .wait-row{
+  font-size:60px!important;
+  font-weight:950!important;
+}
+</style>
+
 </head><body>
 <div id="app"></div>
 <script>
