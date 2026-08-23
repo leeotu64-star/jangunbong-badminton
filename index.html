@@ -568,6 +568,105 @@ body.customer-display .displayNotice{
   body.customer-display .wait-grid{grid-template-columns:1fr!important}
 }
 </style>
+
+<style id="customerDisplayFinalLayout">
+body.customer-display .header{
+  display:grid!important;
+  grid-template-columns:minmax(280px,1fr) minmax(470px,2fr) auto!important;
+  gap:16px!important;
+  align-items:center!important;
+  min-height:78px!important;
+}
+body.customer-display .customerBrand{
+  min-width:0!important;
+}
+body.customer-display .customerBrand .brand{
+  white-space:nowrap!important;
+}
+body.customer-display .headerStats{
+  display:grid!important;
+  grid-template-columns:repeat(4,1fr)!important;
+  gap:2px!important;
+  background:#d8e2ef!important;
+  border-radius:7px!important;
+  overflow:hidden!important;
+}
+body.customer-display .headerStats .stat{
+  min-height:54px!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background:#fff!important;
+  padding:5px 7px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  gap:2px!important;
+  font-size:11px!important;
+  line-height:1.05!important;
+}
+body.customer-display .headerStats .stat b{
+  font-size:23px!important;
+}
+body.customer-display .customerClock{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:10px!important;
+  color:#fff!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+}
+body.customer-display .customerClock .customerBtn{
+  background:#1461e8!important;
+  color:#fff!important;
+  border-radius:7px!important;
+  padding:7px 10px!important;
+  text-decoration:none!important;
+  font-size:12px!important;
+  font-weight:900!important;
+}
+body.customer-display .displaySectionTitle{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  height:38px!important;
+  margin:0!important;
+  padding:0 12px!important;
+  font-size:27px!important;
+  font-weight:950!important;
+  color:#0b1e49!important;
+  border-bottom:3px solid #17356e!important;
+}
+body.customer-display .courts{
+  margin-top:8px!important;
+}
+body.customer-display .wait-dashboard{
+  margin-top:9px!important;
+}
+body.customer-display .wait-dashboard-title{
+  height:38px!important;
+  min-height:38px!important;
+  padding:0 9px 7px!important;
+  margin:0 0 7px!important;
+  font-size:27px!important;
+}
+body.customer-display .wait-card{
+  min-height:240px!important;
+}
+body.customer-display .displayNotice{
+  font-size:12px!important;
+}
+@media(max-width:1250px){
+  body.customer-display .header{
+    grid-template-columns:1fr!important;
+    height:auto!important;
+    padding:10px 18px!important;
+  }
+  body.customer-display .customerClock{justify-content:space-between!important}
+}
+</style>
 </head><body>
 <div id="app"></div>
 <script>
@@ -744,10 +843,23 @@ function route(){
 function customer(){
   const app=document.getElementById("app");
   document.body.classList.add("customer-display");
-  app.innerHTML='<header class="header"><div><div class="brand">장군봉 실내배드민턴장</div><div class="sub">현재 대기 현황</div></div><div style="display:flex;align-items:center;gap:12px"><div id="clock"></div><a class="customerBtn" href="?page=admin">관리자</a></div></header><div class="wrap"><div class="stats" id="stats"></div><div class="courts" id="courts"></div><div id="waitDashboard"></div></div>';
+  app.innerHTML=
+    '<header class="header">'+
+      '<div class="customerBrand"><div class="brand">🏸 장군봉 실내배드민턴장</div><div class="sub">현재 대기 현황</div></div>'+
+      '<div class="headerStats" id="stats"></div>'+
+      '<div class="customerClock"><span id="clock"></span><a class="customerBtn" href="?page=admin">관리자</a></div>'+
+    '</header>'+
+    '<div class="wrap">'+
+      '<div class="displaySectionTitle">👥 이용 중 코트</div>'+
+      '<div class="courts" id="courts"></div>'+
+      '<div id="waitDashboard"></div>'+
+    '</div>';
   renderCustomer(cloneDef());
   sub(renderCustomer);
-  setInterval(()=>{const el=document.getElementById("clock");if(el)el.textContent=new Date().toLocaleString("ko-KR",{year:"numeric",month:"2-digit",day:"2-digit",weekday:"short",hour:"2-digit",minute:"2-digit"})},1000);
+  setInterval(()=>{
+    const el=document.getElementById("clock");
+    if(el)el.textContent=new Date().toLocaleString("ko-KR",{year:"numeric",month:"2-digit",day:"2-digit",weekday:"short",hour:"2-digit",minute:"2-digit",hour12:false});
+  },1000);
 }
 function renderCustomer(s){
   const stats=document.getElementById("stats"), courts=document.getElementById("courts"), wd=document.getElementById("waitDashboard");
@@ -780,7 +892,7 @@ function renderCustomer(s){
   }).join('');
 
   wd.innerHTML='<section class="wait-dashboard">'+
-    '<div class="wait-dashboard-title">👥 대기 현황 <span>대기 순서 · 게임 방식 · 예상 대기 시간을 확인하세요.</span></div>'+
+    '<div class="wait-dashboard-title">👥 대기 현황 <span>대기 순서는 등록 순서이며, 게임 완료 또는 취소 시 자동으로 다음 대기가 적용됩니다.</span></div>'+
     '<div class="wait-grid">'+
     s.courts.map((c,i)=>{
       const q=c.queue||[];
