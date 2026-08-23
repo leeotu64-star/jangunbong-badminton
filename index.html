@@ -2416,4 +2416,108 @@ body:has(.customerHeader) .displayNotice{
 }
 </style>
 
+
+<style id="JGB_CUSTOMER_TEXT_10X_FINAL">
+/* ===== 고객 화면 글씨 10배 이상 확대 =====
+   현재 화면을 기준으로 핵심 고객 정보의 가독성을 최우선.
+   가로폭은 줄이고 세로 공간을 크게 사용.
+   관리자/등록/DB/QR 기능은 변경하지 않음.
+*/
+body:has(.customerHeader) .activeCourts{
+  width:82%!important;
+  margin:0 auto!important;
+  gap:5px!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+}
+body:has(.customerHeader) .activeCard{
+  height:720px!important;
+  min-height:720px!important;
+  max-height:720px!important;
+  border-width:4px!important;
+}
+body:has(.customerHeader) .activeHead{
+  height:90px!important;
+  min-height:90px!important;
+  padding:8px 5px!important;
+  font-size:42px!important;
+  font-weight:950!important;
+}
+body:has(.customerHeader) .activeNum{
+  width:54px!important;
+  height:54px!important;
+  font-size:36px!important;
+}
+body:has(.customerHeader) .status{
+  font-size:27px!important;
+  padding:8px 5px!important;
+}
+body:has(.customerHeader) .activeBody{
+  padding:28px 5px!important;
+}
+body:has(.customerHeader) .activeTeam{
+  font-size:58px!important;
+  line-height:1.1!important;
+  min-height:90px!important;
+  margin:16px 0!important;
+  font-weight:950!important;
+}
+body:has(.customerHeader) .activeGame{
+  font-size:42px!important;
+  line-height:1.1!important;
+  min-height:58px!important;
+  font-weight:950!important;
+}
+body:has(.customerHeader) .activeLabel{
+  font-size:30px!important;
+  line-height:1.1!important;
+  margin-top:30px!important;
+  padding-top:18px!important;
+  font-weight:950!important;
+}
+body:has(.customerHeader) .activeTime{
+  font-size:48px!important;
+  line-height:1.1!important;
+  min-height:70px!important;
+  margin-top:7px!important;
+  font-weight:950!important;
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"]{
+  min-height:135px!important;
+  margin-top:28px!important;
+  padding:14px 3px!important;
+  border-width:3px!important;
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:first-child{
+  font-size:25px!important;
+}
+body:has(.customerHeader) .activeBody>div[style*="margin-top:10px"] div:last-child{
+  font-size:54px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+}
+body:has(.customerHeader) .waitDashboardTitle{
+  font-size:28px!important;
+}
+body:has(.customerHeader) .waitCardTitle{
+  font-size:18px!important;
+}
+body:has(.customerHeader) .waitTableHead{
+  font-size:12px!important;
+}
+body:has(.customerHeader) .waitRow{
+  font-size:15px!important;
+}
+body:has(.customerHeader) .waitEmpty{
+  font-size:23px!important;
+}
+body:has(.customerHeader) .displayNotice{
+  font-size:18px!important;
+  min-height:82px!important;
+}
+body:has(.customerHeader) .displayNotice b,
+body:has(.customerHeader) .displayNotice strong{
+  font-size:22px!important;
+}
+</style>
+
 </body></html>
