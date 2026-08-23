@@ -1311,7 +1311,7 @@ function renderAdmin(s){
 (c.active
  ? '<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>'
  : '<p>이용 중 없음</p>')+
-(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+' <button class="smallbtn queueDeleteBtn" onclick="removeWaiting('+c.id+','+i+')">강제 삭제</button></p>').join('')+
+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+' <button type="button" class="smallbtn queueDeleteBtn" onclick="removeWaiting('+c.id+','+i+')">대기 삭제</button></p>').join('')+
 '</div>').join('');
 }
 async function removeWaiting(id,index){
@@ -1836,5 +1836,22 @@ body:has(.customerHeader) .waitEmpty .emptyFace{
   .waitEmpty{height:68px!important;font-size:34px!important;}
   .emptyFace{font-size:24px!important;}
   .displayNotice{height:40px!important;}
+}
+</style>
+
+<style id="JGB_QUEUE_DELETE_VISIBLE_FINAL">
+.adminTable .queueDeleteBtn{
+  display:inline-block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  float:right!important;
+  background:#e53935!important;
+  color:#fff!important;
+  border:0!important;
+  border-radius:6px!important;
+  padding:7px 10px!important;
+  font-size:12px!important;
+  font-weight:900!important;
+  cursor:pointer!important;
 }
 </style>
