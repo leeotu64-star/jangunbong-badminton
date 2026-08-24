@@ -1384,7 +1384,7 @@ async function sbUpsert(row){
   return true;
 }const ROOT="waiting_state";
 const params=new URLSearchParams(location.search);
-const REGISTER_URL=location.origin+location.pathname+"?page=register";
+const REGISTER_URL=location.origin+location.pathname+"#register";
 const ticket=params.get("ticket")||"";
 const colors=["#07854b","#1461e8","#6332d7","#ff7900","#e51e2a"];
 const def={id:ROOT,settings:{"난타":15,"4인 복식":15,"2인 단식":15},max_per_court:5,re_register_minutes:5,finished:{},courts:[1,2,3,4,5].map(id=>({id,blocked:false,active:null,queue:[]}))};
@@ -1535,7 +1535,7 @@ function sub(fn){
 }
 
 /* GitHub Pages compatible routing:
-   /?page=register
+   /#register
    /?page=admin
    /?page=waiting&ticket=...
    Existing /register, /admin, /waiting paths are also supported. */
@@ -1913,7 +1913,7 @@ function renderWaiting(s){
   w.innerHTML='대기 등록 정보가 없습니다.';
 }
 async function cancelWait(){
-  try{let s=await get();for(const c of s.courts)c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);await save(s);location.href="?page=register"}catch(e){showError(e)}
+  try{let s=await get();for(const c of s.courts)c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);await save(s);location.href="#register"}catch(e){showError(e)}
 }
 async function leave(){
   try{
@@ -1934,7 +1934,7 @@ async function leave(){
   }catch(e){showError(e)}
 }
 async function finish(){
-  try{let s=await get();if(s.finished)delete s.finished[ticket];await save(s);location.href="?page=register"}catch(e){showError(e)}
+  try{let s=await get();if(s.finished)delete s.finished[ticket];await save(s);location.href="#register"}catch(e){showError(e)}
 }
 
 function setupAdminNav(){
@@ -2094,7 +2094,7 @@ function management(){
     if(top){
       const links=top.querySelectorAll('a');
       if(links[0]){links[0].href='?page=management&view=display';links[0].textContent='고객용';}
-      if(links[1]){links[1].href='?page=register';links[1].textContent='QR 등록';}
+      if(links[1]){links[1].href='#register';links[1].textContent='QR 등록';}
     }
   }else{
     customer();
@@ -2724,6 +2724,24 @@ async function resetHistoryOnServer(){
     console.error(e);
   }
 }
+</script>
+
+
+<script>
+(function(){
+  function qrRegisterRoute(){
+    if(location.hash === "#register"){
+      try{
+        const u = new URL(location.href);
+        u.hash = "";
+        u.search = "?page=register";
+        history.replaceState(null,"",u.pathname + u.search);
+      }catch(e){}
+    }
+  }
+  qrRegisterRoute();
+  window.addEventListener("hashchange", qrRegisterRoute);
+})();
 </script>
 
 </body></html>
