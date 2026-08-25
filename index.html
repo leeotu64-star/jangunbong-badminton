@@ -1806,8 +1806,9 @@ function nextAutoLabel(state){
       if(x?.nickname) used.add(String(x.nickname));
     }
   }
-  return pool.find(x=>!used.has(x))||null;
+  return pool.find(v=>!used.has(v)) || ("대기"+(used.size+1));
 }
+
 async function reg(){
   const btn=document.getElementById("regBtn"), ee=document.getElementById("e");
   const gg=document.getElementById("g").value;
@@ -1838,10 +1839,7 @@ async function reg(){
     s.max_per_court=Math.max(1,Math.min(20,Number(s.max_per_court||5)));
     s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
     s.finished=s.finished||{};
-
-    /* 대기자 코드는 A~Z, 이후 ㄱ~ㅎ 순서로 자동 배정하며 현재 대기/이용 중인 코드와 중복되지 않음 */
     const nn=nextAutoLabel(s);
-    if(!nn){err("현재 사용할 수 있는 대기자 코드가 없습니다.");return}
 
     /* 서버에 저장된 익명 기기 토큰으로 모든 코트의 중복 대기/이용 여부 검사 */
     const existing=findDeviceRegistration(s,deviceId);
