@@ -2991,49 +2991,124 @@ async function resetHistoryOnServer(){
 
 </body>
 
-<style id="JGB_WAIT_HEADER_ONLY_FINAL">
-/* 대기현황 머리글만 수정
-   - 아래 실제 대기자 행과 동일한 4등분
-   - 순번/팀명/게임 방식/예상 대기시간 정확히 가운데 정렬
-   - 아래 데이터 글씨/기능/레이아웃은 변경하지 않음
-*/
-body:has(.customerHeader) .waitTableHead{
+<style id="JGB_WAIT_COLUMNS_MATCH_FINAL">
+/* 대기현황 머리글과 실제 행의 4개 열을 완전히 동일하게 맞춤 */
+body:has(.customerHeader) .waitTableHead,
+body:has(.customerHeader) .waitRow,
+body.customer-display .waitTableHead,
+body.customer-display .wait-row{
   display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-columns:25% 25% 25% 25%!important;
   width:100%!important;
   min-width:0!important;
+  box-sizing:border-box!important;
+}
+
+/* 머리글 */
+body:has(.customerHeader) .waitTableHead,
+body.customer-display .waitTableHead{
   height:38px!important;
   min-height:38px!important;
-  margin:0!important;
   padding:0!important;
-  box-sizing:border-box!important;
+  margin:0!important;
   align-items:stretch!important;
   justify-items:stretch!important;
   font-size:16px!important;
-  font-weight:900!important;
-  line-height:1!important;
   text-align:center!important;
 }
-body:has(.customerHeader) .waitTableHead > *{
+
+body:has(.customerHeader) .waitTableHead > *,
+body.customer-display .waitTableHead > *{
   width:100%!important;
   min-width:0!important;
   height:100%!important;
-  margin:0!important;
-  padding:0 4px!important;
-  box-sizing:border-box!important;
   display:flex!important;
   align-items:center!important;
   justify-content:center!important;
-  text-align:center!important;
+  box-sizing:border-box!important;
+  padding:0 4px!important;
+  margin:0!important;
   font-size:16px!important;
   font-weight:900!important;
   line-height:1!important;
+  text-align:center!important;
   white-space:nowrap!important;
   overflow:hidden!important;
   border-left:1px solid #9aa9b8!important;
 }
-body:has(.customerHeader) .waitTableHead > *:first-child{
+body:has(.customerHeader) .waitTableHead > *:first-child,
+body.customer-display .waitTableHead > *:first-child{
   border-left:0!important;
+}
+
+/* 실제 대기자 행: 머리글과 똑같은 4칸 */
+body:has(.customerHeader) .waitRow,
+body.customer-display .wait-row{
+  min-height:72px!important;
+  height:72px!important;
+  padding:0!important;
+  margin:0!important;
+  align-items:stretch!important;
+  justify-items:stretch!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+  overflow:hidden!important;
+}
+
+body:has(.customerHeader) .waitRow > *,
+body.customer-display .wait-row > *{
+  width:100%!important;
+  min-width:0!important;
+  height:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  padding:0 4px!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  border-left:1px solid #b7c3cf!important;
+}
+
+/* 첫 칸은 삭제 버튼과 순번을 같은 칸 안에서 중앙 배치 */
+body:has(.customerHeader) .waitRow > *:first-child,
+body.customer-display .wait-row > *:first-child{
+  border-left:0!important;
+  gap:4px!important;
+}
+
+/* 아래 데이터 글씨는 기존 크기를 유지하되 각 열 중앙 */
+body:has(.customerHeader) .waitRow strong,
+body.customer-display .wait-row strong{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+body:has(.customerHeader) .waitRow span,
+body.customer-display .wait-row span{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+body:has(.customerHeader) .waitRow em,
+body.customer-display .wait-row em{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+}
+
+/* 좁은 화면에서도 같은 4칸 비율 유지 */
+@media(max-width:1100px){
+  body:has(.customerHeader) .waitTableHead > *,
+  body.customer-display .waitTableHead > *{
+    font-size:16px!important;
+  }
 }
 </style>
 
