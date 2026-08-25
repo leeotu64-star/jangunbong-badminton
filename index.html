@@ -1534,6 +1534,21 @@ function sub(fn){
   liveTimer=setInterval(refresh,2000);
 }
 
+/* 관리자 설정 화면은 2초 자동 갱신으로 사용자가 누른 +/− 값을 덮어쓰지 않도록
+   서버에서 읽기만 합니다. 저장 버튼을 눌렀을 때만 설정값이 서버에 반영됩니다. */
+function subAdmin(fn){
+  if(liveTimer) clearInterval(liveTimer);
+  const refresh=async()=>{
+    try{
+      fn(await get());
+    }catch(e){
+      showError(e);
+    }
+  };
+  refresh();
+  liveTimer=setInterval(refresh,2000);
+}
+
 /* GitHub Pages compatible routing:
    /#register
    /?page=admin
@@ -1952,7 +1967,7 @@ function admin(){
 </div>
 <aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div><button class="save adminSave" onclick="saveGameTime()">게임 시간 변경사항 저장</button></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기 정원 설정</h2><div class="hint">전체 코트에 동일하게 적용됩니다.</div></div></div><div class="controlRow"><div class="controlBox"><h3>대기자 최대 정원</h3><div class="hint" style="margin-bottom:10px">전체 코트 동일 적용 · 1명~20명 (사람 수)</div><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div></div><button class="save adminSave" onclick="saveWaitMax()">변경사항 저장</button></section><section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveCooldown()">변경사항 저장</button><button class="save adminSave jgbHistoryManual" type="button" onclick="resetHistoryOnServer()">이용 기록 수동 삭제</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section>
 <section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
-  renderAdmin(cloneDef()); sub(renderAdmin);
+  renderAdmin(cloneDef()); subAdmin(renderAdmin);
 }
 function renderAdmin(s){
   const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),rc=document.getElementById("rc"),cs=document.getElementById("cs"),qq=document.getElementById("qq"),hr=document.getElementById("historyRows");
