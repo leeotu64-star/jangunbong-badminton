@@ -1962,9 +1962,9 @@ function renderAdmin(s){
   g3.textContent=Math.max(1,Math.min(20,Number(s.settings["2인 단식"]||15)));
   mx.textContent=Math.max(1,Math.min(20,Number(s.max_per_court||5)));
   rc.textContent=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
-  cs.innerHTML=s.courts.map(c=>'<div class="lockCard"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'현재 잠금':'현재 사용 가능')+'</p><button class="'+(c.blocked?'locked':'open')+'" onclick="block('+c.id+','+(!c.blocked)+')">'+(c.blocked?'잠금 해제':'코트 잠금')+'</button></div>').join('');
+  cs.innerHTML=s.courts.map(c=>'<div class="lockCard"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'현재 잠금':'현재 사용 가능')+'</p><button type="button" class="'+(c.blocked?'locked':'open')+'" onclick="window.jgbBlock('+c.id+','+(!c.blocked)+')">'+(c.blocked?'잠금 해제':'코트 잠금')+'</button></div>').join('');
   const hist=Object.values((s.finished&&s.finished._history)||{}).sort((a,b)=>Number(b.endedAt||0)-Number(a.endedAt||0));
-  hr.innerHTML=hist.length
+  if(hr) hr.innerHTML=hist.length
     ? '<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">코트</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">팀명</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">게임</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">시작</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">종료</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">비고</th></tr></thead><tbody>'
       +hist.map(x=>'<tr><td style="padding:9px;border:1px solid #d5dfeb;text-align:center">'+esc(x.court)+'번</td><td style="padding:9px;border:1px solid #d5dfeb;font-weight:800">'+esc(x.nickname)+'</td><td style="padding:9px;border:1px solid #d5dfeb">'+esc(x.game)+'</td><td style="padding:9px;border:1px solid #d5dfeb;text-align:center">'+esc(x.startTime||tm(x.startAt))+'</td><td style="padding:9px;border:1px solid #d5dfeb;text-align:center">'+esc(x.endTime||tm(x.endAt))+'</td><td style="padding:9px;border:1px solid #d5dfeb;text-align:center">'+(x.forced?'강제 퇴장':'정상 종료')+'</td></tr>').join('')
       +'</tbody></table></div>'
@@ -2065,10 +2065,13 @@ async function saveAdmin(){
 async function block(id,b){
   try{
     let s=await get();
-    s.courts.find(c=>c.id===id).blocked=b;
+    const c=s.courts.find(c=>c.id===id);
+    if(!c)return;
+    c.blocked=!!b;
     await save(s);
   }catch(e){showError(e)}
 }
+window.jgbBlock=function(id,b){ return block(id,b); };
 async function force(id){
   try{
     let s=await get(),c=s.courts.find(c=>c.id===id);
