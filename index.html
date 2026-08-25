@@ -1956,7 +1956,7 @@ function admin(){
 }
 function renderAdmin(s){
   const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),rc=document.getElementById("rc"),cs=document.getElementById("cs"),qq=document.getElementById("qq"),hr=document.getElementById("historyRows");
-  if(!g1||!g2||!g3||!mx||!rc||!cs||!qq||!hr)return;
+  if(!g1||!g2||!g3||!mx||!rc||!cs||!qq)return;
   g1.textContent=Math.max(1,Math.min(20,Number(s.settings["난타"]||15)));
   g2.textContent=Math.max(1,Math.min(20,Number(s.settings["4인 복식"]||15)));
   g3.textContent=Math.max(1,Math.min(20,Number(s.settings["2인 단식"]||15)));
