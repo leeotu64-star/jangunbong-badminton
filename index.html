@@ -1588,18 +1588,10 @@ let adminDraft={g1:15,g2:15,g3:15,mx:5,rc:5};
 function route(){
   const path=location.pathname.replace(/\/+$/,"");
   const page=params.get("page")||"";
-  const hash=(location.hash||"").replace(/^#/,"").toLowerCase();
-
-  /* GitHub Pages에서도 QR 등록 주소가 바로 열리도록 해시 라우팅 지원 */
-  if(hash==="register") return "register";
-  if(hash==="waiting") return "waiting";
-
   if(page==="management") return "management";
   if(path==="/admin" || path.endsWith("/admin") || page==="admin") return "admin";
   if(path==="/register" || path.endsWith("/register") || page==="register") return "register";
   if(path==="/waiting" || path.endsWith("/waiting") || page==="waiting" || ticket) return "waiting";
-
-  /* 기본 주소는 TV/모니터용 실시간 고객 현황 */
   return "customer";
 }
 
@@ -1612,11 +1604,7 @@ function customer(){
       <div><div class="brand">장군봉 실내배드민턴장</div><div class="sub">실시간 대기 현황</div></div>
     </div>
     <div class="customerStats" id="stats"></div>
-    <div class="customerRight">
-      <div id="clock"></div>
-      <a class="customerAdminBtn" href="#register">고객 등록</a>
-      <a class="customerAdminBtn" href="?page=admin">관리자</a>
-    </div>
+    <div class="customerRight"><div id="clock"></div><a class="customerAdminBtn" href="?page=admin">관리자</a></div>
   </header>
   <main class="customerWrap">
     <section>
@@ -1755,9 +1743,6 @@ function register(){
 <div id="registerCooldownNotice" style="text-align:center;font-size:11px;color:#667085;margin-top:8px;line-height:1.45">
   ※ 같은 스마트폰은 중복 대기 등록할 수 없습니다.<br>
   ※ 등록 후 <b id="cooldownMinutes">5분</b> 동안 재등록이 제한됩니다.
-</div>
-        <div style="text-align:center;margin-top:10px">
-  <a href="./" style="display:inline-block;color:#145fe5;text-decoration:none;font-size:12px;font-weight:800">실시간 대기현황 모니터 보기</a>
 </div>
         <div style="text-align:center;font-size:10px;color:#7b8494;margin-top:10px">※ 대기 등록 후 관리자가 확인할 수 있습니다.</div>
       </div>
