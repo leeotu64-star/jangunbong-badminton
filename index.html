@@ -2989,4 +2989,52 @@ async function resetHistoryOnServer(){
 })();
 </script>
 
-</body></html>
+</body>
+
+<style id="JGB_WAIT_HEADER_ONLY_FINAL">
+/* 대기현황 머리글만 수정
+   - 아래 실제 대기자 행과 동일한 4등분
+   - 순번/팀명/게임 방식/예상 대기시간 정확히 가운데 정렬
+   - 아래 데이터 글씨/기능/레이아웃은 변경하지 않음
+*/
+body:has(.customerHeader) .waitTableHead{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  width:100%!important;
+  min-width:0!important;
+  height:38px!important;
+  min-height:38px!important;
+  margin:0!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+  align-items:stretch!important;
+  justify-items:stretch!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+body:has(.customerHeader) .waitTableHead > *{
+  width:100%!important;
+  min-width:0!important;
+  height:100%!important;
+  margin:0!important;
+  padding:0 4px!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  font-size:16px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  border-left:1px solid #9aa9b8!important;
+}
+body:has(.customerHeader) .waitTableHead > *:first-child{
+  border-left:0!important;
+}
+</style>
+
+</html>
