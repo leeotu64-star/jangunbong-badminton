@@ -1586,12 +1586,18 @@ let adminDraft={g1:15,g2:15,g3:15,mx:5,rc:5};
    /?page=waiting&ticket=...
    Existing /register, /admin, /waiting paths are also supported. */
 function route(){
-  const path=location.pathname.replace(/\/+$/,"");
+  const path=location.pathname.replace(/\\/+$/,"");
   const page=params.get("page")||"";
+  const hash=(location.hash||"").replace(/^#/,"").toLowerCase();
+
+  if(hash==="register") return "register";
+  if(hash==="waiting") return "waiting";
   if(page==="management") return "management";
   if(path==="/admin" || path.endsWith("/admin") || page==="admin") return "admin";
   if(path==="/register" || path.endsWith("/register") || page==="register") return "register";
   if(path==="/waiting" || path.endsWith("/waiting") || page==="waiting" || ticket) return "waiting";
+
+  // GitHub Pages 기본 주소는 모니터용 실시간 대기현황
   return "customer";
 }
 
@@ -1604,7 +1610,11 @@ function customer(){
       <div><div class="brand">장군봉 실내배드민턴장</div><div class="sub">실시간 대기 현황</div></div>
     </div>
     <div class="customerStats" id="stats"></div>
-    <div class="customerRight"><div id="clock"></div><a class="customerAdminBtn" href="?page=admin">관리자</a></div>
+    <div class="customerRight">
+      <div id="clock"></div>
+      <a class="customerAdminBtn" href="#register">고객 등록</a>
+      <a class="customerAdminBtn" href="?page=admin">관리자</a>
+    </div>
   </header>
   <main class="customerWrap">
     <section>
@@ -1625,6 +1635,10 @@ function customer(){
   </main>`;
   renderCustomer(cloneDef());
   sub(renderCustomer);
+  if(window.customerVisualTimer) clearInterval(window.customerVisualTimer);
+  window.customerVisualTimer=setInterval(async()=>{
+    try{ renderCustomer(await get()); }catch(e){ console.error(e); }
+  },1000);
   const tick=()=>{
     const el=document.getElementById("clock");
     if(el) el.textContent=new Date().toLocaleString("ko-KR",{year:"numeric",month:"2-digit",day:"2-digit",weekday:"short",hour:"2-digit",minute:"2-digit"});
@@ -1740,6 +1754,7 @@ function register(){
         </div>
         <div id="e" style="display:none;color:#d71920;background:#fff1f1;border:1px solid #ffc9c9;border-radius:8px;padding:10px;font-size:12px;font-weight:800;margin-bottom:10px"></div>
         <button class="btn" id="regBtn" onclick="reg()">대기 등록하기</button>
+<div style="text-align:center;margin-top:10px"><a href="./" style="color:#145fe5;text-decoration:none;font-size:12px;font-weight:800">실시간 대기현황 모니터 보기</a></div>
 <div id="registerCooldownNotice" style="text-align:center;font-size:11px;color:#667085;margin-top:8px;line-height:1.45">
   ※ 같은 스마트폰은 중복 대기 등록할 수 없습니다.<br>
   ※ 등록 후 <b id="cooldownMinutes">5분</b> 동안 재등록이 제한됩니다.
