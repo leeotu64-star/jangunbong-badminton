@@ -1346,6 +1346,26 @@ body.customer-display .wait-empty,
 }
 </style>
 
+<style id="JGB_WAIT_TIME_ALIGN_ONLY">
+/* 고객용 모니터: 예상 대기시간 칸만 정렬/잘림 방지 */
+body:has(.customerHeader) .waitTableHead,
+body:has(.customerHeader) .waitRow{
+  grid-template-columns:78px 1.10fr 1fr 1.45fr!important;
+}
+body:has(.customerHeader) .waitRow em{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-width:0!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+  font-size:42px!important;
+  letter-spacing:-1px!important;
+}
+</style>
 </head><body>
 <div id="app"></div>
 <script>
@@ -1706,8 +1726,8 @@ function renderCustomer(s){
         for(let k=0;k<j;k++) waitSec+=Number(s.settings?.[q[k].game]||15)*60;
         waitSec=Math.max(0,waitSec);
         const wm=Math.floor(waitSec/60), ws=waitSec%60;
-        const waitText=wm>0?`약 ${wm}분 ${String(ws).padStart(2,"0")}초`:`약 ${ws}초`;
-        return `<div class="waitRow" style="grid-template-columns:78px repeat(3,minmax(0,1fr))!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:6px"><button type="button" class="kickBtn" aria-label="대기자 삭제" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:30px!important;height:30px!important;min-width:30px!important;padding:0!important;margin:0!important;border:0!important;border-radius:5px!important;background:#e11d2e!important;color:#fff!important;font-size:20px!important;font-weight:950!important;line-height:30px!important;cursor:pointer!important" onclick="forceRemoveWait(${c.id},'${String(x.ticket||"").replace(/'/g,"\\'")}');event.stopPropagation()">×</button><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>`;
+        const waitText=wm>0?`${wm}분 ${String(ws).padStart(2,"0")}초`:`${ws}초`;
+        return `<div class="waitRow" style="grid-template-columns:78px 1.10fr 1fr 1.45fr!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:6px"><button type="button" class="kickBtn" aria-label="대기자 삭제" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:30px!important;height:30px!important;min-width:30px!important;padding:0!important;margin:0!important;border:0!important;border-radius:5px!important;background:#e11d2e!important;color:#fff!important;font-size:20px!important;font-weight:950!important;line-height:30px!important;cursor:pointer!important" onclick="forceRemoveWait(${c.id},'${String(x.ticket||"").replace(/'/g,"\\'")}');event.stopPropagation()">×</button><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>`;
       }).join(""):`<div class="waitEmpty"><div class="emptyFace" style="color:${color}">☺</div><b>대기 중인 팀이 없습니다.</b></div>`}
     </article>`;
   }).join("");
@@ -1971,7 +1991,7 @@ function renderWaiting(s){
               for(let k=0;k<i;k++) waitSec+=Number(s.settings?.[arr[k].game]||15)*60;
               waitSec=Math.max(0,waitSec);
               const wm=Math.floor(waitSec/60), ws=waitSec%60;
-              const waitText=wm>0?`약 ${wm}분 ${String(ws).padStart(2,"0")}초`:`약 ${ws}초`;
+              const waitText=wm>0?`${wm}분 ${String(ws).padStart(2,"0")}초`:`${ws}초`;
               return `<div class="qrow"><b>${i+1}</b><span>${esc(x.nickname)}${x.ticket===ticket?' <b>(나)</b>':''}</span><span>${waitText} 후 입장</span></div>`;
             }).join("")}
           </div>
