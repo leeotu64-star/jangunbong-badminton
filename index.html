@@ -1550,7 +1550,7 @@ function sub(fn){
   if(liveTimer) clearInterval(liveTimer);
   const refresh=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
   refresh();
-  liveTimer=setInterval(refresh,1000);
+  liveTimer=setInterval(refresh,2000);
 }
 
 /* 관리자 설정 화면은 2초 자동 갱신으로 사용자가 누른 +/− 값을 덮어쓰지 않도록
@@ -1576,7 +1576,7 @@ function subAdmin(fn){
     }
   };
   refresh();
-  liveTimer=setInterval(refresh,1000);
+  liveTimer=setInterval(refresh,2000);
 }
 let adminDraft={g1:15,g2:15,g3:15,mx:5,rc:5};
 
@@ -1586,18 +1586,12 @@ let adminDraft={g1:15,g2:15,g3:15,mx:5,rc:5};
    /?page=waiting&ticket=...
    Existing /register, /admin, /waiting paths are also supported. */
 function route(){
-  const path=location.pathname.replace(/\\/+$/,"");
+  const path=location.pathname.replace(/\/+$/,"");
   const page=params.get("page")||"";
-  const hash=(location.hash||"").replace(/^#/,"").toLowerCase();
-
-  if(hash==="register") return "register";
-  if(hash==="waiting") return "waiting";
   if(page==="management") return "management";
   if(path==="/admin" || path.endsWith("/admin") || page==="admin") return "admin";
   if(path==="/register" || path.endsWith("/register") || page==="register") return "register";
   if(path==="/waiting" || path.endsWith("/waiting") || page==="waiting" || ticket) return "waiting";
-
-  // GitHub Pages 기본 주소는 모니터용 실시간 대기현황
   return "customer";
 }
 
@@ -1610,11 +1604,7 @@ function customer(){
       <div><div class="brand">장군봉 실내배드민턴장</div><div class="sub">실시간 대기 현황</div></div>
     </div>
     <div class="customerStats" id="stats"></div>
-    <div class="customerRight">
-      <div id="clock"></div>
-      <a class="customerAdminBtn" href="#register">고객 등록</a>
-      <a class="customerAdminBtn" href="?page=admin">관리자</a>
-    </div>
+    <div class="customerRight"><div id="clock"></div><a class="customerAdminBtn" href="?page=admin">관리자</a></div>
   </header>
   <main class="customerWrap">
     <section>
@@ -1635,10 +1625,6 @@ function customer(){
   </main>`;
   renderCustomer(cloneDef());
   sub(renderCustomer);
-  if(window.customerVisualTimer) clearInterval(window.customerVisualTimer);
-  window.customerVisualTimer=setInterval(async()=>{
-    try{ renderCustomer(await get()); }catch(e){ console.error(e); }
-  },1000);
   const tick=()=>{
     const el=document.getElementById("clock");
     if(el) el.textContent=new Date().toLocaleString("ko-KR",{year:"numeric",month:"2-digit",day:"2-digit",weekday:"short",hour:"2-digit",minute:"2-digit"});
@@ -1707,11 +1693,8 @@ function renderCustomer(s){
       <div class="waitCardTitle">${c.id}번 코트 대기 현황 <span>(총 ${q.length}팀)</span></div>
       <div class="waitTableHead"><span>순번</span><span>팀명</span><span>게임 방식</span><span>예상 대기시간</span></div>
       ${q.length?q.slice(0,5).map((x,j)=>{
-        let waitSec = c.active?.endAt ? Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/1000)) : 0;
-        for(let k=0;k<j;k++) waitSec += Number(s.settings[q[k].game]||15)*60;
-        const waitMin=Math.floor(waitSec/60), waitRest=waitSec%60;
-        const waitText=String(waitMin).padStart(2,"0")+":"+String(waitRest).padStart(2,"0");
-        return `<div class="waitRow" style="grid-template-columns:78px repeat(3,minmax(0,1fr))!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:6px"><button type="button" class="kickBtn" aria-label="대기자 삭제" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:30px!important;height:30px!important;min-width:30px!important;padding:0!important;margin:0!important;border:0!important;border-radius:5px!important;background:#e11d2e!important;color:#fff!important;font-size:20px!important;font-weight:950!important;line-height:30px!important;cursor:pointer!important" onclick="forceRemoveWait(${c.id},'${String(x.ticket||"").replace(/'/g,"\\'")}');event.stopPropagation()">×</button><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em data-wait-end="${Date.now()+waitSec*1000}">${waitText}</em></div>`;
+        const mins=Math.max(0,Math.round((Number(x.waitMinutes)||((j+1)*17))));
+        return `<div class="waitRow" style="grid-template-columns:78px repeat(3,minmax(0,1fr))!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:6px"><button type="button" class="kickBtn" aria-label="대기자 삭제" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:30px!important;height:30px!important;min-width:30px!important;padding:0!important;margin:0!important;border:0!important;border-radius:5px!important;background:#e11d2e!important;color:#fff!important;font-size:20px!important;font-weight:950!important;line-height:30px!important;cursor:pointer!important" onclick="forceRemoveWait(${c.id},'${String(x.ticket||"").replace(/'/g,"\\'")}');event.stopPropagation()">×</button><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>약 ${mins}분</em></div>`;
       }).join(""):`<div class="waitEmpty"><div class="emptyFace" style="color:${color}">☺</div><b>대기 중인 팀이 없습니다.</b></div>`}
     </article>`;
   }).join("");
@@ -1754,7 +1737,6 @@ function register(){
         </div>
         <div id="e" style="display:none;color:#d71920;background:#fff1f1;border:1px solid #ffc9c9;border-radius:8px;padding:10px;font-size:12px;font-weight:800;margin-bottom:10px"></div>
         <button class="btn" id="regBtn" onclick="reg()">대기 등록하기</button>
-<div style="text-align:center;margin-top:10px"><a href="./" style="color:#145fe5;text-decoration:none;font-size:12px;font-weight:800">실시간 대기현황 모니터 보기</a></div>
 <div id="registerCooldownNotice" style="text-align:center;font-size:11px;color:#667085;margin-top:8px;line-height:1.45">
   ※ 같은 스마트폰은 중복 대기 등록할 수 없습니다.<br>
   ※ 등록 후 <b id="cooldownMinutes">5분</b> 동안 재등록이 제한됩니다.
@@ -1865,7 +1847,6 @@ function waiting(){
   app.innerHTML='<div class="wait"><div class="waithead"><h2>고객용 QR 스마트등록</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
   renderWaiting(cloneDef());
   sub(renderWaiting);
-  startCustomerSecondTicker();
 }
 function renderWaiting(s){
   const w=document.getElementById("w"); if(!w)return;
@@ -1924,15 +1905,13 @@ function renderWaiting(s){
     const arr=c.queue||[];
     const pos=arr.findIndex(x=>x.ticket===ticket)+1;
     const duration=Number(s.settings[q.game]||15);
-    let activeRemainSec=0;
+    let activeRemain=0;
     if(c.active && c.active.endAt){
-      activeRemainSec=Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/1000));
+      activeRemain=Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/60000));
     }
-    const expectedSec=Math.max(0,activeRemainSec+(pos-1)*duration*60);
-    const expectedMin=Math.floor(expectedSec/60), expectedRest=expectedSec%60;
-    const expectedText=String(expectedMin).padStart(2,"0")+":"+String(expectedRest).padStart(2,"0");
+    const expected=Math.max(0,activeRemain+(pos-1)*duration);
     const now=new Date();
-    const eta=new Date(Date.now()+expectedSec*1000);
+    const eta=new Date(Date.now()+expected*60000);
 
     w.innerHTML=`
       <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
@@ -1960,16 +1939,14 @@ function renderWaiting(s){
           </div>
 
           <div style="text-align:center;font-size:11px;color:#333">남은 시간</div>
-          <div class="timer" style="color:#07854b" data-my-wait-end="${Date.now()+expectedSec*1000}">${expectedText}</div>
+          <div class="timer" style="color:#07854b">${String(expected).padStart(2,"0")}:00</div>
 
           <div class="qbox">
             <div class="qtitle">${c.id}번 코트 대기 현황 (총 ${arr.length}팀)</div>
             <div class="qrow" style="font-weight:800"><span>순번</span><span>닉네임</span><span>예상 대기 시간</span></div>
             ${arr.map((x,i)=>{
-              const waitSec=Math.max(0,activeRemainSec+i*duration*60);
-              const waitMin=Math.floor(waitSec/60), waitRest=waitSec%60;
-              const waitText=String(waitMin).padStart(2,"0")+":"+String(waitRest).padStart(2,"0");
-              return `<div class="qrow"><b>${i+1}</b><span>${esc(x.nickname)}${x.ticket===ticket?' <b>(나)</b>':''}</span><span data-q-wait-end="${Date.now()+waitSec*1000}">${waitText}</span></div>`;
+              const wait=Math.max(0,activeRemain+i*duration);
+              return `<div class="qrow"><b>${i+1}</b><span>${esc(x.nickname)}${x.ticket===ticket?' <b>(나)</b>':''}</span><span>약 ${wait}분 후 입장</span></div>`;
             }).join("")}
           </div>
 
@@ -1981,18 +1958,7 @@ function renderWaiting(s){
 
   w.innerHTML='대기 등록 정보가 없습니다.';
 }
-async function startCustomerSecondTicker(){
-  if(window.__customerSecondTicker) clearInterval(window.__customerSecondTicker);
-  const fmt=(sec)=>{sec=Math.max(0,Math.ceil(sec));const m=Math.floor(sec/60),r=sec%60;return String(m).padStart(2,"0")+":"+String(r).padStart(2,"0")};
-  const tick=()=>{
-    document.querySelectorAll("[data-my-wait-end]").forEach(el=>{el.textContent=fmt((Number(el.dataset.myWaitEnd)-Date.now())/1000)});
-    document.querySelectorAll("[data-q-wait-end]").forEach(el=>{el.textContent=fmt((Number(el.dataset.qWaitEnd)-Date.now())/1000)});
-    document.querySelectorAll("[data-wait-end]").forEach(el=>{el.textContent=fmt((Number(el.dataset.waitEnd)-Date.now())/1000)});
-  };
-  tick(); window.__customerSecondTicker=setInterval(tick,1000);
-}
-
-function cancelWait(){
+async function cancelWait(){
   try{let s=await get();for(const c of s.courts)c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);await save(s);location.href="#register"}catch(e){showError(e)}
 }
 async function leave(){
