@@ -1743,7 +1743,7 @@ function register(){
         <div style="font-size:11px;margin-top:5px">QR로 접속하여 대기 등록해주세요.</div>
       </div>
       <div style="background:#fff;border-radius:0 0 18px 18px;padding:20px 18px;box-shadow:0 8px 24px #001b4f18">
-        <div class="field"><label>닉네임 *</label><input id="n" name="queue_nickname" type="text" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="닉네임을 입력해주세요"></div>
+        <div class="field"><label>대기자</label><input id="n" name="queue_nickname" type="text" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="자동으로 배정됩니다"></div>
         <div class="field"><label>게임 방식 *</label>
           <select id="g">
             <option value="">게임 방식을 선택해주세요</option>
@@ -1918,7 +1918,7 @@ function renderWaiting(s){
       </div>
       <div class="doneScreen" style="background:#061b4f;text-align:left">
         <div style="text-align:center;font-size:12px;font-weight:800;margin-bottom:12px">고객용 QR 스마트등록</div>
-        <div class="row"><span style="color:#fff">닉네임</span><b style="color:#fff">${esc(a.nickname)}</b></div>
+        <div class="row"><span style="color:#fff">대기자</span><b style="color:#fff">${esc(a.nickname)}</b></div>
         <div class="row"><span style="color:#fff">선택 코트</span><b style="color:#fff">${a.court}번 코트</b></div>
         <div class="row"><span style="color:#fff">이용 시간</span><b style="color:#fff">${tm(a.startAt)} ~ ${tm(a.endAt)}</b></div>
         <div class="my">
@@ -1965,7 +1965,7 @@ function renderWaiting(s){
 
         <div style="background:#fff;color:#071633;border-radius:12px;padding:12px">
           <div style="font-size:13px;font-weight:900;margin-bottom:8px">내 대기 정보</div>
-          <div class="row"><span>닉네임</span><b>${esc(q.nickname)}</b></div>
+          <div class="row"><span>대기자</span><b>${esc(q.nickname)}</b></div>
           <div class="row"><span>선택 코트</span><b>${q.court}번 코트</b></div>
           <div class="row"><span>이용 시간</span><b>${Number(s.settings?.[q.game]||15)}분</b></div>
 
@@ -1985,7 +1985,7 @@ function renderWaiting(s){
 
           <div class="qbox">
             <div class="qtitle">${c.id}번 코트 대기 현황 (총 ${arr.length}팀)</div>
-            <div class="qrow" style="font-weight:800"><span>순번</span><span>닉네임</span><span>예상 대기 시간</span></div>
+            <div class="qrow" style="font-weight:800"><span>순번</span><span>대기자</span><span>예상 대기 시간</span></div>
             ${arr.map((x,i)=>{
               let waitSec=activeRemainSec;
               for(let k=0;k<i;k++) waitSec+=Number(s.settings?.[arr[k].game]||15)*60;
