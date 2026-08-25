@@ -1743,7 +1743,6 @@ function register(){
         <div style="font-size:11px;margin-top:5px">QR로 접속하여 대기 등록해주세요.</div>
       </div>
       <div style="background:#fff;border-radius:0 0 18px 18px;padding:20px 18px;box-shadow:0 8px 24px #001b4f18">
-        <div class="field"><label>대기자</label><input id="n" name="queue_nickname" type="text" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="자동으로 배정됩니다"></div>
         <div class="field"><label>게임 방식 *</label>
           <select id="g">
             <option value="">게임 방식을 선택해주세요</option>
@@ -1798,9 +1797,19 @@ async function loadRegisterDuration(){
   window.addEventListener("beforeunload",()=>{if(timer)clearInterval(timer)},{once:true});
 }
 
+function nextAutoLabel(state){
+  const pool=[..."ABCDEFGHIJKLMNOPQRSTUVWXYZㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ"];
+  const used=new Set();
+  for(const c of (state?.courts||[])){
+    if(c?.active?.nickname) used.add(String(c.active.nickname));
+    for(const x of (Array.isArray(c?.queue)?c.queue:[])){
+      if(x?.nickname) used.add(String(x.nickname));
+    }
+  }
+  return pool.find(x=>!used.has(x))||null;
+}
 async function reg(){
   const btn=document.getElementById("regBtn"), ee=document.getElementById("e");
-  const nn=document.getElementById("n").value.trim();
   const gg=document.getElementById("g").value;
   const id=Number(document.getElementById("c").value);
   const deviceId=getDeviceToken();
@@ -1811,7 +1820,7 @@ async function reg(){
     btn.disabled=false; btn.style.opacity="1";
   };
 
-  if(!nn||!gg||!id){err("닉네임, 게임 방식, 코트를 모두 선택해주세요.");return}
+  if(!gg||!id){err("게임 방식과 코트를 선택해주세요.");return}
 
   /* 같은 스마트폰의 5분 재등록 제한 */
   const cooldown=getCooldownUntil();
@@ -1829,6 +1838,10 @@ async function reg(){
     s.max_per_court=Math.max(1,Math.min(20,Number(s.max_per_court||5)));
     s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
     s.finished=s.finished||{};
+
+    /* 대기자 코드는 A~Z, 이후 ㄱ~ㅎ 순서로 자동 배정하며 현재 대기/이용 중인 코드와 중복되지 않음 */
+    const nn=nextAutoLabel(s);
+    if(!nn){err("현재 사용할 수 있는 대기자 코드가 없습니다.");return}
 
     /* 서버에 저장된 익명 기기 토큰으로 모든 코트의 중복 대기/이용 여부 검사 */
     const existing=findDeviceRegistration(s,deviceId);
