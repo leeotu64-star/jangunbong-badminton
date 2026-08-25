@@ -2895,4 +2895,87 @@ async function resetHistoryOnServer(){
 })();
 </script>
 
+
+<script id="JGB_ACCESS_GATE">
+(function(){
+  const AUTH_KEY="jgb_route_auth_v1";
+  const SUPABASE_URL="https://jvurwckjumnzzecazgku.supabase.co";
+  const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
+
+  function targetRoute(){
+    const p=new URLSearchParams(location.search);
+    const page=p.get("page")||"";
+    if(page==="admin") return "admin";
+    if(page==="management" && (p.get("view")||"display")==="display") return "display";
+    return "";
+  }
+
+  function authKey(route){ return AUTH_KEY+"_"+route; }
+
+  function isAuthed(route){
+    return localStorage.getItem(authKey(route))==="ok";
+  }
+
+  function showGate(route){
+    if(document.getElementById("jgbAccessGate")) return;
+    const gate=document.createElement("div");
+    gate.id="jgbAccessGate";
+    gate.style.cssText="position:fixed;inset:0;z-index:2147483647;background:#fff;display:flex;align-items:center;justify-content:center;font-family:inherit;";
+    gate.innerHTML='<div style="width:min(420px,88vw);text-align:center;padding:28px;box-sizing:border-box;">'
+      +'<div style="font-size:28px;margin-bottom:12px;">🔒</div>'
+      +'<div style="font-size:22px;font-weight:700;margin-bottom:8px;">접근 확인</div>'
+      +'<div style="font-size:14px;margin-bottom:18px;">비밀번호를 입력해주세요.</div>'
+      +'<input id="jgbGatePw" type="password" inputmode="numeric" autocomplete="off" style="width:100%;box-sizing:border-box;padding:12px;font-size:18px;text-align:center;border:1px solid #ccc;border-radius:8px;">'
+      +'<button id="jgbGateBtn" type="button" style="width:100%;margin-top:12px;padding:12px;font-size:16px;border:0;border-radius:8px;cursor:pointer;">확인</button>'
+      +'<div id="jgbGateErr" style="min-height:20px;margin-top:10px;font-size:13px;"></div>'
+      +'</div>';
+    document.body.appendChild(gate);
+
+    const input=gate.querySelector("#jgbGatePw");
+    const btn=gate.querySelector("#jgbGateBtn");
+    const err=gate.querySelector("#jgbGateErr");
+
+    async function verify(){
+      btn.disabled=true;
+      err.textContent="";
+      try{
+        const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/verify_jgb_route_password",{
+          method:"POST",
+          headers:{
+            "apikey":SUPABASE_ANON_KEY,
+            "Authorization":"Bearer "+SUPABASE_ANON_KEY,
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({p_route:route,p_password:input.value})
+        });
+        const raw=await r.text();
+        let ok=false;
+        try{ ok=raw==="true" || JSON.parse(raw)===true; }catch(_){}
+        if(!r.ok || !ok) throw new Error("비밀번호가 올바르지 않습니다.");
+        localStorage.setItem(authKey(route),"ok");
+        gate.remove();
+      }catch(e){
+        err.textContent=e.message||"인증에 실패했습니다.";
+        input.value="";
+        input.focus();
+      }finally{
+        btn.disabled=false;
+      }
+    }
+    btn.addEventListener("click",verify);
+    input.addEventListener("keydown",e=>{if(e.key==="Enter")verify()});
+    input.focus();
+  }
+
+  function run(){
+    const route=targetRoute();
+    if(!route || isAuthed(route)) return;
+    showGate(route);
+  }
+
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",run);
+  else run();
+})();
+</script>
+
 </body></html>
