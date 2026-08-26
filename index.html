@@ -1727,7 +1727,7 @@ function renderCustomer(s){
         waitSec=Math.max(0,waitSec);
         const wm=Math.floor(waitSec/60), ws=waitSec%60;
         const waitText=wm>0?`${wm}분 ${String(ws).padStart(2,"0")}초`:`${ws}초`;
-        return `<div class="waitRow" style="grid-template-columns:78px 1.10fr 1fr 1.45fr!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:6px"><button type="button" class="kickBtn" aria-label="대기자 삭제" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:30px!important;height:30px!important;min-width:30px!important;padding:0!important;margin:0!important;border:0!important;border-radius:5px!important;background:#e11d2e!important;color:#fff!important;font-size:20px!important;font-weight:950!important;line-height:30px!important;cursor:pointer!important" onclick="forceRemoveWait(${c.id},'${String(x.ticket||"").replace(/'/g,"\\'")}');event.stopPropagation()">×</button><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>`;
+        return `<div class="waitRow" style="grid-template-columns:1.18fr 1fr 1.11fr 1.12fr!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:6px"><button type="button" class="kickBtn" aria-label="대기자 삭제" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:30px!important;height:30px!important;min-width:30px!important;padding:0!important;margin:0!important;border:0!important;border-radius:5px!important;background:#e11d2e!important;color:#fff!important;font-size:20px!important;font-weight:950!important;line-height:30px!important;cursor:pointer!important" onclick="forceRemoveWait(${c.id},'${String(x.ticket||"").replace(/'/g,"\\'")}');event.stopPropagation()">×</button><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>`;
       }).join(""):`<div class="waitEmpty"><div class="emptyFace" style="color:${color}">☺</div><b>대기 중인 팀이 없습니다.</b></div>`}
     </article>`;
   }).join("");
@@ -3016,3 +3016,67 @@ body:has(.customerHeader) .waitRow > em{
   padding-right:0!important;
 }
 </style>
+
+<style id="JGB_WAIT_LEFT_FINAL_V2">
+/* =========================================================
+   대기현황 최종 위치 보정
+   - 글자 크기/색상/기능 변경 없음
+   - 헤더는 기존 중앙 정렬 유지
+   - 실제 데이터(B/게임방식/예상시간)를 각 칸의 왼쪽에 최대한 밀착
+   - 순번 칸은 삭제버튼 + 번호가 자연스럽게 왼쪽부터 배치
+   ========================================================= */
+@media(min-width:1101px){
+  body:has(.customerHeader) .waitRow{
+    grid-template-columns:1.18fr 1fr 1.11fr 1.12fr!important;
+    text-align:left!important;
+  }
+
+  /* 모든 데이터 셀의 중앙정렬을 해제 */
+  body:has(.customerHeader) .waitRow > *{
+    justify-content:flex-start!important;
+    text-align:left!important;
+    padding-left:2px!important;
+    padding-right:0!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+
+  /* 순번: X와 번호를 한 줄로 왼쪽부터 */
+  body:has(.customerHeader) .waitRow .waitControl{
+    justify-content:flex-start!important;
+    align-items:center!important;
+    gap:5px!important;
+    padding-left:0!important;
+    padding-right:0!important;
+    margin:0!important;
+  }
+
+  body:has(.customerHeader) .waitRow .waitControl .kickBtn{
+    flex:0 0 auto!important;
+    margin:0!important;
+  }
+
+  body:has(.customerHeader) .waitRow b{
+    flex:0 0 auto!important;
+    margin:0!important;
+  }
+
+  /* 한글/문자 데이터: 칸 시작점에 최대한 밀착 */
+  body:has(.customerHeader) .waitRow strong,
+  body:has(.customerHeader) .waitRow span,
+  body:has(.customerHeader) .waitRow em{
+    justify-content:flex-start!important;
+    text-align:left!important;
+    margin:0!important;
+    padding-left:2px!important;
+    padding-right:0!important;
+  }
+
+  /* 긴 예상시간이 가운데로 밀리지 않도록 */
+  body:has(.customerHeader) .waitRow em{
+    white-space:nowrap!important;
+    overflow:visible!important;
+  }
+}
+</style>
+
