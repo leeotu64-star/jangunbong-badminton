@@ -1366,6 +1366,28 @@ body:has(.customerHeader) .waitRow em{
   letter-spacing:-1px!important;
 }
 </style>
+
+
+<style id="JGB_GAME_TURN_ALARM_ADMIN">
+#gameTurnAlarm .alarmToggleRow{
+  display:flex;
+  gap:8px;
+}
+#gameTurnAlarm .alarmToggle{
+  border:1px solid #cbd5e1;
+  background:#fff;
+  color:#334155;
+  border-radius:8px;
+  padding:10px 18px;
+  font-weight:900;
+  cursor:pointer;
+}
+#gameTurnAlarm .alarmToggle.active{
+  background:#1769e8;
+  color:#fff;
+  border-color:#1769e8;
+}
+</style>
 </head><body>
 <div id="app"></div>
 <script>
@@ -1599,6 +1621,7 @@ function subAdmin(fn){
   liveTimer=setInterval(refresh,2000);
 }
 let adminDraft={g1:15,g2:15,g3:15,mx:5,rc:5};
+
 
 /* GitHub Pages compatible routing:
    /#register
@@ -2047,18 +2070,85 @@ function setupAdminNav(){
   }));
 }
 
+
+<script id="JGB_GAME_TURN_ALARM_ADMIN_JS">
+let gameTurnAlarmDraft={enabled:true, minutes:5};
+
+function setGameTurnAlarmEnabled(enabled){
+  gameTurnAlarmDraft.enabled=!!enabled;
+  const on=document.getElementById("gameTurnAlarmOn");
+  const off=document.getElementById("gameTurnAlarmOff");
+  if(on)on.classList.toggle("active",gameTurnAlarmDraft.enabled);
+  if(off)off.classList.toggle("active",!gameTurnAlarmDraft.enabled);
+}
+function changeGameTurnAlarmMinutes(delta){
+  const el=document.getElementById("gameTurnAlarmMinutes");
+  if(!el)return;
+  const n=Math.max(1,Math.min(10,Number(el.textContent||5)+delta));
+  el.textContent=n;
+  gameTurnAlarmDraft.minutes=n;
+}
+async function saveGameTurnAlarm(){
+  try{
+    let s=await get();
+    if(!s)s=cloneDef();
+    s.game_turn_alarm_enabled=!!gameTurnAlarmDraft.enabled;
+    s.game_turn_alarm_minutes=Math.max(1,Math.min(10,Number(document.getElementById("gameTurnAlarmMinutes")?.textContent||5)));
+    await saveWithSettings(s);
+    adminSettingsDirty=false;
+    const saved=await get();
+    renderAdmin(saved);
+    alert("게임 차례 알림 설정이 저장되었습니다.");
+  }catch(e){showError(e)}
+}
+</script>
 function admin(){
   const app=document.getElementById("app");
   app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=management&view=display">고객 화면으로</a></div></header><div class="admin"><div id="viewSwitch" class="view-switch" aria-label="관리자 화면 전환">
   <button id="switchCustomer" type="button" onclick="switchManagementView('display')">고객용</button>
   <button id="switchAdmin" class="secondary" type="button" onclick="switchManagementView('admin')">관리자 모드</button>
 </div>
-<aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div><button class="save adminSave" onclick="saveGameTime()">게임 시간 변경사항 저장</button></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기 정원 설정</h2><div class="hint">전체 코트에 동일하게 적용됩니다.</div></div></div><div class="controlRow"><div class="controlBox"><h3>대기자 최대 정원</h3><div class="hint" style="margin-bottom:10px">전체 코트 동일 적용 · 1명~20명 (사람 수)</div><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div></div><button class="save adminSave" onclick="saveWaitMax()">변경사항 저장</button></section><section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveCooldown()">변경사항 저장</button><button class="save adminSave jgbOperationalReset" type="button" onclick="resetOperationalState()">오늘 운영 상태 초기화</button><button class="save adminSave jgbHistoryManual" type="button" onclick="resetHistoryOnServer()">이용 기록 수동 삭제</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section>
+<aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#gameTurnAlarm">게임 차례 알림 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div><button class="save adminSave" onclick="saveGameTime()">게임 시간 변경사항 저장</button></section><section class="panel" id="gameTurnAlarm">
+<div class="adminSectionTitle">
+  <div>
+    <h2>게임 차례 알림 설정</h2>
+    <div class="hint">고객이 게임 차례가 가까워졌을 때 미리 알림을 받을 수 있습니다.</div>
+  </div>
+</div>
+
+<div class="controlRow">
+  <div class="controlBox">
+    <h3>기능 사용 여부</h3>
+    <div class="hint" style="margin-bottom:10px">전체 게임 차례 알림 기능을 켜거나 끕니다.</div>
+    <div class="alarmToggleRow">
+      <button id="gameTurnAlarmOn" class="alarmToggle active" type="button" onclick="setGameTurnAlarmEnabled(true)">사용</button>
+      <button id="gameTurnAlarmOff" class="alarmToggle" type="button" onclick="setGameTurnAlarmEnabled(false)">사용 안 함</button>
+    </div>
+  </div>
+
+  <div class="controlBox">
+    <h3>알림 시간</h3>
+    <div class="hint" style="margin-bottom:10px">게임 차례 몇 분 전에 고객에게 알릴지 설정합니다.</div>
+    <div class="stepper">
+      <button onclick="changeGameTurnAlarmMinutes(-1)">−</button>
+      <strong id="gameTurnAlarmMinutes">5</strong>
+      <span>분 전</span>
+      <button onclick="changeGameTurnAlarmMinutes(1)">+</button>
+    </div>
+  </div>
+</div>
+
+<button class="save adminSave" onclick="saveGameTurnAlarm()">변경사항 저장</button>
+</section>
+<section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveCooldown()">변경사항 저장</button><button class="save adminSave jgbOperationalReset" type="button" onclick="resetOperationalState()">오늘 운영 상태 초기화</button><button class="save adminSave jgbHistoryManual" type="button" onclick="resetHistoryOnServer()">이용 기록 수동 삭제</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section>
 <section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
   adminSettingsDirty=false;
   renderAdmin(cloneDef()); subAdmin(renderAdmin);
 }
 function renderAdmin(s){
+  const alarmEnabled = s.game_turn_alarm_enabled !== false;
+  const alarmMinutes = Math.max(1,Math.min(10,Number(s.game_turn_alarm_minutes||5)));
+  gameTurnAlarmDraft={enabled:alarmEnabled,minutes:alarmMinutes};
   const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),rc=document.getElementById("rc"),cs=document.getElementById("cs"),qq=document.getElementById("qq"),hr=document.getElementById("historyRows");
   if(!g1||!g2||!g3||!mx||!rc||!cs||!qq)return;
   if(!adminSettingsDirty){
@@ -2093,7 +2183,14 @@ async function resetHistory(){
     renderAdmin(await get());
     alert("이용 기록이 초기화되었습니다.");
   }catch(e){showError(e)}
+}  setTimeout(()=>{
+    const m=document.getElementById("gameTurnAlarmMinutes");
+    if(m)m.textContent=alarmMinutes;
+    setGameTurnAlarmEnabled(alarmEnabled);
+  },0);
 }
+
+
 function changeTime(game,delta){
   const el=game==="난타"?document.getElementById("g1"):game==="4인 복식"?document.getElementById("g2"):document.getElementById("g3");
   if(!el)return;
@@ -3079,4 +3176,3 @@ body:has(.customerHeader) .waitRow > em{
   }
 }
 </style>
-
