@@ -2250,13 +2250,13 @@ ensure().catch(e=>console.error(e));
 })();
 </script>
 
-<script id="JGB_MANAGEMENT_VIEW_ROUTE_FIX">
+<script id="JGB_ROUTE_VIEW_SWITCH">
 (function(){
   window.switchManagementView=function(view){
-    const p=new URLSearchParams(location.search);
+    const p=new URLSearchParams(window.location.search);
     p.set("page","management");
-    p.set("view",view==="admin"?"admin":"display");
-    location.href=location.pathname+"?"+p.toString();
+    p.set("view", view==="admin" ? "admin" : "display");
+    window.location.href=window.location.pathname+"?"+p.toString();
   };
 })();
 </script>
@@ -2956,6 +2956,13 @@ async function resetHistoryOnServer(){
 })();
 </script>
 
+<script id="JGB_PAGE_CLASS_MARKER">
+(function(){
+  const p=new URLSearchParams(window.location.search);
+  document.body.classList.toggle("register-page",p.get("page")==="register");
+  document.body.classList.toggle("management-view",p.get("page")==="management");
+})();
+</script>
 </body></html>
 
 <style id="JGB_WAIT_ROW_LEFT_ALIGN_FINAL">
