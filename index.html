@@ -3086,6 +3086,21 @@ async function resetHistoryOnServer(){
 })();
 </script>
 
+
+<script id="JGB_CUSTOMER_SCREEN_NAV_FIX">
+(function(){
+  function fixCustomerLink(){
+    var a=document.querySelector('.adminTop a[href*="page=management"][href*="view=display"]');
+    if(!a) return;
+    a.textContent='고객 화면으로';
+    a.href='?page=management&view=display';
+    a.onclick=null;
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fixCustomerLink);
+  else fixCustomerLink();
+})();
+</script>
+
 </body></html>
 
 
