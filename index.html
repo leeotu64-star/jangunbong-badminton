@@ -1421,196 +1421,196 @@ const DEVICE_KEY="jb_anonymous_device_v1";
 const COOLDOWN_KEY="jb_register_cooldown_until";
 
 function getDeviceToken(){
-try{
-let v=localStorage.getItem(DEVICE_KEY);
-if(!v){
-v=(crypto&&crypto.randomUUID)?crypto.randomUUID():
-("D"+Date.now()+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2));
-localStorage.setItem(DEVICE_KEY,v);
-}
-return v;
-}catch(e){
-return (crypto&&crypto.randomUUID)?crypto.randomUUID():
-("D"+Date.now()+Math.random().toString(36).slice(2));
-}
+  try{
+    let v=localStorage.getItem(DEVICE_KEY);
+    if(!v){
+      v=(crypto&&crypto.randomUUID)?crypto.randomUUID():
+        ("D"+Date.now()+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2));
+      localStorage.setItem(DEVICE_KEY,v);
+    }
+    return v;
+  }catch(e){
+    return (crypto&&crypto.randomUUID)?crypto.randomUUID():
+      ("D"+Date.now()+Math.random().toString(36).slice(2));
+  }
 }
 function getCooldownUntil(){
-try{return Number(localStorage.getItem(COOLDOWN_KEY)||0)}catch(e){return 0}
+  try{return Number(localStorage.getItem(COOLDOWN_KEY)||0)}catch(e){return 0}
 }
 function setCooldown(minutes){
-const ms=Math.max(1,Math.min(20,Number(minutes||5)))*60000;
-try{localStorage.setItem(COOLDOWN_KEY,String(Date.now()+ms))}catch(e){}
+  const ms=Math.max(1,Math.min(20,Number(minutes||5)))*60*1000;
+  try{localStorage.setItem(COOLDOWN_KEY,String(Date.now()+ms))}catch(e){}
 }
 function clearCooldown(){
-try{localStorage.removeItem(COOLDOWN_KEY)}catch(e){}
+  try{localStorage.removeItem(COOLDOWN_KEY)}catch(e){}
 }
 function cooldownMessage(until){
-const leftMs=Math.max(0,until-Date.now());
-const m=Math.ceil(leftMs/60000);
-return m<=1 ? "잠시 후 다시 등록할 수 있습니다." : m+"분 후 다시 등록할 수 있습니다.";
+  const leftMs=Math.max(0,until-Date.now());
+  const m=Math.ceil(leftMs/60000);
+  return m<=1 ? "잠시 후 다시 등록할 수 있습니다." : m+"분 후 다시 등록할 수 있습니다.";
 }
 function findDeviceRegistration(s,deviceId){
-for(const c of (s.courts||[])){
-if(c.active?.deviceId===deviceId) return {type:"active",court,entry.active};
-const q=(c.queue||[]).find(x=>x.deviceId===deviceId);
-if(q) return {type:"queue",court,entry};
-}
-return null;
+  for(const c of (s.courts||[])){
+    if(c.active?.deviceId===deviceId) return {type:"active",court:c,entry:c.active};
+    const q=(c.queue||[]).find(x=>x.deviceId===deviceId);
+    if(q) return {type:"queue",court:c,entry:q};
+  }
+  return null;
 }
 
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&","<":"<",">":">",'"':""","'":"'"}[m]))}
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function tm(t){return new Date(t).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}
 function left(t){let n=Math.max(0,Math.ceil((t-Date.now())/1000));return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0")}
 function cloneDef(){return JSON.parse(JSON.stringify(def))}
 function showError(err){
-const msg=err?.message||String(err||"알 수 없는 오류");
-console.error("Supabase error:",err);
-const box=document.getElementById("app");
-if(box && !box.innerHTML.includes("장군봉 배드민턴")) {
-box.innerHTML='<div style="max-width:720px;margin:60px auto;padding:28px;font-family:Arial;text-align:center"><h2>고객용 QR 스마트등록</h2><p>데이터 연결을 준비하는 중입니다.</p><small>'+esc(msg)+'</small></div>';
-}
+  const msg=err?.message||String(err||"알 수 없는 오류");
+  console.error("Supabase error:",err);
+  const box=document.getElementById("app");
+  if(box && !box.innerHTML.includes("장군봉 배드민턴")) {
+    box.innerHTML='<div style="max-width:720px;margin:60px auto;padding:28px;font-family:Arial;text-align:center"><h2>고객용 QR 스마트등록</h2><p>데이터 연결을 준비하는 중입니다.</p><small>'+esc(msg)+'</small></div>';
+  }
 }
 async function get(){
-const data=await sbGet();
-return data?data();
+  const data=await sbGet();
+  return data?data:cloneDef();
 }
 async function save(s){
-/* 다른 고객 기기의 오래된 상태가 관리자 설정을 덮어쓰지 않도록
-저장 직전에 서버의 최신 설정값을 가져와 설정은 최신값을 보존합니다. */
-const latest=await sbGet();
-const payload={
-id,
-settings?.settings||s.settings||{"난타":15,"4인 복식":15,"2인 단식":15},
-max_per_court(latest?.max_per_court||s.max_per_court||5),
-re_register_minutes.max(1,Math.min(20,Number(latest?.re_register_minutes||s.re_register_minutes||5))),
-finished.finished||{},
-courts.isArray(s.courts)?s.courts:[]
-};
-await sbUpsert(payload);
+  /* 다른 고객 기기의 오래된 상태가 관리자 설정을 덮어쓰지 않도록
+     저장 직전에 서버의 최신 설정값을 가져와 설정은 최신값을 보존합니다. */
+  const latest=await sbGet();
+  const payload={
+    id:ROOT,
+    settings:latest?.settings||s.settings||{"난타":15,"4인 복식":15,"2인 단식":15},
+    max_per_court:Number(latest?.max_per_court||s.max_per_court||5),
+    re_register_minutes:Math.max(1,Math.min(20,Number(latest?.re_register_minutes||s.re_register_minutes||5))),
+    finished:s.finished||{},
+    courts:Array.isArray(s.courts)?s.courts:[]
+  };
+  await sbUpsert(payload);
 }
 
 /* 이용 기록 완전 초기화: 과거 이용기록만 비우고 현재 코트/대기는 유지 */
 async function resetUsageHistory(){
-try{
-const s=await get();
-s.finished={};
-await save(s);
-return true;
-}catch(e){
-console.error("이용 기록 초기화 오류:",e);
-return false;
-}
+  try{
+    const s=await get();
+    s.finished={};
+    await save(s);
+    return true;
+  }catch(e){
+    console.error("이용 기록 초기화 오류:",e);
+    return false;
+  }
 }
 
 async function ensure(){
-const data=await sbGet();
-if(!data) await save(cloneDef());
+  const data=await sbGet();
+  if(!data) await save(cloneDef());
 }
 function kstDateKey(t=Date.now()){
-return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Seoul",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(t));
+  return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Seoul",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(t));
 }
 function resetHistoryForNewDay(s){
-s.finished=s.finished||{};
-const today=kstDateKey();
-if(s.finished._historyDate!==today){
-const keep={};
-for(const [k,v] of Object.entries(s.finished)){
-if(k==="_historyDate"||k==="_history")continue;
-if(v && typeof v==="object" && v.source!=="qr") keep[k]=v;
-}
-s.finished=keep;
-s.finished._historyDate=today;
-s.finished._history={};
-return true;
-}
-if(!s.finished._history) s.finished._history={};
-return false;
+  s.finished=s.finished||{};
+  const today=kstDateKey();
+  if(s.finished._historyDate!==today){
+    const keep={};
+    for(const [k,v] of Object.entries(s.finished)){
+      if(k==="_historyDate"||k==="_history")continue;
+      if(v && typeof v==="object" && v.source!=="qr") keep[k]=v;
+    }
+    s.finished=keep;
+    s.finished._historyDate=today;
+    s.finished._history={};
+    return true;
+  }
+  if(!s.finished._history) s.finished._history={};
+  return false;
 }
 async function advance(s,doSave=true){
-s.finished=s.finished||{};
-let ch=resetHistoryForNewDay(s);
-for(const c of s.courts){
-if(c.active && Date.now()>=Number(c.active.endAt)){
-const a=c.active;
-const endedAt=Date.now();
-const record={...a,source:"qr",endedAt};
-s.finished[a.ticket]=record;
-s.finished._history=s.finished._history||{};
-s.finished._history[a.ticket]=record;
-c.active=null; ch=true;
-}
-if(!c.active && !c.blocked && (c.queue||[]).length){
-const x=c.queue.shift();
-const m=Number(s.settings[x.game]||15);
-const st=Date.now();
-const et=st+m*60000;
-c.active={
-...x,
-startAt,
-endAt,
-startTime(st),
-endTime(et)
-};
-ch=true;
-}
-}
-if(ch && doSave) await save(s);
-return s;
+  s.finished=s.finished||{};
+  let ch=resetHistoryForNewDay(s);
+  for(const c of s.courts){
+    if(c.active && Date.now()>=Number(c.active.endAt)){
+      const a=c.active;
+      const endedAt=Date.now();
+      const record={...a,source:"qr",endedAt};
+      s.finished[a.ticket]=record;
+      s.finished._history=s.finished._history||{};
+      s.finished._history[a.ticket]=record;
+      c.active=null; ch=true;
+    }
+    if(!c.active && !c.blocked && (c.queue||[]).length){
+      const x=c.queue.shift();
+      const m=Number(s.settings[x.game]||15);
+      const st=Date.now();
+      const et=st+m*60000;
+      c.active={
+        ...x,
+        startAt:st,
+        endAt:et,
+        startTime:tm(st),
+        endTime:tm(et)
+      };
+      ch=true;
+    }
+  }
+  if(ch && doSave) await save(s);
+  return s;
 }
 let liveTimer=null;
 function sub(fn){
-if(liveTimer) clearInterval(liveTimer);
-const refresh=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
-refresh();
-liveTimer=setInterval(refresh,1000);
+  if(liveTimer) clearInterval(liveTimer);
+  const refresh=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
+  refresh();
+  liveTimer=setInterval(refresh,1000);
 }
 
 /* 관리자 설정 화면은 2초 자동 갱신으로 사용자가 누른 +/− 값을 덮어쓰지 않도록
-서버에서 읽기만 합니다. 저장 버튼을 눌렀을 때만 설정값이 서버에 반영됩니다. /
+   서버에서 읽기만 합니다. 저장 버튼을 눌렀을 때만 설정값이 서버에 반영됩니다. */
 let adminSettingsDirty=false;
 function subAdmin(fn){
-if(liveTimer) clearInterval(liveTimer);
-const refresh=async()=>{
-try{
-const s=await get();
-fn(s);
-/ +/−로 수정 중이면 입력값은 renderAdmin이 덮어쓰지 않게 유지 */
-if(adminSettingsDirty){
-const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),rc=document.getElementById("rc");
-if(g1)g1.textContent=adminDraft.g1;
-if(g2)g2.textContent=adminDraft.g2;
-if(g3)g3.textContent=adminDraft.g3;
-if(mx)mx.textContent=adminDraft.mx;
-if(rc)rc.textContent=adminDraft.rc;
-}
-}catch(e){
-showError(e);
-}
-};
-refresh();
-liveTimer=setInterval(refresh,2000);
+  if(liveTimer) clearInterval(liveTimer);
+  const refresh=async()=>{
+    try{
+      const s=await get();
+      fn(s);
+      /* +/−로 수정 중이면 입력값은 renderAdmin이 덮어쓰지 않게 유지 */
+      if(adminSettingsDirty){
+        const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),rc=document.getElementById("rc");
+        if(g1)g1.textContent=adminDraft.g1;
+        if(g2)g2.textContent=adminDraft.g2;
+        if(g3)g3.textContent=adminDraft.g3;
+        if(mx)mx.textContent=adminDraft.mx;
+        if(rc)rc.textContent=adminDraft.rc;
+      }
+    }catch(e){
+      showError(e);
+    }
+  };
+  refresh();
+  liveTimer=setInterval(refresh,2000);
 }
 let adminDraft={g1:15,g2:15,g3:15,mx:5,rc:5};
 
 /* GitHub Pages compatible routing:
-/#register
-/?page=admin
-/?page=waiting&ticket=...
-Existing /register, /admin, /waiting paths are also supported. */
+   /#register
+   /?page=admin
+   /?page=waiting&ticket=...
+   Existing /register, /admin, /waiting paths are also supported. */
 function route(){
-const path=location.pathname.replace(//+$/,"");
-const page=params.get("page")||"";
-if(page==="management") return "management";
-if(path==="/admin" || path.endsWith("/admin") || page==="admin") return "admin";
-if(path==="/register" || path.endsWith("/register") || page==="register") return "register";
-if(path==="/waiting" || path.endsWith("/waiting") || page==="waiting" || ticket) return "waiting";
-return "customer";
+  const path=location.pathname.replace(/\/+$/,"");
+  const page=params.get("page")||"";
+  if(page==="management") return "management";
+  if(path==="/admin" || path.endsWith("/admin") || page==="admin") return "admin";
+  if(path==="/register" || path.endsWith("/register") || page==="register") return "register";
+  if(path==="/waiting" || path.endsWith("/waiting") || page==="waiting" || ticket) return "waiting";
+  return "customer";
 }
 
 function customer(){
-const app=document.getElementById("app");
-app.innerHTML=`
-
+  const app=document.getElementById("app");
+  app.innerHTML=`
   <header class="customerHeader">
     <div class="customerBrand">
       <div class="brandIcon">🏸</div>
@@ -1646,72 +1646,72 @@ app.innerHTML=`
 }
 
 async function forceRemoveWait(courtId,ticketId){
-try{
-if(!ticketId)return;
-const s=await get();
-const c=(s.courts||[]).find(x=>Number(x.id)===Number(courtId));
-if(!c)return;
-c.queue=(c.queue||[]).filter(x=>x.ticket!==ticketId);
-await save(s);
-if(typeof renderCustomer==="function")renderCustomer(s);
-if(typeof renderAdmin==="function")renderAdmin(s);
-}catch(e){
-if(typeof showError==="function")showError(e);
-else console.error(e);
-}
+  try{
+    if(!ticketId)return;
+    const s=await get();
+    const c=(s.courts||[]).find(x=>Number(x.id)===Number(courtId));
+    if(!c)return;
+    c.queue=(c.queue||[]).filter(x=>x.ticket!==ticketId);
+    await save(s);
+    if(typeof renderCustomer==="function")renderCustomer(s);
+    if(typeof renderAdmin==="function")renderAdmin(s);
+  }catch(e){
+    if(typeof showError==="function")showError(e);
+    else console.error(e);
+  }
 }
 
 function renderCustomer(s){
-const stats=document.getElementById("stats"), activeEl=document.getElementById("activeCourts"), waitEl=document.getElementById("waitGrid");
-if(!stats||!activeEl||!waitEl)return;
-const activeCount=s.courts.filter(c=>c.active).length;
-const waitCount=s.courts.reduce((n,c)=>n+(c.queue||[]).length,0);
-const peopleCount=s.courts.reduce((n,c)=>
-n+(c.queue||[]).reduce((m,x)=>m+Number(x.people||x.count||1),0),0);
-stats.innerHTML=
+  const stats=document.getElementById("stats"), activeEl=document.getElementById("activeCourts"), waitEl=document.getElementById("waitGrid");
+  if(!stats||!activeEl||!waitEl)return;
+  const activeCount=s.courts.filter(c=>c.active).length;
+  const waitCount=s.courts.reduce((n,c)=>n+(c.queue||[]).length,0);
+  const peopleCount=s.courts.reduce((n,c)=>
+    n+(c.queue||[]).reduce((m,x)=>m+Number(x.people||x.count||1),0),0);
+  stats.innerHTML=`
     <div class="topStat"><span style="color:#145fe5">▣</span><div><small>전체 코트</small><b>5 개</b></div></div>
     <div class="topStat"><span style="color:#07854b">👥</span><div><small>이용 중 코트</small><b>${activeCount} 개</b></div></div>
     <div class="topStat"><span style="color:#ff7900">👥</span><div><small>대기 중 팀</small><b>${waitCount} 팀</b></div></div>
-    <div class="topStat"><span style="color:#6332d7">👥</span><div><small>전체 대기 인원</small><b>${peopleCount} 명</b></div></div>;
+    <div class="topStat"><span style="color:#6332d7">👥</span><div><small>전체 대기 인원</small><b>${peopleCount} 명</b></div></div>`;
 
-activeEl.innerHTML=s.courts.map((c,i)=>{
-const a=c.active,color=colors[i];
-const q=c.queue||[];
-let firstWaitSec=0;
-if(a?.endAt) firstWaitSec=Math.max(0,Math.ceil((Number(a.endAt)-Date.now())/1000));
-return <article class="activeCard" style="--court:${color}">
+  activeEl.innerHTML=s.courts.map((c,i)=>{
+    const a=c.active,color=colors[i];
+    const q=c.queue||[];
+    let firstWaitSec=0;
+    if(a?.endAt) firstWaitSec=Math.max(0,Math.ceil((Number(a.endAt)-Date.now())/1000));
+    return `<article class="activeCard" style="--court:${color}">
       <div class="activeHead">
         <span><b class="activeNum" style="background:${color}">${c.id}</b> ${c.id}번 코트</span>
         <strong class="status" style="background:${a?color:'#718096'}">${a?'이용중':'대기중'}</strong>
       </div>
       <div class="activeBody">
-        ${a?
-<div style="font-size:11px;font-weight:800;color:#53657c">현재 이용 팀</div>
-<div class="activeTeam">${esc(a.nickname)}</div>
-<div class="activeGame">${esc(a.game)}</div>
-<div class="activeLabel">이용 시간</div>
-<div class="activeTime" style="color:${color}">${a.startTime||tm(a.startAt)} ~ ${a.endTime||tm(a.endAt)}</div>
-<div style="margin-top:10px;padding:9px;background:${color}12;border:1px solid ${color}55;border-radius:9px">
-<div style="font-size:10px;color:#53657c">남은 시간</div>
-<div style="font-size:23px;font-weight:950;color:${color}">${left(a.endAt)}</div>
-</div>
-        :
-<div style="font-size:11px;font-weight:800;color:#53657c;margin-top:8px">현재 대기 팀</div>
-<div class="activeTeam">없음</div>
-<div class="activeLabel">예상 대기 시간</div>
-<div class="activeTime" style="color:${color}">${q.length?'약 '+Math.floor(firstWaitSec/60)+'분':'대기 없음'}</div>}
+        ${a?`
+          <div style="font-size:11px;font-weight:800;color:#53657c">현재 이용 팀</div>
+          <div class="activeTeam">${esc(a.nickname)}</div>
+          <div class="activeGame">${esc(a.game)}</div>
+          <div class="activeLabel">이용 시간</div>
+          <div class="activeTime" style="color:${color}">${a.startTime||tm(a.startAt)} ~ ${a.endTime||tm(a.endAt)}</div>
+          <div style="margin-top:10px;padding:9px;background:${color}12;border:1px solid ${color}55;border-radius:9px">
+            <div style="font-size:10px;color:#53657c">남은 시간</div>
+            <div style="font-size:23px;font-weight:950;color:${color}">${left(a.endAt)}</div>
+          </div>`
+        :`
+          <div style="font-size:11px;font-weight:800;color:#53657c;margin-top:8px">현재 대기 팀</div>
+          <div class="activeTeam">없음</div>
+          <div class="activeLabel">예상 대기 시간</div>
+          <div class="activeTime" style="color:${color}">${q.length?'약 '+Math.floor(firstWaitSec/60)+'분':'대기 없음'}</div>`}
         <div class="courtGraphic" style="--court:${color}"><i></i><i></i><i></i>${a?'<span>🏸</span>':''}</div>
       </div>
-    </article>;
-}).join("");
+    </article>`;
+  }).join("");
 
-waitEl.innerHTML=s.courts.map((c,i)=>{
-const q=c.queue||[],color=colors[i];
-let activeRemainSec=0;
-if(c.active?.endAt){
-activeRemainSec=Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/1000));
-}
-return <article class="waitCard" style="--court:${color}">
+  waitEl.innerHTML=s.courts.map((c,i)=>{
+    const q=c.queue||[],color=colors[i];
+    let activeRemainSec=0;
+    if(c.active?.endAt){
+      activeRemainSec=Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/1000));
+    }
+    return `<article class="waitCard" style="--court:${color}">
       <div class="waitCardTitle">${c.id}번 코트 대기 현황 <span>(총 ${q.length}팀)</span></div>
       <div class="waitTableHead"><span>순번</span><span>팀명</span><span>게임 방식</span><span>예상 대기시간</span></div>
       ${q.length?q.slice(0,5).map((x,j)=>{
@@ -1719,16 +1719,15 @@ return <article class="waitCard" style="--court:${color}">
         for(let k=0;k<j;k++) waitSec+=Number(s.settings?.[q[k].game]||15)*60;
         waitSec=Math.max(0,waitSec);
         const wm=Math.floor(waitSec/60), ws=waitSec%60;
-        const waitText=wm>0?${wm}분 ${String(ws).padStart(2,"0")}초:${ws}초;
-        return <div class="waitRow" style="grid-template-columns:1.18fr 1fr 1.11fr 1.12fr!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:6px"><button type="button" class="kickBtn" aria-label="대기자 삭제" style="display!important;align-items!important;justify-content!important;width:30px!important;height:30px!important;min-width:30px!important;padding:0!important;margin:0!important;border:0!important;border-radius:5px!important;background:#e11d2e!important;color:#fff!important;font-size:20px!important;font-weight:950!important;line-height:30px!important;cursor!important" onclick="forceRemoveWait(${c.id},'${String(x.ticket||"").replace(/'/g,"\'")}');event.stopPropagation()">×</button><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>;
-      }).join(""):<div class="waitEmpty"><div class="emptyFace" style="color:${color}">☺</div><b>대기 중인 팀이 없습니다.</b></div>}
-    </article>;
-}).join("");
+        const waitText=wm>0?`${wm}분 ${String(ws).padStart(2,"0")}초`:`${ws}초`;
+        return `<div class="waitRow" style="grid-template-columns:1.18fr 1fr 1.11fr 1.12fr!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:6px"><button type="button" class="kickBtn" aria-label="대기자 삭제" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:30px!important;height:30px!important;min-width:30px!important;padding:0!important;margin:0!important;border:0!important;border-radius:5px!important;background:#e11d2e!important;color:#fff!important;font-size:20px!important;font-weight:950!important;line-height:30px!important;cursor:pointer!important" onclick="forceRemoveWait(${c.id},'${String(x.ticket||"").replace(/'/g,"\\'")}');event.stopPropagation()">×</button><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>`;
+      }).join(""):`<div class="waitEmpty"><div class="emptyFace" style="color:${color}">☺</div><b>대기 중인 팀이 없습니다.</b></div>`}
+    </article>`;
+  }).join("");
 }
 function register(){
-const app=document.getElementById("app");
-app.innerHTML=`
-
+  const app=document.getElementById("app");
+  app.innerHTML=`
   <div style="min-height:100vh;background:#f4f7fb;padding:14px 12px 28px">
     <div style="max-width:430px;margin:0 auto">
       <div style="background:#061b4f;color:#fff;border-radius:18px 18px 0 0;padding:16px 18px 18px;text-align:center">
@@ -1774,131 +1773,130 @@ app.innerHTML=`
 }
 
 async function loadRegisterDuration(){
-const game=document.getElementById("g"), out=document.getElementById("duration");
-if(!game||!out)return;
-let timer=null;
-const sync=async()=>{
-try{
-const s=await get();
-out.textContent=(s.settings?.[game.value]||15)+"분";
-const cm=document.getElementById("cooldownMinutes");
-if(cm) cm.textContent=(Number(s.re_register_minutes)||5)+"분";
-}catch(e){}
-};
-game.addEventListener("change",sync);
-await sync();
-timer=setInterval(sync,2000);
-window.addEventListener("beforeunload",()=>{if(timer)clearInterval(timer)},{once});
+  const game=document.getElementById("g"), out=document.getElementById("duration");
+  if(!game||!out)return;
+  let timer=null;
+  const sync=async()=>{
+    try{
+      const s=await get();
+      out.textContent=(s.settings?.[game.value]||15)+"분";
+      const cm=document.getElementById("cooldownMinutes");
+      if(cm) cm.textContent=(Number(s.re_register_minutes)||5)+"분";
+    }catch(e){}
+  };
+  game.addEventListener("change",sync);
+  await sync();
+  timer=setInterval(sync,2000);
+  window.addEventListener("beforeunload",()=>{if(timer)clearInterval(timer)},{once:true});
 }
 
 function nextAutoLabel(state){
-const pool=[..."ABCDEFGHIJKLMNOPQRSTUVWXYZㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ"];
-const used=new Set();
-for(const c of (state?.courts||[])){
-if(c?.active?.nickname) used.add(String(c.active.nickname));
-for(const x of (Array.isArray(c?.queue)?c.queue:[])){
-if(x?.nickname) used.add(String(x.nickname));
-}
-}
-return pool.find(v=>!used.has(v)) || ("대기"+(used.size+1));
+  const pool=[..."ABCDEFGHIJKLMNOPQRSTUVWXYZㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ"];
+  const used=new Set();
+  for(const c of (state?.courts||[])){
+    if(c?.active?.nickname) used.add(String(c.active.nickname));
+    for(const x of (Array.isArray(c?.queue)?c.queue:[])){
+      if(x?.nickname) used.add(String(x.nickname));
+    }
+  }
+  return pool.find(v=>!used.has(v)) || ("대기"+(used.size+1));
 }
 
 async function reg(){
-const btn=document.getElementById("regBtn"), ee=document.getElementById("e");
-const gg=document.getElementById("g").value;
-const id=Number(document.getElementById("c").value);
-const deviceId=getDeviceToken();
+  const btn=document.getElementById("regBtn"), ee=document.getElementById("e");
+  const gg=document.getElementById("g").value;
+  const id=Number(document.getElementById("c").value);
+  const deviceId=getDeviceToken();
 
-const err=(msg)=>{
-ee.style.display="block";
-ee.textContent=msg;
-btn.disabled=false; btn.style.opacity="1";
-};
+  const err=(msg)=>{
+    ee.style.display="block";
+    ee.textContent=msg;
+    btn.disabled=false; btn.style.opacity="1";
+  };
 
-if(!gg||!id){err("게임 방식과 코트를 선택해주세요.");return}
+  if(!gg||!id){err("게임 방식과 코트를 선택해주세요.");return}
 
-/* 같은 스마트폰의 5분 재등록 제한 */
-const cooldown=getCooldownUntil();
-if(cooldown>Date.now()){
-err("⚠️ 이미 등록했습니다. "+cooldownMessage(cooldown));
-return;
-}
+  /* 같은 스마트폰의 5분 재등록 제한 */
+  const cooldown=getCooldownUntil();
+  if(cooldown>Date.now()){
+    err("⚠️ 이미 등록했습니다. "+cooldownMessage(cooldown));
+    return;
+  }
 
-btn.disabled=true; btn.style.opacity=".65"; ee.style.display="none";
+  btn.disabled=true; btn.style.opacity=".65"; ee.style.display="none";
 
-try{
-let s=await get();
-if(!s || !Array.isArray(s.courts)) s=cloneDef();
-s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
-s.max_per_court=Math.max(1,Math.min(20,Number(s.max_per_court||5)));
-s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
-s.finished=s.finished||{};
-const nn=nextAutoLabel(s);
+  try{
+    let s=await get();
+    if(!s || !Array.isArray(s.courts)) s=cloneDef();
+    s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
+    s.max_per_court=Math.max(1,Math.min(20,Number(s.max_per_court||5)));
+    s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
+    s.finished=s.finished||{};
+    const nn=nextAutoLabel(s);
 
-/* 서버에 저장된 익명 기기 토큰으로 모든 코트의 중복 대기/이용 여부 검사 */
-const existing=findDeviceRegistration(s,deviceId);
-if(existing){
-  err("⚠️ 이미 대기 등록되어 있습니다.\n기존 대기를 취소하거나 이용을 마친 후 다시 등록해주세요.");
-  return;
-}
+    /* 서버에 저장된 익명 기기 토큰으로 모든 코트의 중복 대기/이용 여부 검사 */
+    const existing=findDeviceRegistration(s,deviceId);
+    if(existing){
+      err("⚠️ 이미 대기 등록되어 있습니다.\n기존 대기를 취소하거나 이용을 마친 후 다시 등록해주세요.");
+      return;
+    }
 
-const x=s.courts.find(v=>Number(v.id)===id);
-if(!x){err("선택한 코트를 찾을 수 없습니다.");return}
-if(x.blocked){err("현재 이용할 수 없는 코트입니다. 다른 코트를 선택해주세요.");return}
+    const x=s.courts.find(v=>Number(v.id)===id);
+    if(!x){err("선택한 코트를 찾을 수 없습니다.");return}
+    if(x.blocked){err("현재 이용할 수 없는 코트입니다. 다른 코트를 선택해주세요.");return}
 
-x.queue=Array.isArray(x.queue)?x.queue:[];
-const total=x.queue.length+(x.active?1:0);
-if(total>=s.max_per_court){err("선택한 코트의 대기가 마감되었습니다.");return}
+    x.queue=Array.isArray(x.queue)?x.queue:[];
+    const total=x.queue.length+(x.active?1:0);
+    if(total>=s.max_per_court){err("선택한 코트의 대기가 마감되었습니다.");return}
 
-const t=(crypto&&crypto.randomUUID)?crypto.randomUUID():
-  ("T"+Date.now()+Math.random().toString(36).slice(2));
+    const t=(crypto&&crypto.randomUUID)?crypto.randomUUID():
+      ("T"+Date.now()+Math.random().toString(36).slice(2));
 
-/* QR에는 개인정보가 없고, 대기 데이터에도 익명 랜덤 토큰만 저장 */
-x.queue.push({
-  ticket:t,
-  nickname:nn,
-  game:gg,
-  court:id,
-  createdAt:Date.now(),
-  deviceId:deviceId,
-  source:"qr"
-});
+    /* QR에는 개인정보가 없고, 대기 데이터에도 익명 랜덤 토큰만 저장 */
+    x.queue.push({
+      ticket:t,
+      nickname:nn,
+      game:gg,
+      court:id,
+      createdAt:Date.now(),
+      deviceId:deviceId,
+      source:"qr"
+    });
 
-// 1번 등록자는 즉시 이용 중(active), 이후 등록자는 대기열(queue)로 들어감
-await advance(s,false);
+    // 1번 등록자는 즉시 이용 중(active), 이후 등록자는 대기열(queue)로 들어감
+    await advance(s,false);
 
-// 변경된 active/queue 상태와 현재 대기 정원을 서버에 확실히 저장
-await save(s);
+    // 변경된 active/queue 상태와 현재 대기 정원을 서버에 확실히 저장
+    await save(s);
 
-/* 등록 성공 후 관리자에서 설정한 시간 동안 같은 브라우저의 재등록 차단 */
-setCooldown(Number(s.re_register_minutes)||5);
+    /* 등록 성공 후 관리자에서 설정한 시간 동안 같은 브라우저의 재등록 차단 */
+    setCooldown(Number(s.re_register_minutes)||5);
 
-location.replace(location.pathname+"?page=waiting&ticket="+encodeURIComponent(t));
-
-}catch(e){
-console.error(e);
-err(String(e?.message||e));
-}
+    location.replace(location.pathname+"?page=waiting&ticket="+encodeURIComponent(t));
+  }catch(e){
+    console.error(e);
+    err(String(e?.message||e));
+  }
 }
 function waiting(){
-const app=document.getElementById("app");
-app.innerHTML='<div class="wait"><div class="waithead"><h2>고객용 QR 스마트등록</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
-renderWaiting(cloneDef());
-sub(renderWaiting);
+  const app=document.getElementById("app");
+  app.innerHTML='<div class="wait"><div class="waithead"><h2>고객용 QR 스마트등록</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
+  renderWaiting(cloneDef());
+  sub(renderWaiting);
 }
 function renderWaiting(s){
-const w=document.getElementById("w"); if(!w)return;
-let a=null,q=null,c=null,fin=s.finished?.[ticket];
+  const w=document.getElementById("w"); if(!w)return;
+  let a=null,q=null,c=null,fin=s.finished?.[ticket];
 
-for(const x of s.courts){
-if(x.active?.ticket===ticket){a=x.active;c=x}
-const z=(x.queue||[]).find(y=>y.ticket===ticket);
-if(z){q=z;c=x}
-}
+  for(const x of s.courts){
+    if(x.active?.ticket===ticket){a=x.active;c=x}
+    const z=(x.queue||[]).find(y=>y.ticket===ticket);
+    if(z){q=z;c=x}
+  }
 
-/* 3번째 화면: 15분 종료 */
-if(fin){
-w.innerHTML=
+  /* 3번째 화면: 15분 종료 */
+  if(fin){
+    w.innerHTML=`
       <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
         ● 15분 경과 후 퇴장 (자동 안내)
       </div>
@@ -1911,14 +1909,14 @@ w.innerHTML=
       </div>
       <div style="font-size:10px;color:#777;text-align:center;margin-top:8px">
         ※ 퇴장 버튼을 눌러야 다음 대기자가 이용을 시작합니다.
-      </div>;
-return;
-}
+      </div>`;
+    return;
+  }
 
-/* 현재 이용 중 */
-if(a){
-const remain=left(a.endAt);
-w.innerHTML=
+  /* 현재 이용 중 */
+  if(a){
+    const remain=left(a.endAt);
+    w.innerHTML=`
       <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
         ● 15분 경과 후 퇴장 (자동 안내)
       </div>
@@ -1934,121 +1932,119 @@ w.innerHTML=
         </div>
         <div class="timer" style="color:#fff">${remain}</div>
         <button class="btn cancel" onclick="leave()">퇴장하기</button>
-      </div>;
-return;
-}
+      </div>`;
+    return;
+  }
 
-/* 2번째 화면: 대기 중 */
-if(q){
-const arr=c.queue||[];
-const pos=arr.findIndex(x=>x.ticket===ticket)+1;
-let activeRemainSec=0;
-if(c.active?.endAt){
-activeRemainSec=Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/1000));
-}
+  /* 2번째 화면: 대기 중 */
+  if(q){
+    const arr=c.queue||[];
+    const pos=arr.findIndex(x=>x.ticket===ticket)+1;
+    let activeRemainSec=0;
+    if(c.active?.endAt){
+      activeRemainSec=Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/1000));
+    }
 
-let expectedSec=activeRemainSec;
-for(let i=0;i<pos-1;i++){
-  expectedSec+=Number(s.settings?.[arr[i].game]||15)*60;
-}
-expectedSec=Math.max(0,expectedSec);
+    let expectedSec=activeRemainSec;
+    for(let i=0;i<pos-1;i++){
+      expectedSec+=Number(s.settings?.[arr[i].game]||15)*60;
+    }
+    expectedSec=Math.max(0,expectedSec);
 
-const now=new Date();
-const eta=new Date(Date.now()+expectedSec*1000);
-const expectedMin=Math.floor(expectedSec/60);
-const expectedSecPart=expectedSec%60;
-const expectedText=expectedMin>0
-  ? `${expectedMin}분 ${String(expectedSecPart).padStart(2,"0")}초`
-  : `${expectedSecPart}초`;
+    const now=new Date();
+    const eta=new Date(Date.now()+expectedSec*1000);
+    const expectedMin=Math.floor(expectedSec/60);
+    const expectedSecPart=expectedSec%60;
+    const expectedText=expectedMin>0
+      ? `${expectedMin}분 ${String(expectedSecPart).padStart(2,"0")}초`
+      : `${expectedSecPart}초`;
 
-w.innerHTML=`
-  <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
-    ● 개선 화면 (해당 코트만 간결하게)
-  </div>
-  <div class="doneScreen" style="padding:12px 14px;background:#061b4f;text-align:left">
-    <div style="text-align:center;font-size:13px;font-weight:900;margin-bottom:10px">고객용 QR 스마트등록</div>
-    <div style="text-align:center;font-size:10px;margin-bottom:12px">간편하게 코트 대기를 확인하세요.</div>
-
-    <div style="background:#fff;color:#071633;border-radius:12px;padding:12px">
-      <div style="font-size:13px;font-weight:900;margin-bottom:8px">내 대기 정보</div>
-      <div class="row"><span>대기자</span><b>${esc(q.nickname)}</b></div>
-      <div class="row"><span>선택 코트</span><b>${q.court}번 코트</b></div>
-      <div class="row"><span>이용 시간</span><b>${Number(s.settings?.[q.game]||15)}분</b></div>
-
-      <div class="my" style="margin-top:12px">
-        <small>나의 순번</small>
-        <strong>${pos}번</strong>
-        <small>(현재 대기 중)</small>
+    w.innerHTML=`
+      <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
+        ● 개선 화면 (해당 코트만 간결하게)
       </div>
+      <div class="doneScreen" style="padding:12px 14px;background:#061b4f;text-align:left">
+        <div style="text-align:center;font-size:13px;font-weight:900;margin-bottom:10px">고객용 QR 스마트등록</div>
+        <div style="text-align:center;font-size:10px;margin-bottom:12px">간편하게 코트 대기를 확인하세요.</div>
 
-      <div style="display:flex;justify-content:space-between;font-size:11px;margin:10px 2px 4px">
-        <span>착 ${now.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}</span>
-        <span>종료 ${eta.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}</span>
-      </div>
+        <div style="background:#fff;color:#071633;border-radius:12px;padding:12px">
+          <div style="font-size:13px;font-weight:900;margin-bottom:8px">내 대기 정보</div>
+          <div class="row"><span>대기자</span><b>${esc(q.nickname)}</b></div>
+          <div class="row"><span>선택 코트</span><b>${q.court}번 코트</b></div>
+          <div class="row"><span>이용 시간</span><b>${Number(s.settings?.[q.game]||15)}분</b></div>
 
-      <div style="text-align:center;font-size:11px;color:#333">남은 시간</div>
-      <div class="timer" style="color:#07854b">${String(Math.floor(expectedSec/60)).padStart(2,"0")}:${String(expectedSec%60).padStart(2,"0")}</div>
+          <div class="my" style="margin-top:12px">
+            <small>나의 순번</small>
+            <strong>${pos}번</strong>
+            <small>(현재 대기 중)</small>
+          </div>
 
-      <div class="qbox">
-        <div class="qtitle">${c.id}번 코트 대기 현황 (총 ${arr.length}팀)</div>
-        <div class="qrow" style="font-weight:800"><span>순번</span><span>대기자</span><span>예상 대기 시간</span></div>
-        ${arr.map((x,i)=>{
-          let waitSec=activeRemainSec;
-          for(let k=0;k<i;k++) waitSec+=Number(s.settings?.[arr[k].game]||15)*60;
-          waitSec=Math.max(0,waitSec);
-          const wm=Math.floor(waitSec/60), ws=waitSec%60;
-          const waitText=wm>0?`${wm}분 ${String(ws).padStart(2,"0")}초`:`${ws}초`;
-          return `<div class="qrow"><b>${i+1}</b><span>${esc(x.nickname)}${x.ticket===ticket?' <b>(나)</b>':''}</span><span>${waitText} 후 입장</span></div>`;
-        }).join("")}
-      </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin:10px 2px 4px">
+            <span>착 ${now.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}</span>
+            <span>종료 ${eta.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}</span>
+          </div>
 
-      <button class="btn cancel" onclick="cancelWait()">예약 대기 취소</button>
-    </div>
-  </div>`;
-return;
+          <div style="text-align:center;font-size:11px;color:#333">남은 시간</div>
+          <div class="timer" style="color:#07854b">${String(Math.floor(expectedSec/60)).padStart(2,"0")}:${String(expectedSec%60).padStart(2,"0")}</div>
 
-}
+          <div class="qbox">
+            <div class="qtitle">${c.id}번 코트 대기 현황 (총 ${arr.length}팀)</div>
+            <div class="qrow" style="font-weight:800"><span>순번</span><span>대기자</span><span>예상 대기 시간</span></div>
+            ${arr.map((x,i)=>{
+              let waitSec=activeRemainSec;
+              for(let k=0;k<i;k++) waitSec+=Number(s.settings?.[arr[k].game]||15)*60;
+              waitSec=Math.max(0,waitSec);
+              const wm=Math.floor(waitSec/60), ws=waitSec%60;
+              const waitText=wm>0?`${wm}분 ${String(ws).padStart(2,"0")}초`:`${ws}초`;
+              return `<div class="qrow"><b>${i+1}</b><span>${esc(x.nickname)}${x.ticket===ticket?' <b>(나)</b>':''}</span><span>${waitText} 후 입장</span></div>`;
+            }).join("")}
+          </div>
 
-w.innerHTML='대기 등록 정보가 없습니다.';
+          <button class="btn cancel" onclick="cancelWait()">예약 대기 취소</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  w.innerHTML='대기 등록 정보가 없습니다.';
 }
 async function cancelWait(){
-try{let s=await get();for(const c of s.courts)c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);await save(s);location.href="#register"}catch(e){showError(e)}
+  try{let s=await get();for(const c of s.courts)c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);await save(s);location.href="#register"}catch(e){showError(e)}
 }
 async function leave(){
-try{
-let s=await get();
-s.finished=s.finished||{};
-resetHistoryForNewDay(s);
-for(const c of s.courts){
-if(c.active?.ticket===ticket){
-const record={...c.active,source:"qr",endedAt.now()};
-s.finished[ticket]=record;
-s.finished._history=s.finished._history||{};
-s.finished._history[ticket]=record;
-c.active=null;
-}
-}
-await advance(s);
-await save(s);
-}catch(e){showError(e)}
+  try{
+    let s=await get();
+    s.finished=s.finished||{};
+    resetHistoryForNewDay(s);
+    for(const c of s.courts){
+      if(c.active?.ticket===ticket){
+        const record={...c.active,source:"qr",endedAt:Date.now()};
+        s.finished[ticket]=record;
+        s.finished._history=s.finished._history||{};
+        s.finished._history[ticket]=record;
+        c.active=null;
+      }
+    }
+    await advance(s);
+    await save(s);
+  }catch(e){showError(e)}
 }
 async function finish(){
-try{let s=await get();if(s.finished)delete s.finished[ticket];await save(s);location.href="#register"}catch(e){showError(e)}
+  try{let s=await get();if(s.finished)delete s.finished[ticket];await save(s);location.href="#register"}catch(e){showError(e)}
 }
 
 function setupAdminNav(){
-document.querySelectorAll('.side .nav').forEach(a=>a.addEventListener('click',()=>{
-document.querySelectorAll('.side .nav').forEach(x=>x.classList.remove('on'));
-a.classList.add('on');
-}));
+  document.querySelectorAll('.side .nav').forEach(a=>a.addEventListener('click',()=>{
+    document.querySelectorAll('.side .nav').forEach(x=>x.classList.remove('on'));
+    a.classList.add('on');
+  }));
 }
 
 function admin(){
-const app=document.getElementById("app");
-app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=management&view=display">고객 화면으로</a></div></header><div class="admin"><div id="viewSwitch" class="view-switch" aria-label="관리자 화면 전환">
-<button id="switchCustomer" type="button" onclick="switchManagementView('display')">고객용</button>
-<button id="switchAdmin" class="secondary" type="button" onclick="switchManagementView('admin')">관리자 모드</button>
-
+  const app=document.getElementById("app");
+  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=management&view=display">고객 화면으로</a></div></header><div class="admin"><div id="viewSwitch" class="view-switch" aria-label="관리자 화면 전환">
+  <button id="switchCustomer" type="button" onclick="switchManagementView('display')">고객용</button>
+  <button id="switchAdmin" class="secondary" type="button" onclick="switchManagementView('admin')">관리자 모드</button>
 </div>
 <aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div><button class="save adminSave" onclick="saveGameTime()">게임 시간 변경사항 저장</button></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기 정원 설정</h2><div class="hint">전체 코트에 동일하게 적용됩니다.</div></div></div><div class="controlRow"><div class="controlBox"><h3>대기자 최대 정원</h3><div class="hint" style="margin-bottom:10px">전체 코트 동일 적용 · 1명~20명 (사람 수)</div><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div></div><button class="save adminSave" onclick="saveWaitMax()">변경사항 저장</button></section><section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveCooldown()">변경사항 저장</button><button class="save adminSave jgbOperationalReset" type="button" onclick="resetOperationalState()">오늘 운영 상태 초기화</button><button class="save adminSave jgbHistoryManual" type="button" onclick="resetHistoryOnServer()">이용 기록 수동 삭제</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section>
 <section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
@@ -2077,176 +2073,175 @@ function renderAdmin(s){
       +'</tbody></table></div>'
     : '<div style="padding:22px;text-align:center;color:#718096;border:1px dashed #cbd5e1;border-radius:10px">오늘 이용 기록이 없습니다.</div>';
 
-qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
+  qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
 }
 async function resetHistory(){
-if(!confirm("오늘 이용 기록을 모두 초기화할까요?\n현재 이용 중/대기 중인 팀은 삭제하지 않습니다."))return;
-try{
-const s=await get();
-s.finished=s.finished||{};
-s.finished._history={};
-s.finished._historyDate=kstDateKey();
-await save(s);
-renderAdmin(await get());
-alert("이용 기록이 초기화되었습니다.");
-}catch(e){showError(e)}
+  if(!confirm("오늘 이용 기록을 모두 초기화할까요?\n현재 이용 중/대기 중인 팀은 삭제하지 않습니다."))return;
+  try{
+    const s=await get();
+    s.finished=s.finished||{};
+    s.finished._history={};
+    s.finished._historyDate=kstDateKey();
+    await save(s);
+    renderAdmin(await get());
+    alert("이용 기록이 초기화되었습니다.");
+  }catch(e){showError(e)}
 }
 function changeTime(game,delta){
-const el=game==="난타"?document.getElementById("g1")==="4인 복식"?document.getElementById("g2").getElementById("g3");
-if(!el)return;
-const value=Math.max(1,Math.min(20,Number(el.textContent||15)+delta));
-el.textContent=value;
-adminSettingsDirty=true;
-if(game==="난타")adminDraft.g1=value;
-else if(game==="4인 복식")adminDraft.g2=value;
-else adminDraft.g3=value;
+  const el=game==="난타"?document.getElementById("g1"):game==="4인 복식"?document.getElementById("g2"):document.getElementById("g3");
+  if(!el)return;
+  const value=Math.max(1,Math.min(20,Number(el.textContent||15)+delta));
+  el.textContent=value;
+  adminSettingsDirty=true;
+  if(game==="난타")adminDraft.g1=value;
+  else if(game==="4인 복식")adminDraft.g2=value;
+  else adminDraft.g3=value;
 }
 function changeMax(delta){
-const el=document.getElementById("mx"); if(!el)return;
-const value=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
-el.textContent=value; adminDraft.mx=value; adminSettingsDirty=true;
+  const el=document.getElementById("mx"); if(!el)return;
+  const value=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
+  el.textContent=value; adminDraft.mx=value; adminSettingsDirty=true;
 }
 function changeCooldown(delta){
-const el=document.getElementById("rc"); if(!el)return;
-const value=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
-el.textContent=value; adminDraft.rc=value; adminSettingsDirty=true;
+  const el=document.getElementById("rc"); if(!el)return;
+  const value=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
+  el.textContent=value; adminDraft.rc=value; adminSettingsDirty=true;
 }
 
 async function saveWithSettings(s){
-/* 관리자 설정은 해당 필드만 저장하여 고객 상태 저장과 충돌하지 않게 합니다. */
-await sbUpsert({
-id,
-settings.settings,
-max_per_court.max_per_court,
-re_register_minutes.max(1,Math.min(20,Number(s.re_register_minutes||5))),
-finished.finished||{},
-courts.courts
-});
+  /* 관리자 설정은 해당 필드만 저장하여 고객 상태 저장과 충돌하지 않게 합니다. */
+  await sbUpsert({
+    id:ROOT,
+    settings:s.settings,
+    max_per_court:s.max_per_court,
+    re_register_minutes:Math.max(1,Math.min(20,Number(s.re_register_minutes||5))),
+    finished:s.finished||{},
+    courts:s.courts
+  });
 }
 
 async function saveGameTime(){
-try{
-let s=await get();
-s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
-s.settings["난타"]=Math.max(1,Math.min(20,Number(document.getElementById("g1").textContent||15)));
-s.settings["4인 복식"]=Math.max(1,Math.min(20,Number(document.getElementById("g2").textContent||15)));
-s.settings["2인 단식"]=Math.max(1,Math.min(20,Number(document.getElementById("g3").textContent||15)));
-await saveWithSettings(s);
-adminSettingsDirty=false;
-const saved=await get();
-renderAdmin(saved);
-alert("게임 시간 설정이 저장되었습니다.");
-}catch(e){showError(e)}
+  try{
+    let s=await get();
+    s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
+    s.settings["난타"]=Math.max(1,Math.min(20,Number(document.getElementById("g1").textContent||15)));
+    s.settings["4인 복식"]=Math.max(1,Math.min(20,Number(document.getElementById("g2").textContent||15)));
+    s.settings["2인 단식"]=Math.max(1,Math.min(20,Number(document.getElementById("g3").textContent||15)));
+    await saveWithSettings(s);
+    adminSettingsDirty=false;
+    const saved=await get();
+    renderAdmin(saved);
+    alert("게임 시간 설정이 저장되었습니다.");
+  }catch(e){showError(e)}
 }
 
 async function saveWaitMax(){
-try{
-let s=await get();
-if(!s) s=cloneDef();
+  try{
+    let s=await get();
+    if(!s) s=cloneDef();
 
-// 대기 정원만 변경하고 기존 게임시간/재등록시간은 그대로 보존
-const value=Math.max(1,Math.min(20,Number(document.getElementById("mx").textContent||5)));
-s.max_per_court=value;
+    // 대기 정원만 변경하고 기존 게임시간/재등록시간은 그대로 보존
+    const value=Math.max(1,Math.min(20,Number(document.getElementById("mx").textContent||5)));
+    s.max_per_court=value;
 
-await saveWithSettings(s);
-adminSettingsDirty=false;
+    await saveWithSettings(s);
+    adminSettingsDirty=false;
 
-// 저장 후 서버값으로 다시 읽어 5명으로 되돌아가는 현상 방지
-const saved=await get();
-renderAdmin(saved);
+    // 저장 후 서버값으로 다시 읽어 5명으로 되돌아가는 현상 방지
+    const saved=await get();
+    renderAdmin(saved);
 
-alert("대기 정원 설정이 저장되었습니다. 현재 정원: "+Number(saved.max_per_court||value)+"명");
-
-}catch(e){showError(e)}
+    alert("대기 정원 설정이 저장되었습니다. 현재 정원: "+Number(saved.max_per_court||value)+"명");
+  }catch(e){showError(e)}
 }
 
 async function saveCooldown(){
-try{
-let s=await get();
-s.re_register_minutes=Math.max(1,Math.min(20,Number(document.getElementById("rc").textContent||5)));
-await saveWithSettings(s);
-adminSettingsDirty=false;
-const saved=await get();
-renderAdmin(saved);
-alert("재등록 제한 시간이 저장되었습니다.");
-}catch(e){showError(e)}
+  try{
+    let s=await get();
+    s.re_register_minutes=Math.max(1,Math.min(20,Number(document.getElementById("rc").textContent||5)));
+    await saveWithSettings(s);
+    adminSettingsDirty=false;
+    const saved=await get();
+    renderAdmin(saved);
+    alert("재등록 제한 시간이 저장되었습니다.");
+  }catch(e){showError(e)}
 }
 
 async function saveAdmin(){
-try{
-let s=await get();
-const reRegisterMinutes=Math.max(1,Math.min(20,Number(document.getElementById("rc").textContent||5)));
-s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
-s.settings["난타"]=Math.max(1,Math.min(20,Number(document.getElementById("g1").textContent||15)));
-s.settings["4인 복식"]=Math.max(1,Math.min(20,Number(document.getElementById("g2").textContent||15)));
-s.settings["2인 단식"]=Math.max(1,Math.min(20,Number(document.getElementById("g3").textContent||15)));
-s.max_per_court=Math.max(1,Math.min(20,Number(document.getElementById("mx").textContent||5)));
-s.re_register_minutes=reRegisterMinutes;
+  try{
+    let s=await get();
+    const reRegisterMinutes=Math.max(1,Math.min(20,Number(document.getElementById("rc").textContent||5)));
+    s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
+    s.settings["난타"]=Math.max(1,Math.min(20,Number(document.getElementById("g1").textContent||15)));
+    s.settings["4인 복식"]=Math.max(1,Math.min(20,Number(document.getElementById("g2").textContent||15)));
+    s.settings["2인 단식"]=Math.max(1,Math.min(20,Number(document.getElementById("g3").textContent||15)));
+    s.max_per_court=Math.max(1,Math.min(20,Number(document.getElementById("mx").textContent||5)));
+    s.re_register_minutes=reRegisterMinutes;
 
-// 게임시간/정원과 함께 재등록 제한시간도 waiting_state에 확실히 저장
-await save(s);
+    // 게임시간/정원과 함께 재등록 제한시간도 waiting_state에 확실히 저장
+    await save(s);
 
-// 저장 직후 DB에서 다시 읽어 화면을 갱신하여 5분으로 되돌아가는 현상 방지
-const saved=await get();
-renderAdmin(saved);
-alert("변경사항이 저장되었습니다.");
-
-}catch(e){showError(e)}
+    // 저장 직후 DB에서 다시 읽어 화면을 갱신하여 5분으로 되돌아가는 현상 방지
+    const saved=await get();
+    renderAdmin(saved);
+    alert("변경사항이 저장되었습니다.");
+  }catch(e){showError(e)}
 }
 async function block(id,b){
-try{
-let s=await get();
-const c=s.courts.find(c=>c.id===id);
-if(!c)return;
-c.blocked=!!b;
-await save(s);
-}catch(e){showError(e)}
+  try{
+    let s=await get();
+    const c=s.courts.find(c=>c.id===id);
+    if(!c)return;
+    c.blocked=!!b;
+    await save(s);
+  }catch(e){showError(e)}
 }
 window.jgbBlock=function(id,b){ return block(id,b); };
 async function force(id){
-try{
-let s=await get(),c=s.courts.find(c=>c.id===id);
-if(c.active){
-s.finished=s.finished||{};
-resetHistoryForNewDay(s);
-const record={...c.active,endedAt.now(),forced};
-s.finished[c.active.ticket]=record;
-s.finished._history=s.finished._history||{};
-s.finished._history[c.active.ticket]=record;
-c.active=null;
-}
-await advance(s); await save(s);
-}catch(e){showError(e)}
+  try{
+    let s=await get(),c=s.courts.find(c=>c.id===id);
+    if(c.active){
+      s.finished=s.finished||{};
+      resetHistoryForNewDay(s);
+      const record={...c.active,endedAt:Date.now(),forced:true};
+      s.finished[c.active.ticket]=record;
+      s.finished._history=s.finished._history||{};
+      s.finished._history[c.active.ticket]=record;
+      c.active=null;
+    }
+    await advance(s); await save(s);
+  }catch(e){showError(e)}
 }
 
+
 function management(){
-const view=params.get("view")||"display";
-if(view==="admin"){
-admin();
-const top=document.querySelector('.adminTop');
-if(top){
-const links=top.querySelectorAll('a');
-if(links[0]){links[0].href='?page=management&view=display';links[0].textContent='고객용';}
-if(links[1]){links[1].href='#register';links[1].textContent='QR 등록';}
-}
-}else{
-customer();
-const top=document.querySelector('.header > div');
-if(top){
-const a=top.querySelector('a.customerBtn');
-if(a){a.href='?page=management&view=admin';a.textContent='관리자';}
-}
-}
+  const view=params.get("view")||"display";
+  if(view==="admin"){
+    admin();
+    const top=document.querySelector('.adminTop');
+    if(top){
+      const links=top.querySelectorAll('a');
+      if(links[0]){links[0].href='?page=management&view=display';links[0].textContent='고객용';}
+      if(links[1]){links[1].href='#register';links[1].textContent='QR 등록';}
+    }
+  }else{
+    customer();
+    const top=document.querySelector('.header > div:last-child');
+    if(top){
+      const a=top.querySelector('a.customerBtn');
+      if(a){a.href='?page=management&view=admin';a.textContent='관리자';}
+    }
+  }
 }
 
 (function(){
-const r=route();
-if(r==="management")management();
-else if(r==="admin")admin();
-else if(r==="register")register();
-else if(r==="waiting")waiting();
-else customer();
-ensure().catch(e=>console.error(e));
+  const r=route();
+  if(r==="management")management();
+  else if(r==="admin")admin();
+  else if(r==="register")register();
+  else if(r==="waiting")waiting();
+  else customer();
+  ensure().catch(e=>console.error(e));
 })();
 </script>
 
