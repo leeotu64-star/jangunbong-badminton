@@ -2990,3 +2990,29 @@ async function resetHistoryOnServer(){
 </script>
 
 </body></html>
+
+
+<style id="JGB_WAIT_ROW_LEFT_ALIGN_FINAL">
+/* 고객용 대기현황: 글자 크기는 유지하고 데이터만 최대한 왼쪽으로 이동 */
+body:has(.customerHeader) .waitRow{
+  justify-items:stretch!important;
+}
+body:has(.customerHeader) .waitRow > .waitControl{
+  justify-content:flex-start!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+body:has(.customerHeader) .waitRow > .waitControl b{
+  margin-left:0!important;
+  margin-right:0!important;
+}
+body:has(.customerHeader) .waitRow > strong,
+body:has(.customerHeader) .waitRow > span,
+body:has(.customerHeader) .waitRow > em{
+  justify-content:flex-start!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+</style>
