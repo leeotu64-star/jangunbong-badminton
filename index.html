@@ -2250,40 +2250,14 @@ ensure().catch(e=>console.error(e));
 })();
 </script>
 
-<script>
+<script id="JGB_MANAGEMENT_VIEW_ROUTE_FIX">
 (function(){
   window.switchManagementView=function(view){
-    const display=document.getElementById("manageDisplay");
-    const admin=document.getElementById("manageAdmin");
-    if(!display||!admin)return;
-    const customer=document.getElementById("switchCustomer");
-    const adminBtn=document.getElementById("switchAdmin");
-    if(view==="admin"){
-      display.style.display="none";
-      admin.style.display="block";
-      if(customer)customer.style.display="inline-flex";
-      if(adminBtn)adminBtn.style.display="none";
-    }else{
-      display.style.display="block";
-      admin.style.display="none";
-      if(customer)customer.style.display="none";
-      if(adminBtn)adminBtn.style.display="inline-flex";
-    }
+    const p=new URLSearchParams(location.search);
+    p.set("page","management");
+    p.set("view",view==="admin"?"admin":"display");
+    location.href=location.pathname+"?"+p.toString();
   };
-
-  function initManagementView(){
-    const mp=document.getElementById("managementPage");
-    if(!mp)return;
-    const params=new URLSearchParams(location.search);
-    const view=params.get("view")||"display";
-    switchManagementView(view==="admin"?"admin":"display");
-  }
-
-  if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded",initManagementView);
-  }else{
-    initManagementView();
-  }
 })();
 </script>
 
