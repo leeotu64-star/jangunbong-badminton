@@ -1,7 +1,7 @@
 <!doctype html>
-<!-- 장군봉 고객용: 재등록 제한 실시간 카운트다운 수정본 / 관리자 기능 및 기존 고객등록 기능 보존 -->
+
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>장군봉 실내배드민턴장 QR 스마트등록</title>
+<title>장군봉 배드민턴</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans KR",sans-serif;color:#071633;background:#fff}
 .header{height:76px;background:#061b4f;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px}.brand{font-size:26px;font-weight:800}.sub{font-size:13px}.wrap{padding:16px;max-width:1500px;margin:auto}
@@ -11,9 +11,10 @@
 .admin{display:grid;grid-template-columns:190px 1fr;min-height:calc(100vh - 76px)}.side{background:#071b45;color:#fff;padding:18px 10px}.side h2{font-size:16px;margin:0;padding:10px}.nav{display:block;box-sizing:border-box;padding:14px;border-radius:6px;margin:4px 0;font-weight:800;color:#fff;text-decoration:none}.nav.on{background:#0c63e8}.main{padding:25px}.panel{border:1px solid #dfe5ee;border-radius:9px;margin-bottom:18px;padding:18px}.panel h2{margin:0 0 6px}.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.card{border:1px solid #dce3ee;border-radius:8px;padding:12px}.card h3{margin:0 0 10px}.smallbtn{padding:7px 11px;border:1px solid #ccd6e4;background:#fff;border-radius:6px}.settings{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.setting{border:1px solid #dce3ee;border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center}.setting input{width:65px;padding:7px;text-align:center}.save{background:#0c63e8;color:#fff;border:0;border-radius:7px;padding:11px 28px;font-weight:800}
 @media(max-width:950px){.courts{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.admin{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}}@media(max-width:600px){.courts,.stats,.settings,.grid{grid-template-columns:1fr}.brand{font-size:18px}}
 
-.adminTop{display:flex;justify-content:space-between;align-items:center;gap:12px}.adminTop a,.customerBtn{display:inline-block;background:#0c63e8;color:#fff;text-decoration:none;border-radius:7px;padding:9px 14px;font-weight:800}.side h2{margin-bottom:12px}.nav{cursor:pointer}.adminSectionTitle{display:flex;justify-content:space-between;align-items:center;gap:10px}.controlRow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.controlBox{border:1px solid #dce3ee;border-radius:9px;padding:14px;text-align:center}.controlBox h3{margin:0 0 10px}.stepper{display:flex;justify-content:center;align-items:center;gap:8px}.stepper button{width:40px;height:36px;border:1px solid #ccd6e4;background:#fff;border-radius:7px;font-size:20px;font-weight:900}.stepper strong{min-width:54px;font-size:22px}.lockGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.lockCard{border:1px solid #dce3ee;border-radius:9px;padding:12px;text-align:center}.lockCard h3{margin:0 0 8px}.lockCard button{width:100%;padding:9px;border:0;border-radius:7px;font-weight:800}.locked{background:#e51e2a;color:#fff}.open{background:#07854b;color:#fff}.hint{font-size:12px;color:#667085;margin-top:8px}.adminSave{margin-top:14px}.adminTable p{margin:7px 0}.adminTable .card{min-height:90px}
-@media(max-width:950px){.lockGrid{grid-template-columns:repeat(2,1fr)}.controlRow{grid-template-columns:1fr}}
+.adminTop{display;justify-content;align-items;gap:12px}.adminTop a,.customerBtn{display;background:#0c63e8;color:#fff;text-decoration;border-radius:7px;padding:9px 14px;font-weight:800}.side h2{margin-bottom:12px}.nav{cursor}.adminSectionTitle{display;justify-content;align-items;gap:10px}.controlRow{display;grid-template-columns(3,1fr);gap:10px}.controlBox{border:1px solid #dce3ee;border-radius:9px;padding:14px;text-align}.controlBox h3{margin:0 0 10px}.stepper{display;justify-content;align-items;gap:8px}.stepper button{width:40px;height:36px;border:1px solid #ccd6e4;background:#fff;border-radius:7px;font-size:20px;font-weight:900}.stepper strong{min-width:54px;font-size:22px}.lockGrid{display;grid-template-columns(5,1fr);gap:9px}.lockCard{border:1px solid #dce3ee;border-radius:9px;padding:12px;text-align}.lockCard h3{margin:0 0 8px}.lockCard button{width:100%;padding:9px;border:0;border-radius:7px;font-weight:800}.locked{background:#e51e2a;color:#fff}.open{background:#07854b;color:#fff}.hint{font-size:12px;color:#667085;margin-top:8px}.adminSave{margin-top:14px}.adminTable p{margin:7px 0}.adminTable .card{min-height:90px}
+@media(max-width:950px){.lockGrid{grid-template-columns(2,1fr)}.controlRow{grid-template-columns:1fr}}
 </style>
+
 <style id="cooldownPanelPolish">
 .cooldownPanel{border:2px solid #e51e2a!important;background:#fffdfd;position:relative}
 .cooldownPanel .cooldownInner{display:grid;grid-template-columns:minmax(360px,1fr) minmax(320px,540px);gap:20px;align-items:center}
@@ -24,6 +25,7 @@
 .cooldownPanel .cooldownInfo b{font-size:15px}
 @media(max-width:950px){.cooldownPanel .cooldownInner{grid-template-columns:1fr}}
 </style>
+
 <style id="adminPolish">
 /* 관리자 화면 정리용 디자인 - 기능/동작은 변경하지 않음 */
 .admin{
@@ -347,7 +349,6 @@ body:not(.management-view) #viewSwitch{display:none!important}
 @media(max-width:760px){.refHeader{height:auto;padding:10px 14px;gap:10px}.refBrandName{font-size:18px}.refClock{font-size:10px}.refStats{grid-template-columns:repeat(2,1fr)}.refActiveGrid{grid-template-columns:repeat(2,1fr)}.refWaitGrid{grid-template-columns:repeat(2,1fr)}.refNotice{height:auto;min-height:70px;white-space:normal;flex-wrap:wrap;padding:8px}.refActiveCard{height:270px}}
 </style>
 
-
 <style id="customerFinalSkin">
 body.customer-display, body:has(.customerHeader){background:#eef4fb!important;color:#071633!important}
 .customerHeader{height:88px!important;background:#061b4f!important;color:#fff!important;display:flex!important;align-items:center!important;gap:12px!important;padding:8px 18px!important;border-bottom:4px solid #1769e8!important;box-sizing:border-box!important}
@@ -369,7 +370,6 @@ body.customer-display, body:has(.customerHeader){background:#eef4fb!important;co
 @media(max-width:1200px){.customerBrand{min-width:250px!important}.customerBrand .brand{font-size:22px!important}.customerStats{height:60px!important}.topStat b{font-size:21px!important}.activeCard{height:285px!important}.activeTeam{font-size:20px!important}.activeTime{font-size:23px!important}.waitCard{height:220px!important}.waitCardTitle{font-size:15px!important}.waitRow strong{font-size:12px!important}.waitRow em{font-size:14px!important}}
 @media(max-width:900px){.customerHeader{height:auto!important;flex-wrap:wrap!important}.customerBrand{min-width:100%!important}.customerStats{width:100%!important}.customerRight{position:absolute!important;right:12px!important;top:10px!important}.waitGrid{grid-template-columns:1fr 1fr!important;grid-template-areas:none!important}.waitCard{grid-area:auto!important}.displayNotice{grid-template-columns:1fr!important}}
 </style>
-
 
 <style id="customerReferenceExactOverride">
 /* 고객용 화면: 사용자가 제공한 기준 화면에 맞춘 최종 배치
@@ -538,7 +538,6 @@ body:has(.customerHeader){background:#f3f7fb!important}
 }
 </style>
 
-
 <style id="FINAL_REFERENCE_LOCK">
 /* ===== 고객용 기준 이미지 최종 고정 ===== */
 @media(min-width:1101px){
@@ -688,218 +687,677 @@ body:has(.customerHeader){background:#f3f7fb!important;overflow-x:hidden!importa
 </style>
 
 
-<style id="customerReferenceFinal20260823">
-/* ===== 장군봉 고객용 최종 기준 화면: 1122x741 기준 ===== */
-body:has(.customerHeader){background:#f3f6fa!important;overflow-x:hidden!important;overflow-y:auto!important}
-.customerHeader{height:72px!important;background:#061b4f!important;color:#fff!important;display:flex!important;align-items:center!important;gap:10px!important;padding:6px 12px!important;border-bottom:0!important;box-sizing:border-box!important}
-.customerBrand{display:flex!important;align-items:center!important;gap:8px!important;min-width:255px!important;flex:0 0 255px!important}
-.customerBrand .brandIcon{font-size:0!important;line-height:1!important;width:35px!important;height:35px!important;display:grid!important;place-items:center!important}
-.customerBrand .brand{font-size:23px!important;line-height:1.03!important;font-weight:950!important;letter-spacing:-1px!important;white-space:nowrap!important}
-.customerBrand .sub{font-size:10px!important;line-height:1.1!important;margin-top:3px!important;color:#dbe7ff!important}
-.customerStats{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:5px!important;height:58px!important;flex:1 1 auto!important;min-width:0!important;background:transparent!important;overflow:visible!important}
-.topStat{height:58px!important;background:#fff!important;border:1px solid #d4deeb!important;border-radius:5px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;box-shadow:0 1px 3px rgba(0,0,0,.10)!important;color:#071633!important}
-.topStat>span{font-size:28px!important;line-height:1!important;width:35px!important;display:flex!important;align-items:center!important;justify-content:center!important}
-.topStat small{font-size:9px!important;font-weight:950!important;line-height:1.1!important;display:block!important;text-align:center!important;white-space:nowrap!important}
-.topStat b{font-size:23px!important;line-height:1.05!important;font-weight:950!important;display:block!important;text-align:center!important;white-space:nowrap!important}
-.customerRight{display:flex!important;align-items:center!important;justify-content:flex-end!important;min-width:190px!important;gap:4px!important;white-space:nowrap!important}
-.customerRight #clock{font-size:13px!important;font-weight:900!important;white-space:nowrap!important}
-.customerAdminBtn{display:none!important}
-.customerWrap{width:100%!important;max-width:none!important;margin:0!important;padding:8px 13px 8px!important;background:#f3f6fa!important;box-sizing:border-box!important;overflow:hidden!important}
-.displaySectionTitle{display:inline-block!important;font-size:15px!important;line-height:1!important;color:#fff!important;background:#0b3d9c!important;border:0!important;border-radius:6px 6px 0 0!important;padding:7px 13px!important;margin:0 0 4px 2px!important;font-weight:950!important}
-.activeCourts{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px!important;width:100%!important}
-.activeCard{min-width:0!important;min-height:0!important;height:239px!important;background:#fff!important;border:1.5px solid var(--court)!important;border-radius:7px!important;overflow:hidden!important;box-shadow:none!important}
-.activeHead{height:42px!important;padding:4px 8px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;font-size:16px!important;font-weight:950!important;border-bottom:1px solid #dce5f0!important;box-sizing:border-box!important}
-.activeNum{width:31px!important;height:31px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;border-radius:6px!important;color:#fff!important;font-size:19px!important;margin-right:5px!important}
-.status{font-size:10px!important;padding:6px 9px!important;border-radius:15px!important;color:#fff!important;font-weight:950!important}
-.activeBody{padding:8px 10px!important;text-align:center!important}
-.activeBody>div:first-child{font-size:11px!important;font-weight:800!important;color:#53657c!important}
-.activeTeam{font-size:22px!important;line-height:1.05!important;font-weight:950!important;color:var(--court)!important;margin-top:3px!important}
-.activeGame{font-size:15px!important;line-height:1.05!important;font-weight:900!important;color:#071633!important;margin-top:3px!important}
-.activeLabel{font-size:11px!important;font-weight:800!important;color:#243653!important;margin-top:9px!important;padding-top:8px!important;border-top:1px solid #b9c6d6!important}
-.activeTime{font-size:21px!important;line-height:1.05!important;font-weight:950!important;margin-top:3px!important;white-space:nowrap!important}
-.activeBody>div[style*="margin-top:10px"]{margin-top:9px!important;padding:7px 8px!important;border-radius:7px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important}
-.activeBody>div[style*="margin-top:10px"] div:first-child{font-size:10px!important;color:#53657c!important}
-.activeBody>div[style*="margin-top:10px"] div:last-child{font-size:22px!important;line-height:1.05!important}
-.activeBody>div[style*="margin-top:10px"] .personIcon{width:34px!important;height:34px!important;flex:0 0 34px!important}
-.activeBody .activeQueueBox{margin-top:10px!important;padding:6px 8px!important;border-radius:7px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;font-weight:950!important}
-.activeBody .activeQueueBox .personIcon{width:30px!important;height:30px!important;flex:0 0 30px!important}
-.courtGraphic{display:none!important}
-.waitDashboard{margin-top:7px!important;padding:6px!important;background:#fff!important;border:1px solid #b7c9df!important;border-radius:7px!important;box-shadow:none!important;box-sizing:border-box!important}
-.waitDashboardTitle{font-size:15px!important;font-weight:950!important;color:#071d52!important;padding:2px 5px 5px!important;border-bottom:2px solid #183a78!important;margin-bottom:6px!important;display:flex!important;align-items:baseline!important;gap:7px!important;line-height:1!important}
-.waitDashboardTitle small{font-size:9px!important;font-weight:800!important;color:#53657c!important;margin-left:0!important}
-.waitGrid{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-template-areas:"a a b b c c" "d d d e e e"!important;gap:8px!important;width:100%!important}
-.waitCard{min-width:0!important;min-height:0!important;height:132px!important;background:#fff!important;border:1px solid var(--court)!important;border-radius:5px!important;overflow:hidden!important}
-.waitCard:nth-child(1){grid-area:a}.waitCard:nth-child(2){grid-area:b}.waitCard:nth-child(3){grid-area:c}.waitCard:nth-child(4){grid-area:d}.waitCard:nth-child(5){grid-area:e}
-.waitCardTitle{height:25px!important;background:var(--court)!important;color:#fff!important;font-size:12px!important;font-weight:950!important;padding:4px 7px!important;display:flex!important;align-items:center!important;box-sizing:border-box!important;white-space:nowrap!important}
-.waitTableHead{height:22px!important;display:grid!important;grid-template-columns:42px 1.25fr 1fr 1.1fr!important;align-items:center!important;background:#f0f4f8!important;border-bottom:1px solid #cbd6e3!important;font-size:8px!important;font-weight:950!important;padding:1px 4px!important;box-sizing:border-box!important}
-.waitRow{min-height:24px!important;display:grid!important;grid-template-columns:42px 1.25fr 1fr 1.1fr!important;align-items:center!important;border-top:1px solid #dbe3ec!important;padding:2px 4px!important;font-size:10px!important;box-sizing:border-box!important}
-.waitRow b{width:20px!important;height:20px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#edf2f7!important;border-radius:4px!important;font-size:10px!important;margin:auto!important}
-.waitRow strong{font-size:11px!important;font-weight:950!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;text-align:center!important}
-.waitRow span{font-size:10px!important;text-align:center!important;white-space:nowrap!important}
-.waitRow em{font-size:12px!important;font-style:normal!important;font-weight:950!important;color:var(--court)!important;white-space:nowrap!important;text-align:center!important}
-.waitEmpty{height:83px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;font-size:12px!important;font-weight:900!important;gap:3px!important}
-.emptyFace{font-size:34px!important;line-height:1!important;margin:0!important}
-.displayNotice{margin-top:8px!important;padding:6px 7px!important;gap:0!important;grid-template-columns:repeat(4,1fr)!important;border:1px solid #b9cbe0!important;border-radius:5px!important;background:#fff!important;height:60px!important;align-items:center!important;box-sizing:border-box!important}
-.displayNotice>div{min-width:0!important;font-size:9px!important;line-height:1.3!important;padding:0 9px!important;border-right:1px solid #b9cbe0!important;text-align:center!important;color:#243653!important;font-weight:800!important}
-.displayNotice>div:last-child{border-right:0!important}.displayNotice b{font-size:11px!important;color:#145fe5!important}.displayNotice strong{font-weight:950!important}
-@media(max-width:1100px){
- .customerBrand{min-width:235px!important;flex-basis:235px!important}.customerBrand .brand{font-size:20px!important}.customerStats{height:52px!important}.topStat{height:52px!important}.topStat>span{font-size:24px!important}.topStat b{font-size:19px!important}.customerRight{min-width:155px!important}.customerRight #clock{font-size:11px!important}.activeCard{height:225px!important}.activeTeam{font-size:20px!important}.activeTime{font-size:19px!important}.waitCard{height:125px!important}.displayNotice{height:56px!important}.displayNotice>div{font-size:8px!important}.displayNotice b{font-size:10px!important}}
-@media(max-width:760px){
- .customerHeader{height:auto!important;flex-wrap:wrap!important;padding:8px!important}.customerBrand{min-width:100%!important;flex-basis:100%!important}.customerStats{width:100%!important;flex:none!important}.customerRight{position:absolute!important;right:10px!important;top:9px!important}.activeCourts{grid-template-columns:repeat(2,minmax(0,1fr))!important}.waitGrid{grid-template-columns:1fr 1fr!important;grid-template-areas:none!important}.waitCard{grid-area:auto!important}.displayNotice{height:auto!important;grid-template-columns:repeat(2,1fr)!important;gap:0!important}.displayNotice>div:nth-child(2){border-right:0!important}.displayNotice>div{padding:5px}}
-</style>
 
-<style id="waitingFinishFit">
-.waitbody{padding:12px!important}.doneScreen{padding:18px 16px!important}.doneScreen h2{font-size:18px!important;line-height:1.45!important;margin:7px 0 10px!important}.doneScreen p{font-size:12px!important;line-height:1.6!important;margin:0 0 10px!important}.doneScreen .notice{padding:9px!important;margin-bottom:10px!important}.doneScreen .btn{min-height:44px!important}
-</style>
+<style id="JGB_WAIT_FINAL_45PT">
+/* =========================================================
+   장군봉 고객용 대기현황 45포인트 적용
+   - 기존 기능/데이터/QR/관리자 기능 변경 없음
+   - 기존 디자인을 유지하고 대기현황 글자만 확대
+   - 45pt = 60px
+   ========================================================= */
 
-<style id="customerFinalTarget">
-body:has(.customerHeader){background:#f5f8fc!important}
-.customerHeader{height:72px!important;padding:5px 14px!important;gap:10px!important;background:#061b4f!important}
-.customerBrand{min-width:265px!important;gap:8px!important}.customerBrand .brand{font-size:24px!important;line-height:1.05!important}.customerBrand .sub{font-size:10px!important}.customerBrand .brandIcon svg{width:34px!important;height:34px!important}
-.customerStats{height:58px!important;gap:5px!important}.topStat{border:1px solid #d5deea!important;border-radius:5px!important;gap:7px!important}.topStat>span svg{width:32px!important;height:32px!important}.topStat small{font-size:9px!important}.topStat b{font-size:21px!important}
-.customerWrap{padding:9px 18px 10px!important}.displaySectionTitle{font-size:15px!important;padding:7px 13px!important;margin-left:3px!important;margin-bottom:5px!important}
-.activeCourts{gap:8px!important}.activeCard{height:238px!important;border-width:1.5px!important;border-radius:7px!important}.activeHead{height:42px!important;padding:4px 9px!important;font-size:15px!important}.activeNum{width:30px!important;height:30px!important;font-size:18px!important}.status{font-size:10px!important;padding:5px 8px!important}.activeBody{padding:8px 10px!important;text-align:center!important}.activeBody>div:first-child{font-size:11px!important}.activeTeam{font-size:21px!important;margin-top:3px!important}.activeGame{font-size:14px!important}.activeLabel{font-size:11px!important;margin-top:9px!important;padding-top:8px!important}.activeTime{font-size:20px!important;margin-top:3px!important}.activeBody>div[style*="margin-top:10px"]{margin-top:9px!important;padding:6px 8px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important}.activeBody>div[style*="margin-top:10px"] .personIcon{width:34px!important;height:34px!important}.activeBody>div[style*="margin-top:10px"] div:last-child{font-size:21px!important}.activeQueueBox{margin:10px 0 0!important;padding:7px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;border-radius:7px!important;font-size:14px!important;font-weight:900!important}.activeQueueBox .personIcon{width:31px!important;height:31px!important}
-.waitDashboard{margin-top:8px!important;padding:6px!important}.waitDashboardTitle{font-size:15px!important;padding:2px 5px 5px!important;margin-bottom:5px!important}.waitDashboardTitle small{font-size:9px!important}.waitGrid{gap:7px!important}.waitCard{height:132px!important}.waitCardTitle{height:26px!important;font-size:12px!important}.waitTableHead{height:22px!important;font-size:8px!important}.waitRow{min-height:24px!important;font-size:10px!important}.waitRow b{width:20px!important;height:20px!important}.waitRow strong{font-size:10px!important}.waitRow em{font-size:11px!important}.waitEmpty{height:82px!important}.emptyFace{font-size:31px!important}
-.displayNotice{margin-top:6px!important;padding:6px 8px!important;grid-template-columns:repeat(4,1fr)!important;background:#fff!important}.displayNotice>div{font-size:9px!important;line-height:1.3!important}.displayNotice b{font-size:11px!important}
-</style>
-
-<style id="JGB_FINAL_ONE_SCREEN">
-/* 최종 고객 화면: 실제 모니터 한 화면에 전체 배치 */
-html,body{width:100%!important;height:100%!important;min-width:0!important;margin:0!important;padding:0!important}
-body:has(.customerHeader){height:100vh!important;overflow:hidden!important;background:#f3f6fa!important}
-body:has(.customerHeader) .customerHeader{height:70px!important;min-height:70px!important;box-sizing:border-box!important;padding:5px 12px!important;gap:8px!important;border-bottom:3px solid #1769e8!important}
-body:has(.customerHeader) .customerBrand{min-width:235px!important;flex:0 0 235px!important}
-body:has(.customerHeader) .customerBrand .brand{font-size:20px!important}
-body:has(.customerHeader) .customerBrand .sub{font-size:9px!important}
-body:has(.customerHeader) .customerStats{height:54px!important;min-height:54px!important;gap:4px!important;flex:1 1 auto!important}
-body:has(.customerHeader) .topStat{height:54px!important;min-height:54px!important;border:2px solid #c9d7e8!important;border-radius:5px!important}
-body:has(.customerHeader) .topStat b{font-size:19px!important}
-body:has(.customerHeader) .customerRight{min-width:175px!important;flex:0 0 175px!important}
-body:has(.customerHeader) .customerRight #clock{font-size:10px!important}
-body:has(.customerHeader) .customerAdminBtn{font-size:10px!important;padding:6px 9px!important;border-radius:5px!important}
-
-body:has(.customerHeader) .customerWrap{height:calc(100vh - 70px)!important;min-height:0!important;box-sizing:border-box!important;padding:5px 10px 5px!important;display:grid!important;grid-template-rows:185px minmax(0,1fr)!important;gap:5px!important;overflow:hidden!important}
-body:has(.customerHeader) .customerWrap>section:first-child{min-height:0!important;overflow:hidden!important}
-body:has(.customerHeader) .displaySectionTitle{height:28px!important;box-sizing:border-box!important;margin:0 0 3px 2px!important;padding:4px 10px!important;font-size:15px!important;font-weight:950!important;border-radius:4px!important}
-body:has(.customerHeader) .activeCourts{height:154px!important;min-height:0!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:5px!important}
-body:has(.customerHeader) .activeCard{height:154px!important;min-height:0!important;border:3px solid var(--court)!important;border-radius:7px!important;box-shadow:none!important}
-body:has(.customerHeader) .activeHead{height:30px!important;padding:3px 6px!important;font-size:12px!important;border-bottom:2px solid #a9bad0!important}
-body:has(.customerHeader) .activeNum{width:25px!important;height:25px!important;font-size:15px!important}
-body:has(.customerHeader) .activeBody{padding:5px 7px!important}
-body:has(.customerHeader) .activeBody>div:first-child{font-size:9px!important}
-body:has(.customerHeader) .activeTeam{font-size:17px!important;line-height:1.1!important}
-body:has(.customerHeader) .activeGame{font-size:10px!important}
-body:has(.customerHeader) .activeLabel{font-size:8px!important;border-top:2px solid #a9bad0!important;margin-top:3px!important;padding-top:2px!important}
-body:has(.customerHeader) .activeTime{font-size:14px!important;line-height:1.1!important}
-body:has(.customerHeader) .remainBox,body:has(.customerHeader) .waitInfoBox{margin-top:3px!important;padding:3px!important;min-height:24px!important;border-width:2px!important;font-size:9px!important}
-body:has(.customerHeader) .remainBox strong,body:has(.customerHeader) .waitInfoBox strong{font-size:12px!important}
-
-body:has(.customerHeader) .waitDashboard{min-height:0!important;height:auto!important;margin:0!important;padding:5px!important;border:3px solid #8fa8c7!important;border-radius:7px!important;box-shadow:none!important;display:grid!important;grid-template-rows:30px minmax(0,1fr) 62px!important;gap:4px!important;overflow:hidden!important}
-body:has(.customerHeader) .waitDashboardTitle{height:30px!important;min-height:30px!important;box-sizing:border-box!important;font-size:20px!important;padding:1px 5px 4px!important;margin:0!important;border-bottom:3px solid #183a78!important;line-height:1!important}
-body:has(.customerHeader) .waitDashboardTitle small{font-size:9px!important;margin-left:5px!important}
-body:has(.customerHeader) .waitGrid{min-height:0!important;height:auto!important;display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-template-rows:1fr 1fr!important;grid-template-areas:"a a b b c c" "d d d e e e"!important;gap:5px!important}
-body:has(.customerHeader) .waitCard{min-height:0!important;height:auto!important;border:3px solid var(--court)!important;border-radius:5px!important;box-shadow:none!important}
-body:has(.customerHeader) .waitCardTitle{height:26px!important;min-height:26px!important;font-size:11px!important;padding:4px 6px!important;box-sizing:border-box!important}
-body:has(.customerHeader) .waitTableHead{height:20px!important;font-size:8px!important;border-bottom:2px solid #c0cedd!important}
-body:has(.customerHeader) .waitRow{min-height:24px!important;font-size:9px!important;border-top:1px solid #c0cedd!important}
-body:has(.customerHeader) .waitRow b{width:20px!important;height:20px!important}
-body:has(.customerHeader) .waitRow strong{font-size:10px!important}
-body:has(.customerHeader) .waitRow em{font-size:11px!important}
-body:has(.customerHeader) .waitEmpty{height:auto!important;min-height:70px!important;font-size:11px!important}
-body:has(.customerHeader) .emptyFace{font-size:28px!important}
-
-body:has(.customerHeader) .displayNotice{height:62px!important;min-height:62px!important;box-sizing:border-box!important;margin:0!important;padding:3px 4px!important;gap:0!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;border:3px solid #8fa8c7!important;border-radius:5px!important;background:#eef6ff!important;overflow:visible!important;align-items:stretch!important}
-body:has(.customerHeader) .displayNotice>div{min-width:0!important;height:54px!important;box-sizing:border-box!important;padding:2px 5px!important;border-right:2px solid #9eb1ca!important;font-size:9px!important;line-height:1.15!important;font-weight:850!important;text-align:center!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important}
-body:has(.customerHeader) .displayNotice>div:last-child{border-right:0!important}
-body:has(.customerHeader) .displayNotice b{font-size:11px!important;margin-bottom:2px!important}
-body:has(.customerHeader) .displayNotice strong{font-size:12px!important;color:#e51e2a!important}
-
-/* 높이가 더 작은 일반 모니터도 한 화면에 맞춤 */
-@media (max-height:700px){
- body:has(.customerHeader) .customerHeader{height:62px!important;min-height:62px!important}
- body:has(.customerHeader) .customerWrap{height:calc(100vh - 62px)!important;grid-template-rows:160px minmax(0,1fr)!important}
- body:has(.customerHeader) .activeCourts,body:has(.customerHeader) .activeCard{height:132px!important}
- body:has(.customerHeader) .displaySectionTitle{height:25px!important;font-size:13px!important}
- body:has(.customerHeader) .waitDashboard{grid-template-rows:26px minmax(0,1fr) 55px!important}
- body:has(.customerHeader) .waitDashboardTitle{height:26px!important;min-height:26px!important;font-size:17px!important}
- body:has(.customerHeader) .displayNotice{height:55px!important;min-height:55px!important}
- body:has(.customerHeader) .displayNotice>div{height:47px!important;font-size:8px!important}
- body:has(.customerHeader) .displayNotice b{font-size:10px!important}
-}
-</style>
-
-
-<style id="JGB_REAL_MONITOR_FIT">
-/* 실제 일반 모니터: 고객 화면 전체를 한 화면 안에 맞춤 */
-html,body{margin:0!important;padding:0!important;min-width:0!important}
-body:has(.customerHeader){
-  width:1255px!important;
-  height:740px!important;
-  min-width:1255px!important;
-  min-height:740px!important;
-  overflow:hidden!important;
-  transform-origin:top left!important;
-}
-body:has(.customerHeader) .customerHeader{
-  width:1255px!important;
-}
-body:has(.customerHeader) .customerWrap{
-  width:1255px!important;
-  height:670px!important;
-  min-height:670px!important;
-  overflow:hidden!important;
-}
-body:has(.customerHeader) .activeCourts{
-  grid-template-columns:repeat(5,minmax(0,1fr))!important;
-}
-body:has(.customerHeader) .waitGrid{
-  grid-template-columns:repeat(6,minmax(0,1fr))!important;
-  grid-template-areas:"a a b b c c" "d d d e e e"!important;
-}
-body:has(.customerHeader) .displayNotice{
+/* 대기현황 표 머리글 */
+body:has(.customerHeader) .waitTableHead{
+  display:grid!important;
   grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  width:100%!important;
+  min-height:60px!important;
+  height:60px!important;
+  padding:0!important;
+  align-items:center!important;
+  justify-items:center!important;
+  background:#eef3f8!important;
+  border-top:3px solid #8a9aaa!important;
+  border-bottom:3px solid #8a9aaa!important;
+  font-size:20px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  text-align:center!important;
 }
-body:has(.customerHeader) .activeCard,
-body:has(.customerHeader) .waitCard{
+
+/* 머리글 4칸 세로 구분선 */
+body:has(.customerHeader) .waitTableHead > *{
+  width:100%!important;
+  height:100%!important;
   min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  padding:0 6px!important;
+  border-left:2px solid #9aa9b8!important;
+  font-size:20px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  text-align:center!important;
+  white-space:nowrap!important;
 }
-body:has(.customerHeader) .displayNotice>div{
+
+body:has(.customerHeader) .waitTableHead > *:first-child{
+  border-left:0!important;
+}
+
+/* 실제 대기자 행 */
+body:has(.customerHeader) .waitRow{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  width:100%!important;
   min-width:0!important;
+  min-height:72px!important;
+  height:72px!important;
+  padding:0!important;
+  align-items:center!important;
+  box-sizing:border-box!important;
+  border-top:2px solid #b7c3cf!important;
+  font-size:60px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+
+/* 대기자 4칸 */
+body:has(.customerHeader) .waitRow > *{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  padding:0 6px!important;
+  border-left:2px solid #b7c3cf!important;
+  font-size:60px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+}
+
+body:has(.customerHeader) .waitRow > *:first-child{
+  border-left:0!important;
+}
+
+/* 순번 */
+body:has(.customerHeader) .waitRow b{
+  width:48px!important;
+  height:48px!important;
+  margin:auto!important;
+  border-radius:7px!important;
+  font-size:30px!important;
+}
+
+/* 팀명 */
+body:has(.customerHeader) .waitRow strong{
+  font-size:60px!important;
+  font-weight:950!important;
+}
+
+/* 게임 방식 */
+body:has(.customerHeader) .waitRow span{
+  font-size:60px!important;
+  font-weight:900!important;
+}
+
+/* 예상 대기시간 */
+body:has(.customerHeader) .waitRow em{
+  font-size:60px!important;
+  font-style:normal!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+}
+
+/* 대기 팀이 없을 때 */
+body:has(.customerHeader) .waitEmpty{
+  min-height:170px!important;
+  height:170px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  font-size:60px!important;
+  font-weight:950!important;
+  line-height:1.2!important;
+  border-top:2px solid #b7c3cf!important;
+}
+
+body:has(.customerHeader) .waitEmpty b{
+  font-size:60px!important;
+  font-weight:950!important;
+}
+
+body:has(.customerHeader) .emptyFace{
+  font-size:48px!important;
+  margin-bottom:10px!important;
+}
+
+/* 좁은 화면에서도 기존 레이아웃 유지 */
+@media(max-width:1100px){
+  body:has(.customerHeader) .waitRow,
+  body:has(.customerHeader) .waitRow > *,
+  body:has(.customerHeader) .waitRow strong,
+  body:has(.customerHeader) .waitRow span,
+  body:has(.customerHeader) .waitRow em{
+    font-size:42px!important;
+  }
+
+  body:has(.customerHeader) .waitTableHead,
+  body:has(.customerHeader) .waitTableHead > *{
+    font-size:18px!important;
+  }
+}
+</style>
+
+<style id="JGB_WAIT_LAYOUT_3_TOP_2_BOTTOM">
+/* 대기현황 배치만 변경: 위 3개 / 아래 2개 */
+/* 기존 글씨 크기, 색상, 기능은 유지 */
+
+body:has(.customerHeader) .waitGrid,
+body.customer-display .waitGrid,
+body:has(.customerHeader) .waitSection .grid,
+body.customer-display .waitSection .grid{
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:4px!important;
+  width:100%!important;
+}
+
+/* 1~3번: 위쪽 3칸 */
+body:has(.customerHeader) .waitGrid > :nth-child(1),
+body.customer-display .waitGrid > :nth-child(1),
+body:has(.customerHeader) .waitSection .grid > :nth-child(1),
+body.customer-display .waitSection .grid > :nth-child(1){
+  grid-column:1 / span 2!important;
+  grid-row:1!important;
+}
+
+/* 2번 */
+body:has(.customerHeader) .waitGrid > :nth-child(2),
+body.customer-display .waitGrid > :nth-child(2),
+body:has(.customerHeader) .waitSection .grid > :nth-child(2),
+body.customer-display .waitSection .grid > :nth-child(2){
+  grid-column:3 / span 2!important;
+  grid-row:1!important;
+}
+
+/* 3번 */
+body:has(.customerHeader) .waitGrid > :nth-child(3),
+body.customer-display .waitGrid > :nth-child(3),
+body:has(.customerHeader) .waitSection .grid > :nth-child(3),
+body.customer-display .waitSection .grid > :nth-child(3){
+  grid-column:5 / span 2!important;
+  grid-row:1!important;
+}
+
+/* 4번: 아래 왼쪽 */
+body:has(.customerHeader) .waitGrid > :nth-child(4),
+body.customer-display .waitGrid > :nth-child(4),
+body:has(.customerHeader) .waitSection .grid > :nth-child(4),
+body.customer-display .waitSection .grid > :nth-child(4){
+  grid-column:1 / span 3!important;
+  grid-row:2!important;
+}
+
+/* 5번: 아래 오른쪽 */
+body:has(.customerHeader) .waitGrid > :nth-child(5),
+body.customer-display .waitGrid > :nth-child(5),
+body:has(.customerHeader) .waitSection .grid > :nth-child(5),
+body.customer-display .waitSection .grid > :nth-child(5){
+  grid-column:4 / span 3!important;
+  grid-row:2!important;
+}
+
+/* 대기현황 카드가 그리드 안에서 가로폭을 제대로 사용 */
+body:has(.customerHeader) .waitGrid > *,
+body.customer-display .waitGrid > *,
+body:has(.customerHeader) .waitSection .grid > *,
+body.customer-display .waitSection .grid > *{
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+
+/* 기존 45px 글씨 강제 유지 */
+body:has(.customerHeader) .waitRow,
+body.customer-display .wait-row{
+  font-size:60px!important;
+}
+</style>
+
+<style id="JGB_WAIT_VERTICAL_COMPACT">
+/* 대기현황의 세로 비율만 줄여서 45pt 글씨가 카드 안에 들어오게 함 */
+/* 가로 배치: 위 3개 / 아래 2개는 그대로 유지 */
+
+body:has(.customerHeader) .waitGrid,
+body.customer-display .waitGrid,
+body:has(.customerHeader) .waitSection .grid,
+body.customer-display .waitSection .grid{
+  grid-auto-rows:minmax(0,1fr)!important;
+  row-gap:4px!important;
+}
+
+/* 위쪽 3개 */
+body:has(.customerHeader) .waitGrid > :nth-child(-n+3),
+body.customer-display .waitGrid > :nth-child(-n+3),
+body:has(.customerHeader) .waitSection .grid > :nth-child(-n+3),
+body.customer-display .waitSection .grid > :nth-child(-n+3){
+  min-height:165px!important;
+  height:165px!important;
+  max-height:165px!important;
+}
+
+/* 아래쪽 2개 */
+body:has(.customerHeader) .waitGrid > :nth-child(n+4),
+body.customer-display .waitGrid > :nth-child(n+4),
+body:has(.customerHeader) .waitSection .grid > :nth-child(n+4),
+body.customer-display .waitSection .grid > :nth-child(n+4){
+  min-height:165px!important;
+  height:165px!important;
+  max-height:165px!important;
+}
+
+/* 빈 대기 안내도 카드 안에서 잘리지 않도록 */
+body:has(.customerHeader) .waitEmpty,
+body.customer-display .wait-empty{
+  min-height:120px!important;
+  height:120px!important;
+  max-height:120px!important;
+  padding:8px!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+}
+
+/* 45pt(60px) 글씨는 그대로 유지하되 줄바꿈/잘림 방지 */
+body:has(.customerHeader) .waitEmpty,
+body.customer-display .wait-empty{
+  font-size:60px!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+
+/* 실제 데이터 행은 한 줄 높이로 정리 */
+body:has(.customerHeader) .waitRow,
+body.customer-display .wait-row{
+  min-height:72px!important;
+  height:72px!important;
+  max-height:72px!important;
   overflow:hidden!important;
 }
 </style>
-<script>
-(function(){
-  function fitCustomerScreen(){
-    const body=document.body;
-    if(!body || !body.querySelector('.customerHeader')) return;
 
-    /* 기준 화면: 1255 x 740.
-       실제 모니터가 작으면 전체를 비율대로 축소하고,
-       큰 모니터면 화면을 최대한 활용하되 잘림은 절대 허용하지 않는다. */
-    const baseW=1255, baseH=740;
-    const vw=Math.max(document.documentElement.clientWidth||window.innerWidth,1);
-    const vh=Math.max(document.documentElement.clientHeight||window.innerHeight,1);
-    const scale=Math.min(vw/baseW, vh/baseH);
+<style id="JGB_WAIT_USE_BOTTOM_SPACE">
+/* 화면 아래 남는 공간까지 대기현황이 사용하도록 높이 재배치 */
+/* 위 3개는 적당히, 아래 2개는 남는 공간을 더 크게 사용 */
 
-    body.style.width=baseW+'px';
-    body.style.height=baseH+'px';
-    body.style.minWidth=baseW+'px';
-    body.style.minHeight=baseH+'px';
-    body.style.transformOrigin='top left';
-    body.style.transform='scale('+Math.max(0.60,Math.min(scale,2.0))+')';
-  }
+body:has(.customerHeader) .waitGrid,
+body.customer-display .waitGrid,
+body:has(.customerHeader) .waitSection .grid,
+body.customer-display .waitSection .grid{
+  grid-template-rows:165px minmax(220px,1fr)!important;
+  height:calc(100vh - 330px)!important;
+  min-height:385px!important;
+  max-height:calc(100vh - 330px)!important;
+  gap:5px!important;
+}
 
-  if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded",()=>setTimeout(fitCustomerScreen,50));
-  }else{
-    setTimeout(fitCustomerScreen,50);
-  }
-  window.addEventListener("resize",fitCustomerScreen);
-  window.addEventListener("orientationchange",()=>setTimeout(fitCustomerScreen,100));
-  setInterval(fitCustomerScreen,1500);
-})();
-</script>
+/* 위 3개 */
+body:has(.customerHeader) .waitGrid > :nth-child(1),
+body:has(.customerHeader) .waitGrid > :nth-child(2),
+body:has(.customerHeader) .waitGrid > :nth-child(3),
+body.customer-display .waitGrid > :nth-child(1),
+body.customer-display .waitGrid > :nth-child(2),
+body.customer-display .waitGrid > :nth-child(3),
+body:has(.customerHeader) .waitSection .grid > :nth-child(1),
+body:has(.customerHeader) .waitSection .grid > :nth-child(2),
+body:has(.customerHeader) .waitSection .grid > :nth-child(3),
+body.customer-display .waitSection .grid > :nth-child(1),
+body.customer-display .waitSection .grid > :nth-child(2),
+body.customer-display .waitSection .grid > :nth-child(3){
+  grid-row:1!important;
+  min-height:165px!important;
+  height:165px!important;
+  max-height:165px!important;
+}
+
+/* 아래 2개: 남는 세로 공간을 모두 사용 */
+body:has(.customerHeader) .waitGrid > :nth-child(4),
+body:has(.customerHeader) .waitGrid > :nth-child(5),
+body.customer-display .waitGrid > :nth-child(4),
+body.customer-display .waitGrid > :nth-child(5),
+body:has(.customerHeader) .waitSection .grid > :nth-child(4),
+body:has(.customerHeader) .waitSection .grid > :nth-child(5),
+body.customer-display .waitSection .grid > :nth-child(4),
+body.customer-display .waitSection .grid > :nth-child(5){
+  grid-row:2!important;
+  min-height:220px!important;
+  height:100%!important;
+  max-height:none!important;
+}
+
+/* 아래 2개 카드 내부도 남는 공간을 사용 */
+body:has(.customerHeader) .waitGrid > :nth-child(n+4) .waitEmpty,
+body.customer-display .waitGrid > :nth-child(n+4) .wait-empty,
+body:has(.customerHeader) .waitSection .grid > :nth-child(n+4) .waitEmpty,
+body.customer-display .waitSection .grid > :nth-child(n+4) .wait-empty{
+  min-height:220px!important;
+  height:calc(100% - 45px)!important;
+  max-height:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+
+</style>
+
+<style id="JGB_ADMIN_BUTTON_FINAL_RESTORE">
+/* 고객 화면 관리자 버튼 복구
+   기존 코드의 후순위 display:none 규칙을 무효화 */
+body.customer-display .customerRight .customerAdminBtn,
+body:has(.customerHeader) .customerRight .customerAdminBtn{
+  display:inline-flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-shrink:0!important;
+
+  background:#1769e8!important;
+  color:#fff!important;
+  text-decoration:none!important;
+  border:0!important;
+  border-radius:6px!important;
+  padding:7px 10px!important;
+  min-width:46px!important;
+  height:32px!important;
+  box-sizing:border-box!important;
+
+  font-size:12px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  cursor:pointer!important;
+}
+
+/* 관리자 버튼이 시계에 밀리지 않도록 오른쪽 영역 확보 */
+body.customer-display .customerRight,
+body:has(.customerHeader) .customerRight{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:7px!important;
+  min-width:130px!important;
+  white-space:nowrap!important;
+}
+</style>
+
+<style id="JGB_WAIT_FILL_BOTTOM_SPACE_FINAL">
+/* =========================================================
+   대기화면 아래 남는 공간을 전부 대기현황 영역으로 사용
+   - 위 3개 / 아래 2개 유지
+   - 카드의 가로 비율 변경 없음
+   - 45px 대기 글씨 유지
+   - 관리자 버튼 유지
+   ========================================================= */
+
+/* 대기현황 박스 자체가 화면의 남는 세로 공간을 차지 */
+body.customer-display .waitDashboard,
+body:has(.customerHeader) .waitDashboard{
+  display:flex!important;
+  flex-direction:column!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  min-height:calc(100vh - 390px)!important;
+  height:calc(100vh - 390px)!important;
+  max-height:none!important;
+  overflow:hidden!important;
+}
+
+/* 제목은 고정, 그 아래 대기 카드 영역이 남는 공간을 전부 사용 */
+body.customer-display .waitDashboardTitle,
+body:has(.customerHeader) .waitDashboardTitle{
+  flex:0 0 auto!important;
+}
+
+/* 핵심: waitGrid가 남은 높이를 전부 차지 */
+body.customer-display .waitGrid,
+body:has(.customerHeader) .waitGrid{
+  flex:1 1 auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  grid-template-rows:165px minmax(260px,1fr)!important;
+  grid-template-areas:"a a b b c c" "d d d e e e"!important;
+  gap:5px!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:425px!important;
+  height:auto!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+}
+
+/* 위 3개 */
+body.customer-display .waitGrid > :nth-child(1),
+body.customer-display .waitGrid > :nth-child(2),
+body.customer-display .waitGrid > :nth-child(3),
+body:has(.customerHeader) .waitGrid > :nth-child(1),
+body:has(.customerHeader) .waitGrid > :nth-child(2),
+body:has(.customerHeader) .waitGrid > :nth-child(3){
+  height:100%!important;
+  min-height:165px!important;
+  max-height:none!important;
+  align-self:stretch!important;
+}
+
+/* 아래 2개는 남는 공간을 모두 사용 */
+body.customer-display .waitGrid > :nth-child(4),
+body.customer-display .waitGrid > :nth-child(5),
+body:has(.customerHeader) .waitGrid > :nth-child(4),
+body:has(.customerHeader) .waitGrid > :nth-child(5){
+  height:100%!important;
+  min-height:260px!important;
+  max-height:none!important;
+  align-self:stretch!important;
+}
+
+/* 카드 내부도 남는 높이를 사용 */
+body.customer-display .waitGrid .waitCard,
+body:has(.customerHeader) .waitGrid .waitCard{
+  width:100%!important;
+  min-width:0!important;
+  height:100%!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+
+/* 대기 없음 표시가 카드 가운데에 정렬 */
+body.customer-display .waitGrid .waitEmpty,
+body:has(.customerHeader) .waitGrid .waitEmpty{
+  height:calc(100% - 79px)!important;
+  min-height:170px!important;
+  max-height:none!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+
+/* 안내문은 대기현황 아래에 고정 */
+body.customer-display .displayNotice,
+body:has(.customerHeader) .displayNotice{
+  flex:0 0 auto!important;
+  margin-top:6px!important;
+}
+
+/* 45px 글씨 유지 */
+body.customer-display .waitRow,
+body.customer-display .waitRow > *,
+body.customer-display .waitRow strong,
+body.customer-display .waitRow span,
+body.customer-display .waitRow em,
+body:has(.customerHeader) .waitRow,
+body:has(.customerHeader) .waitRow > *,
+body:has(.customerHeader) .waitRow strong,
+body:has(.customerHeader) .waitRow span,
+body:has(.customerHeader) .waitRow em,
+body.customer-display .waitEmpty,
+body:has(.customerHeader) .waitEmpty{
+  font-size:45px!important;
+}
+
+/* 폭 때문에 화면 전체가 밀리지 않도록 */
+body.customer-display,
+body.customer-display #app,
+body.customer-display .customerWrap,
+body:has(.customerHeader),
+body:has(.customerHeader) #app,
+body:has(.customerHeader) .customerWrap{
+  width:100%!important;
+  max-width:100vw!important;
+  overflow-x:hidden!important;
+  box-sizing:border-box!important;
+}
+</style>
+
+<style id="JGB_WAIT_BALANCED_RATIO_FINAL">
+/* =========================================================
+   대기현황 비율 균형
+   위 3개 / 아래 2개는 유지하되
+   두 줄의 세로 높이를 동일하게 맞춤
+   ========================================================= */
+
+body:has(.customerHeader) .waitGrid,
+body.customer-display .waitGrid,
+body:has(.customerHeader) .waitSection .grid,
+body.customer-display .waitSection .grid{
+  display:grid!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  grid-template-rows:1fr 1fr!important;
+  gap:5px!important;
+  width:100%!important;
+  height:calc(100vh - 250px)!important;
+  min-height:420px!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+}
+
+/* 위 3개 */
+body:has(.customerHeader) .waitGrid > :nth-child(1),
+body:has(.customerHeader) .waitGrid > :nth-child(2),
+body:has(.customerHeader) .waitGrid > :nth-child(3),
+body.customer-display .waitGrid > :nth-child(1),
+body.customer-display .waitGrid > :nth-child(2),
+body.customer-display .waitGrid > :nth-child(3),
+body:has(.customerHeader) .waitSection .grid > :nth-child(1),
+body:has(.customerHeader) .waitSection .grid > :nth-child(2),
+body:has(.customerHeader) .waitSection .grid > :nth-child(3),
+body.customer-display .waitSection .grid > :nth-child(1),
+body.customer-display .waitSection .grid > :nth-child(2),
+body.customer-display .waitSection .grid > :nth-child(3){
+  grid-row:1!important;
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+}
+
+/* 아래 2개 */
+body:has(.customerHeader) .waitGrid > :nth-child(4),
+body:has(.customerHeader) .waitGrid > :nth-child(5),
+body.customer-display .waitGrid > :nth-child(4),
+body.customer-display .waitGrid > :nth-child(5),
+body:has(.customerHeader) .waitSection .grid > :nth-child(4),
+body:has(.customerHeader) .waitSection .grid > :nth-child(5),
+body.customer-display .waitSection .grid > :nth-child(4),
+body.customer-display .waitSection .grid > :nth-child(5){
+  grid-row:2!important;
+  min-height:0!important;
+  height:100%!important;
+  max-height:none!important;
+}
+
+/* 카드 자체가 행 높이를 꽉 채움 */
+body:has(.customerHeader) .waitGrid > *,
+body.customer-display .waitGrid > *,
+body:has(.customerHeader) .waitSection .grid > *,
+body.customer-display .waitSection .grid > *{
+  align-self:stretch!important;
+  min-height:0!important;
+  box-sizing:border-box!important;
+}
+
+/* 카드 내부 빈 공간도 균형 */
+body:has(.customerHeader) .waitEmpty,
+body.customer-display .wait-empty{
+  min-height:0!important;
+  height:calc(100% - 45px)!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+/* 기존 대기 글씨 크기는 유지 */
+body:has(.customerHeader) .waitEmpty,
+body.customer-display .wait-empty,
+
+</style>
+
+<style id="JGB_HISTORY_MANUAL_BUTTON">
+#reRegister .jgbHistoryManual{
+  display:block!important;
+  margin-top:10px!important;
+  background:#e11d2e!important;
+  border-color:#e11d2e!important;
+  color:#fff!important;
+  font-weight:900!important;
+}
+#reRegister .jgbHistoryManual:hover{
+  filter:brightness(.94)!important;
+}
+</style>
+
+<style id="JGB_OPERATIONAL_RESET_BUTTON">
+#reRegister .jgbOperationalReset{
+  display:block!important;
+  margin-top:10px!important;
+  background:#f97316!important;
+  border-color:#f97316!important;
+  color:#fff!important;
+  font-weight:900!important;
+}
+#reRegister .jgbOperationalReset:hover{
+  filter:brightness(.94)!important;
+}
+</style>
+
+<style id="JGB_WAIT_TIME_ALIGN_ONLY">
+/* 고객용 모니터: 예상 대기시간 칸만 정렬/잘림 방지 */
+body:has(.customerHeader) .waitTableHead,
+body:has(.customerHeader) .waitRow{
+  grid-template-columns:78px 1.10fr 1fr 1.45fr!important;
+}
+body:has(.customerHeader) .waitRow em{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-width:0!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+  font-size:42px!important;
+  letter-spacing:-1px!important;
+}
+</style>
 
 </head><body>
 <div id="app"></div>
@@ -954,19 +1412,10 @@ async function sbUpsert(row){
   return true;
 }const ROOT="waiting_state";
 const params=new URLSearchParams(location.search);
-const REGISTER_URL=location.origin+location.pathname+"?page=register";
+const REGISTER_URL=location.origin+location.pathname+"#register";
 const ticket=params.get("ticket")||"";
 const colors=["#07854b","#1461e8","#6332d7","#ff7900","#e51e2a"];
 const def={id:ROOT,settings:{"난타":15,"4인 복식":15,"2인 단식":15},max_per_court:5,re_register_minutes:5,finished:{},courts:[1,2,3,4,5].map(id=>({id,blocked:false,active:null,queue:[]}))};
-const PREVIEW_MODE=params.get("preview")==="1";
-const previewState={id:ROOT,settings:{"난타":15,"4인 복식":15,"2인 단식":15},max_per_court:5,re_register_minutes:5,finished:{},courts:[
-  {id:1,blocked:false,active:{ticket:"p1",nickname:"강한팀",game:"4인 복식",court:1,startTime:"14:20",endTime:"14:37",startAt:Date.now()-15*60000,endAt:Date.now()+135000,deviceId:"p1"},queue:[{ticket:"q11",nickname:"파워팀",game:"4인 복식",people:2,waitMinutes:3},{ticket:"q12",nickname:"점프스매시",game:"4인 복식",people:1,waitMinutes:20}]},
-  {id:2,blocked:false,active:{ticket:"p2",nickname:"스매싱",game:"2인 단식",court:2,startTime:"14:25",endTime:"14:39",startAt:Date.now()-10*60000,endAt:Date.now()+255000,deviceId:"p2"},queue:[{ticket:"q21",nickname:"민턴여신",game:"2인 단식",people:2,waitMinutes:5}]},
-  {id:3,blocked:false,active:null,queue:[{ticket:"q31",nickname:"배드민턴짱",game:"4인 복식",people:2,waitMinutes:8},{ticket:"q32",nickname:"민턴스타",game:"4인 복식",people:2,waitMinutes:25}]},
-  {id:4,blocked:false,active:null,queue:[{ticket:"q41",nickname:"스매시파워",game:"2인 단식",people:1,waitMinutes:14}]},
-  {id:5,blocked:false,active:null,queue:[]},
-]};
-
 /* QR 연속등록 방지: 개인정보 대신 브라우저에 저장되는 랜덤 토큰만 사용 */
 const DEVICE_KEY="jb_anonymous_device_v1";
 const COOLDOWN_KEY="jb_register_cooldown_until";
@@ -995,66 +1444,52 @@ function setCooldown(minutes){
 function clearCooldown(){
   try{localStorage.removeItem(COOLDOWN_KEY)}catch(e){}
 }
-function cooldownRemaining(until){
-  const ms=Math.max(0,Number(until||0)-Date.now());
-  const total=Math.ceil(ms/1000);
-  const m=Math.floor(total/60);
-  const s=total%60;
-  return String(m).padStart(2,"0")+"분 "+String(s).padStart(2,"0")+"초";
-}
 function cooldownMessage(until){
-  const ms=Math.max(0,until-Date.now());
-  if(ms<=0) return "지금 다시 등록할 수 있습니다.";
-  return cooldownRemaining(until)+" 후 다시 등록할 수 있습니다.";
+  const leftMs=Math.max(0,until-Date.now());
+  const sec=Math.ceil(leftMs/1000);
+  const m=Math.floor(sec/60);
+  const ss=sec%60;
+  if(sec<=0)return "지금 다시 등록할 수 있습니다.";
+  return String(m).padStart(2,"0")+"분 "+String(ss).padStart(2,"0")+"초 후";
 }
-function getCooldownReason(s){
-  const fin=s?.finished?.[ticket];
-  return fin?.reason==="forced" ? "관리자에 의해 이용이 종료되었습니다." :
-         fin?.reason==="cancelled" ? "대기 등록이 취소되었습니다." :
-         fin?.reason==="left" ? "이용 완료 후 퇴장 처리되었습니다." :
-         "이용이 종료되었습니다.";
+function getReRegisterMinutes(s){
+  return Math.max(1,Math.min(20,Number(s?.re_register_minutes||5)));
 }
-function renderCooldownScreen(w,until,reason){
-  const activeUntil=Number(until||0);
-  const update=()=>{
-    if(!document.getElementById("reRegisterCountdown")) return;
-    const leftMs=Math.max(0,activeUntil-Date.now());
-    const el=document.getElementById("reRegisterCountdown");
-    const btn=document.getElementById("reRegisterBtn");
-    if(leftMs<=0){
-      el.textContent="지금 다시 등록할 수 있습니다.";
-      el.style.color="#07854b";
-      if(btn){
-        btn.disabled=false;
-        btn.style.opacity="1";
-        btn.textContent="다시 등록하기";
-      }
-    }else{
-      el.textContent=cooldownRemaining(activeUntil)+" 후";
-      el.style.color="#e51e2a";
-      if(btn){
-        btn.disabled=true;
-        btn.style.opacity=".55";
-        btn.textContent="재등록 대기 중";
-      }
+function getFinishedCooldownUntil(s,fin){
+  if(fin?.reRegisterUntil) return Number(fin.reRegisterUntil)||0;
+  if(fin?.endedAt) return Number(fin.endedAt)+getReRegisterMinutes(s)*60*1000;
+  return 0;
+}
+function renderReRegisterCooldown(w,until){
+  const tick=()=>{
+    const leftMs=Math.max(0,Number(until)-Date.now());
+    const sec=Math.ceil(leftMs/1000);
+    if(sec<=0){
+      clearInterval(tick.timer);
+      try{clearCooldown()}catch(e){}
+      location.hash="#register";
+      return;
     }
+    const m=Math.floor(sec/60), ss=sec%60;
+    const el=document.getElementById("reRegisterCountdown");
+    if(el) el.textContent=String(m).padStart(2,"0")+"분 "+String(ss).padStart(2,"0")+"초 후";
   };
   w.innerHTML=`
-    <div class="doneScreen" style="background:#fff;color:#071633;border:1px solid #dce4ef;text-align:center;padding:24px 18px">
-      <div style="width:58px;height:58px;border:4px solid #1466e8;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#1466e8">◷</div>
-      <h2 style="margin:8px 0 10px;color:#071633;font-size:20px">이용이 완료되었습니다.</h2>
-      <p style="color:#44546a;margin:0 0 14px;line-height:1.7">다음 이용을 위해 QR을<br>다시 찍어주세요.</p>
-      <div style="background:#eef5ff;border-radius:9px;padding:14px 10px;margin:0 0 14px">
-        <div style="font-size:13px;color:#53657c;font-weight:800;margin-bottom:5px">재등록 가능 시간</div>
-        <div id="reRegisterCountdown" style="font-size:27px;font-weight:950;color:#e51e2a">확인 중...</div>
+    <div class="doneScreen" style="background:#061b4f;text-align:center;padding:24px 18px">
+      <div class="doneIcon" style="color:#1565ff;border-color:#1565ff">◷</div>
+      <h2>이용이 완료되었습니다.</h2>
+      <p>다음 이용을 위해 QR을<br>다시 찍어주세요.</p>
+      <div class="notice" style="background:#eaf2ff;border:1px solid #8fb7ff;color:#125fe3;border-radius:8px">
+        <b>재등록 가능 시간</b>
+        <div id="reRegisterCountdown" style="font-size:29px;font-weight:900;margin-top:5px">계산 중...</div>
+        <small>잠시 후 다시 이용해주세요.</small>
       </div>
-      <div style="font-size:11px;color:#667085;line-height:1.6;margin-bottom:12px">${esc(reason||"이용이 종료되었습니다.")}</div>
-      <button id="reRegisterBtn" class="btn" type="button" onclick="goRegisterAfterCooldown()">재등록 대기 중</button>
-      <div style="font-size:10px;color:#777;margin-top:10px">※ 이 화면은 자동으로 닫히지 않습니다.</div>
+    </div>
+    <div style="font-size:10px;color:#777;text-align:center;margin-top:8px">
+      ※ 재등록 가능 시간이 지나면 QR을 다시 찍어 등록할 수 있습니다.
     </div>`;
-  update();
-  if(window.reRegisterTimer) clearInterval(window.reRegisterTimer);
-  window.reRegisterTimer=setInterval(update,1000);
+  tick();
+  tick.timer=setInterval(tick,1000);
 }
 function findDeviceRegistration(s,deviceId){
   for(const c of (s.courts||[])){
@@ -1065,14 +1500,6 @@ function findDeviceRegistration(s,deviceId){
   return null;
 }
 
-
-
-function personIcon(color){
-  return `<svg class="personIcon" viewBox="0 0 64 64" aria-hidden="true" style="color:${color}"><circle cx="23" cy="20" r="9" fill="currentColor"/><circle cx="43" cy="24" r="8" fill="currentColor"/><path d="M7 49c1-12 8-19 16-19s15 7 16 19H7Z" fill="currentColor"/><path d="M31 49c1-10 6-16 13-16 7 0 12 6 13 16H31Z" fill="currentColor"/></svg>`;
-}
-function courtIcon(color){
-  return `<svg viewBox="0 0 64 64" aria-hidden="true" style="width:38px;height:38px;color:${color}"><circle cx="22" cy="22" r="9" fill="currentColor"/><circle cx="43" cy="25" r="8" fill="currentColor"/><path d="M7 52c1-12 7-19 15-19s14 7 15 19H7Z" fill="currentColor"/><path d="M31 52c1-10 6-16 13-16 7 0 12 6 13 16H31Z" fill="currentColor"/></svg>`;
-}
 
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function tm(t){return new Date(t).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}
@@ -1087,39 +1514,86 @@ function showError(err){
   }
 }
 async function get(){
-  if(PREVIEW_MODE) return JSON.parse(JSON.stringify(previewState));
   const data=await sbGet();
   return data?data:cloneDef();
 }
 async function save(s){
-  await sbUpsert({
+  /* 다른 고객 기기의 오래된 상태가 관리자 설정을 덮어쓰지 않도록
+     저장 직전에 서버의 최신 설정값을 가져와 설정은 최신값을 보존합니다. */
+  const latest=await sbGet();
+  const payload={
     id:ROOT,
-    settings:s.settings,
-    max_per_court:s.max_per_court,
-    re_register_minutes:Math.max(1,Math.min(20,Number(s.re_register_minutes||5))),
+    settings:latest?.settings||s.settings||{"난타":15,"4인 복식":15,"2인 단식":15},
+    max_per_court:Number(latest?.max_per_court||s.max_per_court||5),
+    re_register_minutes:Math.max(1,Math.min(20,Number(latest?.re_register_minutes||s.re_register_minutes||5))),
     finished:s.finished||{},
-    courts:s.courts
-  });
+    courts:Array.isArray(s.courts)?s.courts:[]
+  };
+  await sbUpsert(payload);
 }
+
+/* 이용 기록 완전 초기화: 과거 이용기록만 비우고 현재 코트/대기는 유지 */
+async function resetUsageHistory(){
+  try{
+    const s=await get();
+    s.finished={};
+    await save(s);
+    return true;
+  }catch(e){
+    console.error("이용 기록 초기화 오류:",e);
+    return false;
+  }
+}
+
 async function ensure(){
-  if(PREVIEW_MODE) return;
   const data=await sbGet();
   if(!data) await save(cloneDef());
 }
+function kstDateKey(t=Date.now()){
+  return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Seoul",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(t));
+}
+function resetHistoryForNewDay(s){
+  s.finished=s.finished||{};
+  const today=kstDateKey();
+  if(s.finished._historyDate!==today){
+    const keep={};
+    for(const [k,v] of Object.entries(s.finished)){
+      if(k==="_historyDate"||k==="_history")continue;
+      if(v && typeof v==="object" && v.source!=="qr") keep[k]=v;
+    }
+    s.finished=keep;
+    s.finished._historyDate=today;
+    s.finished._history={};
+    return true;
+  }
+  if(!s.finished._history) s.finished._history={};
+  return false;
+}
 async function advance(s,doSave=true){
   s.finished=s.finished||{};
-  let ch=false;
+  let ch=resetHistoryForNewDay(s);
   for(const c of s.courts){
     if(c.active && Date.now()>=Number(c.active.endAt)){
       const a=c.active;
-      s.finished[a.ticket]={...a,endedAt:Date.now()};
+      const endedAt=Date.now();
+      const record={...a,source:"qr",endedAt};
+      s.finished[a.ticket]=record;
+      s.finished._history=s.finished._history||{};
+      s.finished._history[a.ticket]=record;
       c.active=null; ch=true;
     }
     if(!c.active && !c.blocked && (c.queue||[]).length){
       const x=c.queue.shift();
       const m=Number(s.settings[x.game]||15);
       const st=Date.now();
-      c.active={...x,startAt:st,endAt:st+m*60000};
+      const et=st+m*60000;
+      c.active={
+        ...x,
+        startAt:st,
+        endAt:et,
+        startTime:tm(st),
+        endTime:tm(et)
+      };
       ch=true;
     }
   }
@@ -1131,11 +1605,38 @@ function sub(fn){
   if(liveTimer) clearInterval(liveTimer);
   const refresh=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
   refresh();
-  liveTimer=setInterval(refresh,2000);
+  liveTimer=setInterval(refresh,1000);
 }
 
+/* 관리자 설정 화면은 2초 자동 갱신으로 사용자가 누른 +/− 값을 덮어쓰지 않도록
+   서버에서 읽기만 합니다. 저장 버튼을 눌렀을 때만 설정값이 서버에 반영됩니다. */
+let adminSettingsDirty=false;
+function subAdmin(fn){
+  if(liveTimer) clearInterval(liveTimer);
+  const refresh=async()=>{
+    try{
+      const s=await get();
+      fn(s);
+      /* +/−로 수정 중이면 입력값은 renderAdmin이 덮어쓰지 않게 유지 */
+      if(adminSettingsDirty){
+        const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),rc=document.getElementById("rc");
+        if(g1)g1.textContent=adminDraft.g1;
+        if(g2)g2.textContent=adminDraft.g2;
+        if(g3)g3.textContent=adminDraft.g3;
+        if(mx)mx.textContent=adminDraft.mx;
+        if(rc)rc.textContent=adminDraft.rc;
+      }
+    }catch(e){
+      showError(e);
+    }
+  };
+  refresh();
+  liveTimer=setInterval(refresh,2000);
+}
+let adminDraft={g1:15,g2:15,g3:15,mx:5,rc:5};
+
 /* GitHub Pages compatible routing:
-   /?page=register
+   /#register
    /?page=admin
    /?page=waiting&ticket=...
    Existing /register, /admin, /waiting paths are also supported. */
@@ -1154,7 +1655,7 @@ function customer(){
   app.innerHTML=`
   <header class="customerHeader">
     <div class="customerBrand">
-      <div class="brandIcon"><svg viewBox="0 0 64 64" aria-hidden="true" style="width:34px;height:34px"><path d="M13 49c11-2 23-12 30-29 3-7 8-10 12-10 1 0 2 1 2 2 0 4-3 9-9 13-10 7-19 17-25 27z" fill="#fff"/><path d="M20 51c8-1 17-5 25-13" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/></svg></div>
+      <div class="brandIcon">🏸</div>
       <div><div class="brand">장군봉 실내배드민턴장</div><div class="sub">실시간 대기 현황</div></div>
     </div>
     <div class="customerStats" id="stats"></div>
@@ -1171,10 +1672,9 @@ function customer(){
       </div>
       <div class="waitGrid" id="waitGrid"></div>
       <div class="displayNotice">
-        <div><b>ⓘ 안내사항</b><br>게임 완료 후 퇴장 버튼을 눌러주셔야<br>다음 대기가 자동으로 진행됩니다.</div>
-        <div><b>◫ 대기 예상 시간</b><br>평균 게임 시간(약 17분) 기준으로 산정됩니다.</div>
-        <div><b>⟳ 대기 시간</b><br>상황에 따라 변동될 수 있습니다.</div>
-        <div><b>❗ 이용 문의</b><br>이용에 불편 사항이나 문의사항은<br>사무실로 문의 부탁드립니다.<br><strong>02-2015-2771</strong></div>
+        <div><b>ⓘ 안내사항</b><br>게임 완료 후 <strong>퇴장 버튼</strong>을 눌러주셔야 다음 대기가 자동으로 진행됩니다.</div>
+        <div>◷ <strong>대기 예상 시간</strong>은 평균 게임 시간(약 17분) 기준으로 산정됩니다.</div>
+        <div>↻ <strong>대기 시간은 상황에 따라 변동</strong>될 수 있습니다.</div>
       </div>
     </section>
   </main>`;
@@ -1186,20 +1686,44 @@ function customer(){
   };
   tick(); setInterval(tick,1000);
 }
+
+async function forceRemoveWait(courtId,ticketId){
+  try{
+    if(!ticketId)return;
+    const s=await get();
+    const c=(s.courts||[]).find(x=>Number(x.id)===Number(courtId));
+    if(!c)return;
+    const removed=(c.queue||[]).find(x=>x.ticket===ticketId);
+    c.queue=(c.queue||[]).filter(x=>x.ticket!==ticketId);
+    s.finished=s.finished||{};
+    s.finished[ticketId]={...(removed||{}),ticket:ticketId,source:"qr",canceled:true,endedAt:Date.now(),reRegisterUntil:Date.now()+getReRegisterMinutes(s)*60*1000};
+    await save(s);
+    if(typeof renderCustomer==="function")renderCustomer(s);
+    if(typeof renderAdmin==="function")renderAdmin(s);
+  }catch(e){
+    if(typeof showError==="function")showError(e);
+    else console.error(e);
+  }
+}
+
 function renderCustomer(s){
   const stats=document.getElementById("stats"), activeEl=document.getElementById("activeCourts"), waitEl=document.getElementById("waitGrid");
   if(!stats||!activeEl||!waitEl)return;
   const activeCount=s.courts.filter(c=>c.active).length;
-  const waitCount=s.courts.filter(c=>(c.queue||[]).length>0).length;
+  const waitCount=s.courts.reduce((n,c)=>n+(c.queue||[]).length,0);
   const peopleCount=s.courts.reduce((n,c)=>
     n+(c.queue||[]).reduce((m,x)=>m+Number(x.people||x.count||1),0),0);
   stats.innerHTML=`
-    <div class="topStat"><span style="color:#145fe5"><svg viewBox="0 0 64 64" style="width:30px;height:30px"><rect x="10" y="10" width="44" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="5"/><path d="M32 10v44M10 32h44" stroke="currentColor" stroke-width="3"/></svg></span><div><small>전체 코트</small><b>5 개</b></div></div>
-    <div class="topStat"><span style="color:#07854b">${personIcon('#07854b')}</span><div><small>이용 중 코트</small><b>${activeCount} 개</b></div></div>
-    <div class="topStat"><span style="color:#ff7900">${personIcon('#ff7900')}</span><div><small>대기 중 팀</small><b>${waitCount} 팀</b></div></div>
-    <div class="topStat"><span style="color:#6332d7">${personIcon('#6332d7')}</span><div><small>전체 대기 인원</small><b>${peopleCount} 명</b></div></div>`;
+    <div class="topStat"><span style="color:#145fe5">▣</span><div><small>전체 코트</small><b>5 개</b></div></div>
+    <div class="topStat"><span style="color:#07854b">👥</span><div><small>이용 중 코트</small><b>${activeCount} 개</b></div></div>
+    <div class="topStat"><span style="color:#ff7900">👥</span><div><small>대기 중 팀</small><b>${waitCount} 팀</b></div></div>
+    <div class="topStat"><span style="color:#6332d7">👥</span><div><small>전체 대기 인원</small><b>${peopleCount} 명</b></div></div>`;
+
   activeEl.innerHTML=s.courts.map((c,i)=>{
     const a=c.active,color=colors[i];
+    const q=c.queue||[];
+    let firstWaitSec=0;
+    if(a?.endAt) firstWaitSec=Math.max(0,Math.ceil((Number(a.endAt)-Date.now())/1000));
     return `<article class="activeCard" style="--court:${color}">
       <div class="activeHead">
         <span><b class="activeNum" style="background:${color}">${c.id}</b> ${c.id}번 코트</span>
@@ -1211,42 +1735,42 @@ function renderCustomer(s){
           <div class="activeTeam">${esc(a.nickname)}</div>
           <div class="activeGame">${esc(a.game)}</div>
           <div class="activeLabel">이용 시간</div>
-          <div class="activeTime" style="color:${color}">${a.startTime||''} ~ ${a.endTime||tm(a.endAt)}</div>
+          <div class="activeTime" style="color:${color}">${a.startTime||tm(a.startAt)} ~ ${a.endTime||tm(a.endAt)}</div>
           <div style="margin-top:10px;padding:9px;background:${color}12;border:1px solid ${color}55;border-radius:9px">
-            ${personIcon(color)}
-            <div><div style="font-size:10px;color:#53657c">남은 시간</div>
-            <div style="font-size:23px;font-weight:950;color:${color}">${left(a.endAt)}</div></div>
+            <div style="font-size:10px;color:#53657c">남은 시간</div>
+            <div style="font-size:23px;font-weight:950;color:${color}">${left(a.endAt)}</div>
           </div>`
         :`
           <div style="font-size:11px;font-weight:800;color:#53657c;margin-top:8px">현재 대기 팀</div>
           <div class="activeTeam">없음</div>
           <div class="activeLabel">예상 대기 시간</div>
-          <div class="activeTime" style="color:${color}">약 ${Math.max(0,Number((c.queue||[])[0]?.waitMinutes)||0)}분</div>
-          <div class="activeQueueBox" style="background:${color}12;border:1px solid ${color}55;color:${color}">${personIcon(color)}<span>대기 ${(c.queue||[]).length}팀</span></div>`}
+          <div class="activeTime" style="color:${color}">${q.length?'약 '+Math.floor(firstWaitSec/60)+'분':'대기 없음'}</div>`}
+        <div class="courtGraphic" style="--court:${color}"><i></i><i></i><i></i>${a?'<span>🏸</span>':''}</div>
       </div>
     </article>`;
   }).join("");
+
   waitEl.innerHTML=s.courts.map((c,i)=>{
     const q=c.queue||[],color=colors[i];
+    let activeRemainSec=0;
+    if(c.active?.endAt){
+      activeRemainSec=Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/1000));
+    }
     return `<article class="waitCard" style="--court:${color}">
       <div class="waitCardTitle">${c.id}번 코트 대기 현황 <span>(총 ${q.length}팀)</span></div>
       <div class="waitTableHead"><span>순번</span><span>팀명</span><span>게임 방식</span><span>예상 대기시간</span></div>
       ${q.length?q.slice(0,5).map((x,j)=>{
-        const mins=Math.max(0,Math.round((Number(x.waitMinutes)||((j+1)*17))));
-        return `<div class="waitRow"><b style="background:${color}22;color:${color}">${j+1}</b><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>약 ${mins}분</em></div>`;
+        let waitSec=activeRemainSec;
+        for(let k=0;k<j;k++) waitSec+=Number(s.settings?.[q[k].game]||15)*60;
+        waitSec=Math.max(0,waitSec);
+        const wm=Math.floor(waitSec/60), ws=waitSec%60;
+        const waitText=wm>0?`${wm}분 ${String(ws).padStart(2,"0")}초`:`${ws}초`;
+        return `<div class="waitRow" style="grid-template-columns:1.18fr 1fr 1.11fr 1.12fr!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:6px"><button type="button" class="kickBtn" aria-label="대기자 삭제" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:30px!important;height:30px!important;min-width:30px!important;padding:0!important;margin:0!important;border:0!important;border-radius:5px!important;background:#e11d2e!important;color:#fff!important;font-size:20px!important;font-weight:950!important;line-height:30px!important;cursor:pointer!important" onclick="forceRemoveWait(${c.id},'${String(x.ticket||"").replace(/'/g,"\\'")}');event.stopPropagation()">×</button><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>`;
       }).join(""):`<div class="waitEmpty"><div class="emptyFace" style="color:${color}">☺</div><b>대기 중인 팀이 없습니다.</b></div>`}
     </article>`;
   }).join("");
 }
-
 function register(){
-  const cooldown=getCooldownUntil();
-  if(cooldown>Date.now()){
-    const app=document.getElementById("app");
-    app.innerHTML='<div class="wait"><div class="waithead"><h2>고객용 QR 스마트등록</h2></div><div class="waitbody" id="w"></div></div>';
-    renderCooldownScreen(document.getElementById("w"),cooldown,"재등록 제한 시간이 적용 중입니다.");
-    return;
-  }
   const app=document.getElementById("app");
   app.innerHTML=`
   <div style="min-height:100vh;background:#f4f7fb;padding:14px 12px 28px">
@@ -1257,7 +1781,6 @@ function register(){
         <div style="font-size:11px;margin-top:5px">QR로 접속하여 대기 등록해주세요.</div>
       </div>
       <div style="background:#fff;border-radius:0 0 18px 18px;padding:20px 18px;box-shadow:0 8px 24px #001b4f18">
-        <div class="field"><label>닉네임 *</label><input id="n" name="queue_nickname" type="text" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="닉네임을 입력해주세요"></div>
         <div class="field"><label>게임 방식 *</label>
           <select id="g">
             <option value="">게임 방식을 선택해주세요</option>
@@ -1312,9 +1835,20 @@ async function loadRegisterDuration(){
   window.addEventListener("beforeunload",()=>{if(timer)clearInterval(timer)},{once:true});
 }
 
+function nextAutoLabel(state){
+  const pool=[..."ABCDEFGHIJKLMNOPQRSTUVWXYZㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ"];
+  const used=new Set();
+  for(const c of (state?.courts||[])){
+    if(c?.active?.nickname) used.add(String(c.active.nickname));
+    for(const x of (Array.isArray(c?.queue)?c.queue:[])){
+      if(x?.nickname) used.add(String(x.nickname));
+    }
+  }
+  return pool.find(v=>!used.has(v)) || ("대기"+(used.size+1));
+}
+
 async function reg(){
   const btn=document.getElementById("regBtn"), ee=document.getElementById("e");
-  const nn=document.getElementById("n").value.trim();
   const gg=document.getElementById("g").value;
   const id=Number(document.getElementById("c").value);
   const deviceId=getDeviceToken();
@@ -1325,7 +1859,7 @@ async function reg(){
     btn.disabled=false; btn.style.opacity="1";
   };
 
-  if(!nn||!gg||!id){err("닉네임, 게임 방식, 코트를 모두 선택해주세요.");return}
+  if(!gg||!id){err("게임 방식과 코트를 선택해주세요.");return}
 
   /* 같은 스마트폰의 5분 재등록 제한 */
   const cooldown=getCooldownUntil();
@@ -1343,6 +1877,7 @@ async function reg(){
     s.max_per_court=Math.max(1,Math.min(20,Number(s.max_per_court||5)));
     s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
     s.finished=s.finished||{};
+    const nn=nextAutoLabel(s);
 
     /* 서버에 저장된 익명 기기 토큰으로 모든 코트의 중복 대기/이용 여부 검사 */
     const existing=findDeviceRegistration(s,deviceId);
@@ -1369,10 +1904,14 @@ async function reg(){
       game:gg,
       court:id,
       createdAt:Date.now(),
-      deviceId:deviceId
+      deviceId:deviceId,
+      source:"qr"
     });
 
+    // 1번 등록자는 즉시 이용 중(active), 이후 등록자는 대기열(queue)로 들어감
     await advance(s,false);
+
+    // 변경된 active/queue 상태와 현재 대기 정원을 서버에 확실히 저장
     await save(s);
 
     /* 등록 성공 후 관리자에서 설정한 시간 동안 같은 브라우저의 재등록 차단 */
@@ -1394,14 +1933,19 @@ function renderWaiting(s){
   const w=document.getElementById("w"); if(!w)return;
   let a=null,q=null,c=null,fin=s.finished?.[ticket];
 
-  /* 퇴장/예약취소/강제퇴장 후 고객 스마트폰에 재등록 제한 화면 표시 */
-  const localCooldown=getCooldownUntil();
-  const serverCooldown=Number(fin?.reRegisterUntil||0);
-  const cooldownUntil=Math.max(localCooldown,serverCooldown);
+  const serverUntil=getFinishedCooldownUntil(s,fin);
+  const localUntil=getCooldownUntil();
+  const cooldownUntil=Math.max(serverUntil,localUntil);
   if(cooldownUntil>Date.now()){
-    renderCooldownScreen(w,cooldownUntil,getCooldownReason(s));
+    renderReRegisterCooldown(w,cooldownUntil);
     return;
   }
+  if(serverUntil && serverUntil<=Date.now() && fin){
+    if(s.finished)delete s.finished[ticket];
+    try{save(s)}catch(e){}
+    fin=null;
+  }
+  if(localUntil && localUntil<=Date.now()) clearCooldown();
 
   for(const x of s.courts){
     if(x.active?.ticket===ticket){a=x.active;c=x}
@@ -1419,7 +1963,7 @@ function renderWaiting(s){
         <div class="doneIcon">✓</div>
         <h2>장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2>
         <p>이용 시간이 종료되었습니다.<br>다음 고객을 위해<br>퇴장 버튼을 눌러주세요.</p>
-        <div class="notice">퇴장 버튼을 눌러야<br>다음 대기자가 이용을 시작합니다.</div>
+        <div class="notice">퇴장을 눌러야<br>다시 이용 가능합니다.</div>
         <button class="btn" onclick="finish()">퇴장하기</button>
       </div>
       <div style="font-size:10px;color:#777;text-align:center;margin-top:8px">
@@ -1437,7 +1981,7 @@ function renderWaiting(s){
       </div>
       <div class="doneScreen" style="background:#061b4f;text-align:left">
         <div style="text-align:center;font-size:12px;font-weight:800;margin-bottom:12px">고객용 QR 스마트등록</div>
-        <div class="row"><span style="color:#fff">닉네임</span><b style="color:#fff">${esc(a.nickname)}</b></div>
+        <div class="row"><span style="color:#fff">대기자</span><b style="color:#fff">${esc(a.nickname)}</b></div>
         <div class="row"><span style="color:#fff">선택 코트</span><b style="color:#fff">${a.court}번 코트</b></div>
         <div class="row"><span style="color:#fff">이용 시간</span><b style="color:#fff">${tm(a.startAt)} ~ ${tm(a.endAt)}</b></div>
         <div class="my">
@@ -1455,18 +1999,28 @@ function renderWaiting(s){
   if(q){
     const arr=c.queue||[];
     const pos=arr.findIndex(x=>x.ticket===ticket)+1;
-    const duration=Number(s.settings[q.game]||15);
-    let activeRemain=0;
-    if(c.active && c.active.endAt){
-      activeRemain=Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/60000));
+    let activeRemainSec=0;
+    if(c.active?.endAt){
+      activeRemainSec=Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/1000));
     }
-    const expected=Math.max(0,activeRemain+(pos-1)*duration);
+
+    let expectedSec=activeRemainSec;
+    for(let i=0;i<pos-1;i++){
+      expectedSec+=Number(s.settings?.[arr[i].game]||15)*60;
+    }
+    expectedSec=Math.max(0,expectedSec);
+
     const now=new Date();
-    const eta=new Date(Date.now()+expected*60000);
+    const eta=new Date(Date.now()+expectedSec*1000);
+    const expectedMin=Math.floor(expectedSec/60);
+    const expectedSecPart=expectedSec%60;
+    const expectedText=expectedMin>0
+      ? `${expectedMin}분 ${String(expectedSecPart).padStart(2,"0")}초`
+      : `${expectedSecPart}초`;
 
     w.innerHTML=`
       <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
-        ● 현재 대기 현황
+        ● 개선 화면 (해당 코트만 간결하게)
       </div>
       <div class="doneScreen" style="padding:12px 14px;background:#061b4f;text-align:left">
         <div style="text-align:center;font-size:13px;font-weight:900;margin-bottom:10px">고객용 QR 스마트등록</div>
@@ -1474,9 +2028,9 @@ function renderWaiting(s){
 
         <div style="background:#fff;color:#071633;border-radius:12px;padding:12px">
           <div style="font-size:13px;font-weight:900;margin-bottom:8px">내 대기 정보</div>
-          <div class="row"><span>닉네임</span><b>${esc(q.nickname)}</b></div>
+          <div class="row"><span>대기자</span><b>${esc(q.nickname)}</b></div>
           <div class="row"><span>선택 코트</span><b>${q.court}번 코트</b></div>
-          <div class="row"><span>이용 시간</span><b>${duration}분</b></div>
+          <div class="row"><span>이용 시간</span><b>${Number(s.settings?.[q.game]||15)}분</b></div>
 
           <div class="my" style="margin-top:12px">
             <small>나의 순번</small>
@@ -1490,14 +2044,18 @@ function renderWaiting(s){
           </div>
 
           <div style="text-align:center;font-size:11px;color:#333">남은 시간</div>
-          <div class="timer" style="color:#07854b">${String(expected).padStart(2,"0")}:00</div>
+          <div class="timer" style="color:#07854b">${String(Math.floor(expectedSec/60)).padStart(2,"0")}:${String(expectedSec%60).padStart(2,"0")}</div>
 
           <div class="qbox">
             <div class="qtitle">${c.id}번 코트 대기 현황 (총 ${arr.length}팀)</div>
-            <div class="qrow" style="font-weight:800"><span>순번</span><span>닉네임</span><span>예상 대기 시간</span></div>
+            <div class="qrow" style="font-weight:800"><span>순번</span><span>대기자</span><span>예상 대기 시간</span></div>
             ${arr.map((x,i)=>{
-              const wait=Math.max(0,activeRemain+i*duration);
-              return `<div class="qrow"><b>${i+1}</b><span>${esc(x.nickname)}${x.ticket===ticket?' <b>(나)</b>':''}</span><span>약 ${wait}분 후 입장</span></div>`;
+              let waitSec=activeRemainSec;
+              for(let k=0;k<i;k++) waitSec+=Number(s.settings?.[arr[k].game]||15)*60;
+              waitSec=Math.max(0,waitSec);
+              const wm=Math.floor(waitSec/60), ws=waitSec%60;
+              const waitText=wm>0?`${wm}분 ${String(ws).padStart(2,"0")}초`:`${ws}초`;
+              return `<div class="qrow"><b>${i+1}</b><span>${esc(x.nickname)}${x.ticket===ticket?' <b>(나)</b>':''}</span><span>${waitText} 후 입장</span></div>`;
             }).join("")}
           </div>
 
@@ -1512,50 +2070,45 @@ function renderWaiting(s){
 async function cancelWait(){
   try{
     let s=await get();
-    s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
-    for(const c of s.courts)c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);
-    const until=Date.now()+s.re_register_minutes*60000;
+    const minutes=getReRegisterMinutes(s);
+    const until=Date.now()+minutes*60*1000;
     s.finished=s.finished||{};
-    s.finished[ticket]={ticket,endedAt:Date.now(),reRegisterUntil:until,reason:"cancelled"};
+    const oldEntry=findDeviceRegistration(s,getDeviceToken())?.entry;
+    for(const c of s.courts)c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);
+    s.finished[ticket]={...(oldEntry||{}),ticket,source:"qr",canceled:true,endedAt:Date.now(),reRegisterUntil:until};
     await save(s);
-    setCooldown(s.re_register_minutes);
-    renderWaiting(s);
+    renderReRegisterCooldown(document.getElementById("w"),until);
   }catch(e){showError(e)}
 }
 async function leave(){
   try{
     let s=await get();
-    s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
-    const until=Date.now()+s.re_register_minutes*60000;
+    s.finished=s.finished||{};
+    resetHistoryForNewDay(s);
+    const minutes=getReRegisterMinutes(s);
+    const until=Date.now()+minutes*60*1000;
     for(const c of s.courts){
       if(c.active?.ticket===ticket){
-        s.finished=s.finished||{};
-        s.finished[ticket]={...c.active,endedAt:Date.now(),reRegisterUntil:until,reason:"left"};
+        const record={...c.active,source:"qr",endedAt:Date.now(),reRegisterUntil:until};
+        s.finished[ticket]=record;
+        s.finished._history=s.finished._history||{};
+        s.finished._history[ticket]=record;
         c.active=null;
       }
     }
     await advance(s);
     await save(s);
-    setCooldown(s.re_register_minutes);
-    renderWaiting(s);
+    renderReRegisterCooldown(document.getElementById("w"),until);
   }catch(e){showError(e)}
 }
 async function finish(){
   try{
     let s=await get();
-    const current=s.finished?.[ticket];
-    s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
-    const until=Date.now()+s.re_register_minutes*60000;
-    s.finished=s.finished||{};
-    s.finished[ticket]={...(current||{ticket}),endedAt:Date.now(),reRegisterUntil:until,reason:current?.reason||"left"};
+    const fin=s.finished?.[ticket];
+    const until=getFinishedCooldownUntil(s,fin)||Date.now()+getReRegisterMinutes(s)*60*1000;
     await save(s);
-    setCooldown(s.re_register_minutes);
-    renderWaiting(s);
+    renderReRegisterCooldown(document.getElementById("w"),until);
   }catch(e){showError(e)}
-}
-function goRegisterAfterCooldown(){
-  if(getCooldownUntil()>Date.now()) return;
-  location.href=REGISTER_URL;
 }
 
 function setupAdminNav(){
@@ -1567,40 +2120,131 @@ function setupAdminNav(){
 
 function admin(){
   const app=document.getElementById("app");
-  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=customer">고객 화면으로</a></div></header><div class="admin"><div id="viewSwitch" class="view-switch" aria-label="관리자 화면 전환">
+  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=management&view=display">고객 화면으로</a></div></header><div class="admin"><div id="viewSwitch" class="view-switch" aria-label="관리자 화면 전환">
   <button id="switchCustomer" type="button" onclick="switchManagementView('display')">고객용</button>
   <button id="switchAdmin" class="secondary" type="button" onclick="switchManagementView('admin')">관리자 모드</button>
 </div>
-<aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기 정원 설정</h2><div class="hint">전체 코트에 동일하게 적용됩니다.</div></div></div><div class="controlRow"><div class="controlBox"><h3>대기자 최대 정원</h3><div class="hint" style="margin-bottom:10px">전체 코트 동일 적용 · 1명~20명</div><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></section><section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveAdmin()">변경사항 저장</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section><section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
-  renderAdmin(cloneDef()); sub(renderAdmin);
+<aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div><button class="save adminSave" onclick="saveGameTime()">게임 시간 변경사항 저장</button></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기 정원 설정</h2><div class="hint">전체 코트에 동일하게 적용됩니다.</div></div></div><div class="controlRow"><div class="controlBox"><h3>대기자 최대 정원</h3><div class="hint" style="margin-bottom:10px">전체 코트 동일 적용 · 1명~20명 (사람 수)</div><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div></div><button class="save adminSave" onclick="saveWaitMax()">변경사항 저장</button></section><section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveCooldown()">변경사항 저장</button><button class="save adminSave jgbOperationalReset" type="button" onclick="resetOperationalState()">오늘 운영 상태 초기화</button><button class="save adminSave jgbHistoryManual" type="button" onclick="resetHistoryOnServer()">이용 기록 수동 삭제</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section>
+<section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
+  adminSettingsDirty=false;
+  renderAdmin(cloneDef()); subAdmin(renderAdmin);
 }
 function renderAdmin(s){
-  const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),rc=document.getElementById("rc"),cs=document.getElementById("cs"),qq=document.getElementById("qq");
+  const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),rc=document.getElementById("rc"),cs=document.getElementById("cs"),qq=document.getElementById("qq"),hr=document.getElementById("historyRows");
   if(!g1||!g2||!g3||!mx||!rc||!cs||!qq)return;
-  g1.textContent=s.settings["난타"];g2.textContent=s.settings["4인 복식"];g3.textContent=s.settings["2인 단식"];mx.textContent=s.max_per_court;rc.textContent=Number(s.re_register_minutes||5);
-  cs.innerHTML=s.courts.map(c=>'<div class="lockCard"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'현재 잠금':'현재 사용 가능')+'</p><button class="'+(c.blocked?'locked':'open')+'" onclick="block('+c.id+','+(!c.blocked)+')">'+(c.blocked?'잠금 해제':'코트 잠금')+'</button></div>').join('');
+  if(!adminSettingsDirty){
+    g1.textContent=Math.max(1,Math.min(20,Number(s.settings["난타"]||15)));
+    g2.textContent=Math.max(1,Math.min(20,Number(s.settings["4인 복식"]||15)));
+    g3.textContent=Math.max(1,Math.min(20,Number(s.settings["2인 단식"]||15)));
+    adminDraft.g1=Number(g1.textContent); adminDraft.g2=Number(g2.textContent); adminDraft.g3=Number(g3.textContent);
+  }
+  if(!adminSettingsDirty){
+    mx.textContent=Math.max(1,Math.min(20,Number(s.max_per_court||5)));
+    rc.textContent=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
+    adminDraft.mx=Number(mx.textContent); adminDraft.rc=Number(rc.textContent);
+  }
+  cs.innerHTML=s.courts.map(c=>'<div class="lockCard"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'현재 잠금':'현재 사용 가능')+'</p><button type="button" class="'+(c.blocked?'locked':'open')+'" onclick="window.jgbBlock('+c.id+','+(!c.blocked)+')">'+(c.blocked?'잠금 해제':'코트 잠금')+'</button></div>').join('');
+  const hist=Object.values((s.finished&&s.finished._history)||{}).sort((a,b)=>Number(b.endedAt||0)-Number(a.endedAt||0));
+  if(hr) hr.innerHTML=hist.length
+    ? '<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">코트</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">팀명</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">게임</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">시작</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">종료</th><th style="padding:9px;border:1px solid #d5dfeb;background:#eef3f8">비고</th></tr></thead><tbody>'
+      +hist.map(x=>'<tr><td style="padding:9px;border:1px solid #d5dfeb;text-align:center">'+esc(x.court)+'번</td><td style="padding:9px;border:1px solid #d5dfeb;font-weight:800">'+esc(x.nickname)+'</td><td style="padding:9px;border:1px solid #d5dfeb">'+esc(x.game)+'</td><td style="padding:9px;border:1px solid #d5dfeb;text-align:center">'+esc(x.startTime||tm(x.startAt))+'</td><td style="padding:9px;border:1px solid #d5dfeb;text-align:center">'+esc(x.endTime||tm(x.endAt))+'</td><td style="padding:9px;border:1px solid #d5dfeb;text-align:center">'+(x.forced?'강제 퇴장':'정상 종료')+'</td></tr>').join('')
+      +'</tbody></table></div>'
+    : '<div style="padding:22px;text-align:center;color:#718096;border:1px dashed #cbd5e1;border-radius:10px">오늘 이용 기록이 없습니다.</div>';
+
   qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
 }
-async function changeTime(game,delta){
-  const el=game==="난타"?document.getElementById("g1"):game==="4인 복식"?document.getElementById("g2"):document.getElementById("g3");
-  if(!el)return;
-  const v=Math.max(1,Math.min(20,Number(el.textContent||15)+delta));
-  el.textContent=v;
+async function resetHistory(){
+  if(!confirm("오늘 이용 기록을 모두 초기화할까요?\n현재 이용 중/대기 중인 팀은 삭제하지 않습니다."))return;
   try{
     const s=await get();
-    s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
-    s.settings[game]=v;
+    s.finished=s.finished||{};
+    s.finished._history={};
+    s.finished._historyDate=kstDateKey();
     await save(s);
+    renderAdmin(await get());
+    alert("이용 기록이 초기화되었습니다.");
   }catch(e){showError(e)}
+}
+function changeTime(game,delta){
+  const el=game==="난타"?document.getElementById("g1"):game==="4인 복식"?document.getElementById("g2"):document.getElementById("g3");
+  if(!el)return;
+  const value=Math.max(1,Math.min(20,Number(el.textContent||15)+delta));
+  el.textContent=value;
+  adminSettingsDirty=true;
+  if(game==="난타")adminDraft.g1=value;
+  else if(game==="4인 복식")adminDraft.g2=value;
+  else adminDraft.g3=value;
 }
 function changeMax(delta){
   const el=document.getElementById("mx"); if(!el)return;
-  el.textContent=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
+  const value=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
+  el.textContent=value; adminDraft.mx=value; adminSettingsDirty=true;
 }
 function changeCooldown(delta){
   const el=document.getElementById("rc"); if(!el)return;
-  el.textContent=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
+  const value=Math.max(1,Math.min(20,Number(el.textContent||5)+delta));
+  el.textContent=value; adminDraft.rc=value; adminSettingsDirty=true;
 }
+
+async function saveWithSettings(s){
+  /* 관리자 설정은 해당 필드만 저장하여 고객 상태 저장과 충돌하지 않게 합니다. */
+  await sbUpsert({
+    id:ROOT,
+    settings:s.settings,
+    max_per_court:s.max_per_court,
+    re_register_minutes:Math.max(1,Math.min(20,Number(s.re_register_minutes||5))),
+    finished:s.finished||{},
+    courts:s.courts
+  });
+}
+
+async function saveGameTime(){
+  try{
+    let s=await get();
+    s.settings=s.settings||{"난타":15,"4인 복식":15,"2인 단식":15};
+    s.settings["난타"]=Math.max(1,Math.min(20,Number(document.getElementById("g1").textContent||15)));
+    s.settings["4인 복식"]=Math.max(1,Math.min(20,Number(document.getElementById("g2").textContent||15)));
+    s.settings["2인 단식"]=Math.max(1,Math.min(20,Number(document.getElementById("g3").textContent||15)));
+    await saveWithSettings(s);
+    adminSettingsDirty=false;
+    const saved=await get();
+    renderAdmin(saved);
+    alert("게임 시간 설정이 저장되었습니다.");
+  }catch(e){showError(e)}
+}
+
+async function saveWaitMax(){
+  try{
+    let s=await get();
+    if(!s) s=cloneDef();
+
+    // 대기 정원만 변경하고 기존 게임시간/재등록시간은 그대로 보존
+    const value=Math.max(1,Math.min(20,Number(document.getElementById("mx").textContent||5)));
+    s.max_per_court=value;
+
+    await saveWithSettings(s);
+    adminSettingsDirty=false;
+
+    // 저장 후 서버값으로 다시 읽어 5명으로 되돌아가는 현상 방지
+    const saved=await get();
+    renderAdmin(saved);
+
+    alert("대기 정원 설정이 저장되었습니다. 현재 정원: "+Number(saved.max_per_court||value)+"명");
+  }catch(e){showError(e)}
+}
+
+async function saveCooldown(){
+  try{
+    let s=await get();
+    s.re_register_minutes=Math.max(1,Math.min(20,Number(document.getElementById("rc").textContent||5)));
+    await saveWithSettings(s);
+    adminSettingsDirty=false;
+    const saved=await get();
+    renderAdmin(saved);
+    alert("재등록 제한 시간이 저장되었습니다.");
+  }catch(e){showError(e)}
+}
+
 async function saveAdmin(){
   try{
     let s=await get();
@@ -1618,24 +2262,30 @@ async function saveAdmin(){
     // 저장 직후 DB에서 다시 읽어 화면을 갱신하여 5분으로 되돌아가는 현상 방지
     const saved=await get();
     renderAdmin(saved);
-    alert("변경사항이 저장되었습니다. 재등록 제한시간: "+(Number(saved.re_register_minutes)||5)+"분");
+    alert("변경사항이 저장되었습니다.");
   }catch(e){showError(e)}
 }
 async function block(id,b){
   try{
     let s=await get();
-    s.courts.find(c=>c.id===id).blocked=b;
+    const c=s.courts.find(c=>c.id===id);
+    if(!c)return;
+    c.blocked=!!b;
     await save(s);
   }catch(e){showError(e)}
 }
+window.jgbBlock=function(id,b){ return block(id,b); };
 async function force(id){
   try{
     let s=await get(),c=s.courts.find(c=>c.id===id);
     if(c.active){
-      s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
-      const until=Date.now()+s.re_register_minutes*60000;
       s.finished=s.finished||{};
-      s.finished[c.active.ticket]={...c.active,endedAt:Date.now(),reRegisterUntil:until,reason:"forced"};
+      resetHistoryForNewDay(s);
+      const forcedUntil=Date.now()+getReRegisterMinutes(s)*60*1000;
+      const record={...c.active,endedAt:Date.now(),forced:true,reRegisterUntil:forcedUntil};
+      s.finished[c.active.ticket]=record;
+      s.finished._history=s.finished._history||{};
+      s.finished._history[c.active.ticket]=record;
       c.active=null;
     }
     await advance(s); await save(s);
@@ -1651,7 +2301,7 @@ function management(){
     if(top){
       const links=top.querySelectorAll('a');
       if(links[0]){links[0].href='?page=management&view=display';links[0].textContent='고객용';}
-      if(links[1]){links[1].href='?page=register';links[1].textContent='QR 등록';}
+      if(links[1]){links[1].href='#register';links[1].textContent='QR 등록';}
     }
   }else{
     customer();
@@ -1673,40 +2323,15 @@ function management(){
   ensure().catch(e=>console.error(e));
 })();
 </script>
-<script>
+
+<script id="JGB_ROUTE_VIEW_SWITCH">
 (function(){
   window.switchManagementView=function(view){
-    const display=document.getElementById("manageDisplay");
-    const admin=document.getElementById("manageAdmin");
-    if(!display||!admin)return;
-    const customer=document.getElementById("switchCustomer");
-    const adminBtn=document.getElementById("switchAdmin");
-    if(view==="admin"){
-      display.style.display="none";
-      admin.style.display="block";
-      if(customer)customer.style.display="inline-flex";
-      if(adminBtn)adminBtn.style.display="none";
-    }else{
-      display.style.display="block";
-      admin.style.display="none";
-      if(customer)customer.style.display="none";
-      if(adminBtn)adminBtn.style.display="inline-flex";
-    }
+    const p=new URLSearchParams(window.location.search);
+    p.set("page","management");
+    p.set("view", view==="admin" ? "admin" : "display");
+    window.location.href=window.location.pathname+"?"+p.toString();
   };
-
-  function initManagementView(){
-    const mp=document.getElementById("managementPage");
-    if(!mp)return;
-    const params=new URLSearchParams(location.search);
-    const view=params.get("view")||"display";
-    switchManagementView(view==="admin"?"admin":"display");
-  }
-
-  if(document.readyState==="loading"){
-    document.addEventListener("DOMContentLoaded",initManagementView);
-  }else{
-    initManagementView();
-  }
 })();
 </script>
 
@@ -1729,18 +2354,776 @@ function management(){
 })();
 </script>
 
+<style id="JGB_ADMIN_SAVE_FIX">
+/* 관리자: 게임 시간 저장 버튼 */
+#gameTime > .adminSave{
+  display:block!important;
+  margin-top:14px!important;
+  min-width:180px!important;
+  font-weight:900!important;
+}
+
+/* 관리자: 대기 정원은 사람 수(명) 표시 */
+#waitMax #mx{
+  display:inline-block!important;
+  min-width:28px!important;
+  text-align:center!important;
+}
+#waitMax .stepper span{
+  display:inline-block!important;
+  min-width:24px!important;
+  text-align:center!important;
+}
+</style>
+
+<style id="JGB_ACTIVE_START_FLOW_FIX">
+/* 1번 등록자가 이용 시작 상태일 때 시작/종료 영역이 항상 보이도록 */
+.activeStartPanel{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+
+/* 대기 중인 사람은 대기 화면, 이용 시작자는 시작/종료 화면이 섞이지 않도록 */
+.customerStatusPanel{
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+</style>
+
+<style id="JGB_HISTORY_STYLE">
+#historyRows table th,#historyRows table td{vertical-align:middle}
+#history .save{white-space:nowrap}
+</style>
+
+
+
+
+
+<style id="JGB_WAIT_FINAL_45PX">
+/* =========================================================
+   장군봉 대기현황 최종 표시
+   - 관리자 버튼/기능 유지
+   - 대기현황 4칸 균등 정렬
+   - 머리글 20px
+   - 실제 대기 데이터 45px
+   - 대기 없음 문구 45px
+   - 세로/가로 구분선 강화
+   - 코트 카드 전체 크기/기능은 변경하지 않음
+   ========================================================= */
+
+/* 대기현황 카드 안의 표 머리글 */
+body:has(.customerHeader) .waitTableHead{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  height:48px!important;
+  min-height:48px!important;
+  margin:0!important;
+  padding:0!important;
+  align-items:center!important;
+  justify-items:center!important;
+  overflow:hidden!important;
+
+  background:#eef3f8!important;
+  border-top:3px solid #8a9aaa!important;
+  border-bottom:3px solid #8a9aaa!important;
+
+  font-size:20px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+
+/* 머리글 4칸 */
+body:has(.customerHeader) .waitTableHead > *{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  padding:0 6px!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+
+  border-left:2px solid #9aa9b8!important;
+
+  font-size:20px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+
+body:has(.customerHeader) .waitTableHead > *:first-child{
+  border-left:0!important;
+}
+
+/* 실제 대기자 행 */
+body:has(.customerHeader) .waitRow{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+
+  min-height:78px!important;
+  height:78px!important;
+  margin:0!important;
+  padding:0!important;
+
+  align-items:center!important;
+
+  border-top:3px solid #9aa9b8!important;
+  border-bottom:2px solid #c7d0da!important;
+
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  text-align:center!important;
+  overflow:hidden!important;
+}
+
+/* 실제 대기자 각 칸 */
+body:has(.customerHeader) .waitRow > *{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  padding:0 6px!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+
+  border-left:2px solid #c2ccd6!important;
+
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+
+body:has(.customerHeader) .waitRow > *:first-child{
+  border-left:0!important;
+}
+
+/* 순번 */
+body:has(.customerHeader) .waitRow b{
+  width:38px!important;
+  height:38px!important;
+  min-width:38px!important;
+  min-height:38px!important;
+  margin:auto!important;
+
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  font-size:24px!important;
+  font-weight:950!important;
+}
+
+/* 팀명 / 게임 방식 / 예상 대기시간 */
+body:has(.customerHeader) .waitRow strong,
+body:has(.customerHeader) .waitRow span,
+body:has(.customerHeader) .waitRow em{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  max-width:100%!important;
+  margin:0 auto!important;
+  padding:0 4px!important;
+  box-sizing:border-box!important;
+
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1!important;
+  font-style:normal!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+}
+
+/* 대기 중인 팀이 없을 때 */
+body:has(.customerHeader) .waitEmpty{
+  min-height:165px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+
+  font-size:45px!important;
+  font-weight:950!important;
+  line-height:1.15!important;
+  text-align:center!important;
+}
+
+body:has(.customerHeader) .waitEmpty .emptyFace{
+  font-size:48px!important;
+  margin-bottom:10px!important;
+}
+
+/* 관리자 모드 버튼은 항상 기존 기능대로 표시 */
+#switchAdmin{
+  display:inline-flex!important;
+}
+</style>
+
+<style id="JGB_WAIT_ALL_5_EQUAL_FINAL">
+/* 대기 현황 5개 카드만 동일 크기.
+   1·2·3·4·5 모두 2칸 폭, 동일 높이.
+   이용 중 코트 화면과 기존 기능은 변경하지 않음. */
+@media (min-width:901px){
+  body:has(.customerHeader) .waitGrid,
+  body.customer-display .waitGrid,
+  body:has(.customerHeader) .waitSection .grid,
+  body.customer-display .waitSection .grid{
+    display:grid!important;
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    grid-template-rows:165px 165px!important;
+    gap:4px!important;
+  }
+
+  body:has(.customerHeader) .waitGrid > :nth-child(1),
+  body.customer-display .waitGrid > :nth-child(1),
+  body:has(.customerHeader) .waitSection .grid > :nth-child(1),
+  body.customer-display .waitSection .grid > :nth-child(1){
+    grid-column:1 / span 2!important;
+    grid-row:1!important;
+  }
+
+  body:has(.customerHeader) .waitGrid > :nth-child(2),
+  body.customer-display .waitGrid > :nth-child(2),
+  body:has(.customerHeader) .waitSection .grid > :nth-child(2),
+  body.customer-display .waitSection .grid > :nth-child(2){
+    grid-column:3 / span 2!important;
+    grid-row:1!important;
+  }
+
+  body:has(.customerHeader) .waitGrid > :nth-child(3),
+  body.customer-display .waitGrid > :nth-child(3),
+  body:has(.customerHeader) .waitSection .grid > :nth-child(3),
+  body.customer-display .waitSection .grid > :nth-child(3){
+    grid-column:5 / span 2!important;
+    grid-row:1!important;
+  }
+
+  body:has(.customerHeader) .waitGrid > :nth-child(4),
+  body.customer-display .waitGrid > :nth-child(4),
+  body:has(.customerHeader) .waitSection .grid > :nth-child(4),
+  body.customer-display .waitSection .grid > :nth-child(4){
+    grid-column:1 / span 2!important;
+    grid-row:2!important;
+  }
+
+  body:has(.customerHeader) .waitGrid > :nth-child(5),
+  body.customer-display .waitGrid > :nth-child(5),
+  body:has(.customerHeader) .waitSection .grid > :nth-child(5),
+  body.customer-display .waitSection .grid > :nth-child(5){
+    grid-column:3 / span 2!important;
+    grid-row:2!important;
+  }
+
+  body:has(.customerHeader) .waitGrid > *,
+  body.customer-display .waitGrid > *,
+  body:has(.customerHeader) .waitSection .grid > *,
+  body.customer-display .waitSection .grid > *{
+    width:100%!important;
+    min-width:0!important;
+    height:165px!important;
+    min-height:165px!important;
+    max-height:165px!important;
+    box-sizing:border-box!important;
+  }
+}
+</style>
+
+<style id="JGB_FINAL_LAYOUT_LOCK">
+body:has(.customerHeader) .waitGrid{
+display:grid!important;
+grid-template-columns:repeat(3,minmax(0,1fr))!important;
+grid-template-rows:minmax(0,1fr) minmax(0,1fr)!important;
+grid-template-areas:"a b c" "d e blank"!important;
+gap:8px!important;
+width:100%!important;
+height:calc(100vh - 430px)!important;
+min-height:320px!important;
+}
+
+body:has(.customerHeader) .waitGrid > :nth-child(1){grid-area:a!important}
+body:has(.customerHeader) .waitGrid > :nth-child(2){grid-area:b!important}
+body:has(.customerHeader) .waitGrid > :nth-child(3){grid-area:c!important}
+body:has(.customerHeader) .waitGrid > :nth-child(4){grid-area:d!important}
+body:has(.customerHeader) .waitGrid > :nth-child(5){grid-area:e!important}
+
+body:has(.customerHeader) .waitGrid > *{
+width:100%!important;
+height:100%!important;
+min-width:0!important;
+min-height:0!important;
+max-width:none!important;
+max-height:none!important;
+box-sizing:border-box!important;
+}
+
+body:has(.customerHeader) .waitCard{
+height:100%!important;
+min-height:0!important;
+max-height:none!important;
+overflow:hidden!important;
+}
+
+body:has(.customerHeader) .waitCardTitle{
+height:40px!important;
+font-size:20px!important;
+padding:5px 9px!important;
+}
+
+body:has(.customerHeader) .waitTableHead{
+height:38px!important;
+min-height:38px!important;
+font-size:16px!important;
+grid-template-columns:repeat(4,minmax(0,1fr))!important;
+}
+
+body:has(.customerHeader) .waitRow{
+height:48px!important;
+min-height:48px!important;
+max-height:48px!important;
+font-size:45px!important;
+grid-template-columns:repeat(4,minmax(0,1fr))!important;
+padding:0!important;
+}
+
+body:has(.customerHeader) .waitRow > *{
+font-size:45px!important;
+height:100%!important;
+display:flex!important;
+align-items:center!important;
+justify-content:center!important;
+white-space:nowrap!important;
+overflow:hidden!important;
+padding:0 3px!important;
+}
+
+body:has(.customerHeader) .waitRow b{
+width:34px!important;
+height:34px!important;
+min-width:34px!important;
+min-height:34px!important;
+font-size:22px!important;
+}
+
+body:has(.customerHeader) .waitRow strong,
+body:has(.customerHeader) .waitRow span,
+body:has(.customerHeader) .waitRow em{
+font-size:45px!important;
+font-weight:950!important;
+line-height:1!important;
+}
+
+body:has(.customerHeader) .waitEmpty{
+height:calc(100% - 78px)!important;
+min-height:0!important;
+font-size:45px!important;
+}
+
+body:has(.customerHeader) .displayNotice{
+margin-top:6px!important;
+}
+
+body:has(.customerHeader) .kickBtn{
+width:30px!important;
+height:30px!important;
+min-width:30px!important;
+padding:0!important;
+margin:0!important;
+border:0!important;
+border-radius:50%!important;
+background:#777!important;
+color:#fff!important;
+font-size:20px!important;
+font-weight:900!important;
+line-height:30px!important;
+cursor:pointer!important;
+}
+
+@media(max-width:1100px){
+body:has(.customerHeader) .waitGrid{
+height:calc(100vh - 390px)!important;
+}
+}
+</style>
+
 <script>
 (function(){
- if(typeof PREVIEW_MODE!=="undefined" && PREVIEW_MODE){
-   const apply=()=>{
-     const cards=document.querySelectorAll('.activeCard');
-     if(cards[0]){const e=cards[0].querySelector('.activeTime');if(e)e.textContent='14:20 ~ 14:37'; const t=cards[0].querySelector('[style*="font-size:23px"], [style*="font-size:20px"]');}
-     if(cards[1]){const e=cards[1].querySelector('.activeTime');if(e)e.textContent='14:25 ~ 14:39';}
-     const stat=document.querySelectorAll('.topStat b'); if(stat[2])stat[2].textContent='3 팀';
-     const rem=()=>{const r=document.querySelectorAll('.activeBody>div[style*="margin-top:10px"] div:last-child');if(r[0])r[0].textContent='02:15';if(r[1])r[1].textContent='04:15';}; rem();
-   };
-   setTimeout(apply,200); setTimeout(apply,800);
- }
+function jgbLock(){
+const g=document.querySelector('.waitGrid');
+if(!g)return;
+g.style.setProperty('display','grid','important');
+g.style.setProperty('grid-template-columns','repeat(3,minmax(0,1fr))','important');
+g.style.setProperty('grid-template-areas','"a b c" "d e blank"','important');
+const a=[...g.children].filter(x=>x.nodeType===1);
+a.forEach((x,i)=>{
+if(i<5)x.style.setProperty('grid-area',['a','b','c','d','e'][i],'important');
+});
+}
+jgbLock();
+window.addEventListener('load',jgbLock);
+setInterval(jgbLock,1000);
+})();
+</script>
+
+<style id="JGB_FORCE_EXIT_BUTTON">
+body:has(.customerHeader) .waitRow{
+grid-template-columns:78px repeat(3,minmax(0,1fr))!important;
+}
+body:has(.customerHeader) .waitControl{
+width:100%!important;
+height:100%!important;
+display:flex!important;
+align-items:center!important;
+justify-content:center!important;
+gap:6px!important;
+box-sizing:border-box!important;
+}
+body:has(.customerHeader) .waitControl .kickBtn{
+display:flex!important;
+align-items:center!important;
+justify-content:center!important;
+width:28px!important;
+height:28px!important;
+min-width:28px!important;
+min-height:28px!important;
+padding:0!important;
+margin:0!important;
+border:0!important;
+border-radius:5px!important;
+background:#e11d2e!important;
+color:#fff!important;
+font-size:20px!important;
+font-weight:950!important;
+line-height:28px!important;
+cursor:pointer!important;
+box-shadow:none!important;
+}
+body:has(.customerHeader) .waitControl .kickBtn:active{
+transform:scale(.94)!important;
+}
+body:has(.customerHeader) .waitRow .waitControl b{
+width:38px!important;
+height:38px!important;
+min-width:38px!important;
+min-height:38px!important;
+margin:0!important;
+font-size:24px!important;
+}
+</style>
+
+
+
+
+
+<style id="JGB_FORCE_EXIT_VISIBLE_FINAL">
+body:has(.customerHeader) .waitRow{
+  grid-template-columns:78px repeat(3,minmax(0,1fr))!important;
+}
+body:has(.customerHeader) .waitControl{
+  width:100%!important;
+  height:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+}
+body:has(.customerHeader) .waitControl .kickBtn{
+  display:inline-flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  position:relative!important;
+  z-index:20!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  min-height:30px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:5px!important;
+  background:#e11d2e!important;
+  color:#fff!important;
+  font-size:20px!important;
+  font-weight:950!important;
+  line-height:30px!important;
+  cursor:pointer!important;
+}
+body:has(.customerHeader) .waitControl b{
+  width:38px!important;
+  height:38px!important;
+  min-width:38px!important;
+  min-height:38px!important;
+}
+</style>
+
+
+
+<script id="JGB_OPERATIONAL_RESET">
+async function resetOperationalState(){
+  const ok=confirm("⚠️ 오늘 운영 상태를 초기화할까요?\n\n현재 진행 중인 게임과 모든 대기 순번이 삭제됩니다.\n게임시간·대기정원·재등록 제한시간·코트 잠금 설정은 그대로 유지됩니다.\n이용 기록도 삭제하지 않습니다.");
+  if(!ok)return;
+  const ok2=confirm("정말 초기화하시겠습니까?\n\n초기화 후에는 현재 게임과 대기 순번을 복구할 수 없습니다.");
+  if(!ok2)return;
+  try{
+    let s=await get();
+    if(!s||!Array.isArray(s.courts)) s=cloneDef();
+    s.courts=(s.courts||[]).map(c=>({
+      ...c,
+      active:null,
+      queue:[]
+    }));
+    // 설정값(settings/max_per_court/re_register_minutes)과 코트 잠금(blocked),
+    // 이용 기록(finished)은 그대로 유지합니다.
+    await save(s);
+    const saved=await get();
+    renderAdmin(saved);
+    alert("오늘 운영 상태가 초기화되었습니다.\n게임시간 및 관리자 설정은 그대로 유지됩니다.");
+  }catch(e){
+    showError(e);
+  }
+}
+</script>
+
+<script id="JGB_SERVER_HISTORY_RPC">
+async function resetHistoryOnServer(){
+  if(!confirm("QR로 등록되어 완료된 이용 기록만 서버에서 삭제할까요?\n현재 이용 중/대기 중인 팀은 삭제하지 않습니다."))return;
+  try{
+    const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/reset_qr_usage_history",{
+      method:"POST",
+      headers:{
+        "apikey":SUPABASE_ANON_KEY,
+        "Authorization":"Bearer "+SUPABASE_ANON_KEY,
+        "Content-Type":"application/json"
+      },
+      body:"{}"
+    });
+    const t=await r.text();
+    if(!r.ok)throw new Error(t||("RPC 오류 "+r.status));
+    const s=await get();
+    renderAdmin(s);
+    alert("QR 이용 기록만 삭제되었습니다.");
+  }catch(e){
+    alert("서버 기능 설정이 필요합니다. Supabase SQL을 먼저 실행해주세요.");
+    console.error(e);
+  }
+}
+</script>
+
+<script>
+(function(){
+  function qrRegisterRoute(){
+    if(location.hash === "#register"){
+      try{
+        const u = new URL(location.href);
+        u.hash = "";
+        u.search = "?page=register";
+        history.replaceState(null,"",u.pathname + u.search);
+      }catch(e){}
+    }
+  }
+  qrRegisterRoute();
+  window.addEventListener("hashchange", qrRegisterRoute);
+})();
+</script>
+
+<script id="JGB_ACCESS_GATE">
+(function(){
+  const AUTH_KEY="jgb_route_auth_v1";
+  const SUPABASE_URL="https://jvurwckjumnzzecazgku.supabase.co";
+  const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
+
+  function targetRoute(){
+    const p=new URLSearchParams(location.search);
+    const page=p.get("page")||"";
+    if(page==="admin") return "admin";
+    if(page==="management" && (p.get("view")||"display")==="display") return "display";
+    return "";
+  }
+
+  function authKey(route){ return AUTH_KEY+"_"+route; }
+
+  function isAuthed(route){
+    return localStorage.getItem(authKey(route))==="ok";
+  }
+
+  function showGate(route){
+    if(document.getElementById("jgbAccessGate")) return;
+    const gate=document.createElement("div");
+    gate.id="jgbAccessGate";
+    gate.style.cssText="position:fixed;inset:0;z-index:2147483647;background:#fff;display:flex;align-items:center;justify-content:center;font-family:inherit;";
+    gate.innerHTML='<div style="width:min(420px,88vw);text-align:center;padding:28px;box-sizing:border-box;">'
+      +'<div style="font-size:28px;margin-bottom:12px;">🔒</div>'
+      +'<div style="font-size:22px;font-weight:700;margin-bottom:8px;">접근 확인</div>'
+      +'<div style="font-size:14px;margin-bottom:18px;">비밀번호를 입력해주세요.</div>'
+      +'<input id="jgbGatePw" type="password" inputmode="numeric" autocomplete="off" style="width:100%;box-sizing:border-box;padding:12px;font-size:18px;text-align:center;border:1px solid #ccc;border-radius:8px;">'
+      +'<button id="jgbGateBtn" type="button" style="width:100%;margin-top:12px;padding:12px;font-size:16px;border:0;border-radius:8px;cursor:pointer;">확인</button>'
+      +'<div id="jgbGateErr" style="min-height:20px;margin-top:10px;font-size:13px;"></div>'
+      +'</div>';
+    document.body.appendChild(gate);
+
+    const input=gate.querySelector("#jgbGatePw");
+    const btn=gate.querySelector("#jgbGateBtn");
+    const err=gate.querySelector("#jgbGateErr");
+
+    async function verify(){
+      btn.disabled=true;
+      err.textContent="";
+      try{
+        const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/verify_jgb_route_password",{
+          method:"POST",
+          headers:{
+            "apikey":SUPABASE_ANON_KEY,
+            "Authorization":"Bearer "+SUPABASE_ANON_KEY,
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({p_route:route,p_password:input.value})
+        });
+        const raw=await r.text();
+        let ok=false;
+        try{ ok=raw==="true" || JSON.parse(raw)===true; }catch(_){}
+        if(!r.ok || !ok) throw new Error("비밀번호가 올바르지 않습니다.");
+        localStorage.setItem(authKey(route),"ok");
+        gate.remove();
+      }catch(e){
+        err.textContent=e.message||"인증에 실패했습니다.";
+        input.value="";
+        input.focus();
+      }finally{
+        btn.disabled=false;
+      }
+    }
+    btn.addEventListener("click",verify);
+    input.addEventListener("keydown",e=>{if(e.key==="Enter")verify()});
+    input.focus();
+  }
+
+  function run(){
+    const route=targetRoute();
+    if(!route || isAuthed(route)) return;
+    showGate(route);
+  }
+
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",run);
+  else run();
+})();
+</script>
+
+<script id="JGB_PAGE_CLASS_MARKER">
+(function(){
+  const p=new URLSearchParams(window.location.search);
+  document.body.classList.toggle("register-page",p.get("page")==="register");
+  document.body.classList.toggle("management-view",p.get("page")==="management");
 })();
 </script>
 </body></html>
+
+<style id="JGB_WAIT_ROW_LEFT_ALIGN_FINAL">
+/* 고객용 대기현황: 글자 크기는 유지하고 데이터만 최대한 왼쪽으로 이동 */
+body:has(.customerHeader) .waitRow{
+  justify-items:stretch!important;
+}
+body:has(.customerHeader) .waitRow > .waitControl{
+  justify-content:flex-start!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+body:has(.customerHeader) .waitRow > .waitControl b{
+  margin-left:0!important;
+  margin-right:0!important;
+}
+body:has(.customerHeader) .waitRow > strong,
+body:has(.customerHeader) .waitRow > span,
+body:has(.customerHeader) .waitRow > em{
+  justify-content:flex-start!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+</style>
+
+<style id="JGB_WAIT_LEFT_FINAL_V2">
+/* =========================================================
+   대기현황 최종 위치 보정
+   - 글자 크기/색상/기능 변경 없음
+   - 헤더는 기존 중앙 정렬 유지
+   - 실제 데이터(B/게임방식/예상시간)를 각 칸의 왼쪽에 최대한 밀착
+   - 순번 칸은 삭제버튼 + 번호가 자연스럽게 왼쪽부터 배치
+   ========================================================= */
+@media(min-width:1101px){
+  body:has(.customerHeader) .waitRow{
+    grid-template-columns:1.18fr 1fr 1.11fr 1.12fr!important;
+    text-align:left!important;
+  }
+
+  /* 모든 데이터 셀의 중앙정렬을 해제 */
+  body:has(.customerHeader) .waitRow > *{
+    justify-content:flex-start!important;
+    text-align:left!important;
+    padding-left:2px!important;
+    padding-right:0!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+
+  /* 순번: X와 번호를 한 줄로 왼쪽부터 */
+  body:has(.customerHeader) .waitRow .waitControl{
+    justify-content:flex-start!important;
+    align-items:center!important;
+    gap:5px!important;
+    padding-left:0!important;
+    padding-right:0!important;
+    margin:0!important;
+  }
+
+  body:has(.customerHeader) .waitRow .waitControl .kickBtn{
+    flex:0 0 auto!important;
+    margin:0!important;
+  }
+
+  body:has(.customerHeader) .waitRow b{
+    flex:0 0 auto!important;
+    margin:0!important;
+  }
+
+  /* 한글/문자 데이터: 칸 시작점에 최대한 밀착 */
+  body:has(.customerHeader) .waitRow strong,
+  body:has(.customerHeader) .waitRow span,
+  body:has(.customerHeader) .waitRow em{
+    justify-content:flex-start!important;
+    text-align:left!important;
+    margin:0!important;
+    padding-left:2px!important;
+    padding-right:0!important;
+  }
+
+  /* 긴 예상시간이 가운데로 밀리지 않도록 */
+  body:has(.customerHeader) .waitRow em{
+    white-space:nowrap!important;
+    overflow:visible!important;
+  }
+}
+</style>
+
