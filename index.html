@@ -1929,23 +1929,33 @@ function waiting(){
   renderWaiting(cloneDef());
   sub(renderWaiting);
 }
-function renderWaiting(s){
+async function renderWaiting(s){
   const w=document.getElementById("w"); if(!w)return;
   let a=null,q=null,c=null,fin=s.finished?.[ticket];
 
+  /*
+   * 중요:
+   * 등록 직후에도 localStorage에 재등록 제한 시간이 저장되어 있지만,
+   * 그것은 '중복 등록 방지'용이지 등록 완료 후 화면을 가리는 용도가 아닙니다.
+   * 따라서 재등록 대기 화면은 반드시 '퇴장/예약취소/이용종료'로 finished 기록이
+   * 만들어진 경우에만 표시합니다.
+   */
   const serverUntil=getFinishedCooldownUntil(s,fin);
   const localUntil=getCooldownUntil();
-  const cooldownUntil=Math.max(serverUntil,localUntil);
-  if(cooldownUntil>Date.now()){
-    renderReRegisterCooldown(w,cooldownUntil);
-    return;
+
+  if(fin){
+    const cooldownUntil=Math.max(serverUntil,localUntil);
+    if(cooldownUntil>Date.now()){
+      renderReRegisterCooldown(w,cooldownUntil);
+      return;
+    }
+    if(serverUntil && serverUntil<=Date.now()){
+      if(s.finished)delete s.finished[ticket];
+      try{await save(s)}catch(e){}
+      fin=null;
+    }
+    if(localUntil && localUntil<=Date.now()) clearCooldown();
   }
-  if(serverUntil && serverUntil<=Date.now() && fin){
-    if(s.finished)delete s.finished[ticket];
-    try{save(s)}catch(e){}
-    fin=null;
-  }
-  if(localUntil && localUntil<=Date.now()) clearCooldown();
 
   for(const x of s.courts){
     if(x.active?.ticket===ticket){a=x.active;c=x}
