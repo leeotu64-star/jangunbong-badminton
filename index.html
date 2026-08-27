@@ -1419,6 +1419,7 @@ const def={id:ROOT,settings:{"난타":15,"4인 복식":15,"2인 단식":15},max_
 /* QR 연속등록 방지: 개인정보 대신 브라우저에 저장되는 랜덤 토큰만 사용 */
 const DEVICE_KEY="jb_anonymous_device_v1";
 const COOLDOWN_KEY="jb_register_cooldown_until";
+const GAME_COMPLETE_QR_KEY="jb_game_complete_qr_pending_v1";
 
 function getDeviceToken(){
   try{
@@ -1770,8 +1771,38 @@ function renderCustomer(s){
     </article>`;
   }).join("");
 }
-function register(){
+async function register(){
   const app=document.getElementById("app");
+
+  /* 게임 완료 후 QR 재스캔 전용 진입:
+     기존 고객등록 화면을 건드리지 않고, 게임 완료 기록이 있는 경우에만
+     재등록 제한시간 화면을 먼저 보여줍니다. */
+  try{
+    const qrPending=localStorage.getItem(GAME_COMPLETE_QR_KEY)==="1";
+    if(qrPending){
+      const s=await get();
+      const deviceId=getDeviceToken();
+      const records=Object.values(s.finished||{}).filter(x=>
+        x && x.gameCompleted && x.deviceId===deviceId && Number(x.reRegisterUntil)>Date.now()
+      ).sort((a,b)=>Number(b.endedAt||0)-Number(a.endedAt||0));
+      const fin=records[0];
+      if(fin){
+        app.innerHTML='<div class="wait"><div class="waithead"><h2>고객용 QR 스마트등록</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
+        /* QR 재스캔 확인은 기록에 남기되, 제한시간이 끝날 때까지
+           기존 등록 화면으로 절대 진입하지 않습니다. */
+        fin.reRegisterChecked=true;
+        s.finished[fin.ticket]=fin;
+        try{await save(s)}catch(e){}
+        try{localStorage.removeItem(GAME_COMPLETE_QR_KEY)}catch(e){}
+        renderReRegisterCooldown(document.getElementById("w"),Number(fin.reRegisterUntil));
+        return;
+      }
+      try{localStorage.removeItem(GAME_COMPLETE_QR_KEY)}catch(e){}
+    }
+  }catch(e){
+    console.error("game-complete QR check:",e);
+  }
+
   app.innerHTML=`
   <div style="min-height:100vh;background:#f4f7fb;padding:14px 12px 28px">
     <div style="max-width:430px;margin:0 auto">
@@ -1852,6 +1883,27 @@ async function reg(){
   const gg=document.getElementById("g").value;
   const id=Number(document.getElementById("c").value);
   const deviceId=getDeviceToken();
+
+  /* 게임 완료자의 QR 재스캔은 일반 등록보다 먼저 처리됩니다.
+     제한시간이 남아 있으면 기존 등록 화면을 보여주지 않습니다. */
+  try{
+    const s0=await get();
+    const gameDone=Object.values(s0.finished||{}).filter(x=>
+      x && x.gameCompleted && x.deviceId===deviceId && Number(x.reRegisterUntil)>Date.now()
+    ).sort((a,b)=>Number(b.endedAt||0)-Number(a.endedAt||0))[0];
+    if(gameDone){
+      try{localStorage.setItem(GAME_COMPLETE_QR_KEY,"1")}catch(e){}
+      app.innerHTML='<div class="wait"><div class="waithead"><h2>고객용 QR 스마트등록</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
+      gameDone.reRegisterChecked=true;
+      s0.finished[gameDone.ticket]=gameDone;
+      try{await save(s0)}catch(e){}
+      try{localStorage.removeItem(GAME_COMPLETE_QR_KEY)}catch(e){}
+      renderReRegisterCooldown(document.getElementById("w"),Number(gameDone.reRegisterUntil));
+      return;
+    }
+  }catch(e){
+    console.error("game-complete register guard:",e);
+  }
 
   const err=(msg)=>{
     ee.style.display="block";
@@ -1968,6 +2020,7 @@ async function renderWaiting(s){
      이 화면에서는 퇴장 버튼을 누르게 하지 않고 QR 재스캔만 안내합니다.
      재등록 제한시간 화면은 QR을 다시 찍은 뒤에 표시합니다. */
   if(fin && fin.gameCompleted && !fin.reRegisterChecked){
+    try{localStorage.setItem(GAME_COMPLETE_QR_KEY,"1")}catch(e){}
     w.innerHTML=`
       <div class="doneScreen">
         <div class="doneIcon">✓</div>
