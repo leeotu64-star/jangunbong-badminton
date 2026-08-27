@@ -1458,6 +1458,62 @@ function findDeviceRegistration(s,deviceId){
   return null;
 }
 
+function getReRegisterMinutes(s){
+  const n=Number(s?.re_register_minutes);
+  return Number.isFinite(n)&&n>0 ? Math.max(1,Math.min(20,n)) : 5;
+}
+function getReRegisterUntil(s,fin){
+  const stored=Number(fin?.reRegisterUntil||0);
+  if(stored>0)return stored;
+  const ended=Number(fin?.endedAt||0);
+  return ended ? ended+getReRegisterMinutes(s)*60000 : 0;
+}
+function findFinishedForDevice(s,deviceId){
+  let best=null;
+  for(const [t,fin] of Object.entries(s?.finished||{})){
+    if(t.startsWith("_")||!fin||typeof fin!=="object")continue;
+    if(fin.deviceId!==deviceId)continue;
+    const ended=Number(fin.endedAt||0);
+    if(!best||ended>Number(best.fin?.endedAt||0))best={ticket:t,fin};
+  }
+  return best;
+}
+function renderFinishedThanks(w){
+  w.innerHTML=`
+    <div class="doneScreen">
+      <div class="doneIcon">✓</div>
+      <h2>장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2>
+      <p>재등록을 원하시면<br><strong>QR을 다시 찍어주세요.</strong></p>
+    </div>`;
+}
+function renderReRegisterWait(w,until){
+  if(renderReRegisterWait.timer)clearInterval(renderReRegisterWait.timer);
+  const target=Number(until)||0;
+  const tick=()=>{
+    const sec=Math.max(0,Math.ceil((target-Date.now())/1000));
+    const mm=Math.floor(sec/60),ss=sec%60;
+    const el=document.getElementById("reRegisterCountdown");
+    if(el)el.textContent=`${String(mm).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
+    if(sec<=0){
+      clearInterval(renderReRegisterWait.timer);
+      renderReRegisterWait.timer=null;
+      location.replace(location.pathname+"?page=register&reRegisterReady=1");
+    }
+  };
+  w.innerHTML=`
+    <div class="doneScreen">
+      <div style="font-size:15px;font-weight:900;margin-bottom:14px">재등록 안내</div>
+      <p style="margin:0 0 16px">잠시 후 다시 등록할 수 있습니다.</p>
+      <div class="notice">
+        <b>재등록 가능까지</b>
+        <div id="reRegisterCountdown" style="font-size:34px;font-weight:950;color:#1261e8;margin-top:6px">00:00</div>
+      </div>
+    </div>`;
+  tick();
+  renderReRegisterWait.timer=setInterval(tick,1000);
+}
+
+
 
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function tm(t){return new Date(t).toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})}
@@ -1534,7 +1590,7 @@ async function advance(s,doSave=true){
     if(c.active && Date.now()>=Number(c.active.endAt)){
       const a=c.active;
       const endedAt=Date.now();
-      const record={...a,source:"qr",endedAt};
+      const record={...a,source:"qr",endedAt,deviceId:(a.deviceId||getDeviceToken()),reRegisterUntil:endedAt+getReRegisterMinutes(s)*60000};
       s.finished[a.ticket]=record;
       s.finished._history=s.finished._history||{};
       s.finished._history[a.ticket]=record;
@@ -1725,8 +1781,28 @@ function renderCustomer(s){
     </article>`;
   }).join("");
 }
-function register(){
+async function register(){
+
   const app=document.getElementById("app");
+  if(!app)return;
+
+  try{
+    const s0=await get();
+    const fin0=findFinishedForDevice(s0,getDeviceToken());
+    if(fin0){
+      const until0=getReRegisterUntil(s0,fin0.fin);
+      if(until0>Date.now()){
+        renderReRegisterWait(app,until0);
+        return;
+      }
+      delete s0.finished[fin0.ticket];
+      if(s0.finished._history)delete s0.finished._history[fin0.ticket];
+      await save(s0);
+    }
+  }catch(e){
+    console.error("재등록 확인 오류:",e);
+  }
+
   app.innerHTML=`
   <div style="min-height:100vh;background:#f4f7fb;padding:14px 12px 28px">
     <div style="max-width:430px;margin:0 auto">
@@ -1757,7 +1833,7 @@ function register(){
           <b>● 안내</b><br>
           • 대기 등록 후 현재 순번과 예상 대기시간을 확인할 수 있습니다.<br>
           • 순번이 되면 게임이 자동으로 시작됩니다.<br>
-          • 게임 종료 후 퇴장 버튼을 눌러주세요.
+          • 이용시간이 종료되면 자동으로 이용이 종료됩니다.
         </div>
         <div id="e" style="display:none;color:#d71920;background:#fff1f1;border:1px solid #ffc9c9;border-radius:8px;padding:10px;font-size:12px;font-weight:800;margin-bottom:10px"></div>
         <button class="btn" id="regBtn" onclick="reg()">대기 등록하기</button>
@@ -1869,9 +1945,6 @@ async function reg(){
     // 변경된 active/queue 상태와 현재 대기 정원을 서버에 확실히 저장
     await save(s);
 
-    /* 등록 성공 후 관리자에서 설정한 시간 동안 같은 브라우저의 재등록 차단 */
-    setCooldown(Number(s.re_register_minutes)||5);
-
     location.replace(location.pathname+"?page=waiting&ticket="+encodeURIComponent(t));
   }catch(e){
     console.error(e);
@@ -1893,23 +1966,9 @@ function renderWaiting(s){
     const z=(x.queue||[]).find(y=>y.ticket===ticket);
     if(z){q=z;c=x}
   }
-
-  /* 3번째 화면: 15분 종료 */
+  /* 종료자 공통 화면: 이용종료 / 예약취소 / 직접퇴장 / 강제퇴장 */
   if(fin){
-    w.innerHTML=`
-      <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
-        ● 15분 경과 후 퇴장 (자동 안내)
-      </div>
-      <div class="doneScreen">
-        <div class="doneIcon">✓</div>
-        <h2>장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2>
-        <p>이용 시간이 종료되었습니다.<br>다음 고객을 위해<br>퇴장 버튼을 눌러주세요.</p>
-        <div class="notice">퇴장을 눌러야<br>다시 이용 가능합니다.</div>
-        <button class="btn" onclick="finish()">퇴장하기</button>
-      </div>
-      <div style="font-size:10px;color:#777;text-align:center;margin-top:8px">
-        ※ 퇴장 버튼을 눌러야 다음 대기자가 이용을 시작합니다.
-      </div>`;
+    renderFinishedThanks(w);
     return;
   }
 
@@ -2009,7 +2068,34 @@ function renderWaiting(s){
   w.innerHTML='대기 등록 정보가 없습니다.';
 }
 async function cancelWait(){
-  try{let s=await get();for(const c of s.courts)c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);await save(s);location.href="#register"}catch(e){showError(e)}
+  try{
+    let s=await get();
+    s.finished=s.finished||{};
+    resetHistoryForNewDay(s);
+    let removed=null;
+    for(const c of s.courts){
+      const q=c.queue||[];
+      const found=q.find(x=>x.ticket===ticket);
+      if(found)removed={...found,court:c.id};
+      c.queue=q.filter(x=>x.ticket!==ticket);
+    }
+    if(removed){
+      const endedAt=Date.now();
+      const record={
+        ...removed,
+        source:"qr",
+        endedAt,
+        canceled:true,
+        deviceId:(removed.deviceId||getDeviceToken()),
+        reRegisterUntil:endedAt+getReRegisterMinutes(s)*60000
+      };
+      s.finished[ticket]=record;
+      s.finished._history=s.finished._history||{};
+      s.finished._history[ticket]=record;
+    }
+    await save(s);
+    location.replace(location.pathname+"?page=waiting&ticket="+encodeURIComponent(ticket));
+  }catch(e){showError(e)}
 }
 async function leave(){
   try{
@@ -2018,7 +2104,7 @@ async function leave(){
     resetHistoryForNewDay(s);
     for(const c of s.courts){
       if(c.active?.ticket===ticket){
-        const record={...c.active,source:"qr",endedAt:Date.now()};
+        const endedAt=Date.now(); const record={...c.active,source:"qr",endedAt,deviceId:(c.active.deviceId||getDeviceToken()),reRegisterUntil:endedAt+getReRegisterMinutes(s)*60000};
         s.finished[ticket]=record;
         s.finished._history=s.finished._history||{};
         s.finished._history[ticket]=record;
@@ -2203,7 +2289,7 @@ async function force(id){
     if(c.active){
       s.finished=s.finished||{};
       resetHistoryForNewDay(s);
-      const record={...c.active,endedAt:Date.now(),forced:true};
+      const endedAt=Date.now(); const record={...c.active,endedAt,deviceId:(c.active.deviceId||getDeviceToken()),forced:true,reRegisterUntil:endedAt+getReRegisterMinutes(s)*60000};
       s.finished[c.active.ticket]=record;
       s.finished._history=s.finished._history||{};
       s.finished._history[c.active.ticket]=record;
