@@ -1480,10 +1480,87 @@ function findFinishedForDevice(s,deviceId){
 }
 function renderFinishedThanks(w){
   w.innerHTML=`
-    <div class="doneScreen">
-      <div class="doneIcon">✓</div>
-      <h2>장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2>
-      <p>재등록을 원하시면<br><strong>QR을 다시 찍어주세요.</strong></p>
+    <div style="
+      min-height:calc(100vh - 28px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px 14px;
+      box-sizing:border-box;
+      background:linear-gradient(180deg,#f7faff 0%,#eef4ff 100%);
+    ">
+      <div style="
+        width:100%;
+        max-width:430px;
+        overflow:hidden;
+        border-radius:26px;
+        background:#fff;
+        box-shadow:0 18px 50px rgba(20,55,110,.14);
+        border:1px solid #e5ecf7;
+      ">
+        <div style="
+          background:linear-gradient(135deg,#061b4f 0%,#103b86 100%);
+          padding:28px 22px 30px;
+          text-align:center;
+          color:#fff;
+        ">
+          <div style="
+            width:66px;height:66px;
+            margin:0 auto 16px;
+            border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            background:rgba(255,255,255,.14);
+            border:1px solid rgba(255,255,255,.35);
+            font-size:34px;font-weight:900;
+          ">✓</div>
+          <div style="font-size:12px;font-weight:800;letter-spacing:.08em;opacity:.78;margin-bottom:8px">
+            JANGUNBONG BADMINTON
+          </div>
+          <h2 style="margin:0;font-size:23px;line-height:1.55;font-weight:950">
+            장군봉 체육관을 이용해주셔서<br>대단히 감사합니다!
+          </h2>
+        </div>
+
+        <div style="padding:26px 20px 28px;text-align:center">
+          <div style="
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            padding:8px 13px;
+            border-radius:999px;
+            background:#edf4ff;
+            color:#145fd7;
+            font-size:12px;
+            font-weight:900;
+            margin-bottom:14px;
+          ">
+            <span style="font-size:16px">▣</span> 다시 이용하시려면
+          </div>
+
+          <div style="
+            font-size:21px;
+            line-height:1.55;
+            color:#101828;
+            font-weight:950;
+            margin-bottom:18px;
+          ">
+            QR을 다시 찍어주세요.
+          </div>
+
+          <div style="
+            padding:15px 14px;
+            border-radius:15px;
+            background:#f8fafc;
+            border:1px solid #e8edf4;
+            color:#667085;
+            font-size:12px;
+            line-height:1.6;
+          ">
+            QR을 다시 찍으면<br>
+            <b style="color:#344054">재등록 가능 시간을 확인할 수 있습니다.</b>
+          </div>
+        </div>
+      </div>
     </div>`;
 }
 function renderReRegisterWait(w,until){
@@ -1501,12 +1578,21 @@ function renderReRegisterWait(w,until){
     }
   };
   w.innerHTML=`
-    <div class="doneScreen">
-      <div style="font-size:15px;font-weight:900;margin-bottom:14px">재등록 안내</div>
-      <p style="margin:0 0 16px">잠시 후 다시 등록할 수 있습니다.</p>
-      <div class="notice">
-        <b>재등록 가능까지</b>
-        <div id="reRegisterCountdown" style="font-size:34px;font-weight:950;color:#1261e8;margin-top:6px">00:00</div>
+    <div style="min-height:100vh;background:linear-gradient(180deg,#f7faff 0%,#eef4ff 100%);padding:18px 14px;box-sizing:border-box">
+      <div style="max-width:430px;margin:0 auto">
+        <div style="background:linear-gradient(135deg,#061b4f 0%,#103b86 100%);color:#fff;border-radius:24px 24px 0 0;padding:22px 18px;text-align:center">
+          <div style="font-size:11px;font-weight:800;letter-spacing:.08em;opacity:.78">JANGUNBONG BADMINTON</div>
+          <div style="font-size:20px;font-weight:950;margin-top:6px">재등록 안내</div>
+        </div>
+        <div style="background:#fff;border-radius:0 0 24px 24px;padding:28px 20px;box-shadow:0 18px 50px rgba(20,55,110,.14);text-align:center">
+          <div style="width:64px;height:64px;margin:0 auto 15px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#edf4ff;color:#145fd7;font-size:31px;font-weight:900">◷</div>
+          <div style="font-size:20px;font-weight:950;color:#101828">조금만 기다려주세요</div>
+          <p style="font-size:13px;color:#667085;line-height:1.7;margin:9px 0 22px">재등록 가능 시간이 지나면<br>다시 등록할 수 있습니다.</p>
+          <div style="background:#f8fafc;border:1px solid #e5eaf2;border-radius:18px;padding:19px 12px">
+            <div style="font-size:12px;color:#667085;font-weight:800">재등록 가능까지</div>
+            <div id="reRegisterCountdown" style="font-size:40px;line-height:1.2;font-weight:950;color:#125fe3;margin-top:6px;letter-spacing:.03em">00:00</div>
+          </div>
+        </div>
       </div>
     </div>`;
   tick();
