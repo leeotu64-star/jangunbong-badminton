@@ -1963,23 +1963,33 @@ async function renderWaiting(s){
     if(z){q=z;c=x}
   }
 
-  /* 3번째 화면: 15분 종료 */
-  if(fin){
+  /* 게임 완료자 전용 마지막 화면:
+     이용시간 종료 = 자동 종료/퇴장 처리.
+     이 화면에서는 퇴장 버튼을 누르게 하지 않고 QR 재스캔만 안내합니다.
+     재등록 제한시간 화면은 QR을 다시 찍은 뒤에 표시합니다. */
+  if(fin && fin.gameCompleted && !fin.reRegisterChecked){
     w.innerHTML=`
-      <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
-        ● 15분 경과 후 퇴장 (자동 안내)
-      </div>
       <div class="doneScreen">
         <div class="doneIcon">✓</div>
-        <h2>장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2>
-        <p>이용 시간이 종료되었습니다.<br>다음 고객을 위해<br>퇴장 버튼을 눌러주세요.</p>
-        <div class="notice">퇴장을 눌러야<br>다시 이용 가능합니다.</div>
-        <button class="btn" onclick="finish()">퇴장하기</button>
+        <h2>장군봉 체육관을<br>이용해 주셔서 감사합니다.</h2>
+        <p>이용시간이 종료되어 자동으로 이용이 종료되었습니다.<br>QR을 다시 찍고 재등록해 주시기 바랍니다.</p>
       </div>
-      <div style="font-size:10px;color:#777;text-align:center;margin-top:8px">
-        ※ 퇴장 버튼을 눌러야 다음 대기자가 이용을 시작합니다.
+      <div style="font-size:11px;color:#667085;text-align:center;margin-top:10px">
+        QR을 다시 찍으면 재등록 가능 시간을 확인할 수 있습니다.
       </div>`;
     return;
+  }
+
+  /* 게임 완료 후 QR을 다시 찍은 경우에만 재등록 시간 화면 */
+  if(fin && fin.gameCompleted && fin.reRegisterChecked){
+    const until=getFinishedCooldownUntil(s,fin);
+    if(until>Date.now()){
+      renderReRegisterCooldown(w,until);
+      return;
+    }
+    if(s.finished)delete s.finished[ticket];
+    try{await save(s)}catch(e){}
+    fin=null;
   }
 
   /* 현재 이용 중 */
@@ -2116,8 +2126,30 @@ async function finish(){
     let s=await get();
     const fin=s.finished?.[ticket];
     const until=getFinishedCooldownUntil(s,fin)||Date.now()+getReRegisterMinutes(s)*60*1000;
+    if(fin){
+      fin.reRegisterChecked=true;
+      fin.reRegisterUntil=until;
+      s.finished[ticket]=fin;
+    }
     await save(s);
     renderReRegisterCooldown(document.getElementById("w"),until);
+  }catch(e){showError(e)}
+}
+
+async function markGameCompleted(ticketId, record){
+  try{
+    let s=await get();
+    s.finished=s.finished||{};
+    const until=Date.now()+getReRegisterMinutes(s)*60*1000;
+    s.finished[ticketId]={
+      ...(record||{}),
+      ticket:ticketId,
+      gameCompleted:true,
+      endedAt:Date.now(),
+      reRegisterUntil:until,
+      reRegisterChecked:false
+    };
+    await save(s);
   }catch(e){showError(e)}
 }
 
@@ -2292,7 +2324,7 @@ async function force(id){
       s.finished=s.finished||{};
       resetHistoryForNewDay(s);
       const forcedUntil=Date.now()+getReRegisterMinutes(s)*60*1000;
-      const record={...c.active,endedAt:Date.now(),forced:true,reRegisterUntil:forcedUntil};
+      const record={...c.active,endedAt:Date.now(),forced:true,reRegisterUntil:forcedUntil,gameCompleted:false};
       s.finished[c.active.ticket]=record;
       s.finished._history=s.finished._history||{};
       s.finished._history[c.active.ticket]=record;
