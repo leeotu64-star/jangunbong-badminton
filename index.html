@@ -1,6 +1,7 @@
 <!doctype html>
+<!-- 장군봉 고객용: 재등록 제한 실시간 카운트다운 수정본 / 관리자 기능 및 기존 고객등록 기능 보존 -->
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>장군봉 배드민턴</title>
+<title>장군봉 실내배드민턴장 QR 스마트등록</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans KR",sans-serif;color:#071633;background:#fff}
 .header{height:76px;background:#061b4f;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px}.brand{font-size:26px;font-weight:800}.sub{font-size:13px}.wrap{padding:16px;max-width:1500px;margin:auto}
@@ -994,57 +995,66 @@ function setCooldown(minutes){
 function clearCooldown(){
   try{localStorage.removeItem(COOLDOWN_KEY)}catch(e){}
 }
+function cooldownRemaining(until){
+  const ms=Math.max(0,Number(until||0)-Date.now());
+  const total=Math.ceil(ms/1000);
+  const m=Math.floor(total/60);
+  const s=total%60;
+  return String(m).padStart(2,"0")+"분 "+String(s).padStart(2,"0")+"초";
+}
 function cooldownMessage(until){
-  const leftMs=Math.max(0,until-Date.now());
-  const m=Math.ceil(leftMs/60000);
-  return m<=1 ? "잠시 후 다시 등록할 수 있습니다." : m+"분 후 다시 등록할 수 있습니다.";
+  const ms=Math.max(0,until-Date.now());
+  if(ms<=0) return "지금 다시 등록할 수 있습니다.";
+  return cooldownRemaining(until)+" 후 다시 등록할 수 있습니다.";
 }
-
-/* 고객 스마트등록 추가 기능: 퇴장/취소/강제퇴장 후 재등록 제한 화면 */
-let reRegisterTimer=null;
-function showReRegisterScreen(until){
-  if(reRegisterTimer) clearInterval(reRegisterTimer);
-  const app=document.getElementById("app");
-  if(!app)return;
-  const draw=()=>{
-    const leftMs=Math.max(0,Number(until)-Date.now());
+function getCooldownReason(s){
+  const fin=s?.finished?.[ticket];
+  return fin?.reason==="forced" ? "관리자에 의해 이용이 종료되었습니다." :
+         fin?.reason==="cancelled" ? "대기 등록이 취소되었습니다." :
+         fin?.reason==="left" ? "이용 완료 후 퇴장 처리되었습니다." :
+         "이용이 종료되었습니다.";
+}
+function renderCooldownScreen(w,until,reason){
+  const activeUntil=Number(until||0);
+  const update=()=>{
+    if(!document.getElementById("reRegisterCountdown")) return;
+    const leftMs=Math.max(0,activeUntil-Date.now());
+    const el=document.getElementById("reRegisterCountdown");
+    const btn=document.getElementById("reRegisterBtn");
     if(leftMs<=0){
-      if(reRegisterTimer){clearInterval(reRegisterTimer);reRegisterTimer=null;}
-      clearCooldown();
-      app.innerHTML=`<div class="wait"><div class="waithead"><h2>고객용 QR 스마트등록</h2></div><div class="waitbody">
-        <div class="doneScreen" style="text-align:center">
-          <div style="font-size:54px;color:#145fe5;line-height:1;margin:10px 0">✓</div>
-          <h2 style="margin:0 0 10px">지금 등록 가능합니다.</h2>
-          <p style="margin:0;line-height:1.7">체육관에 비치된 QR을<br>다시 찍어 대기 등록해주세요.</p>
-        </div>
-      </div></div>`;
-      return;
+      el.textContent="지금 다시 등록할 수 있습니다.";
+      el.style.color="#07854b";
+      if(btn){
+        btn.disabled=false;
+        btn.style.opacity="1";
+        btn.textContent="다시 등록하기";
+      }
+    }else{
+      el.textContent=cooldownRemaining(activeUntil)+" 후";
+      el.style.color="#e51e2a";
+      if(btn){
+        btn.disabled=true;
+        btn.style.opacity=".55";
+        btn.textContent="재등록 대기 중";
+      }
     }
-    const sec=Math.ceil(leftMs/1000);
-    const m=Math.floor(sec/60), s=sec%60;
-    const mm=String(m).padStart(2,"0"), ss=String(s).padStart(2,"0");
-    app.innerHTML=`<div class="wait"><div class="waithead"><h2>고객용 QR 스마트등록</h2></div><div class="waitbody">
-      <div class="doneScreen" style="text-align:center">
-        <div style="font-size:54px;color:#145fe5;line-height:1;margin:10px 0">◷</div>
-        <h2 style="margin:0 0 10px">이용이 완료되었습니다.</h2>
-        <p style="margin:0;line-height:1.7">다음 이용을 위해 QR을<br>다시 찍어주세요.</p>
-        <div class="notice" style="margin-top:14px;text-align:center;background:#eaf2ff">
-          <div style="font-size:13px;font-weight:800;color:#145fe5">재등록 가능 시간</div>
-          <div style="font-size:27px;font-weight:950;color:#145fe5;margin-top:4px">${mm}분 ${ss}초 후</div>
-          <div style="font-size:11px;margin-top:4px">잠시 후 다시 이용해주세요.</div>
-        </div>
-      </div>
-      <div style="text-align:center;font-size:10px;color:#777;margin-top:8px">※ 이 화면은 자동으로 닫히지 않습니다.</div>
-    </div></div>`;
   };
-  draw();
-  reRegisterTimer=setInterval(draw,1000);
-}
-function startCustomerCooldown(minutes){
-  const mins=Math.max(1,Math.min(20,Number(minutes||5)));
-  const until=Date.now()+mins*60000;
-  try{localStorage.setItem(COOLDOWN_KEY,String(until))}catch(e){}
-  showReRegisterScreen(until);
+  w.innerHTML=`
+    <div class="doneScreen" style="background:#fff;color:#071633;border:1px solid #dce4ef;text-align:center;padding:24px 18px">
+      <div style="width:58px;height:58px;border:4px solid #1466e8;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#1466e8">◷</div>
+      <h2 style="margin:8px 0 10px;color:#071633;font-size:20px">이용이 완료되었습니다.</h2>
+      <p style="color:#44546a;margin:0 0 14px;line-height:1.7">다음 이용을 위해 QR을<br>다시 찍어주세요.</p>
+      <div style="background:#eef5ff;border-radius:9px;padding:14px 10px;margin:0 0 14px">
+        <div style="font-size:13px;color:#53657c;font-weight:800;margin-bottom:5px">재등록 가능 시간</div>
+        <div id="reRegisterCountdown" style="font-size:27px;font-weight:950;color:#e51e2a">확인 중...</div>
+      </div>
+      <div style="font-size:11px;color:#667085;line-height:1.6;margin-bottom:12px">${esc(reason||"이용이 종료되었습니다.")}</div>
+      <button id="reRegisterBtn" class="btn" type="button" onclick="goRegisterAfterCooldown()">재등록 대기 중</button>
+      <div style="font-size:10px;color:#777;margin-top:10px">※ 이 화면은 자동으로 닫히지 않습니다.</div>
+    </div>`;
+  update();
+  if(window.reRegisterTimer) clearInterval(window.reRegisterTimer);
+  window.reRegisterTimer=setInterval(update,1000);
 }
 function findDeviceRegistration(s,deviceId){
   for(const c of (s.courts||[])){
@@ -1230,6 +1240,13 @@ function renderCustomer(s){
 }
 
 function register(){
+  const cooldown=getCooldownUntil();
+  if(cooldown>Date.now()){
+    const app=document.getElementById("app");
+    app.innerHTML='<div class="wait"><div class="waithead"><h2>고객용 QR 스마트등록</h2></div><div class="waitbody" id="w"></div></div>';
+    renderCooldownScreen(document.getElementById("w"),cooldown,"재등록 제한 시간이 적용 중입니다.");
+    return;
+  }
   const app=document.getElementById("app");
   app.innerHTML=`
   <div style="min-height:100vh;background:#f4f7fb;padding:14px 12px 28px">
@@ -1368,9 +1385,6 @@ async function reg(){
   }
 }
 function waiting(){
-  const localUntil=getCooldownUntil();
-  if(localUntil>Date.now()){ showReRegisterScreen(localUntil); return; }
-  if(localUntil>0) clearCooldown();
   const app=document.getElementById("app");
   app.innerHTML='<div class="wait"><div class="waithead"><h2>고객용 QR 스마트등록</h2></div><div class="waitbody" id="w">불러오는 중...</div></div>';
   renderWaiting(cloneDef());
@@ -1380,18 +1394,37 @@ function renderWaiting(s){
   const w=document.getElementById("w"); if(!w)return;
   let a=null,q=null,c=null,fin=s.finished?.[ticket];
 
+  /* 퇴장/예약취소/강제퇴장 후 고객 스마트폰에 재등록 제한 화면 표시 */
+  const localCooldown=getCooldownUntil();
+  const serverCooldown=Number(fin?.reRegisterUntil||0);
+  const cooldownUntil=Math.max(localCooldown,serverCooldown);
+  if(cooldownUntil>Date.now()){
+    renderCooldownScreen(w,cooldownUntil,getCooldownReason(s));
+    return;
+  }
+
   for(const x of s.courts){
     if(x.active?.ticket===ticket){a=x.active;c=x}
     const z=(x.queue||[]).find(y=>y.ticket===ticket);
     if(z){q=z;c=x}
   }
 
-  /* 이용 완료 후 재등록 제한 화면: 관리자 설정 시간을 사용 */
+  /* 3번째 화면: 15분 종료 */
   if(fin){
-    const mins=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
-    const until=Number(fin.reRegisterUntil||0) || (Number(fin.endedAt||Date.now()) + mins*60000);
-    try{localStorage.setItem(COOLDOWN_KEY,String(until))}catch(e){}
-    showReRegisterScreen(until);
+    w.innerHTML=`
+      <div style="font-size:11px;color:#1565ff;font-weight:800;text-align:center;margin-bottom:8px">
+        ● 15분 경과 후 퇴장 (자동 안내)
+      </div>
+      <div class="doneScreen">
+        <div class="doneIcon">✓</div>
+        <h2>장군봉 체육관을<br>이용해주셔서<br>대단히 감사합니다!</h2>
+        <p>이용 시간이 종료되었습니다.<br>다음 고객을 위해<br>퇴장 버튼을 눌러주세요.</p>
+        <div class="notice">퇴장 버튼을 눌러야<br>다음 대기자가 이용을 시작합니다.</div>
+        <button class="btn" onclick="finish()">퇴장하기</button>
+      </div>
+      <div style="font-size:10px;color:#777;text-align:center;margin-top:8px">
+        ※ 퇴장 버튼을 눌러야 다음 대기자가 이용을 시작합니다.
+      </div>`;
     return;
   }
 
@@ -1479,34 +1512,50 @@ function renderWaiting(s){
 async function cancelWait(){
   try{
     let s=await get();
+    s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
     for(const c of s.courts)c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);
-    const mins=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
+    const until=Date.now()+s.re_register_minutes*60000;
+    s.finished=s.finished||{};
+    s.finished[ticket]={ticket,endedAt:Date.now(),reRegisterUntil:until,reason:"cancelled"};
     await save(s);
-    startCustomerCooldown(mins);
+    setCooldown(s.re_register_minutes);
+    renderWaiting(s);
   }catch(e){showError(e)}
 }
 async function leave(){
   try{
     let s=await get();
-    const mins=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
-    for(const c of s.courts)if(c.active?.ticket===ticket){
-      s.finished=s.finished||{};
-      s.finished[ticket]={...c.active,endedAt:Date.now()};
-      c.active=null;
+    s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
+    const until=Date.now()+s.re_register_minutes*60000;
+    for(const c of s.courts){
+      if(c.active?.ticket===ticket){
+        s.finished=s.finished||{};
+        s.finished[ticket]={...c.active,endedAt:Date.now(),reRegisterUntil:until,reason:"left"};
+        c.active=null;
+      }
     }
     await advance(s);
     await save(s);
-    startCustomerCooldown(mins);
+    setCooldown(s.re_register_minutes);
+    renderWaiting(s);
   }catch(e){showError(e)}
 }
 async function finish(){
   try{
     let s=await get();
-    const mins=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
-    if(s.finished)delete s.finished[ticket];
+    const current=s.finished?.[ticket];
+    s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
+    const until=Date.now()+s.re_register_minutes*60000;
+    s.finished=s.finished||{};
+    s.finished[ticket]={...(current||{ticket}),endedAt:Date.now(),reRegisterUntil:until,reason:current?.reason||"left"};
     await save(s);
-    startCustomerCooldown(mins);
+    setCooldown(s.re_register_minutes);
+    renderWaiting(s);
   }catch(e){showError(e)}
+}
+function goRegisterAfterCooldown(){
+  if(getCooldownUntil()>Date.now()) return;
+  location.href=REGISTER_URL;
 }
 
 function setupAdminNav(){
@@ -1582,7 +1631,13 @@ async function block(id,b){
 async function force(id){
   try{
     let s=await get(),c=s.courts.find(c=>c.id===id);
-    if(c.active){s.finished=s.finished||{};s.finished[c.active.ticket]={...c.active,endedAt:Date.now()};c.active=null}
+    if(c.active){
+      s.re_register_minutes=Math.max(1,Math.min(20,Number(s.re_register_minutes||5)));
+      const until=Date.now()+s.re_register_minutes*60000;
+      s.finished=s.finished||{};
+      s.finished[c.active.ticket]={...c.active,endedAt:Date.now(),reRegisterUntil:until,reason:"forced"};
+      c.active=null;
+    }
     await advance(s); await save(s);
   }catch(e){showError(e)}
 }
