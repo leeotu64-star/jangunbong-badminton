@@ -2362,10 +2362,10 @@ function admin(){
   <div class="jgbNotifyAdminRow">
     <div>
       <b>예약 자동 알림</b>
-      <div class="hint">OFF이면 고객 화면의 알림 스위치도 숨겨집니다.</div>
+      <div class="hint">ON으로 밀어 놓고 저장하면 고객 화면에 알림 스위치가 표시됩니다.</div>
     </div>
     <label class="jgbNotifySwitch">
-      <input id="jgbAdminNotifyEnabled" type="checkbox">
+      <input id="jgbAdminNotifyEnabled" type="checkbox" onchange="window.jgbNotifyToggleChanged(this.checked)">
       <span class="jgbNotifySlider"></span>
     </label>
   </div>
@@ -2396,7 +2396,7 @@ function renderAdmin(s){
     adminDraft.mx=Number(mx.textContent); adminDraft.rc=Number(rc.textContent);
   }
   const ne=document.getElementById("jgbAdminNotifyEnabled");
-  if(ne)ne.checked=!!s.notification_enabled;
+  if(ne)ne.checked=window.jgbNotifyDraftEnabled(!!s.notification_enabled);
   const nm=[5,8,10].includes(Number(s.notification_minutes))?Number(s.notification_minutes):5;
   document.querySelectorAll('input[name="jgbAdminNotifyMinutes"]').forEach(r=>r.checked=Number(r.value)===nm);
   cs.innerHTML=s.courts.map(c=>'<div class="lockCard"><h3>'+c.id+'번 코트</h3><p>'+(c.blocked?'현재 잠금':'현재 사용 가능')+'</p><button type="button" class="'+(c.blocked?'locked':'open')+'" onclick="window.jgbBlock('+c.id+','+(!c.blocked)+')">'+(c.blocked?'잠금 해제':'코트 잠금')+'</button></div>').join('');
@@ -2456,6 +2456,24 @@ async function saveWithSettings(s){
   });
 }
 
+
+window.jgbNotifyToggleChanged=function(checked){
+  try{
+    localStorage.setItem("jgb_admin_notify_draft_enabled", checked ? "1" : "0");
+  }catch(e){}
+  const box=document.getElementById("jgbAdminNotifyEnabled");
+  if(box) box.checked=!!checked;
+};
+
+window.jgbNotifyDraftEnabled=function(serverValue){
+  try{
+    const v=localStorage.getItem("jgb_admin_notify_draft_enabled");
+    if(v==="1") return true;
+    if(v==="0") return false;
+  }catch(e){}
+  return !!serverValue;
+};
+
 async function saveReservationNotifySettings(){
   try{
     let s=await get();
@@ -2463,6 +2481,9 @@ async function saveReservationNotifySettings(){
     const r=document.querySelector('input[name="jgbAdminNotifyMinutes"]:checked');
     s.notification_minutes=[5,8,10].includes(Number(r?.value))?Number(r.value):5;
     await saveWithSettings(s);
+    try{
+      localStorage.removeItem("jgb_admin_notify_draft_enabled");
+    }catch(e){}
     adminSettingsDirty=false;
     renderAdmin(await get());
     alert(s.notification_enabled
@@ -3431,6 +3452,16 @@ html,body{width:100%;max-width:100%;overflow-x:hidden}
   .stepper{flex-wrap:wrap}
   .adminSave{width:100%;max-width:100%}
 }
+
+
+/* 예약 알림 관리자 토글 고정 보강 */
+.jgbNotifySwitch{position:relative;display:inline-block;width:64px;height:36px;flex:0 0 64px;cursor:pointer;user-select:none}
+.jgbNotifySwitch input{position:absolute!important;opacity:0!important;width:1px!important;height:1px!important;margin:0!important}
+.jgbNotifySlider{position:absolute;inset:0;background:#cbd5e1;border:2px solid #b8c4d4;border-radius:999px;cursor:pointer;transition:background .18s,border-color .18s}
+.jgbNotifySlider:before{content:"";position:absolute;width:28px;height:28px;left:2px;top:2px;background:#fff;border-radius:50%;box-shadow:0 2px 7px rgba(0,0,0,.22);transition:transform .18s}
+.jgbNotifySwitch input:checked + .jgbNotifySlider{background:#1769e8;border-color:#1769e8}
+.jgbNotifySwitch input:checked + .jgbNotifySlider:before{transform:translateX(28px)}
+.jgbNotifySwitch input:focus-visible + .jgbNotifySlider{outline:3px solid rgba(23,105,232,.25);outline-offset:2px}
 
 </style>
 
