@@ -1359,410 +1359,6 @@ body:has(.customerHeader) .waitRow em{
 }
 </style>
 
-
-<style id="JGB_POSTER_MONITOR_DESIGN">
-/* ============================================================
-   장군봉 모니터 - 요청 이미지 스타일
-   17인치 가로 모니터에서 하단 공간을 최대한 사용.
-   기능/DB/Firebase/예약/자동진행/관리자 기능은 변경하지 않음.
-   ============================================================ */
-
-@media(min-width:900px){
-
-  body:has(.customerHeader){
-    margin:0!important;
-    padding:0!important;
-    background:#07101d!important;
-    color:#071633!important;
-    overflow-x:hidden!important;
-  }
-
-  .customerHeader{
-    height:76px!important;
-    box-sizing:border-box!important;
-    padding:6px 14px!important;
-    background:linear-gradient(105deg,#061225,#0d294c 58%,#061225)!important;
-    border-bottom:3px solid #1769e8!important;
-  }
-
-  .customerBrand{min-width:300px!important}
-  .customerBrand .brand{
-    font-size:24px!important;
-    line-height:1!important;
-    font-weight:950!important;
-    color:#fff!important;
-  }
-  .customerBrand .sub{
-    font-size:9px!important;
-    margin-top:4px!important;
-    color:#a7d2ff!important;
-  }
-
-  .customerStats{
-    height:62px!important;
-    gap:6px!important;
-  }
-  .customerStats .topStat{
-    height:54px!important;
-    box-sizing:border-box!important;
-    border:1px solid #2c4e70!important;
-    border-radius:8px!important;
-    background:#10243d!important;
-    color:#fff!important;
-  }
-  .customerStats .topStat>span{
-    font-size:19px!important;
-  }
-  .customerStats .topStat small{
-    font-size:8px!important;
-    color:#a9bdd3!important;
-  }
-  .customerStats .topStat b{
-    font-size:19px!important;
-    color:#fff!important;
-  }
-  .customerRight{
-    color:#fff!important;
-    font-size:12px!important;
-    white-space:nowrap!important;
-  }
-
-  .customerWrap{
-    box-sizing:border-box!important;
-    width:100%!important;
-    max-width:none!important;
-    padding:6px 8px 7px!important;
-    background:#07101d!important;
-  }
-
-  .displaySectionTitle{
-    margin:0 0 5px!important;
-    padding:5px 10px!important;
-    border-radius:5px!important;
-    background:#1769e8!important;
-    color:#fff!important;
-    font-size:13px!important;
-    font-weight:950!important;
-  }
-
-  /* 이미지처럼 상단의 중복 5카드는 없애고
-     아래에 5개 코트 행을 화면 전체 폭으로 크게 사용 */
-  .activeCourts{
-    display:none!important;
-  }
-
-  .waitDashboard{
-    margin:0!important;
-    padding:4px!important;
-    border:1px solid #31506f!important;
-    border-radius:7px!important;
-    background:#0b1829!important;
-    box-sizing:border-box!important;
-  }
-
-  .waitDashboardTitle{
-    height:28px!important;
-    display:flex!important;
-    align-items:center!important;
-    padding:0 7px!important;
-    margin:0 0 4px!important;
-    color:#fff!important;
-    border-bottom:1px solid #31506f!important;
-    font-size:16px!important;
-    font-weight:950!important;
-  }
-  .waitDashboardTitle small{
-    margin-left:8px!important;
-    color:#9db0c5!important;
-    font-size:8px!important;
-  }
-
-  .waitGrid{
-    display:flex!important;
-    flex-direction:column!important;
-    gap:5px!important;
-    width:100%!important;
-  }
-
-  /* ★ 1번 → 2번 → 3번 → 4번 → 5번
-     각각 한 줄을 통째로 사용 */
-  .posterCourt{
-    display:grid!important;
-    grid-template-columns:210px 350px minmax(0,1fr)!important;
-    width:100%!important;
-    height:108px!important;
-    min-height:108px!important;
-    border:2px solid var(--court)!important;
-    border-radius:7px!important;
-    overflow:hidden!important;
-    background:#fff!important;
-    box-sizing:border-box!important;
-  }
-
-  .posterCourtBlock{
-    position:relative!important;
-    display:flex!important;
-    align-items:center!important;
-    gap:10px!important;
-    padding:8px!important;
-    box-sizing:border-box!important;
-    background:linear-gradient(150deg,var(--court),#071326)!important;
-    color:#fff!important;
-  }
-
-  .posterCourtNo{
-    width:62px!important;
-    height:62px!important;
-    flex:none!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    border-radius:9px!important;
-    background:#fff!important;
-    color:var(--court)!important;
-    font-size:43px!important;
-    line-height:1!important;
-    font-weight:950!important;
-  }
-
-  .posterCourtName{
-    font-size:21px!important;
-    font-weight:950!important;
-    white-space:nowrap!important;
-  }
-  .posterCourtName span{font-size:18px!important}
-
-  .posterStatus{
-    position:absolute!important;
-    left:10px!important;
-    bottom:8px!important;
-    padding:3px 9px!important;
-    border-radius:12px!important;
-    border:1px solid #ffffff66!important;
-    background:#071326cc!important;
-    color:#fff!important;
-    font-size:9px!important;
-    font-weight:950!important;
-  }
-
-  .posterCurrent{
-    display:flex!important;
-    flex-direction:column!important;
-    justify-content:center!important;
-    align-items:center!important;
-    padding:6px 10px!important;
-    box-sizing:border-box!important;
-    background:#f4f8fb!important;
-    border-right:1px solid #cbd6e0!important;
-    text-align:center!important;
-  }
-  .posterCurrent>small{
-    color:#61738a!important;
-    font-size:9px!important;
-    font-weight:950!important;
-  }
-  .posterCurrentMain{
-    display:flex!important;
-    align-items:baseline!important;
-    justify-content:center!important;
-    gap:12px!important;
-    width:100%!important;
-  }
-
-  /* 현재 이용자 A/B/C도 최소 35px 이상 */
-  .posterCurrentMain b{
-    font-size:40px!important;
-    line-height:1!important;
-    color:var(--court)!important;
-    font-weight:950!important;
-  }
-  .posterCurrentMain span{
-    max-width:170px!important;
-    overflow:hidden!important;
-    white-space:nowrap!important;
-    text-overflow:ellipsis!important;
-    color:#40556c!important;
-    font-size:12px!important;
-    font-weight:900!important;
-  }
-
-  .posterCurrentTime{
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    gap:8px!important;
-    margin-top:3px!important;
-  }
-  .posterCurrentTime small{
-    color:#61738a!important;
-    font-size:8px!important;
-    font-weight:900!important;
-  }
-  .posterCurrentTime b{
-    color:var(--court)!important;
-    font-size:25px!important;
-    font-weight:950!important;
-  }
-
-  .posterQueue{
-    min-width:0!important;
-    background:#fff!important;
-  }
-  .posterQueueTitle{
-    height:27px!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:space-between!important;
-    padding:0 10px!important;
-    box-sizing:border-box!important;
-    color:var(--court)!important;
-    background:color-mix(in srgb,var(--court) 12%,#fff)!important;
-    border-bottom:1px solid #d3dde6!important;
-  }
-  .posterQueueTitle strong{
-    font-size:13px!important;
-    font-weight:950!important;
-  }
-  .posterQueueTitle>b{
-    padding:3px 8px!important;
-    border-radius:10px!important;
-    background:var(--court)!important;
-    color:#fff!important;
-    font-size:8px!important;
-  }
-
-  .posterQueueHead,
-  .posterQueueRow{
-    display:grid!important;
-    grid-template-columns:70px 1.15fr 1fr 120px!important;
-    align-items:center!important;
-    text-align:center!important;
-  }
-
-  .posterQueueHead{
-    height:23px!important;
-    background:#e9f0f5!important;
-    color:#64758a!important;
-    font-size:8px!important;
-    font-weight:950!important;
-  }
-
-  .posterQueueRow{
-    height:56px!important;
-    border-bottom:1px solid #d9e2e9!important;
-  }
-
-  .posterNo{
-    width:35px!important;
-    height:35px!important;
-    margin:auto!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    border-radius:7px!important;
-    background:color-mix(in srgb,var(--court) 14%,#fff)!important;
-    color:var(--court)!important;
-    font-size:21px!important;
-    font-weight:950!important;
-  }
-
-  /* ★ 대기자 글씨 크게 */
-  .posterNick{
-    font-size:35px!important;
-    line-height:1!important;
-    color:#071633!important;
-    font-weight:950!important;
-  }
-  .posterGame{
-    font-size:17px!important;
-    font-weight:900!important;
-    color:#40556c!important;
-  }
-  .posterWait{
-    font-size:20px!important;
-    font-style:normal!important;
-    color:var(--court)!important;
-    font-weight:950!important;
-  }
-
-  .posterEmpty{
-    height:80px!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    gap:12px!important;
-    color:#566a80!important;
-  }
-  .posterEmpty span{
-    width:38px!important;
-    height:38px!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    border-radius:50%!important;
-    background:color-mix(in srgb,var(--court) 13%,#fff)!important;
-    color:var(--court)!important;
-    font-size:23px!important;
-    font-weight:950!important;
-  }
-  .posterEmpty b{
-    font-size:20px!important;
-    font-weight:950!important;
-  }
-
-  /* 하단 공간은 안내영역을 넓게 사용 */
-  .displayNotice{
-    height:46px!important;
-    min-height:46px!important;
-    margin-top:5px!important;
-    padding:4px 8px!important;
-    box-sizing:border-box!important;
-    display:grid!important;
-    grid-template-columns:repeat(4,1fr)!important;
-    align-items:center!important;
-    gap:0!important;
-    border:1px solid #31506f!important;
-    border-radius:7px!important;
-    background:#0d1c30!important;
-  }
-  .displayNotice>div{
-    text-align:center!important;
-    font-size:9px!important;
-    color:#b6c7d8!important;
-    border-right:1px solid #31506f!important;
-  }
-  .displayNotice>div:last-child{border-right:0!important}
-  .displayNotice b,.displayNotice strong{color:#fff!important}
-
-  /* 관리자 화면의 기존 삭제/강제퇴장 버튼은 숨기지 않음 */
-  .adminTable .smallbtn{
-    display:inline-block!important;
-    visibility:visible!important;
-    opacity:1!important;
-  }
-}
-
-/* 1366×768 같은 17인치 모니터에 최적화 */
-@media(min-width:1201px){
-  .posterCourt{height:108px!important;min-height:108px!important}
-}
-
-/* 작은 모니터에서는 비율만 줄이고 구조는 유지 */
-@media(min-width:900px) and (max-width:1200px){
-  .posterCourt{
-    grid-template-columns:175px 285px minmax(0,1fr)!important;
-    height:98px!important;
-    min-height:98px!important;
-  }
-  .posterCourtNo{width:54px!important;height:54px!important;font-size:37px!important}
-  .posterCourtName{font-size:18px!important}
-  .posterCurrentMain b{font-size:35px!important}
-  .posterNick{font-size:31px!important}
-  .posterGame{font-size:14px!important}
-  .posterWait{font-size:17px!important}
-}
-</style>
-
 </head><body>
 <div id="app"></div>
 <script>
@@ -2208,93 +1804,69 @@ async function forceRemoveWait(courtId,ticketId){
 }
 
 function renderCustomer(s){
-  const stats=document.getElementById("stats");
-  const activeEl=document.getElementById("activeCourts");
-  const waitEl=document.getElementById("waitGrid");
+  const stats=document.getElementById("stats"), activeEl=document.getElementById("activeCourts"), waitEl=document.getElementById("waitGrid");
   if(!stats||!activeEl||!waitEl)return;
-
-  const courts=s.courts||[];
-  const activeCount=courts.filter(c=>c.active).length;
-  const waitCount=courts.reduce((n,c)=>n+(c.queue||[]).length,0);
-  const peopleCount=courts.reduce((n,c)=>
+  const activeCount=s.courts.filter(c=>c.active).length;
+  const waitCount=s.courts.reduce((n,c)=>n+(c.queue||[]).length,0);
+  const peopleCount=s.courts.reduce((n,c)=>
     n+(c.queue||[]).reduce((m,x)=>m+Number(x.people||x.count||1),0),0);
-
   stats.innerHTML=`
-    <div class="topStat"><span>▣</span><div><small>전체 코트</small><b>5 개</b></div></div>
-    <div class="topStat"><span>👥</span><div><small>이용 중 코트</small><b>${activeCount} 개</b></div></div>
-    <div class="topStat"><span>👥</span><div><small>대기 팀</small><b>${waitCount} 팀</b></div></div>
-    <div class="topStat"><span>👥</span><div><small>전체 대기 인원</small><b>${peopleCount} 명</b></div></div>`;
+    <div class="topStat"><span style="color:#145fe5">▣</span><div><small>전체 코트</small><b>5 개</b></div></div>
+    <div class="topStat"><span style="color:#07854b">👥</span><div><small>이용 중 코트</small><b>${activeCount} 개</b></div></div>
+    <div class="topStat"><span style="color:#ff7900">👥</span><div><small>대기 중 팀</small><b>${waitCount} 팀</b></div></div>
+    <div class="topStat"><span style="color:#6332d7">👥</span><div><small>전체 대기 인원</small><b>${peopleCount} 명</b></div></div>`;
 
-  activeEl.innerHTML="";
-
-  waitEl.innerHTML=courts.map((c,i)=>{
-    const color=colors[i];
-    const a=c.active;
+  activeEl.innerHTML=s.courts.map((c,i)=>{
+    const a=c.active,color=colors[i];
     const q=c.queue||[];
-    const activeRemainSec=a?.endAt
-      ? Math.max(0,Math.ceil((Number(a.endAt)-Date.now())/1000))
-      : 0;
-
-    const rows=q.slice(0,6).map((x,j)=>{
-      let waitSec=activeRemainSec;
-      for(let k=0;k<j;k++){
-        waitSec += Number(s.settings?.[q[k].game]||15)*60;
-      }
-      waitSec=Math.max(0,waitSec);
-      const wm=Math.floor(waitSec/60);
-      const ws=waitSec%60;
-      const waitText=wm>0
-        ? `${wm}분 ${String(ws).padStart(2,"0")}초`
-        : `${ws}초`;
-
-      return `<div class="posterQueueRow">
-        <b class="posterNo">${j+1}</b>
-        <strong class="posterNick">${esc(x.nickname)}</strong>
-        <span class="posterGame">${esc(x.game)}</span>
-        <em class="posterWait">${waitText}</em>
-      </div>`;
-    }).join("");
-
-    return `<article class="posterCourt" style="--court:${color}">
-      <div class="posterCourtBlock">
-        <div class="posterCourtNo">${c.id}</div>
-        <div class="posterCourtName">${c.id} <span>번 코트</span></div>
-        <div class="posterStatus">${c.blocked?"사용 불가":a?"이용 중":"사용 가능"}</div>
+    let firstWaitSec=0;
+    if(a?.endAt) firstWaitSec=Math.max(0,Math.ceil((Number(a.endAt)-Date.now())/1000));
+    return `<article class="activeCard" style="--court:${color}">
+      <div class="activeHead">
+        <span><b class="activeNum" style="background:${color}">${c.id}</b> ${c.id}번 코트</span>
+        <strong class="status" style="background:${a?color:'#718096'}">${a?'이용중':'대기중'}</strong>
       </div>
-
-      <div class="posterCurrent">
-        <small>현재 이용자</small>
-        <div class="posterCurrentMain">
-          <b>${a?esc(a.nickname):"없음"}</b>
-          <span>${a?esc(a.game):"현재 이용자가 없습니다"}</span>
-        </div>
-        <div class="posterCurrentTime">
-          <small>${a?"남은 시간":"-"}</small>
-          <b>${a?left(a.endAt):"-"}</b>
-        </div>
-      </div>
-
-      <div class="posterQueue">
-        <div class="posterQueueTitle">
-          <strong>대기자</strong>
-          <b>${q.length}팀</b>
-        </div>
-        ${q.length?`
-          <div class="posterQueueHead">
-            <span>순번</span><span>이용자</span><span>게임 방식</span><span>예상 대기</span>
-          </div>
-          ${rows}
-        `:`
-          <div class="posterEmpty">
-            <span>✓</span>
-            <b>대기 중인 팀이 없습니다</b>
-          </div>
-        `}
+      <div class="activeBody">
+        ${a?`
+          <div style="font-size:11px;font-weight:800;color:#53657c">현재 이용 팀</div>
+          <div class="activeTeam">${esc(a.nickname)}</div>
+          <div class="activeGame">${esc(a.game)}</div>
+          <div class="activeLabel">이용 시간</div>
+          <div class="activeTime" style="color:${color}">${a.startTime||tm(a.startAt)} ~ ${a.endTime||tm(a.endAt)}</div>
+          <div style="margin-top:10px;padding:9px;background:${color}12;border:1px solid ${color}55;border-radius:9px">
+            <div style="font-size:10px;color:#53657c">남은 시간</div>
+            <div style="font-size:23px;font-weight:950;color:${color}">${left(a.endAt)}</div>
+          </div>`
+        :`
+          <div style="font-size:11px;font-weight:800;color:#53657c;margin-top:8px">현재 대기 팀</div>
+          <div class="activeTeam">없음</div>
+          <div class="activeLabel">예상 대기 시간</div>
+          <div class="activeTime" style="color:${color}">${q.length?'약 '+Math.floor(firstWaitSec/60)+'분':'대기 없음'}</div>`}
+        <div class="courtGraphic" style="--court:${color}"><i></i><i></i><i></i>${a?'<span>🏸</span>':''}</div>
       </div>
     </article>`;
   }).join("");
-}
 
+  waitEl.innerHTML=s.courts.map((c,i)=>{
+    const q=c.queue||[],color=colors[i];
+    let activeRemainSec=0;
+    if(c.active?.endAt){
+      activeRemainSec=Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/1000));
+    }
+    return `<article class="waitCard" style="--court:${color}">
+      <div class="waitCardTitle">${c.id}번 코트 대기 현황 <span>(총 ${q.length}팀)</span></div>
+      <div class="waitTableHead"><span>순번</span><span>팀명</span><span>게임 방식</span><span>예상 대기시간</span></div>
+      ${q.length?q.slice(0,5).map((x,j)=>{
+        let waitSec=activeRemainSec;
+        for(let k=0;k<j;k++) waitSec+=Number(s.settings?.[q[k].game]||15)*60;
+        waitSec=Math.max(0,waitSec);
+        const wm=Math.floor(waitSec/60), ws=waitSec%60;
+        const waitText=wm>0?`${wm}분 ${String(ws).padStart(2,"0")}초`:`${ws}초`;
+        return `<div class="waitRow" style="grid-template-columns:1.18fr 1fr 1.11fr 1.12fr!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:6px"><button type="button" class="kickBtn" aria-label="대기자 삭제" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:30px!important;height:30px!important;min-width:30px!important;padding:0!important;margin:0!important;border:0!important;border-radius:5px!important;background:#e11d2e!important;color:#fff!important;font-size:20px!important;font-weight:950!important;line-height:30px!important;cursor:pointer!important" onclick="forceRemoveWait(${c.id},'${String(x.ticket||"").replace(/'/g,"\\'")}');event.stopPropagation()">×</button><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>`;
+      }).join(""):`<div class="waitEmpty"><div class="emptyFace" style="color:${color}">☺</div><b>대기 중인 팀이 없습니다.</b></div>`}
+    </article>`;
+  }).join("");
+}
 async function register(){
 
   const app=document.getElementById("app");
