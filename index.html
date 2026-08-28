@@ -1490,8 +1490,8 @@ body:has(.customerHeader) .waitRow em{
     display:grid!important;
     grid-template-columns:210px 350px minmax(0,1fr)!important;
     width:100%!important;
-    height:calc((100vh - 145px) / 5)!important;
-    min-height:112px!important;
+    height:108px!important;
+    min-height:108px!important;
     border:2px solid var(--court)!important;
     border-radius:7px!important;
     overflow:hidden!important;
@@ -1668,18 +1668,18 @@ body:has(.customerHeader) .waitRow em{
 
   /* ★ 대기자 글씨 크게 */
   .posterNick{
-    font-size:52px!important;
+    font-size:35px!important;
     line-height:1!important;
     color:#071633!important;
     font-weight:950!important;
   }
   .posterGame{
-    font-size:19px!important;
+    font-size:17px!important;
     font-weight:900!important;
     color:#40556c!important;
   }
   .posterWait{
-    font-size:25px!important;
+    font-size:20px!important;
     font-style:normal!important;
     color:var(--court)!important;
     font-weight:950!important;
@@ -1710,29 +1710,7 @@ body:has(.customerHeader) .waitRow em{
     font-weight:950!important;
   }
 
-  
-  /* ★ 대기자 이름 최우선 강조: 17인치 모니터에서 가장 크게 */
-  .posterQueue .posterNick{
-    font-size:52px!important;
-    line-height:.95!important;
-    letter-spacing:-.04em!important;
-    font-weight:950!important;
-  }
-  .posterQueue .posterNo{
-    width:40px!important;
-    height:40px!important;
-    font-size:24px!important;
-  }
-  .posterQueue .posterGame{
-    font-size:19px!important;
-    font-weight:950!important;
-  }
-  .posterQueue .posterWait{
-    font-size:25px!important;
-    font-weight:950!important;
-  }
-
-/* 하단 공간은 안내영역을 넓게 사용 */
+  /* 하단 공간은 안내영역을 넓게 사용 */
   .displayNotice{
     height:46px!important;
     min-height:46px!important;
@@ -1766,10 +1744,7 @@ body:has(.customerHeader) .waitRow em{
 
 /* 1366×768 같은 17인치 모니터에 최적화 */
 @media(min-width:1201px){
-  .posterCourt{
-    height:calc((100vh - 145px) / 5)!important;
-    min-height:112px!important;
-  }
+  .posterCourt{height:108px!important;min-height:108px!important}
 }
 
 /* 작은 모니터에서는 비율만 줄이고 구조는 유지 */
@@ -3669,26 +3644,6 @@ body:has(.customerHeader) .waitRow > em{
   body:has(.customerHeader) .waitRow em{
     white-space:nowrap!important;
     overflow:visible!important;
-  }
-}
-
-/* ★ 하단 빈 공간 최소화 — 17인치 모니터 높이를 5개 코트가 최대한 사용 */
-@media(min-width:900px){
-  .waitGrid{
-    width:100%!important;
-  }
-  .posterCourt{
-    height:calc((100vh - 145px) / 5)!important;
-    min-height:112px!important;
-  }
-  .posterCurrent,
-  .posterQueue{
-    height:100%!important;
-    box-sizing:border-box!important;
-  }
-  .posterEmpty{
-    min-height:0!important;
-    height:calc(100% - 27px)!important;
   }
 }
 </style>
