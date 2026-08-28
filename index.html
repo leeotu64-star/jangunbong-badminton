@@ -1985,13 +1985,14 @@ async function setupJgbCustomerNotification(){
   if(!box||!toggle)return;
   try{
     const s=await get();
-    if(!s.notification_enabled){
-      box.style.display="none";
-      return;
-    }
+    /* 고객 화면에서는 예약 알림 슬라이더를 항상 표시한다.
+       관리자가 OFF인 경우에도 고객이 기능 위치를 볼 수 있으며,
+       실제 알림은 관리자 설정이 ON일 때만 실행된다. */
     box.style.display="block";
     const minutes=[5,8,10].includes(Number(s.notification_minutes))?Number(s.notification_minutes):5;
-    hint.textContent=`예약시간 ${minutes}분 전에 알려드립니다.`;
+    hint.textContent=s.notification_enabled
+      ? `예약시간 ${minutes}분 전에 알려드립니다.`
+      : "현재 관리자 알림 설정이 OFF입니다.";
     toggle.checked=localStorage.getItem("jgbCustomerNotifyOptIn")==="1";
     toggle.onchange=async function(){
       if(!this.checked){
@@ -2324,6 +2325,10 @@ async function checkJgbReservationNotification(){
       const sentKey="jgbReservationNotifySent_"+ticket+"_"+minutes;
       if(sessionStorage.getItem(sentKey)==="1")return;
       sessionStorage.setItem(sentKey,"1");
+      // 휴대폰이 지원하는 경우 짧게 3회 진동
+      try{
+        if("vibrate" in navigator) navigator.vibrate([350,180,350,180,350]);
+      }catch(e){}
       new Notification("🏸 장군봉 배드민턴 예약 알림",{
         body:`${court.id}번 코트 이용시간이 약 ${minutes}분 후입니다.`,
         tag:"jgb-reservation-"+ticket
