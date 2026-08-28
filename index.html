@@ -1935,7 +1935,7 @@ async function register(){
           • 이용시간이 종료되면 자동으로 이용이 종료됩니다.
         </div>
         <div id="e" style="display:none;color:#d71920;background:#fff1f1;border:1px solid #ffc9c9;border-radius:8px;padding:10px;font-size:12px;font-weight:800;margin-bottom:10px"></div>
-        <div id="jgbCustomerNotifyBox" style="display:none;margin:12px 0;padding:13px 14px;border:1px solid #d7e2ef;border-radius:10px;background:#f8fbff">
+        <div id="jgbCustomerNotifyBox" style="display:flex;margin:12px 0;padding:13px 14px;border:1px solid #d7e2ef;border-radius:10px;background:#f8fbff">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
             <div>
               <div style="font-size:14px;font-weight:950">🔔 예약 알림 받기</div>
@@ -1988,7 +1988,7 @@ async function setupJgbCustomerNotification(){
     /* 고객 화면에서는 예약 알림 슬라이더를 항상 표시한다.
        관리자가 OFF인 경우에도 고객이 기능 위치를 볼 수 있으며,
        실제 알림은 관리자 설정이 ON일 때만 실행된다. */
-    box.style.display="block";
+    box.style.display="flex";
     const minutes=[5,8,10].includes(Number(s.notification_minutes))?Number(s.notification_minutes):5;
     hint.textContent=s.notification_enabled
       ? `예약시간 ${minutes}분 전에 알려드립니다.`
