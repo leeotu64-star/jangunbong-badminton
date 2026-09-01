@@ -690,10 +690,10 @@ body:has(.customerHeader){background:#f3f7fb!important;overflow-x:hidden!importa
 
 <style id="JGB_WAIT_FINAL_40PX">
 /* =========================================================
-   장군봉 고객용 대기현황 40px 적용
+   장군봉 고객용 대기현황 40px 강제 적용
    - 기존 기능/데이터/QR/관리자 기능 변경 없음
    - 기존 디자인을 유지하고 대기현황 글자만 확대
-   - 최종 글씨 40px
+   - 최종 표시 글씨 = 40px
    ========================================================= */
 
 /* 대기현황 표 머리글 */
@@ -839,7 +839,7 @@ body:has(.customerHeader) .emptyFace{
   body:has(.customerHeader) .waitRow strong,
   body:has(.customerHeader) .waitRow span,
   body:has(.customerHeader) .waitRow em{
-    font-size:42px!important;
+    font-size:40px!important;
   }
 
   body:has(.customerHeader) .waitTableHead,
@@ -1359,6 +1359,24 @@ body:has(.customerHeader) .waitRow em{
 }
 </style>
 
+
+<style id="JGB_WAIT_EXACT_40PX_LAST">
+/* 최종 우선순위: 대기현황 큰 글씨 40px + 칸 정중앙 */
+body:has(.customerHeader) .waitRow,
+body:has(.customerHeader) .waitRow > *,
+body:has(.customerHeader) .waitRow strong,
+body:has(.customerHeader) .waitRow span,
+body:has(.customerHeader) .waitRow em{
+  font-size:40px !important;
+  line-height:1 !important;
+}
+body:has(.customerHeader) .waitRow > *{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+}
+</style>
 
 </head><body>
 <div id="app"></div>
@@ -3131,62 +3149,6 @@ async function resetHistoryOnServer(){
   document.body.classList.toggle("management-view",p.get("page")==="management");
 })();
 </script>
-
-<!-- JGB FINAL HARD 40PX OVERRIDE -->
-<style id="JGB_FINAL_HARD_40PX">
-/* 대기현황 실제 표시값만 최종 40px 강제 */
-.waitRow,
-.waitRow > div,
-.waitRow > span,
-.waitRow > strong,
-.waitRow > em,
-.waitRow > p,
-.waitRow > b,
-.waitRow strong,
-.waitRow span,
-.waitRow em,
-.waitRow p{
-  font-size:40px !important;
-  line-height:1 !important;
-  text-align:center !important;
-}
-
-/* 4칸 정확한 가로/세로 중앙 */
-.waitRow{
-  display:grid !important;
-  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
-  align-items:center !important;
-  justify-items:center !important;
-}
-.waitRow > *{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  text-align:center !important;
-  min-width:0 !important;
-  height:100% !important;
-}
-
-/* 머리글은 너무 크지 않게 중앙 정렬 */
-.waitTableHead,
-.waitTableHead > *{
-  text-align:center !important;
-}
-.waitTableHead > *{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-}
-
-/* 실제 고객 표시 영역에서 40px이 다시 덮이는 것을 차단 */
-#waitList .waitRow *,
-.waitList .waitRow *,
-.waitTable .waitRow *{
-  font-size:40px !important;
-  line-height:1 !important;
-}
-</style>
-
 </body></html>
 
 <style id="JGB_WAIT_ROW_LEFT_ALIGN_FINAL">
