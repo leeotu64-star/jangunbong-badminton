@@ -1829,9 +1829,13 @@ function renderCustomer(s){
       </div>
       <div class="activeBody">
         ${a?`
-          <div style="font-size:11px;font-weight:800;color:#53657c">현재 이용 팀</div>
-          <div class="activeTeam">${esc(a.nickname)}</div>
-          <div class="activeGame">${esc(a.game)}</div>
+          <div class="activeMain">
+            <div class="activeTeam">${esc(a.nickname)}</div>
+            <div class="activeGameBox">
+              <div class="activeGameLabel">게임 방식</div>
+              <div class="activeGame">${esc(a.game)}</div>
+            </div>
+          </div>
           <div class="activeLabel">이용 시간</div>
           <div class="activeTime" style="color:${color}">${a.startTime||tm(a.startAt)} ~ ${a.endTime||tm(a.endAt)}</div>
           <div style="margin-top:10px;padding:9px;background:${color}12;border:1px solid ${color}55;border-radius:9px">
@@ -3314,112 +3318,68 @@ async function resetHistoryOnServer(){
   }
 }
 </style>
-
-</body></html>
-
-<style id="JGB_ACTIVE_TEAM_MAX_FINAL">
-/* 고객용 코트 카드 최종 수정
-   - "현재 이용 팀" 문구 제거
-   - 팀명(A)은 최대한 크게
-   - 게임 방식은 오른쪽 공간으로 이동
-   - 오전/오후 표시는 24시간제로 제거 (tm 함수 적용)
-*/
-@media(min-width:1101px){
-  body:has(.customerHeader) .activeBody{
-    display:grid!important;
-    grid-template-columns:minmax(0,2.2fr) minmax(180px,1fr)!important;
-    grid-template-rows:auto auto auto auto!important;
-    column-gap:18px!important;
-    align-items:center!important;
-    text-align:center!important;
-    padding:7px 12px!important;
-  }
-
-  /* 현재 이용 팀 문구 제거 */
-  body:has(.customerHeader) .activeBody > div:first-child{
-    display:none!important;
-  }
-
-  /* 팀명 A: 사용 가능한 공간을 최대한 크게 사용 */
-  body:has(.customerHeader) .activeBody .activeTeam{
-    grid-column:1!important;
-    grid-row:1 / span 2!important;
-    align-self:center!important;
-    font-size:92px!important;
-    line-height:.9!important;
-    font-weight:950!important;
-    margin:0!important;
-    white-space:nowrap!important;
-  }
-
-  /* 게임 방식은 오른쪽 */
-  body:has(.customerHeader) .activeBody .activeGame{
-    grid-column:2!important;
-    grid-row:1 / span 2!important;
-    align-self:center!important;
-    font-size:25px!important;
-    line-height:1.15!important;
-    font-weight:950!important;
-    margin:0!important;
-    padding-left:14px!important;
-    border-left:2px solid #b9c6d6!important;
-  }
-  body:has(.customerHeader) .activeBody .activeGame::before{
-    content:"게임 방식";
-    display:block!important;
-    font-size:12px!important;
-    color:#53657c!important;
-    margin-bottom:7px!important;
-    font-weight:900!important;
-  }
-
-  /* 이용 시간은 아래 전체 폭 */
-  body:has(.customerHeader) .activeBody .activeLabel{
-    grid-column:1 / -1!important;
-    grid-row:3!important;
-    margin-top:3px!important;
-    padding-top:7px!important;
-    font-size:10px!important;
-  }
-  body:has(.customerHeader) .activeBody .activeTime{
-    grid-column:1 / -1!important;
-    grid-row:4!important;
-    font-size:20px!important;
-    margin-top:0!important;
-    white-space:nowrap!important;
-  }
-
-  /* 남은 시간 박스는 아래 전체 폭 */
-  body:has(.customerHeader) .activeBody > div[style*="margin-top:10px"]{
-    grid-column:1 / -1!important;
-    grid-row:5!important;
-    margin-top:6px!important;
-  }
+<style id="JGB_ACTIVE_CARD_FINAL_NO_DIVIDER">
+/* 고객용 이용중 카드 최종 배치: 현재 이용 팀 문구 제거 / A 최대 확대 / 게임 방식 우측 / 가운데 세로선 제거 */
+body:has(.customerHeader) .activeBody,
+body.customer-display .activeBody{
+  padding:6px 8px!important;
+  text-align:center!important;
+  overflow:hidden!important;
 }
-
-@media(max-width:1100px){
-  body:has(.customerHeader) .activeBody > div:first-child{display:none!important}
-  body:has(.customerHeader) .activeBody{
-    display:grid!important;
-    grid-template-columns:minmax(0,1.7fr) minmax(110px,1fr)!important;
-    column-gap:8px!important;
-    text-align:center!important;
-  }
-  body:has(.customerHeader) .activeBody .activeTeam{
-    grid-column:1!important;grid-row:1 / span 2!important;
-    font-size:68px!important;line-height:.9!important;margin:0!important;
-  }
-  body:has(.customerHeader) .activeBody .activeGame{
-    grid-column:2!important;grid-row:1 / span 2!important;
-    font-size:18px!important;margin:0!important;padding-left:8px!important;
-    border-left:1px solid #b9c6d6!important;
-  }
-  body:has(.customerHeader) .activeBody .activeGame::before{
-    content:"게임 방식";display:block!important;font-size:9px!important;color:#53657c!important;margin-bottom:4px!important;
-  }
-  body:has(.customerHeader) .activeBody .activeLabel{grid-column:1 / -1!important;margin-top:5px!important;padding-top:5px!important}
-  body:has(.customerHeader) .activeBody .activeTime{grid-column:1 / -1!important;white-space:nowrap!important}
-  body:has(.customerHeader) .activeBody > div[style*="margin-top:10px"]{grid-column:1 / -1!important;margin-top:5px!important}
+body:has(.customerHeader) .activeMain,
+body.customer-display .activeMain{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.35fr) minmax(95px,.9fr)!important;
+  align-items:center!important;
+  min-height:92px!important;
+  margin:0!important;
+  padding:0!important;
+}
+body:has(.customerHeader) .activeTeam,
+body.customer-display .activeTeam{
+  font-size:76px!important;
+  line-height:.9!important;
+  font-weight:950!important;
+  margin:0!important;
+  padding:0!important;
+}
+body:has(.customerHeader) .activeGameBox,
+body.customer-display .activeGameBox{
+  border-left:0!important;
+  border-right:0!important;
+  padding:0 4px!important;
+  margin:0!important;
+  text-align:center!important;
+}
+body:has(.customerHeader) .activeGameLabel,
+body.customer-display .activeGameLabel{
+  font-size:10px!important;
+  font-weight:800!important;
+  color:#53657c!important;
+  margin:0 0 3px!important;
+}
+body:has(.customerHeader) .activeGame,
+body.customer-display .activeGame{
+  font-size:20px!important;
+  line-height:1.05!important;
+  font-weight:950!important;
+  margin:0!important;
+  white-space:nowrap!important;
+}
+body:has(.customerHeader) .activeLabel,
+body.customer-display .activeLabel{
+  margin-top:5px!important;
+  padding-top:5px!important;
+}
+body:has(.customerHeader) .activeTime,
+body.customer-display .activeTime{
+  font-size:22px!important;
+  line-height:1!important;
+  margin-top:2px!important;
+  white-space:nowrap!important;
 }
 </style>
+
+
+</body></html>
 
