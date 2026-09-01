@@ -3221,5 +3221,56 @@ async function resetHistoryOnServer(){
 }
 </style>
 
+
+<style id="JGB_WAIT_HEADER_ROW_SAME_GRID_FINAL">
+/* =========================================================
+   ★ 대기현황 헤더 + 아래 실제 고객행 칸 완전 일치 ★
+   순번 | 팀명 | 게임 방식 | 예상 대기시간
+   두 줄 모두 같은 grid-template-columns 사용
+========================================================= */
+
+@media(min-width:1101px){
+  /* 위 제목행과 아래 고객행을 완전히 동일한 칸 비율로 고정 */
+  body:has(.customerHeader) .waitTableHead,
+  body:has(.customerHeader) .waitRow,
+  body:has(.customerHeader) #waitList .waitRow{
+    display:grid!important;
+    grid-template-columns:78px 0.82fr 1fr 1.35fr!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+  }
+
+  /* 헤더 칸 */
+  body:has(.customerHeader) .waitTableHead > *{
+    min-width:0!important;
+    box-sizing:border-box!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    text-align:center!important;
+    padding:0!important;
+    margin:0!important;
+  }
+
+  /* 실제 고객 데이터 칸 */
+  body:has(.customerHeader) .waitRow > *,
+  body:has(.customerHeader) #waitList .waitRow > *{
+    min-width:0!important;
+    box-sizing:border-box!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    text-align:center!important;
+  }
+
+  /* 순번 칸만 기존 삭제버튼/번호 구조 유지 */
+  body:has(.customerHeader) .waitRow .waitControl{
+    width:100%!important;
+    justify-content:center!important;
+    align-items:center!important;
+  }
+}
+</style>
+
 </body></html>
 
