@@ -1863,7 +1863,7 @@ function renderCustomer(s){
         waitSec=Math.max(0,waitSec);
         const wm=Math.floor(waitSec/60), ws=waitSec%60;
         const waitText=wm>0?`${wm}분 ${String(ws).padStart(2,"0")}초`:`${ws}초`;
-        return `<div class="waitRow" style="grid-template-columns:1.18fr 1fr 1.11fr 1.12fr!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:6px"><button type="button" class="kickBtn" aria-label="대기자 삭제" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:30px!important;height:30px!important;min-width:30px!important;padding:0!important;margin:0!important;border:0!important;border-radius:5px!important;background:#e11d2e!important;color:#fff!important;font-size:20px!important;font-weight:950!important;line-height:30px!important;cursor:pointer!important" onclick="forceRemoveWait(${c.id},'${String(x.ticket||"").replace(/'/g,"\\'")}');event.stopPropagation()">×</button><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>`;
+        return `<div class="waitRow" style="grid-template-columns:78px 0.82fr 1fr 1.35fr!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:6px"><button type="button" class="kickBtn" aria-label="대기자 삭제" style="display:inline-flex!important;align-items:center!important;justify-content:center!important;width:30px!important;height:30px!important;min-width:30px!important;padding:0!important;margin:0!important;border:0!important;border-radius:5px!important;background:#e11d2e!important;color:#fff!important;font-size:20px!important;font-weight:950!important;line-height:30px!important;cursor:pointer!important" onclick="forceRemoveWait(${c.id},'${String(x.ticket||"").replace(/'/g,"\\'")}');event.stopPropagation()">×</button><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>`;
       }).join(""):`<div class="waitEmpty"><div class="emptyFace" style="color:${color}">☺</div><b>대기 중인 팀이 없습니다.</b></div>`}
     </article>`;
   }).join("");
@@ -3222,15 +3222,16 @@ async function resetHistoryOnServer(){
 </style>
 
 
+
 <style id="JGB_WAIT_HEADER_ROW_SAME_GRID_FINAL">
 /* =========================================================
-   ★ 대기현황 헤더 + 아래 실제 고객행 칸 완전 일치 ★
-   순번 | 팀명 | 게임 방식 | 예상 대기시간
-   두 줄 모두 같은 grid-template-columns 사용
+   ★ 대기현황 정렬 최종 수정 ★
+   원인: 실제 고객행 JS inline grid가 헤더와 다른 비율을 강제함
+   해결: 헤더와 실제 고객행 모두 완전히 같은 4칸 비율 사용
 ========================================================= */
 
 @media(min-width:1101px){
-  /* 위 제목행과 아래 고객행을 완전히 동일한 칸 비율로 고정 */
+  /* 위 헤더 + 아래 실제 고객행: 정확히 동일한 칸 */
   body:has(.customerHeader) .waitTableHead,
   body:has(.customerHeader) .waitRow,
   body:has(.customerHeader) #waitList .waitRow{
@@ -3238,24 +3239,34 @@ async function resetHistoryOnServer(){
     grid-template-columns:78px 0.82fr 1fr 1.35fr!important;
     width:100%!important;
     box-sizing:border-box!important;
-  }
-
-  /* 헤더 칸 */
-  body:has(.customerHeader) .waitTableHead > *{
-    min-width:0!important;
-    box-sizing:border-box!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    text-align:center!important;
-    padding:0!important;
     margin:0!important;
   }
 
-  /* 실제 고객 데이터 칸 */
+  /* 헤더 */
+  body:has(.customerHeader) .waitTableHead{
+    padding:0!important;
+    height:48px!important;
+  }
+
+  /* 실제 고객행 */
+  body:has(.customerHeader) .waitRow,
+  body:has(.customerHeader) #waitList .waitRow{
+    padding:0!important;
+    min-height:48px!important;
+    height:48px!important;
+    max-height:48px!important;
+    align-items:center!important;
+  }
+
+  /* 위 헤더 / 아래 데이터 모든 칸 같은 방식으로 중앙 */
+  body:has(.customerHeader) .waitTableHead > *,
   body:has(.customerHeader) .waitRow > *,
   body:has(.customerHeader) #waitList .waitRow > *{
     min-width:0!important;
+    width:100%!important;
+    height:100%!important;
+    margin:0!important;
+    padding:0!important;
     box-sizing:border-box!important;
     display:flex!important;
     align-items:center!important;
@@ -3263,11 +3274,43 @@ async function resetHistoryOnServer(){
     text-align:center!important;
   }
 
-  /* 순번 칸만 기존 삭제버튼/번호 구조 유지 */
+  /* 중요한 실제 글씨는 조금 줄여서 칸 안에 안정적으로 배치 */
+  body:has(.customerHeader) .waitRow strong,
+  body:has(.customerHeader) .waitRow span,
+  body:has(.customerHeader) .waitRow em,
+  body:has(.customerHeader) #waitList .waitRow strong,
+  body:has(.customerHeader) #waitList .waitRow span,
+  body:has(.customerHeader) #waitList .waitRow em{
+    width:100%!important;
+    height:100%!important;
+    margin:0!important;
+    padding:0!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    text-align:center!important;
+    font-size:28px!important;
+    font-weight:900!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    font-style:normal!important;
+  }
+
+  /* 순번 칸 */
   body:has(.customerHeader) .waitRow .waitControl{
     width:100%!important;
-    justify-content:center!important;
+    height:100%!important;
+    display:flex!important;
     align-items:center!important;
+    justify-content:center!important;
+    gap:5px!important;
+  }
+
+  body:has(.customerHeader) .waitRow .waitControl b,
+  body:has(.customerHeader) .waitRow b{
+    font-size:20px!important;
+    margin:0!important;
+    line-height:1!important;
   }
 }
 </style>
