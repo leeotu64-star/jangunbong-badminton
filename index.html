@@ -3134,26 +3134,31 @@ async function resetHistoryOnServer(){
 
 <style id="JGB_WAIT_IMPORTANT_32PX_FINAL">
 /* =========================================================
-   대기 현황 최종 권장 크기
-   팀명 / 게임 방식 / 예상 대기시간 = 32px
-   이유: 4개 칸에서 가장 균형이 좋고 가독성이 높음
+   대기 현황 최종 정렬
+   팀명은 조금 넓게 / 예상 대기시간 칸은 조금 좁게
+   순번 | 팀명 | 게임 방식 | 예상 대기시간
 ========================================================= */
 
 @media(min-width:1101px){
+  /* 칸 비율 조정: 팀명 넓게, 시간 칸 좁게 */
+  body:has(.customerHeader) .waitTableHead,
   body:has(.customerHeader) .waitRow{
     display:grid!important;
-    grid-template-columns:78px repeat(3,minmax(0,1fr))!important;
+    grid-template-columns:78px 0.82fr 1fr 1.35fr!important;
+    width:100%!important;
     min-height:60px!important;
     height:60px!important;
     max-height:60px!important;
     padding:0!important;
     margin:0!important;
     align-items:center!important;
-    justify-items:center!important;
+    justify-items:stretch!important;
     text-align:center!important;
   }
 
-  body:has(.customerHeader) .waitRow > *{
+  /* 모든 칸 정확한 중앙 정렬 */
+  body:has(.customerHeader) .waitRow > *,
+  body:has(.customerHeader) .waitTableHead > *{
     width:100%!important;
     height:100%!important;
     min-width:0!important;
@@ -3167,17 +3172,17 @@ async function resetHistoryOnServer(){
     line-height:1!important;
   }
 
-  /* 중요 실제 데이터: 팀명 / 게임 방식 / 예상 대기시간 */
+  /* 팀명 / 게임 방식 / 예상 대기시간 */
   body:has(.customerHeader) .waitRow strong,
   body:has(.customerHeader) .waitRow span,
   body:has(.customerHeader) .waitRow em{
     display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
     width:100%!important;
     height:100%!important;
     margin:0!important;
     padding:0!important;
-    align-items:center!important;
-    justify-content:center!important;
     text-align:center!important;
     font-size:32px!important;
     font-weight:900!important;
@@ -3186,7 +3191,7 @@ async function resetHistoryOnServer(){
     font-style:normal!important;
   }
 
-  /* 순번은 작게 유지 */
+  /* 순번 칸 */
   body:has(.customerHeader) .waitRow .waitControl,
   body:has(.customerHeader) .waitRow .waitControl *{
     display:flex!important;
@@ -3202,7 +3207,7 @@ async function resetHistoryOnServer(){
     line-height:1!important;
   }
 
-  /* 다른 마지막 CSS가 덮어쓰지 못하도록 실제 데이터 다시 강제 */
+  /* 중요 데이터 최종 강제 */
   body:has(.customerHeader) #waitList .waitRow strong,
   body:has(.customerHeader) #waitList .waitRow span,
   body:has(.customerHeader) #waitList .waitRow em,
