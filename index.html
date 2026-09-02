@@ -1935,11 +1935,20 @@ function renderCustomer(s){
       }).join(""):`<div class="waitEmpty"><div class="emptyFace" style="color:${color}">☺</div><b>대기 중인 팀이 없습니다.</b></div>`}
     </article>`;
   }).join("")+`
-    <aside class="displayNotice">
-      <div><b>① 안내사항</b><span>대기 등록 순서에 따라 다음 팀이 <strong>자동으로 진행됩니다.</strong></span></div>
-      <div><b>② 대기 예상 시간</b><span>현재 설정된 게임 시간을 기준으로 <strong>실시간 산정됩니다.</strong></span></div>
-      <div><b>③ 이용 안내</b><span>코트 이용 현황은 <strong>실시간으로 업데이트됩니다.</strong></span></div>
-    </aside>`;
+    <section class="entryReadyGrid" aria-label="입장 준비 안내">
+      ${s.courts.map((c,i)=>{
+        const q=c.queue||[], color=colors[i], next=q[0];
+        const remain= c.active?.endAt ? Math.max(0,Math.ceil((Number(c.active.endAt)-Date.now())/1000)) : 0;
+        const show=!!next && !!c.active?.endAt && remain>0 && remain<=300;
+        const mm=String(Math.floor(remain/60)).padStart(2,"0"), ss=String(remain%60).padStart(2,"0");
+        return `<article class="entryReadyCard ${show?'isReady':''}" style="--court:${color}">
+          <div class="entryReadyHead"><b>${c.id}번 코트</b></div>
+          <div class="entryReadyBody">
+            ${show?`<div class="entryReadyTeam">${esc(next.nickname)}</div><div class="entryReadyTime">${mm}:${ss}</div>`:`<div class="entryReadyEmpty">입장 준비 팀 없음</div>`}
+          </div>
+        </article>`;
+      }).join("")}
+    </section>`;
 }
 async function register(){
 
@@ -3450,5 +3459,101 @@ body.customer-display .activeTime{
 </style>
 
 
-</body></html>
+</body>
+<style id="JGB_ENTRY_READY_FINAL">
+/* 입장 준비: 기존 코트/대기현황 레이아웃은 변경하지 않고 하단 안내영역만 5칸으로 교체 */
+body.customer-display .displayNotice,
+body:has(.customerHeader) .displayNotice{display:none!important}
+body.customer-display .entryReadyGrid,
+body:has(.customerHeader) .entryReadyGrid{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:8px!important;
+  width:100%!important;
+  margin-top:8px!important;
+  height:118px!important;
+  min-height:118px!important;
+  box-sizing:border-box!important;
+}
+body.customer-display .entryReadyCard,
+body:has(.customerHeader) .entryReadyCard{
+  min-width:0!important;
+  height:118px!important;
+  background:#fff!important;
+  border:1.5px solid var(--court)!important;
+  border-radius:6px!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+body.customer-display .entryReadyHead,
+body:has(.customerHeader) .entryReadyHead{
+  height:28px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:var(--court)!important;
+  color:#fff!important;
+  font-size:12px!important;
+  font-weight:950!important;
+}
+body.customer-display .entryReadyBody,
+body:has(.customerHeader) .entryReadyBody{
+  height:90px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  padding:4px!important;
+  box-sizing:border-box!important;
+}
+body.customer-display .entryReadyTeam,
+body:has(.customerHeader) .entryReadyTeam{
+  font-size:25px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  color:#071d52!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  max-width:100%!important;
+}
+body.customer-display .entryReadyTime,
+body:has(.customerHeader) .entryReadyTime{
+  margin-top:8px!important;
+  font-size:30px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  color:var(--court)!important;
+  font-variant-numeric:tabular-nums!important;
+}
+body.customer-display .entryReadyCard.isReady,
+body:has(.customerHeader) .entryReadyCard.isReady{
+  border-width:3px!important;
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--court) 18%,transparent),0 3px 10px rgba(7,29,73,.14)!important;
+}
+body.customer-display .entryReadyCard.isReady .entryReadyHead,
+body:has(.customerHeader) .entryReadyCard.isReady .entryReadyHead{
+  font-size:13px!important;
+}
+body.customer-display .entryReadyCard.isReady .entryReadyTeam,
+body:has(.customerHeader) .entryReadyCard.isReady .entryReadyTeam{
+  color:var(--court)!important;
+}
+body.customer-display .entryReadyEmpty,
+body:has(.customerHeader) .entryReadyEmpty{
+  font-size:11px!important;
+  font-weight:800!important;
+  color:#94a3b8!important;
+}
+@media(max-width:900px){
+  body.customer-display .entryReadyGrid,body:has(.customerHeader) .entryReadyGrid{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:4px!important;height:96px!important;min-height:96px!important}
+  body.customer-display .entryReadyCard,body:has(.customerHeader) .entryReadyCard{height:96px!important}
+  body.customer-display .entryReadyHead,body:has(.customerHeader) .entryReadyHead{height:24px!important;font-size:10px!important}
+  body.customer-display .entryReadyBody,body:has(.customerHeader) .entryReadyBody{height:72px!important}
+  body.customer-display .entryReadyTeam,body:has(.customerHeader) .entryReadyTeam{font-size:18px!important}
+  body.customer-display .entryReadyTime,body:has(.customerHeader) .entryReadyTime{font-size:22px!important;margin-top:6px!important}
+}
+</style>
+</html>
 
