@@ -2104,7 +2104,7 @@ if(SUPA){syncFromSupabase();startRealtime();setInterval(syncFromSupabase,5000);}
   window.eamSaveFullEdit=async function(code){
     const a=(window.__eamA||[]).find(v=>String(v.asset_code)===String(code));
     if(!a){alert('자산을 찾을 수 없습니다.');return}
-    if(!window.SUPA){alert('Supabase 연결이 필요합니다.');return}
+    if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
     const val=id=>document.getElementById(id)?.value?.trim()||'';
     const cat=val('editCategory')||'기타설비';
     const name=val('editName');
@@ -2120,7 +2120,7 @@ if(SUPA){syncFromSupabase();startRealtime();setInterval(syncFromSupabase,5000);}
     };
     const btn=document.getElementById('eamEditSave'); if(btn){btn.disabled=true;btn.textContent='저장 중…'}
     try{
-      const r=await window.SUPA.from('assets').update({name,category:cat,place,status:meta.status,product_name:meta.model||cat}).eq('id',a.id);
+      const r=await SUPA.from('assets').update({name,category:cat,place,status:meta.status,product_name:meta.model||cat}).eq('id',a.id);
       if(r.error) throw r.error;
       const all=readMeta(); all[String(code)]=meta; writeMeta(all); window.__eamMetaByCode=all;
       document.getElementById('eamEditModal')?.remove();
