@@ -2104,7 +2104,7 @@ if(SUPA){syncFromSupabase();startRealtime();setInterval(syncFromSupabase,5000);}
   window.eamSaveFullEdit=async function(code){
     const a=(window.__eamA||[]).find(v=>String(v.asset_code)===String(code));
     if(!a){alert('자산을 찾을 수 없습니다.');return}
-    if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
+    if(!window.SUPA){alert('Supabase 연결이 필요합니다.');return}
     const val=id=>document.getElementById(id)?.value?.trim()||'';
     const cat=val('editCategory')||'기타설비';
     const name=val('editName');
@@ -2120,7 +2120,7 @@ if(SUPA){syncFromSupabase();startRealtime();setInterval(syncFromSupabase,5000);}
     };
     const btn=document.getElementById('eamEditSave'); if(btn){btn.disabled=true;btn.textContent='저장 중…'}
     try{
-      const r=await SUPA.from('assets').update({name,category:cat,place,status:meta.status,product_name:meta.model||cat}).eq('id',a.id);
+      const r=await window.SUPA.from('assets').update({name,category:cat,place,status:meta.status,product_name:meta.model||cat}).eq('id',a.id);
       if(r.error) throw r.error;
       const all=readMeta(); all[String(code)]=meta; writeMeta(all); window.__eamMetaByCode=all;
       document.getElementById('eamEditModal')?.remove();
@@ -2162,170 +2162,114 @@ if(SUPA){syncFromSupabase();startRealtime();setInterval(syncFromSupabase,5000);}
 </script>
 
 
-
-<!-- EAM CLICK FIX: EAM 영역만 클릭 이벤트를 강제 연결 -->
-<style id="EAM_CLICK_FIX_20260908">
-/* 다른 화면의 레이어가 EAM 버튼을 가로채지 못하게 EAM만 최상단 클릭 영역으로 고정 */
-.eam-innovation{position:relative!important;z-index:100!important;pointer-events:auto!important}
-.eam-innovation *{pointer-events:auto!important}
-.eam-type-row,.eam-type,.eam-assets-panel,.eam-detail-panel,.eam-asset-row,.eam-manage-top{position:relative!important;z-index:101!important}
-.eam-type,.eam-asset-row,.eam-manage-top{cursor:pointer!important}
-</style>
-<script id="EAM_CLICK_FIX_20260908_SCRIPT">
+<script id="JGB_EAM_TRUE_FINAL">
 (function(){
-  if(window.__JGB_EAM_CLICK_FIX_20260908)return;
-  window.__JGB_EAM_CLICK_FIX_20260908=true;
-
-  function closestEam(target, selector){
-    try{return target && target.closest ? target.closest(selector) : null}catch(e){return null}
-  }
-
-  document.addEventListener('click',function(ev){
-    const root=closestEam(ev.target,'.eam-innovation');
-    if(!root)return;
-
-    const manage=closestEam(ev.target,'.eam-manage-top');
-    if(manage){
-      ev.preventDefault();
-      ev.stopImmediatePropagation();
-      if(typeof window.eamOpenManageMenu==='function')window.eamOpenManageMenu();
-      return;
-    }
-
-    const type=closestEam(ev.target,'.eam-type');
-    if(type){
-      ev.preventDefault();
-      ev.stopImmediatePropagation();
-      const onclick=type.getAttribute('onclick')||'';
-      const m=onclick.match(/eamPick\(\s*['\"]([^'\"]+)['\"]/);
-      const cat=m?m[1]:type.className.match(/eam-type-([a-z]+)/)?.[1];
-      if(cat && typeof window.eamPick==='function')window.eamPick(cat);
-      return;
-    }
-
-    const asset=closestEam(ev.target,'.eam-asset-row');
-    if(asset){
-      ev.preventDefault();
-      ev.stopImmediatePropagation();
-      const cat=window.__eamCat||'cooling';
-      const code=asset.getAttribute('data-code')||'';
-      if(code && typeof window.eamPick==='function')window.eamPick(cat,code);
-      return;
-    }
-  },true);
-})();
-</script>
-
-
-<!-- EAM MASTER 2.0: 통합 자산마스터 + 이력카드 + 분류 자동이동 -->
-<style id="EAM_MASTER_2_CSS">
-.eam2-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 12px;padding:12px 14px;border:1px solid #c9dbea;background:linear-gradient(135deg,#f7fbff,#edf6ff);border-radius:14px}
-.eam2-bar .left{display:flex;align-items:center;gap:9px}.eam2-bar .dot{width:10px;height:10px;border-radius:50%;background:#1677e8;box-shadow:0 0 0 5px #e5f1ff}.eam2-bar b{font-size:13px}.eam2-bar small{color:#6b7f95}.eam2-bar .savehint{font-size:11px;color:#58708b}
-.eam2-card{border:1px solid #c9dbea!important;border-radius:16px!important;overflow:hidden;background:#fff;box-shadow:0 8px 24px rgba(25,60,100,.06)}
-.eam2-card .section-title{background:linear-gradient(135deg,#edf7ff,#e5f1fb);padding:13px 16px!important;border-bottom:1px solid #d2e0ed}.eam2-card .section-title h3{font-size:16px!important}.eam2-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#d8e3ed}.eam2-cell{padding:13px;background:#fff;min-height:74px}.eam2-cell small{display:block;color:#6a7e93;font-size:11px;margin-bottom:6px}.eam2-cell b{font-size:15px;color:#0d2d50}.eam2-cell .muted{color:#8a9aab;font-weight:600}.eam2-cell.wide{grid-column:span 4}
-.eam2-card details summary{list-style:none;cursor:pointer}.eam2-card details summary::-webkit-details-marker{display:none}.eam2-headline{display:flex;align-items:center;justify-content:space-between;gap:10px}.eam2-headline .edit-pill{padding:6px 10px;border:1px solid #b9d4ee;background:#fff;border-radius:9px;color:#1267b4;font-size:11px;font-weight:800}
-.eam2-vitals{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px}.eam2-vital{border:1px solid #d7e3ee;border-radius:12px;padding:11px 12px;background:#fbfdff}.eam2-vital small{display:block;color:#71849a;font-size:10px}.eam2-vital b{display:block;margin-top:4px;font-size:15px}.eam2-vital .empty{color:#9aa8b7}.eam2-progress{height:5px;background:#e9eff5;border-radius:99px;margin-top:8px;overflow:hidden}.eam2-progress i{display:block;height:100%;background:#1677e8;border-radius:99px}
-.eam2-plan{display:grid;grid-template-columns:150px repeat(3,1fr);border-top:1px solid #d8e3ed}.eam2-plan>*{padding:11px 13px;border-right:1px solid #d8e3ed;font-size:12px}.eam2-plan>*:last-child{border-right:0}.eam2-plan b{background:#f5f9fc}.eam2-note{padding:10px 13px;font-size:11px;color:#63778d;background:#f8fbfd;border-top:1px solid #d8e3ed}
-.eam2-modal{position:fixed;inset:0;background:rgba(12,31,52,.48);z-index:100000;display:grid;place-items:center;padding:18px}.eam2-modal-card{width:min(980px,96vw);max-height:92vh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.25)}.eam2-modal-head{display:flex;justify-content:space-between;align-items:flex-start;padding:18px 20px;border-bottom:1px solid #dbe5ee;background:linear-gradient(135deg,#f5faff,#eaf4ff)}.eam2-modal-head span{font-size:10px;letter-spacing:1.2px;color:#2375b9;font-weight:900}.eam2-modal-head h2{margin:4px 0;font-size:22px}.eam2-modal-head p{margin:0;color:#708398;font-size:11px}.eam2-modal-head button{border:0;background:transparent;font-size:27px;cursor:pointer}.eam2-form{padding:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.eam2-field{display:flex;flex-direction:column;gap:5px}.eam2-field.wide{grid-column:span 4}.eam2-field label{font-size:11px;font-weight:800;color:#526b84}.eam2-field input,.eam2-field select,.eam2-field textarea{width:100%;box-sizing:border-box;border:1px solid #c7d7e6;border-radius:9px;padding:10px 11px;background:#fff;color:#102f50;outline:none}.eam2-field input:focus,.eam2-field select:focus,.eam2-field textarea:focus{border-color:#1878df;box-shadow:0 0 0 3px #e7f2ff}.eam2-section-label{grid-column:span 4;padding:9px 2px 2px;color:#1768ae;font-size:12px;font-weight:900;border-bottom:1px solid #e1eaf2}.eam2-warning{grid-column:span 4;padding:9px 11px;border-radius:9px;background:#fff7e8;border:1px solid #f1d29a;color:#7a5a20;font-size:11px;display:none}.eam2-actions{display:flex;justify-content:flex-end;gap:8px;padding:13px 16px;border-top:1px solid #dbe5ee;background:#f8fbfd}.eam2-actions button{border:0;border-radius:9px;padding:10px 16px;font-weight:800;cursor:pointer}.eam2-actions .cancel{background:#e9eef3}.eam2-actions .save{background:#126bc4;color:#fff}.eam2-code-lock{background:#f3f7fb!important;color:#5f7184!important;font-weight:800}.eam2-auto{font-size:10px;color:#6f8398;margin-top:2px}
-@media(max-width:850px){.eam2-grid,.eam2-vitals{grid-template-columns:repeat(2,1fr)}.eam2-cell.wide{grid-column:span 2}.eam2-plan{grid-template-columns:1fr}.eam2-plan>*{border-right:0;border-bottom:1px solid #d8e3ed}.eam2-form{grid-template-columns:repeat(2,1fr)}.eam2-field.wide,.eam2-section-label,.eam2-warning{grid-column:span 2}}
-</style>
-<script id="EAM_MASTER_2_SCRIPT">
-(function(){
-  if(window.__EAM_MASTER_2)return; window.__EAM_MASTER_2=true;
-  const META='JGB_EAM_ASSET_META_V39';
-  const CAT={cooling:'냉난방',fire:'소방·방재',water:'온수·난방',electrical:'전기설비',lighting:'코트조명',waterproof:'방수',other:'기타설비'};
-  const CATKEY=Object.fromEntries(Object.entries(CAT).map(([k,v])=>[v,k]));
-  const PREFIX={cooling:'AC',fire:'FI',water:'BO',electrical:'EL',lighting:'LT',waterproof:'WP',other:'OT'};
-  const LOC={A:['1번 코트(좌측)','1번 코트(우측)','2번 코트(좌측)','2번 코트(우측)','3번 코트(좌측)','3번 코트(우측)','4번 코트(좌측)','4번 코트(우측)','5번 코트(좌측)','5번 코트(우측)','코트'],B:['복도'],C:['사무실'],D:['옥상'],E:['유수장치실']};
-  const locCode=p=>{p=String(p||'');if(p.includes('유수장치실'))return'E';if(p.includes('옥상'))return'D';if(p.includes('사무실'))return'C';if(p.includes('복도'))return'B';if(p.includes('코트'))return'A';return'X'};
-  const read=()=>{try{return JSON.parse(localStorage.getItem(META)||'{}')||{}}catch(e){return{}}};
-  const write=x=>{try{localStorage.setItem(META,JSON.stringify(x||{}))}catch(e){}};
-  const meta=()=>Object.assign({},window.__eamMetaByCode||{},read());
-  const mainData=()=>typeof JGB_MAIN_EQUIPMENT!=='undefined' && Array.isArray(JGB_MAIN_EQUIPMENT)?JGB_MAIN_EQUIPMENT:[]; const excelData=()=>typeof JGB_EXCEL_EQUIPMENT!=='undefined' && Array.isArray(JGB_EXCEL_EQUIPMENT)?JGB_EXCEL_EQUIPMENT:[]; const srcByCode=code=>{const m=mainData().find(x=>String(x.code)===String(code));const e=excelData().find(x=>String(x.code)===String(code));return Object.assign({},e||{},m||{});};
-  const baseCat=x=>{const c=String(x?.code||x?.asset_code||'');if(['EQ-01','EQ-02','EQ-03','EQ-05'].includes(c)||c.startsWith('FI-'))return'fire';if(['EQ-04','EQ-06'].includes(c)||c.startsWith('BO-'))return'water';if(c.startsWith('AC-'))return'cooling';if(c.startsWith('EL-'))return'electrical';if(c.startsWith('LT-'))return'lighting';if(c.startsWith('WP-'))return'waterproof';if(c.startsWith('OT-'))return'other';const t=String(x?.type||x?.category||'');if(t.includes('소방'))return'fire';if(t.includes('온수')||t.includes('보일러')||t.includes('난방'))return'water';if(t.includes('냉난방'))return'cooling';if(t.includes('전기'))return'electrical';if(t.includes('조명'))return'lighting';if(t.includes('방수'))return'waterproof';return'other'};
-  const effectiveCat=(x,mm)=>CATKEY[mm?.category]||baseCat(x);
-  const mergedFor=code=>{const src=srcByCode(code);const a=(window.__eamA||[]).find(v=>String(v.asset_code)===String(code))||{};const mm=meta()[String(code)]||{};const m={...src,...a,...mm};m.code=String(code);m.asset_code=String(code);m.capacity=mm.capacity??src.capacity??'';m.life=mm.life??src.life??'';m.grade=mm.grade??src.grade??'';m.manufacturer=mm.manufacturer??mm.maker??src.maker??src.vendor??a.maker??a.vendor??'';m.manufactureDate=mm.manufactureDate??src.date??'';m.improvementPlan=mm.improvementPlan??src.improvementPlan??'';m.nextInspection=mm.nextInspection??'';m.replacementNeed=mm.replacementNeed??'';m.recentAction=mm.recentAction??'';return m};
-  const displayName=x=>{const code=String(x?.code||x?.asset_code||'');const s=srcByCode(code);const mm=meta()[code]||{};if(mm.name)return mm.name;if(code.startsWith('FI-'))return String(s.model||s.name||'소방설비');if(['EQ-01','EQ-02','EQ-03','EQ-05'].includes(code))return String(s.name||x?.name||'-')+'(소방장비)';return String(s.name||x?.name||'-')};
-  const typeDefs=()=>{const out={};Object.entries(CAT).forEach(([k,label])=>out[k]={ico:{cooling:'❄️',fire:'🚒',water:'♨️',electrical:'⚡',lighting:'💡',waterproof:'🏗️',other:'🔧'}[k],label,desc:{cooling:'냉방기 · 실외기',fire:'펌프 · 밸브 · 제어',water:'온수기 · 조절기 · 난방',electrical:'분전반 · 전기',lighting:'조명 · 전동릴',waterproof:'지붕 · 방수',other:'사무 · 공용'}[k],items:[]});
-    const all=[];const seen=new Set();[...mainData(),...excelData()].forEach(x=>{if(!x?.code||seen.has(x.code))return;seen.add(x.code);all.push(x)});
-    all.filter(x=>!['OT-04','OT-05','OT-06'].includes(String(x.code))).forEach(x=>{const mm=meta()[String(x.code)]||{};const k=effectiveCat(x,mm);const m=mergedFor(x.code);m.code=x.code;out[k].items.push(m)});
-    return out};
-  window.eamCategoryDefs=typeDefs;
-  window.eamUnifiedCode=function(x){return String(x?.code||x?.asset_code||'')};
-  window.eamDisplayName=displayName;
-  window.eamDisplaySubName=function(x){return '소분류 · '+displayName(x)};
-  function histFor(code){const a=(window.__eamA||[]).find(v=>String(v.asset_code)===String(code));return {hs:a?(window.__eamH||[]).filter(v=>v.asset_id===a.id):[],ins:a?(window.__eamI||[]).filter(v=>v.asset_id===a.id):[]}}
-  function esc(v){return typeof xEsc==='function'?xEsc(String(v??'')):String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-  function edit(code){window.__eamSelCode=String(code||window.__eamSelCode||'');const old=window.eamEditSelectedAsset; if(typeof old==='function'&&old!==edit){/* use custom form below */} openEdit(window.__eamSelCode)}
-  function openEdit(code){
-    if(!code){alert('수정할 자산을 선택하세요.');return} document.getElementById('eamEditModal')?.remove();
-    const m=mergedFor(code), k=effectiveCat(m,meta()[code]); const p=String(m.place||''); const lc=locCode(p); const detail=p||'';
-    const plan=m.improvementPlan||''; const next=m.nextInspection||''; const repl=m.replacementNeed||'';
-    document.body.insertAdjacentHTML('beforeend',`<div id="eamEditModal" class="eam2-modal" onclick="if(event.target===this)this.remove()"><div class="eam2-modal-card">
-      <div class="eam2-modal-head"><div><span>EAM ASSET MASTER 2.0</span><h2>${esc(displayName(m))}</h2><p>기본정보와 주요설비 이력카드를 한 번에 수정합니다. 자산코드는 식별을 위해 유지됩니다.</p></div><button onclick="document.getElementById('eamEditModal').remove()">×</button></div>
-      <div class="eam2-form">
-        <div class="eam2-section-label">① 자산 식별 · 분류</div>
-        <div class="eam2-field"><label>자산코드</label><input id="edit2Code" class="eam2-code-lock" value="${esc(code)}" readonly></div>
-        <div class="eam2-field"><label>설비 종류</label><select id="edit2Category" onchange="window.__eam2CategoryChanged()">${Object.values(CAT).map(v=>`<option ${v===CAT[k]?'selected':''}>${esc(v)}</option>`).join('')}</select><span class="eam2-auto" id="eam2CodeHint"></span></div>
-        <div class="eam2-field wide"><label>소분류(자산명)</label><input id="edit2Name" value="${esc(m.name||displayName(m))}"></div>
-        <div class="eam2-field"><label>위치코드</label><select id="edit2Loc" onchange="window.__eam2LocChanged()">${['A','B','C','D','E'].map(v=>`<option ${v===lc?'selected':''}>${v} · ${v==='A'?'코트':v==='B'?'복도':v==='C'?'사무실':v==='D'?'옥상':'유수장치실'}</option>`).join('')}</select></div>
-        <div class="eam2-field"><label>상세 위치</label><select id="edit2Detail"></select></div>
-        <div class="eam2-field"><label>상태</label><select id="edit2Status">${['정상','점검필요','조치필요'].map(v=>`<option ${v===String(m.status||'정상')?'selected':''}>${v}</option>`).join('')}</select></div>
-        <div class="eam2-section-label">② 설비 기본정보</div>
-        <div class="eam2-field"><label>모델·규격</label><input id="edit2Model" value="${esc(m.model&&m.model!=='-'?m.model:'')}"></div>
-        <div class="eam2-field"><label>수량</label><input id="edit2Qty" value="${esc(m.qty??m.quantity??'')}"></div>
-        <div class="eam2-field"><label>제조사</label><input id="edit2Maker" value="${esc(m.manufacturer||'')}"></div>
-        <div class="eam2-field"><label>제조일</label><input id="edit2ManufactureDate" value="${esc(m.manufactureDate||'')}"></div>
-        <div class="eam2-field"><label>설치일</label><input id="edit2Install" value="${esc(m.installDate||'')}"></div>
-        <div class="eam2-field"><label>보증</label><input id="edit2Warranty" value="${esc(m.warranty||'')}"></div>
-        <div class="eam2-field"><label>A/S 연락처</label><input id="edit2As" value="${esc(m.asContact||'')}"></div>
-        <div class="eam2-field"><label>기존 A/S 기록</label><input id="edit2AsHistory" value="${esc(m.asHistory||'')}"></div>
-        <div class="eam2-section-label">③ 주요설비 이력카드</div>
-        <div class="eam2-field"><label>용량</label><input id="edit2Capacity" value="${esc(m.capacity||'')}"></div>
-        <div class="eam2-field"><label>내용연수</label><input id="edit2Life" value="${esc(m.life||'')}"></div>
-        <div class="eam2-field"><label>평가등급</label><input id="edit2Grade" value="${esc(m.grade||'')}"></div>
-        <div class="eam2-field"><label>다음 점검 예정</label><input id="edit2NextInspection" value="${esc(next)}" placeholder="자료 없으면 비워두세요"></div>
-        <div class="eam2-field"><label>교체 필요 여부</label><select id="edit2Replacement"><option value="">-</option><option ${repl==='필요'?'selected':''}>필요</option><option ${repl==='불필요'?'selected':''}>불필요</option><option ${repl==='검토'?'selected':''}>검토</option></select></div>
-        <div class="eam2-field wide"><label>시설개선계획</label><textarea id="edit2Plan" rows="3" placeholder="실제 자료가 있을 때만 입력">${esc(plan)}</textarea></div>
-        <div class="eam2-field wide"><label>비고</label><textarea id="edit2Note" rows="3">${esc(m.note||'')}</textarea></div>
-        <div class="eam2-warning" id="eam2Warning"></div>
-      </div><div class="eam2-actions"><button class="cancel" onclick="document.getElementById('eamEditModal').remove()">취소</button><button class="save" id="eam2Save" onclick="window.__eam2Save('${esc(code)}')">전체 저장</button></div>
-    </div></div>`);
-    window.__eam2CategoryChanged(); window.__eam2LocChanged(lc,detail); 
-  }
-  window.__eam2CategoryChanged=function(){const cat=document.getElementById('edit2Category')?.value||'';const k=CATKEY[cat]||'other';const code=document.getElementById('edit2Code')?.value||'';const pref=PREFIX[k];const hint=document.getElementById('eam2CodeHint');if(hint)hint.textContent=(code.startsWith(pref+'-')?'✓ 코드 분류 일치':'⚠ 기존 자산코드 유지 · 분류 변경 시 목록이 자동 이동');if(k==='fire'){const l=document.getElementById('edit2Loc');if(l){l.value='E';l.disabled=true;window.__eam2LocChanged('E','유수장치실')}}else{const l=document.getElementById('edit2Loc');if(l)l.disabled=false}}
-  window.__eam2LocChanged=function(force,detail){const sel=document.getElementById('edit2Loc'),box=document.getElementById('edit2Detail');if(!sel||!box)return;const c=force||sel.value||'A';const opts=LOC[c]||[detail||'기존 위치'];box.innerHTML=opts.map(p=>`<option value="${esc(p)}">${esc(p)}</option>`).join('');if(detail&&opts.includes(detail))box.value=detail};
-  window.eamEditSelectedAsset=function(){openEdit(String(window.__eamSelCode||''))};
-  window.__eam2Save=async function(code){
-    const val=id=>document.getElementById(id)?.value?.trim()||''; const a=(window.__eamA||[]).find(v=>String(v.asset_code)===String(code)); if(!a){alert('등록된 자산을 찾을 수 없습니다.');return}
-    const cat=val('edit2Category'), k=CATKEY[cat]||'other', loc=val('edit2Loc').slice(0,1), detail=val('edit2Detail'); const place=k==='fire'?'유수장치실':detail;
-    const name=val('edit2Name'); if(!name){alert('소분류(자산명)를 입력하세요.');return}
-    if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
-    const status=val('edit2Status')||'정상'; const mm={asset_code:String(code),name,category:cat,locationCode:loc,place,model:val('edit2Model'),qty:val('edit2Qty'),quantity:val('edit2Qty'),manufacturer:val('edit2Maker'),maker:val('edit2Maker'),vendor:val('edit2Maker'),manufactureDate:val('edit2ManufactureDate'),installDate:val('edit2Install'),warranty:val('edit2Warranty'),asContact:val('edit2As'),asHistory:val('edit2AsHistory'),capacity:val('edit2Capacity'),life:val('edit2Life'),grade:val('edit2Grade'),nextInspection:val('edit2NextInspection'),replacementNeed:val('edit2Replacement'),improvementPlan:val('edit2Plan'),note:val('edit2Note'),status};
-    const btn=document.getElementById('eam2Save');if(btn){btn.disabled=true;btn.textContent='저장 중…'}
-    try{
-      const r=await SUPA.from('assets').update({name,category:cat,place,status,product_name:mm.model||cat}).eq('id',a.id);if(r.error)throw r.error;
-      const all=read();all[String(code)]=mm;write(all);window.__eamMetaByCode=all;
-      const h=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'자산정보수정',description:'META::'+JSON.stringify(mm),worker_name:'관리자',action_type:'자산마스터수정',cost:0,event_date:new Date().toISOString().slice(0,10)});if(h.error)console.warn('상세 메타 이력 저장 경고',h.error);
-      document.getElementById('eamEditModal')?.remove();window.__eamSelCode=String(code);window.__eamCat=k;await eamLoad();window.__eamMetaByCode=Object.assign(read(),window.__eamMetaByCode||{});render();alert('EAM 자산정보와 이력카드가 함께 저장되었습니다.');
-    }catch(e){console.error(e);alert('저장에 실패했습니다.\n'+(e?.message||'Supabase 권한 또는 연결을 확인하세요.'))}finally{if(btn){btn.disabled=false;btn.textContent='전체 저장'}}
+  const META_KEY='JGB_EAM_ASSET_META_V39';
+  const CATMAP={
+    '냉난방':'cooling','소방·방재':'fire','온수·난방':'water','전기설비':'electrical','코트조명':'lighting','방수':'waterproof','기타설비':'other',
+    '냉방':'cooling','소방':'fire','소방장비':'fire','소방제어':'fire','온수기':'water','저수조':'fire','전기':'electrical','기타':'other'
   };
+  const CATDEF=[['cooling','❄️','냉난방','냉방기 · 실외기'],['fire','🚒','소방·방재','펌프 · 밸브 · 제어'],['water','♨️','온수·난방','온수기 · 조절기 · 난방'],['electrical','⚡','전기설비','분전반 · 전기'],['lighting','💡','코트조명','조명 · 전동릴'],['waterproof','🏗️','방수','지붕 · 방수'],['other','🔧','기타설비','사무 · 공용']];
+  const FIRE=new Set(['EQ-01','EQ-02','EQ-03','EQ-05','FI-01','FI-02','FI-03','FI-04','FI-05','FI-06','FI-07','FI-08','EQ-07']);
+  function readMeta(){try{return JSON.parse(localStorage.getItem(META_KEY)||'{}')||{}}catch(e){return {}}}
+  function writeMeta(m){try{localStorage.setItem(META_KEY,JSON.stringify(m||{}))}catch(e){console.warn(e)}}
+  function v(x){return String(x??'').trim()}
+  function catKey(x){
+    const m=readMeta()[v(x?.code||x?.asset_code)];
+    if(m?.category && CATMAP[m.category]) return CATMAP[m.category];
+    const db=x?.category;
+    if(db && CATMAP[db]) return CATMAP[db];
+    const t=v(x?.type);
+    if(FIRE.has(v(x?.code||x?.asset_code)) || t.includes('소방')) return 'fire';
+    if(t.includes('냉난방')) return 'cooling';
+    if(t.includes('온수')||t.includes('보일러')||t.includes('난방')) return 'water';
+    if(t.includes('전기')) return 'electrical';
+    if(t.includes('조명')) return 'lighting';
+    if(t.includes('방수')) return 'waterproof';
+    if(t.includes('저수조')) return 'fire';
+    return 'other';
+  }
+  function effective(x){
+    const code=v(x?.code||x?.asset_code), m=readMeta()[code]||{};
+    return Object.assign({},x,m,{category:m.category||x?.category||x?.type||'',place:m.place||x?.place||'-'});
+  }
+  function sourceRows(){
+    const main=Array.isArray(window.JGB_MAIN_EQUIPMENT)?window.JGB_MAIN_EQUIPMENT:[];
+    const excel=Array.isArray(window.JGB_EXCEL_EQUIPMENT)?window.JGB_EXCEL_EQUIPMENT:[];
+    const rows=[...main,...excel].filter(x=>x&&x.code&&!['OT-04','OT-05','OT-06'].includes(v(x.code)));
+    const map=new Map();
+    rows.forEach(x=>{if(map.has(v(x.code)))return; const code=v(x.code), fire=FIRE.has(code)||v(x.type).includes('소방')||v(x.type).includes('저수조');
+      map.set(code,{code,name:v(x.name)||'-',type:v(x.type)||'기타설비',place:fire?'유수장치실':(v(x.place)||'-'),model:v(x.model)||'-',qty:x.quantity??'-',vendor:v(x.vendor||x.maker)||'-',asContact:v(x.asContact||x.contact)||'-',installDate:v(x.installDate||x.date)||'-',warranty:v(x.warranty)||'-',asHistory:v(x.asHistory)||'-',note:v(x.note)||'-',photo:x.photo||null,capacity:v(x.capacity)||'',life:v(x.life)||'',grade:v(x.grade)||'',date:v(x.date)||''});
+    });
+    return [...map.values()];
+  }
+  window.eamSourceAssets=function(){return sourceRows()};
+  window.eamDisplayName=function(x){
+    const code=v(x?.code||x?.asset_code);
+    const names={'EQ-01':'주펌프(소방장비)','EQ-02':'보조펌프(소방장비)','EQ-03':'예비펌프(소방장비)','EQ-05':'전기소방제어장비(MCC판넬)','FI-01':'P형 복합식수신기(HPS-320N)','FI-02':'소방 분전반','FI-03':'SP-예비펌프','FI-04':'프리액션 밸브(준비작동식)','FI-05':'난방순환펌프','FI-06':'충압펌프','FI-07':'기동용수압개폐장치(압력챔버)','FI-08':'소방 분전반','EQ-04':'스마트온수기','EQ-06':'축열식 전기온수기','EQ-07':'저수조'};
+    return names[code]||v(x?.name)||v(x?.model)||'-';
+  };
+  window.eamDisplaySubName=function(x){return '소분류 · '+window.eamDisplayName(x)};
+  window.eamSourceCategory=function(x){return catKey(x)};
+  window.eamCategoryDefs=function(){
+    const src=sourceRows(), out={}; CATDEF.forEach(([k,ico,label,desc])=>out[k]={ico,label,desc,items:src.filter(x=>catKey(x)===k)}); return out;
+  };
+  function displayCodesByCat(items,cat){const sorted=items.slice().sort((a,b)=>sourceRows().findIndex(x=>x.code===a.code)-sourceRows().findIndex(x=>x.code===b.code));const out={};sorted.forEach((x,i)=>out[x.code]=(cat==='fire'?'FI':cat==='cooling'?'AC':cat==='water'?'BO':cat==='electrical'?'EL':cat==='lighting'?'LT':cat==='waterproof'?'WP':'OT')+'-'+String(i+1).padStart(2,'0'));return out}
+  window.eamUnifiedCode=function(x){
+    const k=catKey(x), items=window.eamCategoryDefs()[k]?.items||sourceRows().filter(z=>catKey(z)===k); return displayCodesByCat(items,k)[v(x?.code||x?.asset_code)]||v(x?.code||x?.asset_code);
+  };
+  window.eamLoad=async function(){
+    window.__eamA=window.__eamA||[];window.__eamH=window.__eamH||[];window.__eamI=window.__eamI||[];
+    if(!window.SUPA)return;
+    try{const [a,h,i]=await Promise.all([SUPA.from('assets').select('*').order('name'),SUPA.from('asset_history').select('*').order('event_date',{ascending:false}),SUPA.from('inspections').select('*').order('inspection_date',{ascending:false})]);
+      if(a.error)throw a.error; window.__eamA=a.data||[];window.__eamH=h.data||[];window.__eamI=i.data||{};
+      const hist={};(window.__eamH||[]).forEach(r=>{if(r.event_type==='자산정보수정'&&v(r.description).startsWith('META::')){try{const m=JSON.parse(v(r.description).slice(6));if(m?.asset_code&&!hist[m.asset_code])hist[m.asset_code]=m}catch(e){}}});
+      window.__eamMetaByCode=Object.assign({},hist,readMeta());
+    }catch(e){console.warn('EAM 동기화 실패',e)}
+  };
+  function placeCode(p){p=v(p);if(p.includes('유수장치실'))return'E';if(p.includes('옥상'))return'D';if(p.includes('사무실'))return'C';if(p.includes('복도'))return'B';if(p.includes('코트'))return'A';return'-'}
+  function placeLabel(p){const c=placeCode(p);return c==='E'?'E · 유수장치실':c==='D'?'D · 옥상':c==='C'?'C · 사무실':c==='B'?'B · 복도':c==='A'?'A · '+v(p):v(p)||'-'}
   window.eamPage=function(){
-    const cats=typeDefs(),order=Object.keys(cats),cat=cats[window.__eamCat]?window.__eamCat:'cooling',C=cats[cat],list=C.items||[],sel=list.some(v=>v.code===window.__eamSelCode)?window.__eamSelCode:(list[0]?.code||'');if(sel)window.__eamSelCode=sel;const m=sel?mergedFor(sel):null;const hist=sel?histFor(sel):{hs:[],ins:[]};
-    const hs=hist.hs||[],ins=hist.ins||[], totalHist=hs.length+ins.length, fields=[m?.capacity,m?.life,m?.grade,m?.manufacturer,m?.manufactureDate,m?.installDate,m?.model,m?.qty].filter(v=>v!==undefined&&v!==null&&String(v).trim()&&String(v)!=='-').length, rate=Math.round(fields/8*100);const st=m?.status||'원본';
-    const p=m?.place||'-', pc=locCode(p), catLabel=C.label;
-    const card=(lab,val)=>`<div class="eam2-cell"><small>${lab}</small><b class="${!val||val==='-'?'muted':''}">${esc(val||'-')}</b></div>`;
-    return `<div class="eam-innovation"><div class="eam-innovation-head"><div><div class="eyebrow">ENTERPRISE ASSET MANAGEMENT</div><h1>시설물 EAM 관제</h1><p>설비 분류 → 자산 선택 → 통합 자산마스터 → 유지보수 이력</p></div><button class="eam-manage-main eam-manage-top" onclick="eamOpenManageMenu()">⚙ 자산 관리</button></div>
-      <div class="eam-type-row">${order.map(k=>{const v=cats[k];return `<button class="eam-type ${k===cat?'on':''} eam-type-${k}" onclick="eamPick('${k}')"><span>${v.ico}</span><strong>${v.label}</strong><em>${v.items.length}</em></button>`}).join('')}</div>
-      <div class="eam2-bar"><div class="left"><i class="dot"></i><div><b>자산 마스터</b> <small>분류와 자산코드를 기준으로 관리</small></div></div><span class="savehint">수정은 「⚙ 자산 관리 → 자산 수정」에서 한 번에 처리</span></div>
-      <div class="eam-innovation-layout"><aside class="eam-assets-panel"><div class="eam-assets-head"><div><b>${C.ico} ${C.label}</b><span>${list.length}개 자산</span></div><div class="eam-filter-row"><input id="eamProSearch" placeholder="🔎 자산코드 또는 자산명" oninput="eamProFilter(this.value,document.getElementById('eamProLocationFilter')?.value||'')"><select id="eamProLocationFilter" onchange="eamProFilter(document.getElementById('eamProSearch')?.value||'',this.value)"><option value="">전체 위치</option><option value="A">A · 코트</option><option value="B">B · 복도</option><option value="C">C · 사무실</option><option value="D">D · 옥상</option><option value="E">E · 유수장치실</option></select></div></div><div id="eamproGrid" class="eam-asset-list">${list.map(v=>{const mm=mergedFor(v.code),s=mm.status||'원본',pc2=locCode(mm.place);return `<button class="eam-asset-row ${v.code===sel?'on':''}" data-code="${esc(v.code)}" data-loc="${pc2}" onclick="eamPick('${cat}','${esc(v.code)}')"><span class="row-code">${esc(v.code)}</span><span class="row-copy"><b>${esc(displayName(mm))}</b><small>${esc(C.label)} · ${esc(pc2)} · ${esc(mm.place||'-')}</small></span><i class="${s==='정상'?'ok':s==='원본'?'source':'bad'}">${esc(s)}</i></button>`}).join('')||'<div class="eam-empty">등록된 자산이 없습니다.</div>'}</div></aside>
-      <main class="eam-detail-panel">${m?`<div class="eam-detail-hero"><div><div class="hero-code">${esc(sel)}</div><h2>${esc(displayName(m))}</h2><div class="hero-meta"><span>${esc(catLabel)}</span><b>${esc(pc==='E'?'E · 유수장치실':pc==='D'?'D · 옥상':pc==='C'?'C · 사무실':pc==='B'?'B · 복도':pc==='A'?'A · '+p:p)}</b><span>자산코드 기준</span></div></div><span class="hero-status ${st==='정상'?'good':st==='원본'?'source':'bad'}">${esc(st)}</span></div>
-        <section class="eam-detail-section eam2-card eam-master"><div class="section-title"><h3>자산 기본정보</h3><span>자산코드 1개 기준으로 통합 관리</span></div><div class="eam2-grid">${card('자산코드',sel)}${card('설비 종류',catLabel)}${card('소분류(자산명)',displayName(m))}${card('위치',pc+' · '+p)}${card('모델·규격',m.model)}${card('수량',m.qty??m.quantity)}${card('제조사',m.manufacturer)}${card('A/S 연락처',m.asContact)}${card('제조일',m.manufactureDate)}${card('설치일',m.installDate)}${card('보증',m.warranty)}${card('기존 A/S',m.asHistory)}${card('상태',st)}${card('비고',m.note)}</div></section>
-        <section class="eam-detail-section eam2-card" style="margin-top:12px"><div class="section-title eam2-headline"><h3>📋 주요설비 이력카드</h3><button class="edit-pill" onclick="eamEditSelectedAsset()">⚙ 자산 수정에서 편집</button></div><div class="eam2-vitals">${[['용량',m.capacity],['내용연수',m.life],['평가등급',m.grade],['제조일',m.manufactureDate]].map(([l,v])=>`<div class="eam2-vital"><small>${l}</small><b class="${!v||v==='-'?'empty':''}">${esc(v||'-')}</b></div>`).join('')}</div><div class="eam2-vitals">${[['최근 점검일',ins[0]?.inspection_date||'-'],['최근 수리일',hs[0]?.event_date||'-'],['누적 작업',String(totalHist)+'건'],['다음 점검 예정',m.nextInspection||'-']].map(([l,v])=>`<div class="eam2-vital"><small>${l}</small><b class="${v==='-'?'empty':''}">${esc(v)}</b></div>`).join('')}</div><div class="eam2-plan"><b>시설개선계획</b><span>${esc(m.improvementPlan||'-')}</span><b>교체 필요 여부</b><span>${esc(m.replacementNeed||'-')}</span></div><div class="eam2-note">데이터 완성도 ${rate}% · 실제 등록된 값만 표시하며 없는 정보는 '-'로 표시합니다.</div></section>
-        <section class="eam-detail-section eam-history" style="margin-top:12px"><div class="section-title"><h3>유지보수 이력</h3><span>${hs.length}건 · 점검 ${ins.length}건</span></div>${typeof renderEamHistory==='function'?renderEamHistory(hs,ins):'<div class="eam-empty">등록된 이력이 없습니다.</div>'}</section>`:'<div class="eam-empty">설비 종류에서 자산을 선택하세요.</div>'}</main></div></div>`;
+    const cats=window.eamCategoryDefs(),order=Object.keys(cats),cat=cats[window.__eamCat]?window.__eamCat:'cooling',C=cats[cat],list=C.items||[],A=window.__eamA||[],H=window.__eamH||[],I=window.__eamI||[],meta=Object.assign({},readMeta(),window.__eamMetaByCode||{});
+    let sel=window.__eamSelCode&&list.some(x=>x.code===window.__eamSelCode)?window.__eamSelCode:(list[0]?.code||'');if(sel)window.__eamSelCode=sel;
+    const src=list.find(x=>x.code===sel)||null,reg=src?(A.find(a=>v(a.asset_code)===v(src.code))||null):null;let cur=Object.assign({},src||{},reg||{},meta[sel]||{});
+    if(cat==='fire')cur.place='유수장치실';
+    const hs=reg?H.filter(h=>v(h.asset_id)===v(reg.id)&&h.event_type!=='자산정보수정'):[],ins=reg?I.filter(i=>v(i.asset_id)===v(reg.id)):[];
+    const codes=displayCodesByCat(list,cat), dc=sel?codes[sel]||sel:'';
+    return `<div class="eam-innovation"><div class="eam-innovation-head"><div><div class="eyebrow">ENTERPRISE ASSET MANAGEMENT</div><h1>시설물 EAM 관리</h1><p>설비 종류 → 자산 선택 → 통합 자산마스터 → 유지보수 이력</p></div><button class="eam-manage-main eam-manage-top" onclick="eamOpenManageMenu()">⚙ 자산 관리</button></div>
+      <div class="eam-type-row">${order.map(k=>{const z=cats[k];return `<button type="button" class="eam-type ${k===cat?'on':''}" onclick="eamPick('${k}')"><span>${z.ico}</span><strong>${z.label}</strong><em>${z.items.length}</em><small>${z.desc}</small></button>`}).join('')}</div>
+      <div class="eam-innovation-layout"><aside class="eam-assets-panel"><div class="eam-assets-head"><div><b>${C.ico} ${C.label}</b><span>${list.length}개 자산</span></div><div class="eam-filter-row"><input id="eamProSearch" placeholder="🔎 자산코드 또는 자산명" oninput="eamProFilter(this.value,document.getElementById('eamProLocationFilter')?.value||'')"><select id="eamProLocationFilter" onchange="eamProFilter(document.getElementById('eamProSearch')?.value||'',this.value)"><option value="">전체 위치</option><option value="A">A · 코트</option><option value="B">B · 복도</option><option value="C">C · 사무실</option><option value="D">D · 옥상</option><option value="E">E · 유수장치실</option></select></div></div><div id="eamproGrid" class="eam-asset-list">${list.map(x=>{const m=meta[x.code]||{},a=A.find(z=>v(z.asset_code)===x.code)||null,merged=Object.assign({},x,a||{},m);if(cat==='fire')merged.place='유수장치실';const st=a?.status||'원본';return `<button type="button" class="eam-asset-row ${x.code===sel?'on':''}" data-code="${xEsc(x.code)}" data-loc="${xEsc(placeCode(merged.place))}" onclick="eamPick('${cat}','${xEsc(x.code)}')"><span class="row-code">${xEsc(codes[x.code]||x.code)}</span><span class="row-copy"><b>${xEsc(window.eamDisplayName(merged))}</b><small>${xEsc(placeLabel(merged.place))}</small></span><i class="${st==='정상'?'ok':st==='원본'?'source':'bad'}">${xEsc(st)}</i></button>`}).join('')||'<div class="eam-empty">등록된 자산이 없습니다.</div>'}</div></aside>
+      <main class="eam-detail-panel">${src?`<div class="eam-detail-hero"><div><div class="hero-code">${xEsc(dc)}</div><h2>${xEsc(window.eamDisplayName(cur))}</h2><div class="hero-meta"><span>${xEsc(C.label)}</span><b>${xEsc(placeLabel(cur.place))}</b><span>위치코드 ${xEsc(placeCode(cur.place))}</span></div></div><span class="hero-status ${String(cur.status||'원본')==='정상'?'good':'source'}">${xEsc(cur.status||'원본')}</span></div>
+      <section class="eam-detail-section eam-master"><div class="section-title"><h3>자산 기본정보</h3><span>자산코드 기준으로 관리</span></div><div class="master-grid"><div><small>자산코드</small><b>${xEsc(dc)}</b></div><div><small>설비 종류</small><b>${xEsc(C.label)}</b></div><div><small>소분류(자산명)</small><b>${xEsc(window.eamDisplayName(cur))}</b></div><div><small>위치</small><b>${xEsc(placeLabel(cur.place))}</b></div><div><small>모델·규격</small><b>${xEsc(cur.model||'-')}</b></div><div><small>수량</small><b>${xEsc(cur.qty??cur.quantity??'-')}</b></div><div><small>제작·구매</small><b>${xEsc(cur.vendor||cur.maker||'-')}</b></div><div><small>A/S 연락처</small><b>${xEsc(cur.asContact||'-')}</b></div><div><small>설치일</small><b>${xEsc(cur.installDate||cur.date||'-')}</b></div><div><small>보증</small><b>${xEsc(cur.warranty||'-')}</b></div><div><small>既存 A/S</small><b>${xEsc(cur.asHistory||'-')}</b></div><div><small>상태</small><b>${xEsc(cur.status||'정상')}</b></div><div class="wide"><small>비고</small><b>${xEsc(cur.note||'-')}</b></div></div></section>
+      <details class="eam-source-card" open><summary>📋 주요설비 이력카드 <span>자산 수정에서 함께 수정</span></summary><div class="source-grid"><div><small>용량</small><b>${xEsc(cur.capacity||'-')}</b></div><div><small>내용연수</small><b>${xEsc(cur.life||'-')}</b></div><div><small>평가등급</small><b>${xEsc(cur.grade||'-')}</b></div><div><small>제조사</small><b>${xEsc(cur.maker||cur.vendor||'-')}</b></div><div><small>제조일</small><b>${xEsc(cur.date||'-')}</b></div><div><small>설치일</small><b>${xEsc(cur.installDate||'-')}</b></div><div class="wide"><small>시설개선계획</small><b>${xEsc(cur.improvementPlan||'-')}</b></div></div></details>
+      <section class="eam-detail-section eam-history"><div class="section-title"><h3>유지보수 이력</h3><span>${hs.length}건 · 점검 ${ins.length}건</span></div>${renderEamHistory(hs,ins)}</section>`:'<div class="eam-empty">설비 종류에서 자산을 선택하세요.</div>'}</main></div></div>`;
   };
-  const oldPick=window.eamPick;
-  window.eamPick=function(cat,code){const b=document.getElementById('eamproGrid'),pos=b?b.scrollTop:0;window.__eamCat=cat||'cooling';if(code!==undefined)window.__eamSelCode=String(code);render();requestAnimationFrame(()=>{const nb=document.getElementById('eamproGrid');if(nb)nb.scrollTop=pos})};
+  window.eamPick=function(cat,code){const b=document.getElementById('eamproGrid'),old=b?b.scrollTop:0,oldCat=window.__eamCat||'';window.__eamCat=cat||'cooling';window.__eamSelCode=code!==undefined&&code!==null?String(code):'';render();requestAnimationFrame(()=>{const n=document.getElementById('eamproGrid');if(n&&oldCat===window.__eamCat)n.scrollTop=old;});};
+  window.eamEditSelectedAsset=async function(){
+    const code=String(window.__eamSelCode||'');if(!code){alert('수정할 시설·설비를 선택하세요.');return} if(!window.SUPA){alert('Supabase 연결이 필요합니다.');return}
+    let a=(window.__eamA||[]).find(z=>v(z.asset_code)===code);if(!a&&typeof eamEnsureEditableAsset==='function')a=await eamEnsureEditableAsset();if(!a)return;
+    const src=sourceRows().find(z=>z.code===code)||{};const m=Object.assign({},src,a,readMeta()[code]||{});let cat=m.category&&CATMAP[m.category]?m.category:(catKey(m)==='fire'?'소방·방재':catKey(m)==='cooling'?'냉난방':catKey(m)==='water'?'온수·난방':catKey(m)==='electrical'?'전기설비':catKey(m)==='lighting'?'코트조명':catKey(m)==='waterproof'?'방수':'기타설비');let lc=placeCode(m.place);if(cat==='소방·방재')lc='E';
+    const details=lc==='A'?['1번 코트(좌측)','1번 코트(우측)','2번 코트(좌측)','2번 코트(우측)','3번 코트(좌측)','3번 코트(우측)','4번 코트(좌측)','4번 코트(우측)','5번 코트(좌측)','5번 코트(우측)','코트']:lc==='B'?['복도']:lc==='C'?['사무실']:lc==='D'?['옥상']:['유수장치실'];
+    document.getElementById('eamEditModal')?.remove();document.body.insertAdjacentHTML('beforeend',`<div id="eamEditModal" class="eam-edit-overlay" onclick="if(event.target===this)this.remove()"><div class="eam-edit-card"><div class="eam-edit-head"><div><span>ASSET MASTER EDIT</span><h2>자산 전체정보 수정</h2><p>기본정보와 주요설비 이력카드를 한 번에 수정합니다.</p></div><button type="button" onclick="document.getElementById('eamEditModal').remove()">×</button></div><div class="eam-edit-grid">
+      <label>자산코드<input value="${xEsc(code)}" readonly></label><label>설비 종류<select id="editCategory" onchange="eamEditLocationChange(this.value)">${['냉난방','소방·방재','온수·난방','전기설비','코트조명','방수','기타설비'].map(z=>`<option ${cat===z?'selected':''}>${z}</option>`).join('')}</select></label>
+      <label class="wide">소분류(자산명)<input id="editName" value="${xEsc(m.name||window.eamDisplayName(m))}"></label>
+      <label>위치코드<select id="editLocCode" onchange="eamEditLocationChange(this.value)"><option value="A" ${lc==='A'?'selected':''}>A · 코트</option><option value="B" ${lc==='B'?'selected':''}>B · 복도</option><option value="C" ${lc==='C'?'selected':''}>C · 사무실</option><option value="D" ${lc==='D'?'selected':''}>D · 옥상</option><option value="E" ${lc==='E'?'selected':''}>E · 유수장치실</option></select></label>
+      <label>세부 위치<select id="editDetailPlace">${details.map(z=>`<option ${v(m.place)===z?'selected':''}>${xEsc(z)}</option>`).join('')}</select></label>
+      <label>모델·규격<input id="editModel" value="${xEsc(m.model||'')}"></label><label>수량<input id="editQty" value="${xEsc(m.qty??m.quantity??'')}"></label><label>제조사<input id="editVendor" value="${xEsc(m.vendor||m.maker||'')}"></label><label>A/S 연락처<input id="editAs" value="${xEsc(m.asContact||'')}"></label><label>제조일<input id="editManufactureDate" value="${xEsc(m.date||'')}"></label><label>설치일<input id="editInstall" value="${xEsc(m.installDate||'')}"></label><label>내용연수<input id="editLife" value="${xEsc(m.life||'')}"></label><label>용량<input id="editCapacity" value="${xEsc(m.capacity||'')}"></label><label>평가등급<input id="editGrade" value="${xEsc(m.grade||'')}"></label><label>보증<input id="editWarranty" value="${xEsc(m.warranty||'')}"></label><label>기존 A/S 기록<input id="editAsHistory" value="${xEsc(m.asHistory||'')}"></label><label>상태<select id="editStatus"><option ${String(m.status||'정상')==='정상'?'selected':''}>정상</option><option ${String(m.status||'')==='점검필요'?'selected':''}>점검필요</option><option ${String(m.status||'')==='조치필요'?'selected':''}>조치필요</option></select></label><label class="wide">시설개선계획<input id="editImprovementPlan" value="${xEsc(m.improvementPlan||'')}"></label><label class="wide">비고<textarea id="editNote" rows="3">${xEsc(m.note||'')}</textarea></label>
+      </div><div class="eam-edit-actions"><button class="btn gray" type="button" onclick="document.getElementById('eamEditModal').remove()">취소</button><button class="btn blue" type="button" id="eamEditSave" onclick="eamSaveFullEdit('${xEsc(code)}')">저장</button></div></div></div>`);eamEditLocationChange(lc,m.place);
+  };
+  window.eamEditLocationChange=function(vv,current){const cat=document.getElementById('editCategory')?.value||'';const lc=cat==='소방·방재'?'E':vv;const box=document.getElementById('editDetailPlace');if(!box)return;const opts={A:['1번 코트(좌측)','1번 코트(우측)','2번 코트(좌측)','2번 코트(우측)','3번 코트(좌측)','3번 코트(우측)','4번 코트(좌측)','4번 코트(우측)','5번 코트(좌측)','5번 코트(우측)','코트'],B:['복도'],C:['사무실'],D:['옥상'],E:['유수장치실']};box.innerHTML=(opts[lc]||opts.A).map(z=>`<option value="${xEsc(z)}">${xEsc(z)}</option>`).join('');if(current&&[...box.options].some(o=>o.value===current)&&lc!=='E')box.value=current;if(cat==='소방·방재'){const sel=document.getElementById('editLocCode');if(sel)sel.value='E';box.value='유수장치실';}};
+  window.eamSaveFullEdit=async function(code){
+    const a=(window.__eamA||[]).find(z=>v(z.asset_code)===String(code));if(!a){alert('자산을 찾을 수 없습니다.');return}if(!window.SUPA){alert('Supabase 연결이 필요합니다.');return}
+    const g=id=>document.getElementById(id)?.value?.trim()||'';const category=g('editCategory')||'기타설비';const name=g('editName');let lc=g('editLocCode');let place=g('editDetailPlace');if(category==='소방·방재'){lc='E';place='유수장치실'}if(!name){alert('소분류(자산명)를 입력하세요.');return}
+    const meta={asset_code:String(code),name,category,locationCode:lc,place,model:g('editModel'),qty:g('editQty'),vendor:g('editVendor'),asContact:g('editAs'),manufactureDate:g('editManufactureDate'),date:g('editManufactureDate'),installDate:g('editInstall'),life:g('editLife'),capacity:g('editCapacity'),grade:g('editGrade'),warranty:g('editWarranty'),asHistory:g('editAsHistory'),status:g('editStatus')||'정상',improvementPlan:g('editImprovementPlan'),note:g('editNote')};
+    const btn=document.getElementById('eamEditSave');if(btn){btn.disabled=true;btn.textContent='저장 중…'}
+    try{const r=await SUPA.from('assets').update({name,category,place,status:meta.status,product_name:meta.model||category}).eq('id',a.id);if(r.error)throw r.error;const all=Object.assign({},readMeta());all[String(code)]=meta;writeMeta(all);window.__eamMetaByCode=all;
+      const h=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'자산정보수정',description:'META::'+JSON.stringify(meta),worker_name:'관리자',action_type:'자산마스터수정',cost:0,event_date:new Date().toISOString().slice(0,10)});if(h.error)throw h.error;
+      document.getElementById('eamEditModal')?.remove();await window.eamLoad();window.__eamMetaByCode=Object.assign(readMeta(),window.__eamMetaByCode||{});window.__eamSelCode=String(code);window.__eamCat=CATMAP[category]||'other';render();alert('자산 기본정보와 주요설비 이력카드가 함께 저장되었습니다.');
+    }catch(e){console.error(e);alert('자산 저장에 실패했습니다.\n'+(e?.message||''))}finally{if(btn){btn.disabled=false;btn.textContent='저장'}}
+  };
 })();
 </script>
+
 </body></html>
