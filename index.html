@@ -3809,18 +3809,8 @@ if(typeof window.eamPage==='function'){
 </style>
 <script id="JGB_MAINT_COLUMN_FINAL_JS">
 (function(){
- function fix(){
-   document.querySelectorAll('.jgb-maint-final table.jgb-maint-table').forEach(function(tb){
-     var old=tb.querySelector('colgroup[data-final-cols]');
-     if(old)old.remove();
-     var cg=document.createElement('colgroup');cg.dataset.finalCols='1';
-     ['4%','10%','9%','10%','16%','24%','11%','8%','7%','1%'].forEach(function(w){var c=document.createElement('col');c.style.width=w;cg.appendChild(c)});
-     tb.insertBefore(cg,tb.firstChild);
-   });
- }
- fix();
- new MutationObserver(fix).observe(document.body,{childList:true,subtree:true});
- setTimeout(fix,100);setTimeout(fix,500);setTimeout(fix,1500);
+  // 중요: DOM을 다시 변경하는 MutationObserver를 사용하지 않는다.
+  // 기존 Observer는 colgroup 삭제/삽입을 반복하여 페이지가 응답하지 않는 무한 루프를 만들었다.
 })();
 </script>
 
@@ -3835,29 +3825,7 @@ if(typeof window.eamPage==='function'){
 </style>
 <script id="JGB_EAM_ROUTING_FINAL_FIX_JS">
 (function(){
-  // 원본 body()의 EAM 호출이 구버전 lexical 함수로 남아 있어도 최종 EAM 렌더러를 사용
-  try{
-    if(typeof window.eamPage==='function'){
-      eamPage=window.eamPage;
-    }
-  }catch(e){}
-
-  // 현재 화면에 EAM이 열려 있으면 최종 렌더러로 즉시 한 번 다시 그림
-  function forceEam(){
-    try{
-      const p=new URLSearchParams(location.search).get('page');
-      if(p==='eam' && typeof window.eamPage==='function'){
-        window.__eamForceFinal=1;
-        const app=document.getElementById('app');
-        if(app && typeof render==='function'){
-          app.innerHTML=app.innerHTML; // 기존 화면 상태를 건드리지 않음
-          const content=app.querySelector('.jgb-content');
-          if(content) content.innerHTML=window.eamPage();
-        }
-      }
-    }catch(e){console.warn('EAM 최종 렌더 보정 실패',e)}
-  }
-  setTimeout(forceEam,400);
+  // 최종 수정: 강제 재렌더를 하지 않는다. 기본 render()/라우팅만 사용한다.
 })();
 </script>
 
@@ -3882,18 +3850,37 @@ if(typeof window.eamPage==='function'){
 </style>
 <script id="JGB_CLICK_DEAD_FINAL_JS">
 (function(){
-  /* 이전에 추가했던 강제 EAM 재렌더가 라우팅/이벤트를 방해하지 않도록 비활성화 */
-  window.__eamForceFinalDisabled=true;
-
-  /* 기존 data-page 리스너도 유지하되, 클릭 시 반드시 go()를 직접 호출 */
-  document.addEventListener('click',function(e){
-    const a=e.target.closest && e.target.closest('.jgb-nav a[data-page]');
-    if(!a)return;
-    const p=a.getAttribute('data-page');
-    if(!p)return;
-    e.preventDefault();
-    e.stopPropagation();
-    try{go(p)}catch(err){location.href='?page='+encodeURIComponent(p)}
-  },true);
+  // 최종 수정: 전역 capture 클릭 가로채기를 제거한다.
+  // render()에서 등록한 data-page 클릭 이벤트가 정상적으로 처리한다.
 })();
 </script>
+
+
+<style id="JGB_MAINT_TABLE_SAFE_FINAL">
+.jgb-maint-final{width:100%!important;max-width:none!important;overflow:hidden!important}
+.jgb-maint-final .jgb-maint-table-wrap{width:100%!important;overflow-x:auto!important;box-sizing:border-box!important}
+.jgb-maint-final table.jgb-maint-table{
+  width:100%!important;
+  min-width:900px!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+}
+.jgb-maint-final table.jgb-maint-table th,
+.jgb-maint-final table.jgb-maint-table td{
+  box-sizing:border-box!important;
+  text-align:center!important;
+  vertical-align:middle!important;
+  line-height:1.35!important;
+  padding:9px 7px!important;
+  word-break:keep-all!important;
+}
+.jgb-maint-final table.jgb-maint-table th:nth-child(1),.jgb-maint-final table.jgb-maint-table td:nth-child(1){width:5%!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(2),.jgb-maint-final table.jgb-maint-table td:nth-child(2){width:10%!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(3),.jgb-maint-final table.jgb-maint-table td:nth-child(3){width:9%!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(4),.jgb-maint-final table.jgb-maint-table td:nth-child(4){width:10%!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(5),.jgb-maint-final table.jgb-maint-table td:nth-child(5){width:16%!important;text-align:left!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(6),.jgb-maint-final table.jgb-maint-table td:nth-child(6){width:23%!important;text-align:left!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(7),.jgb-maint-final table.jgb-maint-table td:nth-child(7){width:11%!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(8),.jgb-maint-final table.jgb-maint-table td:nth-child(8){width:8%!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(9),.jgb-maint-final table.jgb-maint-table td:nth-child(9){width:8%!important}
+</style>
