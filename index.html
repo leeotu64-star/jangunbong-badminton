@@ -2359,4 +2359,134 @@ if(typeof window.eamPage==='function'){
   eamPage=window.eamPage;
 }
 </script>
+
+
+<style id="JGB_EAM_HISTORY_CARD_DIRECT_FIX">
+.jgb-history-card .jgb-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.jgb-history-card .jgb-card-edit{border:1px solid #9fc3e8;background:#fff;color:#1769aa;border-radius:8px;padding:6px 11px;font-weight:800;cursor:pointer;font-size:12px}
+.jgb-history-card .jgb-card-edit:hover{background:#eef6ff}
+.jgb-history-card .jgb-inline-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid #d7e1eb}
+.jgb-history-card .jgb-inline-grid label{display:block;padding:12px 14px;border-right:1px solid #d7e1eb;border-bottom:1px solid #d7e1eb;font-size:11px;color:#64778c;font-weight:700}
+.jgb-history-card .jgb-inline-grid label:nth-child(3n){border-right:0}
+.jgb-history-card .jgb-inline-grid label.wide{grid-column:1/-1;border-right:0}
+.jgb-history-card .jgb-inline-grid input,.jgb-history-card .jgb-inline-grid textarea{box-sizing:border-box;width:100%;margin-top:6px;border:1px solid #b9cee2;border-radius:8px;padding:9px 10px;font-size:13px;color:#173554;background:#fff}
+.jgb-history-card .jgb-inline-grid textarea{min-height:70px;resize:vertical}
+.jgb-history-card .jgb-inline-actions{display:flex;justify-content:flex-end;gap:8px;padding:12px 14px;background:#f5f9fd;border-top:1px solid #d7e1eb}
+.jgb-history-card .jgb-inline-actions button{border:0;border-radius:8px;padding:9px 15px;font-weight:800;cursor:pointer}
+.jgb-history-card .jgb-inline-cancel{background:#e9eef3;color:#41576d}
+.jgb-history-card .jgb-inline-save{background:#1672d4;color:#fff}
+@media(max-width:900px){.jgb-history-card .jgb-inline-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.jgb-history-card .jgb-inline-grid label:nth-child(3n){border-right:1px solid #d7e1eb}.jgb-history-card .jgb-inline-grid label:nth-child(2n){border-right:0}}
+@media(max-width:600px){.jgb-history-card .jgb-inline-grid{grid-template-columns:1fr}.jgb-history-card .jgb-inline-grid label,.jgb-history-card .jgb-inline-grid label:nth-child(n){border-right:0}}
+</style>
+<script id="JGB_EAM_HISTORY_CARD_DIRECT_FIX">
+(function(){
+  const esc2=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const val2=s=>String(s??'').trim();
+  const getMeta2=()=>{try{return JSON.parse(localStorage.getItem('JGB_EAM_ASSET_META_V39')||'{}')||{}}catch(e){return {}}};
+  const putMeta2=o=>{try{localStorage.setItem('JGB_EAM_ASSET_META_V39',JSON.stringify(o||{}))}catch(e){console.warn(e)}};
+
+  window.eamHistoryCardEdit=function(){
+    const card=document.querySelector('.jgb-history-card');
+    const code=String(window.__eamSelCode||'');
+    if(!card||!code){alert('수정할 자산을 선택하세요.');return}
+    if(card.dataset.editing==='1')return;
+    card.dataset.editing='1';
+    const meta=getMeta2()[code]||{};
+    const src=(typeof sourceRows==='function'?sourceRows():[]).find(x=>String(x.code)===code)||{};
+    const a=(window.__eamA||[]).find(x=>String(x.asset_code)===code)||{};
+    const m=Object.assign({},src,a,meta);
+    const grid=card.querySelector('.source-grid');
+    if(!grid)return;
+    grid.innerHTML=`
+      <div class="jgb-inline-grid">
+        <label>용량<input id="jgbHC_capacity" value="${esc2(m.capacity||'')}"></label>
+        <label>내용연수<input id="jgbHC_life" value="${esc2(m.life||'')}"></label>
+        <label>평가등급<input id="jgbHC_grade" value="${esc2(m.grade||'')}"></label>
+        <label>제조사<input id="jgbHC_maker" value="${esc2(m.maker||m.vendor||'')}"></label>
+        <label>제조일<input id="jgbHC_date" value="${esc2(m.date||m.manufactureDate||'')}"></label>
+        <label>설치일<input id="jgbHC_install" value="${esc2(m.installDate||'')}"></label>
+        <label class="wide">시설개선계획<textarea id="jgbHC_plan">${esc2(m.improvementPlan||'')}</textarea></label>
+        <label class="wide">특이사항<textarea id="jgbHC_note">${esc2(m.note||'')}</textarea></label>
+      </div>
+      <div class="jgb-inline-actions">
+        <button type="button" class="jgb-inline-cancel" onclick="eamHistoryCardCancel()">취소</button>
+        <button type="button" class="jgb-inline-save" id="jgbHC_save" onclick="eamHistoryCardSave('${esc2(code)}')">저장</button>
+      </div>`;
+    const summary=card.querySelector('summary');
+    if(summary){
+      summary.innerHTML=`<div class="jgb-card-head"><span>📋 주요설비 이력카드 <em style="font-style:normal;color:#64778b;font-size:11px;font-weight:700">수정 중</em></span><button type="button" class="jgb-card-edit" onclick="event.preventDefault();event.stopPropagation();eamHistoryCardCancel()">취소</button></div>`;
+    }
+  };
+  window.eamHistoryCardCancel=function(){
+    const code=String(window.__eamSelCode||'');
+    const card=document.querySelector('.jgb-history-card');
+    if(!card)return;
+    card.dataset.editing='0';
+    if(typeof render==='function')render();
+    requestAnimationFrame(()=>{
+      const c=document.querySelector('.jgb-history-card');if(c)c.open=true;
+    });
+  };
+  window.eamHistoryCardSave=async function(code){
+    if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
+    let a=(window.__eamA||[]).find(x=>String(x.asset_code)===String(code));
+    if(!a&&typeof eamEnsureEditableAsset==='function')a=await eamEnsureEditableAsset();
+    if(!a){alert('등록된 EAM 자산을 찾을 수 없습니다.');return}
+    const g=id=>document.getElementById(id)?.value?.trim()||'';
+    const old=getMeta2()[code]||{};
+    const meta=Object.assign({},old,{
+      asset_code:String(code),
+      capacity:g('jgbHC_capacity'),life:g('jgbHC_life'),grade:g('jgbHC_grade'),
+      maker:g('jgbHC_maker'),vendor:g('jgbHC_maker'),date:g('jgbHC_date'),manufactureDate:g('jgbHC_date'),
+      installDate:g('jgbHC_install'),improvementPlan:g('jgbHC_plan'),note:g('jgbHC_note')
+    });
+    const btn=document.getElementById('jgbHC_save');if(btn){btn.disabled=true;btn.textContent='저장 중…'}
+    try{
+      // asset_history 테이블에는 action_type 컬럼이 없으므로 해당 필드는 전송하지 않는다.
+      const h=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'자산정보수정',description:'META::'+JSON.stringify(meta),worker_name:'관리자',cost:0,event_date:new Date().toISOString().slice(0,10)});
+      if(h.error)throw h.error;
+      const all=Object.assign({},getMeta2(),{[String(code)]:meta});putMeta2(all);window.__eamMetaByCode=all;
+      document.querySelector('.jgb-history-card')?.setAttribute('data-editing','0');
+      if(typeof eamLoad==='function')await eamLoad();
+      window.__eamSelCode=String(code);
+      render();
+      requestAnimationFrame(()=>{const c=document.querySelector('.jgb-history-card');if(c)c.open=true});
+    }catch(e){console.error(e);alert('이력카드 저장에 실패했습니다.\n'+(e?.message||''))}
+    finally{if(btn){btn.disabled=false;btn.textContent='저장'}}
+  };
+
+  // 자산 관리 메뉴의 "주요설비 이력카드 수정"도 별도 화면이 아니라 카드 자체를 열도록 한다.
+  window.eamEditSelectedAsset=function(){
+    const card=document.querySelector('.jgb-history-card');
+    if(card){card.open=true;window.eamHistoryCardEdit();return}
+    alert('먼저 수정할 자산을 선택하세요.');
+  };
+
+  // 저장 오류가 발생했던 외부정비 등록도 action_type 없이 저장한다.
+  window.eamRegisterMaintenance=async function(assetId){
+    if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
+    const a=(window.__eamA||[]).find(x=>String(x.id)===String(assetId));
+    if(!a){alert('등록된 EAM 자산을 찾을 수 없습니다.');return}
+    const vendor=prompt('정비업체명','');if(vendor===null)return;
+    const desc=prompt('외부정비 조치내용','');if(desc===null||!val2(desc)){alert('조치내용은 필수입니다.');return}
+    const cost=prompt('정비비용(원)','0');if(cost===null)return;
+    const date=prompt('외부정비일 (YYYY-MM-DD)',new Date().toISOString().slice(0,10));if(date===null)return;
+    const r=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'외부정비',description:val2(desc),worker_name:val2(vendor),cost:Number(String(cost).replace(/[^0-9.-]/g,''))||0,event_date:date});
+    if(r.error){console.error(r.error);alert('외부정비 이력 저장에 실패했습니다.\n'+(r.error.message||''));return}
+    await window.eamLoad();render();
+  };
+
+  function decorate(){
+    const card=document.querySelector('.jgb-history-card');
+    if(!card||card.dataset.directFix==='1'||card.dataset.editing==='1')return;
+    card.dataset.directFix='1';
+    const summary=card.querySelector('summary');
+    if(summary){summary.innerHTML=`<div class="jgb-card-head"><span>📋 주요설비 이력카드</span><button type="button" class="jgb-card-edit" onclick="event.preventDefault();event.stopPropagation();eamHistoryCardEdit()">✏️ 수정</button></div>`}
+  }
+  const obs=new MutationObserver(()=>requestAnimationFrame(decorate));
+  obs.observe(document.body,{childList:true,subtree:true});
+  document.addEventListener('DOMContentLoaded',decorate);
+  setTimeout(decorate,300);
+})();
+</script>
 </body></html>
