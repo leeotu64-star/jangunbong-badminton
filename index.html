@@ -2698,3 +2698,633 @@ if(typeof window.eamPage==='function'){
   }
 })();
 </script>
+
+<style id="JGB_EAM_REPLACEMENT_V2">
+/* EAM 사진 영역 + 설비교체 UI */
+.jgb-photo-box{grid-column:1/-1;border:1px dashed #9fb4c8;border-radius:14px;background:#f7fafc;padding:14px}
+.jgb-photo-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.jgb-photo-head b{font-size:14px}.jgb-photo-head small{color:#718096}
+.jgb-photo-drop{min-height:110px;border:1px dashed #b8c7d6;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;text-align:center;color:#718096;cursor:pointer;padding:12px}
+.jgb-photo-previews{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}.jgb-photo-previews img{width:120px;height:90px;object-fit:cover;border-radius:10px;border:1px solid #d9e2ec}
+.jgb-replace-overlay{position:fixed;inset:0;background:rgba(15,31,48,.48);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px}
+.jgb-replace-modal{width:min(1080px,96vw);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.25)}
+.jgb-replace-head{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid #e5edf4}.jgb-replace-head h2{margin:2px 0 0;font-size:21px}.jgb-replace-head span{font-size:11px;color:#54708a;font-weight:800;letter-spacing:.08em}.jgb-replace-head button{border:0;background:#f1f5f9;border-radius:10px;width:36px;height:36px;font-size:22px;cursor:pointer}
+.jgb-replace-body{padding:20px 24px}.jgb-replace-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.jgb-replace-panel{border:1px solid #dce6ef;border-radius:16px;padding:16px;background:#fbfdff}.jgb-replace-panel.old{background:#f8fafc}.jgb-replace-panel.new{background:#f8fbff}.jgb-replace-panel h3{margin:0 0 14px;font-size:15px}.jgb-replace-panel label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;color:#536779;margin-bottom:10px}.jgb-replace-panel input,.jgb-replace-panel select,.jgb-replace-panel textarea{width:100%;box-sizing:border-box;border:1px solid #ccd9e5;border-radius:9px;padding:9px;background:#fff;font:inherit;color:#24384a}.jgb-replace-panel textarea{min-height:72px;resize:vertical}.jgb-replace-common{margin-top:16px;border:1px solid #dce6ef;border-radius:16px;padding:16px}.jgb-replace-common label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;color:#536779}.jgb-replace-common input,.jgb-replace-common textarea{border:1px solid #ccd9e5;border-radius:9px;padding:9px;font:inherit}.jgb-replace-actions{display:flex;justify-content:flex-end;gap:8px;padding:16px 24px;border-top:1px solid #e5edf4}.jgb-replace-actions button{border:0;border-radius:10px;padding:10px 18px;font-weight:800;cursor:pointer}.jgb-replace-cancel{background:#edf2f7}.jgb-replace-save{background:#245b87;color:#fff}
+.jgb-replace-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:7px 10px;border-radius:9px;background:#eef6ff;color:#1f5f91;font-size:12px;font-weight:800}
+@media(max-width:760px){.jgb-replace-grid{grid-template-columns:1fr}}
+</style>
+<script id="JGB_EAM_REPLACEMENT_V2">
+(function(){
+  const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const key='JGB_EAM_REPLACEMENT_PHOTOS_V1';
+  const photoStore=()=>{try{return JSON.parse(localStorage.getItem(key)||'{}')||{}}catch(e){return {}}};
+  const savePhotoStore=o=>{try{localStorage.setItem(key,JSON.stringify(o||{}))}catch(e){console.warn(e)}};
+  function photoArea(code,photos){
+    const imgs=(photos||[]).map((p,i)=>`<div><img src="${p}" alt="작업사진 ${i+1}"></div>`).join('');
+    return `<div class="jgb-photo-box"><div class="jgb-photo-head"><b>📷 작업사진</b><small>교체 전·후 사진을 여러 장 등록할 수 있습니다.</small></div><label class="jgb-photo-drop" for="jgbPhotoInput">사진 파일 선택<br><small>JPG / PNG · 여러 장 선택 가능</small></label><input id="jgbPhotoInput" type="file" accept="image/*" multiple style="display:none" onchange="window.jgbEamPhotos(this,'${esc(code)}')"><div class="jgb-photo-previews" id="jgbPhotoPreviews">${imgs||'<small style="color:#8a9aaa">등록된 사진 없음</small>'}</div></div>`;
+  }
+  window.jgbEamPhotos=function(input,code){
+    const files=[...(input.files||[])]; if(!files.length)return;
+    const rd=files.map(f=>new Promise(res=>{const r=new FileReader();r.onload=()=>res(String(r.result));r.readAsDataURL(f)}));
+    Promise.all(rd).then(arr=>{const all=photoStore();all[code]=[...(all[code]||[]),...arr].slice(-10);savePhotoStore(all);const box=document.getElementById('jgbPhotoPreviews');if(box)box.innerHTML=all[code].map((p,i)=>`<img src="${p}" alt="작업사진 ${i+1}">`).join('')});
+  };
+
+  // 주요설비 이력카드 하단에 사진 영역 추가
+  const oldCard=window.eamHistoryCardSave;
+  function addPhotoToCard(){
+    const card=document.querySelector('.jgb-history-card'); if(!card||card.querySelector('.jgb-photo-box'))return;
+    const code=String(window.__eamSelCode||'');
+    const grid=card.querySelector('.source-grid'); if(!grid)return;
+    grid.insertAdjacentHTML('beforeend',photoArea(code,photoStore()[code]||[]));
+  }
+  const decorate=()=>requestAnimationFrame(addPhotoToCard);
+  new MutationObserver(decorate).observe(document.body,{childList:true,subtree:true});
+  document.addEventListener('DOMContentLoaded',decorate);setTimeout(decorate,300);setTimeout(decorate,1000);
+
+  // 전체 설비 교체: 기존 자산은 사용종료/폐기, 신규 자산을 별도 등록하고 교체관계를 기록
+  window.eamRetireSelectedAsset=function(){
+    const code=String(window.__eamSelCode||'');
+    const a=(window.__eamA||[]).find(x=>String(x.asset_code)===code);
+    if(!code||!a){alert('먼저 교체할 자산을 선택하세요.');return}
+    const src=(typeof sourceRows==='function'?sourceRows():[]).find(x=>String(x.code)===code)||{};
+    const meta=(()=>{try{return JSON.parse(localStorage.getItem('JGB_EAM_ASSET_META_V39')||'{}')[code]||{}}catch(e){return {}}})();
+    const m=Object.assign({},src,a,meta);
+    document.getElementById('jgbReplaceModal')?.remove();
+    document.body.insertAdjacentHTML('beforeend',`<div id="jgbReplaceModal" class="jgb-replace-overlay"><div class="jgb-replace-modal">
+      <div class="jgb-replace-head"><div><span>ENTERPRISE ASSET MANAGEMENT</span><h2>설비교체 등록</h2><small>기존 설비를 폐기·사용종료 처리하고 신규 설비를 별도 자산으로 등록합니다.</small></div><button type="button" onclick="document.getElementById('jgbReplaceModal').remove()">×</button></div>
+      <div class="jgb-replace-body"><div class="jgb-replace-grid">
+        <section class="jgb-replace-panel old"><h3>① 기존 설비</h3>
+          <label>관리코드<input id="jgbOldCode" value="${esc(code)}" readonly></label>
+          <label>자산명<input value="${esc(m.name||window.eamDisplayName?.(m)||'')}" readonly></label>
+          <label>제조사<input value="${esc(m.maker||m.vendor||'')}" readonly></label>
+          <label>모델·규격<input value="${esc(m.model||'')}" readonly></label>
+          <label>설치일<input value="${esc(m.installDate||'')}" readonly></label>
+          <label>처리상태<select id="jgbOldStatus"><option>사용종료</option><option selected>폐기</option></select></label>
+          <label>처리사유<textarea id="jgbRetireReason">노후 및 성능저하에 따른 설비교체</textarea></label>
+        </section>
+        <section class="jgb-replace-panel new"><h3>② 신규 설비</h3>
+          <label>신규 관리코드<input id="jgbNewCode" value="${esc(code.replace(/^(.*?)(\\d+)$/,(_,p,n)=>p+(Number(n)+1)).replace(code,code+'-N'))}"></label>
+          <label>자산명<input id="jgbNewName" value="${esc(m.name||'')}"></label>
+          <label>설비 종류<select id="jgbNewCategory">${['냉난방','소방·방재','보일러·온수','전기설비','코트조명','방수','기타설비'].map(z=>`<option ${String(m.category||'')===z?'selected':''}>${z}</option>`).join('')}</select></label>
+          <label>제조사<input id="jgbNewMaker" placeholder="신규 제조사"></label>
+          <label>모델·규격<input id="jgbNewModel" placeholder="신규 모델·규격"></label>
+          <label>용량<input id="jgbNewCapacity" value="${esc(m.capacity||'')}"></label>
+          <label>제조일<input id="jgbNewDate" placeholder="YYYY-MM-DD"></label>
+          <label>신규 설치일<input id="jgbNewInstall" value="${new Date().toISOString().slice(0,10)}"></label>
+          <label>내용연수<input id="jgbNewLife" value="${esc(m.life||'')}"></label>
+          <label>평가등급<input id="jgbNewGrade" value="${esc(m.grade||'')}"></label>
+        </section>
+      </div>
+      <div class="jgb-replace-common"><label>교체일<input id="jgbReplaceDate" value="${new Date().toISOString().slice(0,10)}"></label><label style="margin-top:10px">교체사유<textarea id="jgbReplaceReason">${esc(m.name||'')} 노후 및 성능저하에 따른 전체 설비 교체</textarea></label>${photoArea(code,photoStore()[code]||[])}<div class="jgb-replace-link">🔗 기존 자산 ${esc(code)} → 신규 자산 <span id="jgbNewCodeView">신규코드</span> · 설비교체</div></div></div>
+      <div class="jgb-replace-actions"><button class="jgb-replace-cancel" onclick="document.getElementById('jgbReplaceModal').remove()">취소</button><button class="jgb-replace-save" onclick="window.jgbConfirmReplacement('${esc(code)}')">기존 설비 폐기 + 신규 설비 등록</button></div>
+    </div></div>`);
+    const nc=document.getElementById('jgbNewCode');const nv=document.getElementById('jgbNewCodeView');if(nc&&nv){const sync=()=>nv.textContent=nc.value;nc.addEventListener('input',sync);sync()}
+  };
+
+  window.jgbConfirmReplacement=async function(oldCode){
+    if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
+    const a=(window.__eamA||[]).find(x=>String(x.asset_code)===String(oldCode));if(!a){alert('기존 자산을 찾을 수 없습니다.');return}
+    const g=id=>document.getElementById(id)?.value?.trim()||'';
+    const newCode=g('jgbNewCode'),name=g('jgbNewName'),category=g('jgbNewCategory'),install=g('jgbNewInstall'),replaceDate=g('jgbReplaceDate');
+    if(!newCode||!name||!category||!install){alert('신규 관리코드, 자산명, 설비 종류, 설치일은 필수입니다.');return}
+    if((window.__eamA||[]).some(x=>String(x.asset_code)===newCode)){alert('이미 존재하는 관리코드입니다.');return}
+    const place=category==='소방·방재'?'유수장치실':(category==='코트조명'?'코트':(category==='방수'?'옥상':String((window.__eamA||[]).find(x=>String(x.asset_code)===String(oldCode))?.place||'기타')));
+    const btn=document.querySelector('.jgb-replace-save');if(btn){btn.disabled=true;btn.textContent='처리 중…'}
+    try{
+      const oldUpd=await SUPA.from('assets').update({status:g('jgbOldStatus')||'폐기'}).eq('id',a.id);if(oldUpd.error)throw oldUpd.error;
+      const ins=await SUPA.from('assets').insert({asset_code:newCode,name,category,place,status:'정상',product_name:g('jgbNewModel')||category}).select().single();if(ins.error)throw ins.error;
+      const na=ins.data;
+      const desc={type:'설비교체',old_asset_code:oldCode,new_asset_code:newCode,replace_date:replaceDate,reason:g('jgbReplaceReason'),old_status:g('jgbOldStatus')||'폐기',old_reason:g('jgbRetireReason'),new:{name,category,maker:g('jgbNewMaker'),model:g('jgbNewModel'),capacity:g('jgbNewCapacity'),manufactureDate:g('jgbNewDate'),installDate:install,life:g('jgbNewLife'),grade:g('jgbNewGrade')},photos:photoStore()[oldCode]||[]};
+      const h1=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'설비교체',description:JSON.stringify(desc),worker_name:'관리자',cost:0,event_date:replaceDate});if(h1.error)throw h1.error;
+      const metaAll=(()=>{try{return JSON.parse(localStorage.getItem('JGB_EAM_ASSET_META_V39')||'{}')||{}}catch(e){return {}}})();
+      metaAll[newCode]={asset_code:newCode,name,category,place,model:g('jgbNewModel'),capacity:g('jgbNewCapacity'),maker:g('jgbNewMaker'),vendor:g('jgbNewMaker'),date:g('jgbNewDate'),manufactureDate:g('jgbNewDate'),installDate:install,life:g('jgbNewLife'),grade:g('jgbNewGrade'),status:'정상',replacementFrom:oldCode,replacementDate:replaceDate};
+      metaAll[oldCode]=Object.assign({},metaAll[oldCode]||{},{status:g('jgbOldStatus')||'폐기',retiredDate:replaceDate,retiredReason:g('jgbRetireReason'),replacedBy:newCode});
+      localStorage.setItem('JGB_EAM_ASSET_META_V39',JSON.stringify(metaAll));
+      alert(`설비교체가 등록되었습니다.\n기존: ${oldCode} → ${g('jgbOldStatus')||'폐기'}\n신규: ${newCode} → 사용중`);
+      document.getElementById('jgbReplaceModal')?.remove();
+      await window.eamLoad();
+      window.__eamSelCode=newCode;
+      render();
+    }catch(e){console.error(e);alert('설비교체 등록에 실패했습니다.\n'+(e?.message||''))}
+    finally{if(btn){btn.disabled=false;btn.textContent='기존 설비 폐기 + 신규 설비 등록'}}
+  };
+})();
+</script>
+
+
+<!-- =========================================================
+ JGB EAM FINAL OVERHAUL
+ - EAM 화면만 전면 교체
+ - 주요설비 이력카드 = 자산 기본정보의 단일 원본
+ - 실제 사진은 넣지 않고 사진 등록 공간만 제공
+ - 자체정비/내부수리 EAM 메뉴 제거
+ - 외부정비만 유지
+ - 수리/점검/부품교체 = 기존 자산 유지
+ - 설비교체 = 구자산 사용종료/폐기 + 신자산 신규등록 + 구↔신 연결
+ ========================================================= -->
+<style id="JGB_EAM_FINAL_OVERHAUL_CSS">
+#eamproGrid.jgb-eam-final{font-family:Inter,"Noto Sans KR","Malgun Gothic",sans-serif;color:#203449}
+.jgb-eam-final .jgb-eam-shell{background:#f4f8fc;border:1px solid #dce7f0;border-radius:16px;overflow:hidden}
+.jgb-eam-final .jgb-eam-top{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:linear-gradient(135deg,#0f568d,#1d73b5);color:#fff}
+.jgb-eam-final .jgb-eam-top h2{margin:0;font-size:21px}
+.jgb-eam-final .jgb-eam-top small{opacity:.88}
+.jgb-eam-final .jgb-code-guide{display:grid;grid-template-columns:repeat(7,minmax(90px,1fr));gap:7px;padding:10px;background:#fff;border-bottom:1px solid #e1eaf2}
+.jgb-eam-final .jgb-code-guide span{padding:7px 8px;border-radius:8px;background:#f2f7fb;border:1px solid #e0e9f0;font-size:11px;text-align:center}
+.jgb-eam-final .jgb-code-guide b{color:#14598c}
+.jgb-eam-final .jgb-eam-layout{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:620px}
+.jgb-eam-final .jgb-side{background:#fff;border-right:1px solid #dce7f0;padding:12px}
+.jgb-eam-final .jgb-side-title{font-size:12px;font-weight:900;color:#65788a;padding:4px 7px 8px}
+.jgb-eam-final .jgb-cat{display:flex;justify-content:space-between;align-items:center;width:100%;border:1px solid #e1e9f0;background:#fff;border-radius:9px;padding:9px 10px;margin:4px 0;cursor:pointer;font-weight:800;color:#344b60}
+.jgb-eam-final .jgb-cat.active{background:#e9f4ff;border-color:#75afe0;color:#0b5b96}
+.jgb-eam-final .jgb-cat em{font-style:normal;font-size:10px;color:#8293a3}
+.jgb-eam-final .jgb-assets{margin-top:10px;border-top:1px solid #edf1f5;padding-top:8px}
+.jgb-eam-final .jgb-asset{padding:9px 8px;border-radius:8px;cursor:pointer;border:1px solid transparent;margin:3px 0}
+.jgb-eam-final .jgb-asset:hover{background:#f5f9fc}
+.jgb-eam-final .jgb-asset.active{background:#eaf5ff;border-color:#b5d7ef}
+.jgb-eam-final .jgb-asset strong{display:block;font-size:12px}
+.jgb-eam-final .jgb-asset small{color:#718496;font-size:10px}
+.jgb-eam-final .jgb-main{padding:14px;min-width:0}
+.jgb-eam-final .jgb-hero{display:flex;justify-content:space-between;gap:12px;align-items:center;background:#fff;border:1px solid #dce7f0;border-radius:13px;padding:13px 15px;margin-bottom:12px}
+.jgb-eam-final .jgb-hero-left{display:flex;align-items:center;gap:11px;min-width:0}
+.jgb-eam-final .jgb-hero-icon{width:42px;height:42px;border-radius:11px;background:#e8f3fb;display:grid;place-items:center;font-size:21px}
+.jgb-eam-final .jgb-hero h3{margin:0;font-size:19px}
+.jgb-eam-final .jgb-hero .jgb-pill{display:inline-block;margin-left:6px;padding:4px 8px;border-radius:999px;background:#dceeff;color:#11629c;font-size:10px;font-weight:900}
+.jgb-eam-final .jgb-actions{display:flex;gap:7px;flex-wrap:wrap}
+.jgb-eam-final .jgb-btn{border:1px solid #c8d8e6;background:#fff;color:#29465f;border-radius:8px;padding:8px 12px;font-weight:900;cursor:pointer}
+.jgb-eam-final .jgb-btn.primary{background:#0876c9;color:#fff;border-color:#0876c9}
+.jgb-eam-final .jgb-btn.danger{background:#fff;color:#c73737;border-color:#e5aaaa}
+.jgb-eam-final .jgb-card{background:#fff;border:1px solid #dce7f0;border-radius:13px;overflow:hidden;margin-bottom:12px}
+.jgb-eam-final .jgb-card-head{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;background:linear-gradient(90deg,#eef7fd,#f9fbfd);border-bottom:1px solid #dce7f0}
+.jgb-eam-final .jgb-card-head h4{margin:0;font-size:14px;color:#163e61}
+.jgb-eam-final .jgb-card-head small{color:#718496}
+.jgb-eam-final .jgb-card-body{padding:12px}
+.jgb-eam-final .jgb-master-photo{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(260px,.75fr);gap:12px}
+.jgb-eam-final .jgb-table{width:100%;border-collapse:collapse;font-size:12px}
+.jgb-eam-final .jgb-table th,.jgb-eam-final .jgb-table td{border:1px solid #e0e7ee;padding:7px 8px;text-align:left}
+.jgb-eam-final .jgb-table th{background:#f2f6fa;color:#506578;width:105px;font-weight:900}
+.jgb-eam-final .jgb-table td{background:#fff;color:#253b4f}
+.jgb-eam-final .jgb-status{display:inline-block;padding:3px 8px;border-radius:6px;background:#e4f6df;color:#287529;font-size:11px;font-weight:900}
+.jgb-eam-final .jgb-status.end{background:#f3e9e9;color:#9b4141}
+.jgb-eam-final .jgb-photo-placeholder{height:100%;min-height:245px;border:1.5px dashed #a9bfd1;border-radius:10px;background:linear-gradient(180deg,#fbfdff,#f6f9fb);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#7c8f9f}
+.jgb-eam-final .jgb-photo-placeholder .cam{font-size:38px;opacity:.75;margin-bottom:7px}
+.jgb-eam-final .jgb-photo-placeholder b{font-size:13px;color:#60778b}
+.jgb-eam-final .jgb-photo-placeholder small{margin-top:5px}
+.jgb-eam-final .jgb-photo-placeholder button{margin-top:12px}
+.jgb-eam-final .jgb-section-note{font-size:11px;color:#748697;margin-top:7px}
+.jgb-eam-final .jgb-plan{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.jgb-eam-final .jgb-plan div{border:1px solid #e1e8ee;border-radius:8px;padding:9px;background:#fbfdff}
+.jgb-eam-final .jgb-plan b{display:block;font-size:11px;color:#5c7183;margin-bottom:4px}
+.jgb-eam-final .jgb-plan span{font-size:12px}
+.jgb-eam-final .jgb-history-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px}
+.jgb-eam-final .jgb-history-summary{font-size:11px;color:#6c7f90}
+.jgb-eam-final .jgb-history-table{width:100%;border-collapse:collapse;font-size:11px}
+.jgb-eam-final .jgb-history-table th{background:#edf4fa;color:#476177;padding:8px;border:1px solid #dce6ee;white-space:nowrap}
+.jgb-eam-final .jgb-history-table td{padding:8px;border:1px solid #e1e8ee;vertical-align:top}
+.jgb-eam-final .jgb-history-table tr:hover td{background:#f9fcff}
+.jgb-eam-final .jgb-type{font-weight:900;color:#155f91}
+.jgb-eam-final .jgb-history-empty{text-align:center;padding:30px;color:#8394a2}
+.jgb-eam-final .jgb-lifecycle{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.jgb-eam-final .jgb-life-step{position:relative;border:1px solid #dbe5ed;background:#f9fbfd;border-radius:8px;padding:9px;text-align:center}
+.jgb-eam-final .jgb-life-step.active{background:#e9f6ff;border-color:#8ec4e8}
+.jgb-eam-final .jgb-life-step b{display:block;font-size:11px}
+.jgb-eam-final .jgb-life-step small{font-size:9px;color:#718394}
+.jgb-eam-final .jgb-photos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.jgb-eam-final .jgb-slot{border:1.5px dashed #aec2d3;border-radius:9px;background:#fbfdff;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#8294a3}
+.jgb-eam-final .jgb-slot b{font-size:11px;color:#61778a;margin-bottom:5px}
+.jgb-eam-final .jgb-slot .cam{font-size:25px;margin-bottom:4px}
+.jgb-eam-final .jgb-edit-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.jgb-eam-final .jgb-edit-grid label{font-size:10px;font-weight:900;color:#5d7284}
+.jgb-eam-final .jgb-edit-grid input,.jgb-eam-final .jgb-edit-grid select,.jgb-eam-final .jgb-edit-grid textarea{width:100%;box-sizing:border-box;margin-top:4px;border:1px solid #ccd9e4;border-radius:7px;padding:7px;background:#fff;font:inherit}
+.jgb-eam-final .jgb-edit-grid textarea{min-height:58px;resize:vertical}
+.jgb-eam-final .wide{grid-column:1/-1}
+.jgb-eam-final .jgb-edit-actions{display:flex;justify-content:flex-end;gap:7px;margin-top:10px}
+.jgb-eam-final .jgb-modal-bg{position:fixed;inset:0;background:rgba(13,31,48,.48);z-index:999999;display:flex;align-items:center;justify-content:center;padding:18px}
+.jgb-eam-final .jgb-modal{width:min(1100px,96vw);max-height:92vh;overflow:auto;background:#fff;border-radius:15px;box-shadow:0 25px 70px rgba(0,0,0,.25)}
+.jgb-eam-final .jgb-modal-head{display:flex;justify-content:space-between;align-items:center;padding:15px 18px;border-bottom:1px solid #e0e8ef}
+.jgb-eam-final .jgb-modal-head h3{margin:0}
+.jgb-eam-final .jgb-modal-body{padding:16px}
+.jgb-eam-final .jgb-form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.jgb-eam-final .jgb-form-grid label{font-size:10px;font-weight:900;color:#566d80}
+.jgb-eam-final .jgb-form-grid input,.jgb-eam-final .jgb-form-grid select,.jgb-eam-final .jgb-form-grid textarea{width:100%;box-sizing:border-box;margin-top:4px;border:1px solid #ccd9e4;border-radius:7px;padding:8px;font:inherit}
+.jgb-eam-final .jgb-form-grid textarea{min-height:70px;resize:vertical}
+.jgb-eam-final .jgb-modal-foot{display:flex;justify-content:flex-end;gap:8px;padding:12px 16px;border-top:1px solid #e0e8ef}
+@media(max-width:1000px){
+  .jgb-eam-final .jgb-eam-layout{grid-template-columns:190px minmax(0,1fr)}
+  .jgb-eam-final .jgb-master-photo{grid-template-columns:1fr}
+  .jgb-eam-final .jgb-edit-grid,.jgb-eam-final .jgb-form-grid{grid-template-columns:repeat(2,1fr)}
+  .jgb-eam-final .jgb-code-guide{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:700px){
+  .jgb-eam-final .jgb-eam-layout{grid-template-columns:1fr}
+  .jgb-eam-final .jgb-side{border-right:0;border-bottom:1px solid #dce7f0}
+  .jgb-eam-final .jgb-code-guide{grid-template-columns:repeat(2,1fr)}
+  .jgb-eam-final .jgb-photos-grid,.jgb-eam-final .jgb-plan,.jgb-eam-final .jgb-lifecycle{grid-template-columns:1fr 1fr}
+}
+</style>
+
+<script id="JGB_EAM_FINAL_OVERHAUL_JS">
+(function(){
+  const esc = s => String(s ?? '').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const vv = s => String(s ?? '').trim();
+  const META_KEY_FINAL='JGB_EAM_META_V_FINAL';
+  const cats=[
+    ['all','전체','▦','전체'],
+    ['cooling','냉난방','❄','AC'],
+    ['fire','소방·방재','🚒','FI'],
+    ['water','온수·난방','♨','BO'],
+    ['electrical','전기설비','⚡','EL'],
+    ['lighting','코트조명','💡','LT'],
+    ['waterproof','방수','🏗','WP'],
+    ['other','기타설비','⚙','OT']
+  ];
+  const codePrefix={cooling:'AC',fire:'FI',water:'BO',electrical:'EL',lighting:'LT',waterproof:'WP',other:'OT'};
+  const catLabel=k=>(cats.find(x=>x[0]===k)||cats[cats.length-1])[1];
+  const catKeyLocal=x=>{
+    const m=readMeta()[vv(x?.code||x?.asset_code)]||{};
+    const c=vv(m.category||x?.category||x?.type);
+    if(cats.some(z=>z[1]===c)) return cats.find(z=>z[1]===c)[0];
+    if(/소방|저수조/.test(c))return'fire';
+    if(/냉난방|냉방/.test(c))return'cooling';
+    if(/온수|보일러|난방/.test(c))return'water';
+    if(/전기/.test(c))return'electrical';
+    if(/조명/.test(c))return'lighting';
+    if(/방수/.test(c))return'waterproof';
+    return'other';
+  };
+  function readMeta(){try{return JSON.parse(localStorage.getItem(META_KEY_FINAL)||'{}')||{}}catch(e){return{}}}
+  function writeMeta(x){try{localStorage.setItem(META_KEY_FINAL,JSON.stringify(x||{}))}catch(e){}}
+  function allSource(){
+    let arr=[];
+    try{if(typeof JGB_MAIN_EQUIPMENT!=='undefined'&&Array.isArray(JGB_MAIN_EQUIPMENT))arr=arr.concat(JGB_MAIN_EQUIPMENT)}catch(e){}
+    try{if(typeof JGB_EXCEL_EQUIPMENT!=='undefined'&&Array.isArray(JGB_EXCEL_EQUIPMENT))arr=arr.concat(JGB_EXCEL_EQUIPMENT)}catch(e){}
+    const map=new Map();
+    arr.filter(x=>x&&x.code).forEach(x=>{if(!map.has(vv(x.code)))map.set(vv(x.code),x)});
+    return [...map.values()];
+  }
+  function mergedAssets(){
+    const meta=readMeta(), A=Array.isArray(window.__eamA)?window.__eamA:[];
+    const map=new Map();
+    allSource().forEach(x=>{
+      const code=vv(x.code),a=A.find(z=>vv(z.asset_code)===code)||{},m=meta[code]||{};
+      map.set(code,Object.assign({},x,a,{
+        code,
+        name:vv(m.name||a.name||x.name)||'-',
+        category:vv(m.category||a.category||x.category||x.type)||'기타설비',
+        type:vv(m.category||a.category||x.type)||'기타설비',
+        place:catKeyLocal({code,...x,...a})==='fire'?'유수장치실':vv(m.place||a.place||x.place)||'-',
+        model:vv(m.model||a.model||a.product_name||x.model),
+        qty:m.qty??a.qty??a.quantity??x.qty??x.quantity??'-',
+        vendor:vv(m.vendor||m.maker||a.vendor||a.maker||x.vendor||x.maker),
+        maker:vv(m.maker||m.vendor||a.maker||a.vendor||x.maker||x.vendor),
+        capacity:vv(m.capacity||x.capacity),
+        life:vv(m.life||x.life),
+        grade:vv(m.grade||x.grade),
+        manufactureDate:vv(m.manufactureDate||m.date||x.date||x.manufactureDate),
+        date:vv(m.date||m.manufactureDate||x.date),
+        installDate:vv(m.installDate||a.installDate||x.installDate||x.date),
+        asContact:vv(m.asContact||x.asContact),
+        warranty:vv(m.warranty||x.warranty),
+        asHistory:vv(m.asHistory||x.asHistory),
+        improvementPlan:vv(m.improvementPlan||x.improvementPlan),
+        note:vv(m.note||a.note||x.note),
+        status:vv(m.status||a.status||'정상')||'정상',
+        dbOnly:false
+      }));
+    });
+    A.forEach(a=>{
+      const code=vv(a.asset_code);
+      if(code&&!map.has(code)){
+        const m=meta[code]||{};
+        map.set(code,Object.assign({},a,{code,name:vv(m.name||a.name)||'-',category:vv(m.category||a.category)||'기타설비',type:vv(m.category||a.category)||'기타설비',place:vv(m.place||a.place)||'-',model:vv(m.model||a.product_name),qty:m.qty??a.qty??a.quantity??'-',vendor:vv(m.vendor||a.vendor||a.maker),maker:vv(m.maker||a.maker||a.vendor),capacity:vv(m.capacity),life:vv(m.life),grade:vv(m.grade),manufactureDate:vv(m.manufactureDate||m.date),date:vv(m.date||m.manufactureDate),installDate:vv(m.installDate||a.installDate),asContact:vv(m.asContact),warranty:vv(m.warranty),asHistory:vv(m.asHistory),improvementPlan:vv(m.improvementPlan),note:vv(m.note),status:vv(m.status||a.status||'정상')||'정상',dbOnly:true}));
+      }
+    });
+    return [...map.values()].filter(x=>!['폐기','사용종료'].includes(vv(x.status)));
+  }
+  function currentAsset(code){return mergedAssets().find(x=>vv(x.code)===vv(code))}
+  function historyFor(code){
+    const A=Array.isArray(window.__eamA)?window.__eamA:[],H=Array.isArray(window.__eamH)?window.__eamH:[];
+    const a=A.find(x=>vv(x.asset_code)===vv(code));
+    return H.filter(h=>a&&String(h.asset_id)===String(a.id)).sort((x,y)=>String(y.event_date||'').localeCompare(String(x.event_date||'')));
+  }
+  function maintenanceRows(code){
+    return historyFor(code).filter(h=>/외부정비|점검|수리|부품교체|설비교체|유지관리/i.test(vv(h.event_type)||vv(h.description)));
+  }
+  function parseHist(h){
+    let d=vv(h.description),j={};
+    if(d.startsWith('META::')){try{j=JSON.parse(d.slice(6))}catch(e){}}
+    if(d.startsWith('EAM_EXT::')){try{j=JSON.parse(d.slice(8))}catch(e){}}
+    if(d.startsWith('EAM_REPLACE::')){try{j=JSON.parse(d.slice(13))}catch(e){}}
+    return Object.assign({date:vv(h.event_date),type:vv(h.event_type),desc:d,cost:h.cost??0,worker:vv(h.worker_name)},j);
+  }
+  function fmtCost(v){const n=Number(v);return Number.isFinite(n)&&n>0?n.toLocaleString('ko-KR')+'원':'-'}
+  function latestByType(rows,re){
+    const r=rows.map(parseHist).filter(x=>re.test(vv(x.type)||vv(x.maintenanceType)||vv(x.desc)));
+    return r[0]||null;
+  }
+  function placeCode(p){
+    p=vv(p);
+    if(p.includes('유수장치실'))return'E';
+    if(p.includes('옥상'))return'D';
+    if(p.includes('사무실'))return'C';
+    if(p.includes('복도'))return'B';
+    if(p.includes('코트'))return'A';
+    return'-';
+  }
+  function placeLabel(p){const c=placeCode(p);return c==='E'?'E · 유수장치실':c==='D'?'D · 옥상':c==='C'?'C · 사무실':c==='B'?'B · 복도':c==='A'?'A · '+vv(p):vv(p)||'-'}
+  function displayCode(asset){
+    const k=catKeyLocal(asset), pre=codePrefix[k]||'OT';
+    const raw=vv(asset.code);
+    const m=raw.match(/^(?:A-|EQ-|AST-|)(\d+)$/i);
+    if(m)return pre+'-'+String(Number(m[1])).padStart(2,'0');
+    if(/^[A-Z]{2}-\d+$/i.test(raw))return raw.toUpperCase();
+    return raw||pre+'-01';
+  }
+  function slots(title,n){
+    return `<div class="jgb-photos-grid">${Array.from({length:n},(_,i)=>`<div class="jgb-slot"><div class="cam">📷</div><b>${esc(title[i]||'사진 '+(i+1))}</b><span>사진 등록 공간</span><small>JPG / PNG</small></div>`).join('')}</div>`;
+  }
+  function cardHtml(a){
+    const code=vv(a.code),rows=maintenanceRows(code),lastCheck=latestByType(rows,/점검/),lastExt=latestByType(rows,/외부정비|수리|부품교체|설비교체/),lastAny=rows[0]?parseHist(rows[0]):null;
+    const fire=catKeyLocal(a)==='fire';
+    const m=readMeta()[code]||{};
+    const status=vv(a.status||'정상');
+    return `<section class="jgb-card">
+      <div class="jgb-card-head"><h4>📋 주요설비 이력카드</h4><button class="jgb-btn primary" type="button" onclick="window.jgbEamEditCard('${esc(code)}')">✎ 수정</button></div>
+      <div class="jgb-card-body">
+        <div class="jgb-master-photo">
+          <div>
+            <table class="jgb-table">
+              <tr><th>자산코드</th><td><b>${esc(displayCode(a))}</b></td><th>전설번호</th><td>${esc(code)}</td></tr>
+              <tr><th>자산명</th><td>${esc(a.name)}</td><th>설비 종류</th><td>${esc(catLabel(catKeyLocal(a)))}</td></tr>
+              <tr><th>위치</th><td>${esc(placeLabel(fire?'유수장치실':a.place))}</td><th>모델·규격</th><td>${esc(a.model||'-')}</td></tr>
+              <tr><th>용량</th><td>${esc(a.capacity||'-')}</td><th>수량</th><td>${esc(a.qty??'-')}</td></tr>
+              <tr><th>제조사</th><td>${esc(a.maker||a.vendor||'-')}</td><th>A/S 연락처</th><td>${esc(a.asContact||'-')}</td></tr>
+              <tr><th>제조일</th><td>${esc(a.manufactureDate||a.date||'-')}</td><th>설치일</th><td>${esc(a.installDate||'-')}</td></tr>
+              <tr><th>내용연수</th><td>${esc(a.life||'-')}</td><th>평가등급</th><td>${esc(a.grade||'-')}</td></tr>
+              <tr><th>보증</th><td>${esc(a.warranty||'-')}</td><th>상태</th><td><span class="jgb-status ${status!=='정상'?'end':''}">${esc(status)}</span></td></tr>
+              <tr><th>기존 A/S 기록</th><td colspan="3">${esc(a.asHistory||'-')}</td></tr>
+              <tr><th>시설개선계획</th><td colspan="3">${esc(a.improvementPlan||'-')}</td></tr>
+              <tr><th>특이사항</th><td colspan="3">${esc(a.note||'-')}</td></tr>
+            </table>
+          </div>
+          <div>
+            <div class="jgb-photo-placeholder">
+              <div class="cam">📷</div>
+              <b>설비 사진 (현재)</b>
+              <span>사진 등록 공간</span>
+              <small>실제 사진을 나중에 이 위치에 등록</small>
+              <button class="jgb-btn" type="button" onclick="window.jgbEamPhotoInfo('${esc(code)}')">사진 등록</button>
+            </div>
+          </div>
+        </div>
+        <div class="jgb-section-note">※ 사진 파일은 현재 비워두었으며, 실제 설비 사진을 등록하면 동일 영역에 표시하도록 구성합니다.</div>
+      </div>
+    </section>
+    <section class="jgb-card">
+      <div class="jgb-card-head"><h4>🔧 유지관리 현황</h4><small>외부정비 기준 자동 집계</small></div>
+      <div class="jgb-card-body">
+        <table class="jgb-table">
+          <tr><th>최근 점검일</th><td>${esc(lastCheck?.date||'-')}</td><th>최근 외부정비일</th><td>${esc(lastExt?.date||'-')}</td></tr>
+          <tr><th>누적 외부정비 건수</th><td>${rows.filter(h=>/외부정비|수리|부품교체|설비교체/i.test(vv(h.event_type))).length}건</td><th>최근 조치내용</th><td>${esc(lastAny?.action||lastAny?.desc||'-')}</td></tr>
+          <tr><th>차기 점검일</th><td>${esc(lastCheck?.nextInspection||lastCheck?.nextDate||'-')}</td><th>교체·폐기 예정</th><td>${esc(m.replacementPlan||'-')}</td></tr>
+        </table>
+      </div>
+    </section>
+    <section class="jgb-card">
+      <div class="jgb-card-head"><h4>📅 시설개선계획 / 생애주기</h4><small>자산의 현재 상태를 한눈에 확인</small></div>
+      <div class="jgb-card-body">
+        <div class="jgb-lifecycle">
+          <div class="jgb-life-step active"><b>신규등록</b><small>${esc(a.installDate||'-')}</small></div>
+          <div class="jgb-life-step active"><b>운영</b><small>현재</small></div>
+          <div class="jgb-life-step ${rows.length?'active':''}"><b>외부정비</b><small>${rows.length}건</small></div>
+          <div class="jgb-life-step"><b>설비교체</b><small>발생 시</small></div>
+          <div class="jgb-life-step"><b>폐기/사용종료</b><small>생애 종료</small></div>
+        </div>
+      </div>
+    </section>`;
+  }
+  function historyTable(code){
+    const rows=maintenanceRows(code);
+    const ext=rows.filter(h=>/외부정비|수리|부품교체|설비교체/i.test(vv(h.event_type)||vv(h.description)));
+    return `<section class="jgb-card">
+      <div class="jgb-card-head"><h4>🔧 유지관리 이력</h4><div class="jgb-actions"><small>${ext.length}건</small><button class="jgb-btn primary" type="button" onclick="window.jgbEamExternalMaintenance('${esc(code)}')">＋ 외부정비 등록</button></div></div>
+      <div class="jgb-card-body">
+        ${ext.length?`<table class="jgb-history-table"><thead><tr><th>No</th><th>작업일자</th><th>정비구분</th><th>정비유형</th><th>고장·이상내용</th><th>조치내용</th><th>정비업체</th><th>비용</th><th>결과</th></tr></thead><tbody>${ext.map((h,i)=>{const x=parseHist(h);return `<tr><td>${i+1}</td><td>${esc(x.date||'-')}</td><td class="jgb-type">${esc(x.maintenanceType||x.type||'-')}</td><td>${esc(x.workType||'-')}</td><td>${esc(x.problem||'-')}</td><td>${esc(x.action||x.desc||'-')}</td><td>${esc(x.vendor||'-')}</td><td>${fmtCost(x.cost??h.cost)}</td><td>${esc(x.result||'처리완료')}</td></tr>`}).join('')}</tbody></table>`:'<div class="jgb-history-empty">등록된 외부정비 이력이 없습니다.</div>'}
+      </div>
+    </section>
+    <section class="jgb-card">
+      <div class="jgb-card-head"><h4>📷 작업 사진</h4><small>실제 사진 등록 전 자리만 표시</small></div>
+      <div class="jgb-card-body">${slots(['교체 전 (기존 설비)','철거 작업','신규 설치','교체 완료'])}</div>
+    </section>`;
+  }
+  function renderFinal(){
+    const root=document.getElementById('eamproGrid');
+    if(!root)return;
+    const all=mergedAssets(), cat=window.__eamCat||'all', selected=vv(window.__eamSelCode)||vv(all[0]?.code||'');
+    if(!window.__eamSelCode&&all[0])window.__eamSelCode=all[0].code;
+    const current=currentAsset(window.__eamSelCode)||all[0];
+    root.className='jgb-eam-final';
+    const counts={};cats.forEach(c=>counts[c[0]]=c[0]==='all'?all.length:all.filter(x=>catKeyLocal(x)===c[0]).length);
+    const visible=cat==='all'?all:all.filter(x=>catKeyLocal(x)===cat);
+    root.innerHTML=`<div class="jgb-eam-shell">
+      <div class="jgb-eam-top"><div><h2>주요설비 이력카드</h2><small>EAM · 자산 생애주기 · 외부정비 · 설비교체 이력관리</small></div><div>홈 › 설비관리 › 이력카드</div></div>
+      <div class="jgb-code-guide">${cats.slice(1).map(c=>`<span><b>${c[3]}-01</b><br>${esc(c[1])}</span>`).join('')}</div>
+      <div class="jgb-eam-layout">
+        <aside class="jgb-side">
+          <div class="jgb-side-title">설비 분류</div>
+          ${cats.map(c=>`<button class="jgb-cat ${cat===c[0]?'active':''}" type="button" onclick="window.jgbEamPick('${c[0]}')"><span>${c[2]} ${esc(c[1])}</span><em>${counts[c[0]]||0}</em></button>`).join('')}
+          <div class="jgb-assets">
+            <div class="jgb-side-title">자산 목록</div>
+            ${visible.length?visible.map(a=>`<div class="jgb-asset ${vv(a.code)===vv(current?.code)?'active':''}" onclick="window.jgbEamPick('${esc(cat)}','${esc(a.code)}')"><strong>${esc(displayCode(a))} · ${esc(a.name)}</strong><small>${esc(placeLabel(catKeyLocal(a)==='fire'?'유수장치실':a.place))}</small></div>`).join(''):'<div class="jgb-history-empty">등록 자산 없음</div>'}
+          </div>
+        </aside>
+        <main class="jgb-main">
+          ${current?`<div class="jgb-hero"><div class="jgb-hero-left"><div class="jgb-hero-icon">⚙</div><div><h3>${esc(displayCode(current))} ${esc(current.name)} <span class="jgb-pill">${esc(catLabel(catKeyLocal(current)))}</span></h3><small>${esc(placeLabel(catKeyLocal(current)==='fire'?'유수장치실':current.place))}</small></div></div><div class="jgb-actions"><button class="jgb-btn primary" onclick="window.jgbEamEditCard('${esc(current.code)}')">✎ 수정</button><button class="jgb-btn" onclick="window.jgbEamExternalMaintenance('${esc(current.code)}')">＋ 외부정비</button><button class="jgb-btn danger" onclick="window.jgbEamReplace('${esc(current.code)}')">설비교체</button></div></div>
+          ${cardHtml(current)}
+          ${historyTable(current.code)}
+          <section class="jgb-card"><div class="jgb-card-head"><h4>📎 문서함</h4><small>작업확인서 · 사양서 · 견적서 등</small></div><div class="jgb-card-body">${slots(['작업확인서','설비사양서','견적서','기타첨부'])}</div></section>`
+          :'<div class="jgb-history-empty">설비를 선택하세요.</div>'}
+        </main>
+      </div>
+    </div>`;
+  }
+  window.jgbEamPick=function(cat,code){
+    window.__eamCat=cat||'all';
+    const list=mergedAssets().filter(x=>cat==='all'||catKeyLocal(x)===cat);
+    window.__eamSelCode=code?String(code):(list[0]?.code||'');
+    renderFinal();
+  };
+  window.jgbEamPhotoInfo=function(code){
+    alert('사진 등록 공간입니다.\\n\\n현재 화면은 실제 사진을 넣지 않고 자리만 구성해 두었습니다.\\n추후 사진 업로드 기능을 연결하면 이 위치에 표시됩니다.\\n\\n자산코드: '+code);
+  };
+  function editModal(code){
+    const a=currentAsset(code); if(!a)return;
+    const k=catKeyLocal(a),m=readMeta()[code]||{};
+    const loc=k==='fire'?'E':placeCode(a.place);
+    const opts=cats.slice(1).map(c=>`<option value="${c[1]}" ${catLabel(k)===c[1]?'selected':''}>${c[1]}</option>`).join('');
+    document.body.insertAdjacentHTML('beforeend',`<div id="jgbEamEditModal" class="jgb-modal-bg"><div class="jgb-modal">
+      <div class="jgb-modal-head"><div><h3>주요설비 이력카드 수정</h3><small>자산 기본정보와 이력카드 정보를 한 번에 수정</small></div><button class="jgb-btn" onclick="document.getElementById('jgbEamEditModal')?.remove()">×</button></div>
+      <div class="jgb-modal-body"><div class="jgb-form-grid">
+        <label>관리코드<input value="${esc(displayCode(a))}" readonly></label>
+        <label>원본 자산코드<input id="jgbEditCode" value="${esc(code)}" readonly></label>
+        <label>설비 종류<select id="jgbEditCategory">${opts}</select></label>
+        <label>자산명<input id="jgbEditName" value="${esc(a.name)}"></label>
+        <label>위치코드<select id="jgbEditLoc"><option ${loc==='A'?'selected':''}>A</option><option ${loc==='B'?'selected':''}>B</option><option ${loc==='C'?'selected':''}>C</option><option ${loc==='D'?'selected':''}>D</option><option ${loc==='E'?'selected':''}>E</option></select></label>
+        <label>세부 위치<input id="jgbEditPlace" value="${esc(k==='fire'?'유수장치실':a.place)}"></label>
+        <label>모델·규격<input id="jgbEditModel" value="${esc(a.model)}"></label>
+        <label>용량<input id="jgbEditCapacity" value="${esc(a.capacity)}"></label>
+        <label>수량<input id="jgbEditQty" value="${esc(a.qty)}"></label>
+        <label>제조사<input id="jgbEditMaker" value="${esc(a.maker||a.vendor)}"></label>
+        <label>A/S 연락처<input id="jgbEditAs" value="${esc(a.asContact)}"></label>
+        <label>제조일<input id="jgbEditManufacture" type="date" value="${esc(a.manufactureDate||a.date)}"></label>
+        <label>설치일<input id="jgbEditInstall" type="date" value="${esc(a.installDate)}"></label>
+        <label>내용연수<input id="jgbEditLife" value="${esc(a.life)}"></label>
+        <label>평가등급<input id="jgbEditGrade" value="${esc(a.grade)}"></label>
+        <label>보증<input id="jgbEditWarranty" value="${esc(a.warranty)}"></label>
+        <label>상태<select id="jgbEditStatus"><option ${a.status==='정상'?'selected':''}>정상</option><option ${a.status==='점검필요'?'selected':''}>점검필요</option><option ${a.status==='사용중'?'selected':''}>사용중</option></select></label>
+        <label class="wide">기존 A/S 기록<textarea id="jgbEditAsHistory">${esc(a.asHistory)}</textarea></label>
+        <label class="wide">시설개선계획<textarea id="jgbEditPlan">${esc(a.improvementPlan)}</textarea></label>
+        <label class="wide">특이사항<textarea id="jgbEditNote">${esc(a.note)}</textarea></label>
+      </div></div>
+      <div class="jgb-modal-foot"><button class="jgb-btn" onclick="document.getElementById('jgbEamEditModal')?.remove()">취소</button><button class="jgb-btn primary" id="jgbEditSave" onclick="window.jgbEamSaveCard('${esc(code)}')">저장</button></div>
+    </div></div>`);
+  }
+  window.jgbEamEditCard=editModal;
+  window.jgbEamSaveCard=async function(code){
+    const a=currentAsset(code);if(!a)return;
+    const g=id=>document.getElementById(id)?.value?.trim()||'';
+    const category=g('jgbEditCategory')||'기타설비';
+    const k=cats.find(c=>c[1]===category)?.[0]||'other';
+    let place=g('jgbEditPlace'); if(k==='fire')place='유수장치실';
+    const meta=readMeta();
+    const item={
+      asset_code:code,name:g('jgbEditName'),category,locationCode:k==='fire'?'E':g('jgbEditLoc'),
+      place,model:g('jgbEditModel'),qty:g('jgbEditQty'),vendor:g('jgbEditMaker'),maker:g('jgbEditMaker'),
+      asContact:g('jgbEditAs'),manufactureDate:g('jgbEditManufacture'),date:g('jgbEditManufacture'),
+      installDate:g('jgbEditInstall'),life:g('jgbEditLife'),capacity:g('jgbEditCapacity'),grade:g('jgbEditGrade'),
+      warranty:g('jgbEditWarranty'),asHistory:g('jgbEditAsHistory'),status:g('jgbEditStatus')||'정상',
+      improvementPlan:g('jgbEditPlan'),note:g('jgbEditNote')
+    };
+    meta[code]=item;writeMeta(meta);window.__eamMetaByCode=meta;
+    try{
+      if(typeof SUPA!=='undefined'&&SUPA&&a.id){
+        const r=await SUPA.from('assets').update({name:item.name,category:item.category,place:item.place,status:item.status,product_name:item.model||item.category}).eq('id',a.id);
+        if(r.error)throw r.error;
+        const h=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'자산정보수정',description:'META::'+JSON.stringify(item),worker_name:'관리자',cost:0,event_date:new Date().toISOString().slice(0,10)});
+        if(h.error)console.warn(h.error);
+        if(typeof eamLoad==='function')await eamLoad();
+      }
+    }catch(e){console.error(e);alert('저장 중 오류가 발생했습니다.\\n'+(e?.message||''));return}
+    document.getElementById('jgbEamEditModal')?.remove();
+    window.__eamSelCode=code;renderFinal();
+  };
+  window.jgbEamExternalMaintenance=function(code){
+    const a=currentAsset(code);if(!a)return;
+    document.body.insertAdjacentHTML('beforeend',`<div id="jgbExtModal" class="jgb-modal-bg"><div class="jgb-modal">
+      <div class="jgb-modal-head"><div><h3>외부정비 등록</h3><small>EAM 유지관리 이력에 외부정비만 기록합니다.</small></div><button class="jgb-btn" onclick="document.getElementById('jgbExtModal')?.remove()">×</button></div>
+      <div class="jgb-modal-body"><div class="jgb-form-grid">
+        <label>작업번호<input id="jgbExtNo" placeholder="자동 또는 기관 작업번호"></label>
+        <label>작업일자<input id="jgbExtDate" type="date" value="${new Date().toISOString().slice(0,10)}"></label>
+        <label>정비구분<select id="jgbExtType"><option>점검</option><option>수리</option><option>부품교체</option><option>설비교체</option><option>기타</option></select></label>
+        <label>정비유형<select id="jgbExtWorkType"><option>예방정비</option><option>고장정비</option><option>계획정비</option></select></label>
+        <label class="wide">고장·이상내용<textarea id="jgbExtProblem" placeholder="고장 또는 이상 내용을 입력"></textarea></label>
+        <label>고장원인<input id="jgbExtCause"></label>
+        <label class="wide">조치내용<textarea id="jgbExtAction" placeholder="정비업체가 수행한 조치내용"></textarea></label>
+        <label>교체부품<input id="jgbExtParts" placeholder="해당 시 입력"></label>
+        <label>정비업체<input id="jgbExtVendor"></label>
+        <label>정비비용<input id="jgbExtCost" type="number" min="0" value="0"></label>
+        <label>작업시작일<input id="jgbExtStart" type="date"></label>
+        <label>작업완료일<input id="jgbExtFinish" type="date"></label>
+        <label>차기점검일<input id="jgbExtNext" type="date"></label>
+        <label>결과<select id="jgbExtResult"><option>처리완료</option><option>정상</option><option>추가조치 필요</option></select></label>
+        <label class="wide">비고<textarea id="jgbExtNote"></textarea></label>
+      </div></div>
+      <div class="jgb-modal-foot"><button class="jgb-btn" onclick="document.getElementById('jgbExtModal')?.remove()">취소</button><button class="jgb-btn primary" id="jgbExtSave" onclick="window.jgbEamSaveMaintenance('${esc(code)}')">유지관리 이력 등록</button></div>
+    </div></div>`);
+  };
+  window.jgbEamSaveMaintenance=async function(code){
+    const a=currentAsset(code);if(!a)return;
+    const g=id=>document.getElementById(id)?.value?.trim()||'';
+    const obj={workNo:g('jgbExtNo'),date:g('jgbExtDate'),maintenanceType:g('jgbExtType'),workType:g('jgbExtWorkType'),problem:g('jgbExtProblem'),cause:g('jgbExtCause'),action:g('jgbExtAction'),parts:g('jgbExtParts'),vendor:g('jgbExtVendor'),cost:Number(g('jgbExtCost')||0),startDate:g('jgbExtStart'),finishDate:g('jgbExtFinish'),nextInspection:g('jgbExtNext'),result:g('jgbExtResult'),note:g('jgbExtNote')};
+    if(!obj.action&&!obj.problem){alert('고장·이상내용 또는 조치내용을 입력하세요.');return}
+    try{
+      if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
+      const r=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'외부정비',description:'EAM_EXT::'+JSON.stringify(obj),worker_name:obj.vendor||'외부정비업체',cost:obj.cost,event_date:obj.date||new Date().toISOString().slice(0,10)});
+      if(r.error)throw r.error;
+      if(typeof eamLoad==='function')await eamLoad();
+      document.getElementById('jgbExtModal')?.remove();window.__eamSelCode=code;renderFinal();
+    }catch(e){console.error(e);alert('외부정비 이력 저장에 실패했습니다.\\n'+(e?.message||''))}
+  };
+  window.jgbEamReplace=function(code){
+    const a=currentAsset(code);if(!a)return;
+    const k=catKeyLocal(a), today=new Date().toISOString().slice(0,10);
+    const newCode=codePrefix[k]+'-'+String(Math.floor(Math.random()*900)+100);
+    document.body.insertAdjacentHTML('beforeend',`<div id="jgbReplaceModal" class="jgb-modal-bg"><div class="jgb-modal">
+      <div class="jgb-modal-head"><div><h3>설비교체 처리</h3><small>구자산을 보존하고 신규 설비를 별도 자산으로 등록합니다.</small></div><button class="jgb-btn" onclick="document.getElementById('jgbReplaceModal')?.remove()">×</button></div>
+      <div class="jgb-modal-body">
+        <div class="jgb-form-grid">
+          <label>구자산 관리코드<input value="${esc(displayCode(a))}" readonly></label>
+          <label>구자산명<input value="${esc(a.name)}" readonly></label>
+          <label>교체일<input id="jgbRepDate" type="date" value="${today}"></label>
+          <label>구자산 처리<select id="jgbRepOldStatus"><option>사용종료</option><option>폐기</option></select></label>
+          <label>신규 관리코드<input id="jgbRepNewCode" value="${esc(newCode)}"></label>
+          <label>신규 자산명<input id="jgbRepNewName" value="${esc(a.name)}"></label>
+          <label>신규 설비 종류<select id="jgbRepCat">${cats.slice(1).map(c=>`<option value="${c[1]}" ${c[0]===k?'selected':''}>${c[1]}</option>`).join('')}</select></label>
+          <label>신규 위치<input id="jgbRepPlace" value="${esc(k==='fire'?'유수장치실':a.place)}"></label>
+          <label>신규 제조사<input id="jgbRepMaker" value=""></label>
+          <label>신규 모델·규격<input id="jgbRepModel" value=""></label>
+          <label>신규 용량<input id="jgbRepCapacity" value="${esc(a.capacity)}"></label>
+          <label>신규 제조일<input id="jgbRepManufacture" type="date"></label>
+          <label>신규 설치일<input id="jgbRepInstall" type="date" value="${today}"></label>
+          <label>신규 내용연수<input id="jgbRepLife" value="${esc(a.life)}"></label>
+          <label>신규 평가등급<input id="jgbRepGrade" value=""></label>
+          <label>정비업체<input id="jgbRepVendor"></label>
+          <label>교체비용<input id="jgbRepCost" type="number" min="0" value="0"></label>
+          <label class="wide">교체사유<textarea id="jgbRepReason" placeholder="노후, 성능저하, 고장 등"></textarea></label>
+        </div>
+        <div style="margin-top:14px" class="jgb-card"><div class="jgb-card-head"><h4>📷 교체 작업 사진</h4><small>사진은 실제 파일 없이 자리만 구성</small></div><div class="jgb-card-body">${slots(['교체 전 (기존 설비)','철거 작업','신규 설치','교체 완료'])}</div></div>
+      </div>
+      <div class="jgb-modal-foot"><button class="jgb-btn" onclick="document.getElementById('jgbReplaceModal')?.remove()">취소</button><button class="jgb-btn danger" onclick="window.jgbEamConfirmReplace('${esc(code)}')">설비교체 확정</button></div>
+    </div></div>`);
+  };
+  window.jgbEamConfirmReplace=async function(oldCode){
+    const old=currentAsset(oldCode);if(!old)return;
+    const g=id=>document.getElementById(id)?.value?.trim()||'';
+    const category=g('jgbRepCat')||'기타설비', k=cats.find(c=>c[1]===category)?.[0]||'other';
+    const newCode=g('jgbRepNewCode')||codePrefix[k]+'-'+String(Date.now()).slice(-4);
+    const place=k==='fire'?'유수장치실':g('jgbRepPlace');
+    const today=g('jgbRepDate')||new Date().toISOString().slice(0,10);
+    if(newCode===oldCode){alert('신규 자산코드는 기존 자산코드와 달라야 합니다.');return}
+    try{
+      if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
+      if(old.id){
+        const u=await SUPA.from('assets').update({status:g('jgbRepOldStatus')||'사용종료'}).eq('id',old.id);if(u.error)throw u.error;
+      }
+      const ins=await SUPA.from('assets').insert({asset_code:newCode,name:g('jgbRepNewName')||old.name,category,place,status:'정상',product_name:g('jgbRepModel')||category});
+      if(ins.error)throw ins.error;
+      const fresh=await SUPA.from('assets').select('*').eq('asset_code',newCode).maybeSingle();
+      const newId=fresh.data?.id;
+      const detail={oldAssetCode:oldCode,newAssetCode:newCode,oldStatus:g('jgbRepOldStatus')||'사용종료',reason:g('jgbRepReason'),vendor:g('jgbRepVendor'),cost:Number(g('jgbRepCost')||0),newMaker:g('jgbRepMaker'),newModel:g('jgbRepModel'),newCapacity:g('jgbRepCapacity'),newManufactureDate:g('jgbRepManufacture'),newInstallDate:g('jgbRepInstall'),newLife:g('jgbRepLife'),newGrade:g('jgbRepGrade')};
+      if(old.id)await SUPA.from('asset_history').insert({asset_id:old.id,event_type:'설비교체',description:'EAM_REPLACE::'+JSON.stringify(detail),worker_name:detail.vendor||'외부정비업체',cost:detail.cost,event_date:today});
+      if(newId)await SUPA.from('asset_history').insert({asset_id:newId,event_type:'설비교체',description:'EAM_REPLACE::'+JSON.stringify(detail),worker_name:detail.vendor||'외부정비업체',cost:detail.cost,event_date:today});
+      const meta=readMeta();
+      meta[oldCode]=Object.assign({},meta[oldCode]||{}, {status:g('jgbRepOldStatus')||'사용종료',replacementTo:newCode,replacementDate:today,replacementReason:g('jgbRepReason')});
+      meta[newCode]={asset_code:newCode,name:g('jgbRepNewName')||old.name,category,place,model:g('jgbRepModel'),capacity:g('jgbRepCapacity'),maker:g('jgbRepMaker'),manufactureDate:g('jgbRepManufacture'),date:g('jgbRepManufacture'),installDate:g('jgbRepInstall'),life:g('jgbRepLife'),grade:g('jgbRepGrade'),status:'정상',replacementFrom:oldCode};
+      writeMeta(meta);
+      if(typeof eamLoad==='function')await eamLoad();
+      document.getElementById('jgbReplaceModal')?.remove();
+      window.__eamCat=k;window.__eamSelCode=newCode;renderFinal();
+      alert('설비교체가 완료되었습니다.\\n구자산은 사용종료 처리되고 신규 자산이 별도로 등록되었습니다.');
+    }catch(e){console.error(e);alert('설비교체 저장에 실패했습니다.\\n'+(e?.message||''))}
+  };
+
+  // EAM 진입 시 기존 화면 대신 최종 화면 사용
+  window.eamPage=renderFinal;
+  try{eamPage=window.eamPage}catch(e){}
+  // body()가 다시 호출되어도 EAM 화면은 최종 화면으로 연결
+  window.addEventListener('load',()=>{if(location.hash==='#eam')setTimeout(renderFinal,0)});
+  if(typeof window.go==='function'){
+    const oldGo=window.go;
+    window.go=function(page){const r=oldGo.apply(this,arguments);if(page==='eam')setTimeout(renderFinal,0);return r};
+  }
+  setTimeout(()=>{if(document.getElementById('eamproGrid') && (window.__eamCat||location.hash==='#eam'))renderFinal()},50);
+})();
+</script>
