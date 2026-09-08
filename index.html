@@ -3316,15 +3316,50 @@ if(typeof window.eamPage==='function'){
     }catch(e){console.error(e);alert('설비교체 저장에 실패했습니다.\\n'+(e?.message||''))}
   };
 
-  // EAM 진입 시 기존 화면 대신 최종 화면 사용
-  window.eamPage=renderFinal;
-  try{eamPage=window.eamPage}catch(e){}
-  // body()가 다시 호출되어도 EAM 화면은 최종 화면으로 연결
+  // 중요: 기존 body()의 eamPage 반환값을 깨뜨리지 않는다.
+  // 기존 EAM 페이지가 정상적으로 문자열을 반환한 뒤, DOM만 최종 화면으로 교체한다.
   window.addEventListener('load',()=>{if(location.hash==='#eam')setTimeout(renderFinal,0)});
-  if(typeof window.go==='function'){
+  if(typeof window.go==='function'&&!window.__JGB_EAM_GO_PATCHED){
     const oldGo=window.go;
-    window.go=function(page){const r=oldGo.apply(this,arguments);if(page==='eam')setTimeout(renderFinal,0);return r};
+    window.go=function(page){
+      const r=oldGo.apply(this,arguments);
+      if(page==='eam')setTimeout(renderFinal,80);
+      return r;
+    };
+    window.__JGB_EAM_GO_PATCHED=true;
   }
   setTimeout(()=>{if(document.getElementById('eamproGrid') && (window.__eamCat||location.hash==='#eam'))renderFinal()},50);
+})();
+</script>
+
+
+<!-- JGB EAM: 자산 관리 메뉴는 신규 자산 등록만 -->
+<style id="JGB_EAM_ASSET_MENU_ONLY_NEW_CSS">
+.eam-manage-overlay.jgb-new-only .eam-manage-card{width:min(560px,94vw)}
+.eam-manage-overlay.jgb-new-only .eam-manage-list{display:block;padding:16px}
+.eam-manage-overlay.jgb-new-only .eam-manage-list button{width:100%;min-height:82px;border:1px solid #cbdceb;border-radius:12px;background:#fff;text-align:left;padding:18px;cursor:pointer}
+.eam-manage-overlay.jgb-new-only .eam-manage-list button:hover{background:#f3f8fc;border-color:#76acd2}
+.eam-manage-overlay.jgb-new-only .eam-manage-list b{display:block;font-size:15px;margin-bottom:5px}
+.eam-manage-overlay.jgb-new-only .eam-manage-list small{color:#718394}
+</style>
+<script id="JGB_EAM_ASSET_MENU_ONLY_NEW_JS">
+(function(){
+  window.eamOpenManageMenu=function(){
+    document.getElementById('eamManageModal')?.remove();
+    document.body.insertAdjacentHTML('beforeend',`
+      <div id="eamManageModal" class="eam-manage-overlay jgb-new-only" onclick="if(event.target===this)this.remove()">
+        <div class="eam-manage-card">
+          <div class="eam-manage-head">
+            <div><span>EAM ASSET MANAGEMENT</span><h3>자산 관리</h3><small>신규 시설·설비 자산을 등록합니다.</small></div>
+            <button type="button" onclick="document.getElementById('eamManageModal')?.remove()">×</button>
+          </div>
+          <div class="eam-manage-list">
+            <button type="button" onclick="document.getElementById('eamManageModal')?.remove(); if(typeof eamRegisterNewAsset==='function') eamRegisterNewAsset(); else alert('신규 자산 등록 기능을 찾을 수 없습니다.');">
+              ＋ <b>신규 자산 등록</b><small>새 시설·설비를 EAM 자산으로 등록</small>
+            </button>
+          </div>
+        </div>
+      </div>`);
+  };
 })();
 </script>
