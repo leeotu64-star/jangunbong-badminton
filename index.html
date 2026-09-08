@@ -2642,3 +2642,59 @@ if(typeof window.eamPage==='function'){
 </script>
 
 </body></html>
+
+<script id="JGB_EAM_EDIT_STAY_FINAL">
+(function(){
+  /* 수정 클릭 즉시 EAM 화면이 닫히거나 다른 화면으로 넘어가지 않게 한다.
+     저장 성공 후에만 일반 이력카드 화면으로 복귀한다. */
+  const originalEdit=window.eamHistoryCardEdit;
+  if(typeof originalEdit!=='function') return;
+  window.eamHistoryCardEdit=function(ev){
+    if(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
+    }
+    const card=document.querySelector('.eam-detail-panel .jgb-history-card')||document.querySelector('.jgb-history-card');
+    if(card){ card.open=true; card.dataset.editing='0'; }
+    /* 현재 EAM 화면의 선택 자산과 카테고리를 그대로 유지 */
+    const code=String(window.__eamSelCode||'');
+    if(!code){ alert('수정할 자산을 선택하세요.'); return false; }
+    const result=originalEdit.call(this,ev);
+    requestAnimationFrame(()=>{
+      const c=document.querySelector('.eam-detail-panel .jgb-history-card')||document.querySelector('.jgb-history-card');
+      if(c){ c.open=true; c.dataset.editing='1'; }
+    });
+    return result;
+  };
+
+  /* 수정 중에는 summary 클릭으로 details가 접히지 않도록 유지 */
+  document.addEventListener('click',function(e){
+    const card=e.target.closest?.('.jgb-history-card');
+    if(!card || card.dataset.editing!=='1') return;
+    if(e.target.closest('.jgb-inline-actions')) return;
+    if(e.target.closest('.jgb-card-edit')){
+      e.preventDefault();
+      e.stopPropagation();
+      if(typeof e.stopImmediatePropagation==='function') e.stopImmediatePropagation();
+      card.open=true;
+    }
+  },true);
+
+  /* 저장 성공 시에만 편집모드 해제. 저장 중에는 현재 화면 유지 */
+  const originalSave=window.eamHistoryCardSave;
+  if(typeof originalSave==='function'){
+    window.eamHistoryCardSave=async function(code){
+      const card=document.querySelector('.eam-detail-panel .jgb-history-card')||document.querySelector('.jgb-history-card');
+      if(card) card.open=true;
+      const before=String(window.__eamSelCode||code||'');
+      await originalSave.call(this,code);
+      window.__eamSelCode=before||String(code||'');
+      requestAnimationFrame(()=>{
+        const c=document.querySelector('.eam-detail-panel .jgb-history-card')||document.querySelector('.jgb-history-card');
+        if(c){ c.dataset.editing='0'; c.open=true; }
+      });
+    };
+  }
+})();
+</script>
