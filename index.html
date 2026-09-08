@@ -2184,6 +2184,10 @@ if(SUPA){syncFromSupabase();startRealtime();setInterval(syncFromSupabase,5000);}
   function writeMeta(x){try{localStorage.setItem(META_KEY,JSON.stringify(x||{}))}catch(e){console.warn(e)}}
   function catKey(x){
     const code=v(x?.code||x?.asset_code), m=readMeta()[code]||{};
+    const text=[x?.name,x?.model,x?.type,x?.category,x?.place,m?.name,m?.model,m?.category,m?.place].map(v).join(' ');
+    // 누수 관련 자산은 기타설비에 남기지 않고 방수 자산으로 통합한다.
+    // 기존 메타/DB의 '기타' 분류보다 설비명·규격·위치에 포함된 '누수'를 우선한다.
+    if(/누수/.test(text))return 'waterproof';
     if(m.category&&CATMAP[m.category])return CATMAP[m.category];
     if(x?.category&&CATMAP[x.category])return CATMAP[x.category];
     const t=v(x?.type);
@@ -2211,7 +2215,11 @@ if(SUPA){syncFromSupabase();startRealtime();setInterval(syncFromSupabase,5000);}
     raw.forEach(x=>{
       const code=v(x.code), a=A.find(z=>v(z.asset_code)===code)||{} , m=meta[code]||{};
       const fire=FIRE.has(code)||catKey(x)==='fire';
-      map.set(code,Object.assign({},x,{code,name:v(m.name||a.name||x.name)||'-',type:v(m.category||a.category||x.type)||'기타설비',place:fire?'유수장치실':v(m.place||a.place||x.place)||'-',model:v(m.model||a.product_name||x.model)||'',qty:m.qty??a.quantity??x.quantity??'-',vendor:v(m.vendor||a.vendor||x.vendor||x.maker)||'-',maker:v(m.maker||m.vendor||a.vendor||x.vendor||x.maker)||'-',asContact:v(m.asContact||x.asContact||x.contact)||'-',installDate:v(m.installDate||x.installDate)||'',warranty:v(m.warranty||x.warranty)||'-',asHistory:v(m.asHistory||x.asHistory)||'-',note:v(m.note||x.note)||'',capacity:v(m.capacity||x.capacity)||'',life:v(m.life||x.life)||'',grade:v(m.grade||x.grade)||'',date:v(m.date||x.date)||'',improvementPlan:v(m.improvementPlan)||'',status:v(m.status||a.status)||'원본',internalCode:code}));
+      const row=Object.assign({},x,{code,name:v(m.name||a.name||x.name)||'-',type:v(m.category||a.category||x.type)||'기타설비',place:fire?'유수장치실':v(m.place||a.place||x.place)||'-',model:v(m.model||a.product_name||x.model)||'',qty:m.qty??a.quantity??x.quantity??'-',vendor:v(m.vendor||a.vendor||x.vendor||x.maker)||'-',maker:v(m.maker||m.vendor||a.vendor||x.vendor||x.maker)||'-',asContact:v(m.asContact||x.asContact||x.contact)||'-',installDate:v(m.installDate||x.installDate)||'',warranty:v(m.warranty||x.warranty)||'-',asHistory:v(m.asHistory||x.asHistory)||'-',note:v(m.note||x.note)||'',capacity:v(m.capacity||x.capacity)||'',life:v(m.life||x.life)||'',grade:v(m.grade||x.grade)||'',date:v(m.date||x.date)||'',improvementPlan:v(m.improvementPlan)||'',status:v(m.status||a.status)||'원본',internalCode:code});
+      // 기존 기타설비로 저장된 누수 자산도 방수 자산으로 통합하고 WP 관리코드를 사용한다.
+      const rowCat=catKey(row);
+      if(rowCat==='waterproof'){row.type=categoryLabel(rowCat);row.category=categoryLabel(rowCat)}
+      map.set(code,row);
     });
     A.forEach(a=>{
       const code=v(a.asset_code); if(!code||map.has(code))return;
