@@ -4290,186 +4290,210 @@ if(typeof window.eamPage==='function'){
 </style>
 
 
-<style id="JGB_EAM_BUTTONS_AUTHORITATIVE_FINAL">
-/* 마지막 최종 버튼/폼 보정 */
-#jgbMaintFinalModal .jgb-modal-final-actions{display:flex!important;justify-content:flex-end!important;gap:8px!important}
-#jgbMaintFinalModal .jgb-modal-final-actions button{pointer-events:auto!important}
+<style id="JGB_EAM_GLOSSARY_FINAL">
+.jgb-eam-glossary-btn{
+  border:1px solid #b8d2e8;background:#eef7ff;color:#145a8a;
+  border-radius:10px;padding:9px 14px;font-weight:900;cursor:pointer;
+  box-shadow:0 2px 6px rgba(30,80,120,.08)
+}
+.jgb-eam-glossary-btn:hover{background:#dff0ff}
+#jgbEamGlossaryModal{
+  position:fixed;inset:0;background:rgba(15,35,55,.48);z-index:99999;
+  display:flex;align-items:center;justify-content:center;padding:20px
+}
+.jgb-glossary-card{
+  width:min(820px,96vw);max-height:88vh;overflow:auto;background:#fff;
+  border-radius:18px;box-shadow:0 18px 55px rgba(0,0,0,.25);border:1px solid #c8dceb
+}
+.jgb-glossary-head{
+  position:sticky;top:0;background:#edf7ff;border-bottom:1px solid #c9dceb;
+  padding:18px 22px;display:flex;justify-content:space-between;align-items:center;z-index:2
+}
+.jgb-glossary-head h3{margin:0;color:#163c5b;font-size:21px}
+.jgb-glossary-close{border:0;background:transparent;font-size:26px;cursor:pointer;color:#527087}
+.jgb-glossary-body{padding:18px 22px}
+.jgb-glossary-note{
+  background:#f6f9fc;border:1px solid #dbe6ef;border-radius:10px;
+  padding:11px 13px;margin-bottom:14px;color:#526a7c;font-size:13px;font-weight:700
+}
+.jgb-glossary-list{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.jgb-glossary-item{
+  border:1px solid #d8e5ef;border-radius:11px;padding:11px 13px;background:#fff
+}
+.jgb-glossary-item b{display:block;color:#174d75;font-size:14px;margin-bottom:4px}
+.jgb-glossary-item span{display:block;color:#526575;font-size:13px;line-height:1.45}
+@media(max-width:700px){.jgb-glossary-list{grid-template-columns:1fr}}
 </style>
-<script id="JGB_EAM_BUTTONS_AUTHORITATIVE_FINAL">
+
+<script id="JGB_EAM_GLOSSARY_FINAL">
 (function(){
-  const V=x=>String(x??'').trim();
-  const esc=x=>typeof E==='function'?E(x):String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-  const modal=()=>document.getElementById('jgbMaintFinalModal');
-  const getHistory=id=>(window.__eamH||[]).find(h=>V(h.id)===V(id))||null;
+  const TERMS = [
+    ['EAM','설비와 정비 이력을 관리하는 시스템'],
+    ['자산','체육관에서 관리하는 설비·장비'],
+    ['자산상태','현재 설비의 상태'],
+    ['정상','설비에 이상이 없는 상태'],
+    ['고장','설비에 이상이 발생한 상태'],
+    ['사용종료','더 이상 사용하지 않는 자산'],
+    ['폐기','사용종료 자산을 최종 폐기한 상태'],
+    ['정비구분','정비를 누가 했는지 구분'],
+    ['자체정비','직원이 직접 실시한 정비'],
+    ['외부정비','외부 전문업체가 실시한 정비'],
+    ['정비유형','정비 당시 설비의 상태 구분'],
+    ['정비유형 · 정상','점검 결과 이상이 없는 경우'],
+    ['정비유형 · 고장','고장이 발생한 경우'],
+    ['미조치','등록은 됐지만 아직 조치하지 않은 상태'],
+    ['조치중','현재 조치를 진행 중인 상태'],
+    ['조치완료','필요한 조치가 끝난 상태'],
+    ['유지관리 이력','설비에 실시한 정비·점검 등의 기록'],
+    ['고장·이상내용','발생한 고장이나 이상 내용을 기록'],
+    ['고장원인','고장이나 이상이 발생한 원인을 기록'],
+    ['조치내용','실제로 실시한 조치 내용을 기록'],
+    ['교체부품','정비하면서 교체한 부품'],
+    ['정비업체','외부정비를 실시한 업체'],
+    ['정비비용','해당 정비에 들어간 비용'],
+    ['작업시작일','정비 작업을 시작한 날짜'],
+    ['작업완료일','정비 작업을 끝낸 날짜'],
+    ['차기 점검일','다음 점검이 필요한 예정 날짜'],
+    ['비고','추가로 기록할 사항'],
+    ['자산 이력카드','해당 자산의 기본정보와 유지관리 이력을 모아 보는 기록']
+  ];
 
-  function cleanTypeSelect(){
-    const s=document.querySelector('#jgbMaintFinalModal #jf_sub');
-    if(!s)return;
-    const cur=(s.value||'정상');
-    s.innerHTML='<option value="정상">정상</option><option value="고장">고장</option>';
-    s.value=(cur==='고장'?'고장':'정상');
+  function openGlossary(){
+    if(document.getElementById('jgbEamGlossaryModal')) return;
+    const rows=TERMS.map(x=>`<div class="jgb-glossary-item"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');
+    document.body.insertAdjacentHTML('beforeend',
+      `<div id="jgbEamGlossaryModal" onclick="if(event.target===this)this.remove()">
+        <div class="jgb-glossary-card">
+          <div class="jgb-glossary-head">
+            <h3>📘 EAM 용어 안내</h3>
+            <button class="jgb-glossary-close" type="button" onclick="document.getElementById('jgbEamGlossaryModal')?.remove()">×</button>
+          </div>
+          <div class="jgb-glossary-body">
+            <div class="jgb-glossary-note">현황판에서 사용하는 용어를 쉽게 풀어 설명합니다.</div>
+            <div class="jgb-glossary-list">${rows}</div>
+          </div>
+        </div>
+      </div>`);
   }
+  window.jgbOpenEamGlossary=openGlossary;
 
-  function values(){
-    const g=id=>document.getElementById(id)?.value?.trim()||'';
-    return {
-      date:g('jf_date')||new Date().toISOString().slice(0,10),
-      party:g('jf_type')||'자체정비',
-      maintenanceType:g('jf_sub')==='고장'?'고장':'정상',
-      vendor:g('jf_vendor')||'-',
-      issue:g('jf_issue')||'-',
-      cause:g('jf_cause')||'-',
-      action:g('jf_action')||'-',
-      part:g('jf_part')||'-',
-      cost:Number(g('jf_cost'))||0,
-      startDate:g('jf_start')||'',
-      endDate:g('jf_end')||'',
-      nextDate:g('jf_next')||'',
-      result:g('jf_result')||'미조치',
-      note:g('jf_note')||'-'
-    };
-  }
-
-  async function refresh(){
-    try{if(typeof window.eamLoad==='function')await window.eamLoad();}catch(e){console.warn(e)}
-    try{if(typeof render==='function')render();}catch(e){}
-  }
-
-  async function save(mode){
-    const m=modal();
-    if(!m){alert('유지관리 이력 창을 찾을 수 없습니다.');return}
-    if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
-    const v=values();
-    if(!v.action || v.action==='-'){alert('조치내용을 입력하세요.');return}
-    if(mode==='complete')v.result='조치완료';
-
-    const hid=V(m.dataset.historyId);
-    const aid=V(m.dataset.assetId);
-    const data={
-      maintenanceParty:v.party,
-      maintenanceType:v.maintenanceType,
-      issue:v.issue,
-      cause:v.cause,
-      action:v.action,
-      part:v.part,
-      startDate:v.startDate,
-      endDate:v.endDate,
-      nextDate:v.nextDate,
-      result:v.result,
-      note:v.note
-    };
-
-    const btn=mode==='complete'?m.querySelector('.complete'):mode==='edit'?m.querySelector('.edit'):m.querySelector('.save');
-    if(btn){btn.disabled=true;btn.textContent=mode==='complete'?'처리 중…':mode==='edit'?'수정 중…':'등록 중…'}
-
-    try{
-      let r;
-      if(hid){
-        r=await SUPA.from('asset_history').update({
-          event_type:v.party,
-          description:'MAINT::'+JSON.stringify(data),
-          worker_name:v.vendor,
-          cost:v.cost,
-          event_date:v.date
-        }).eq('id',hid);
-      }else{
-        if(!aid){alert('연결할 자산을 찾을 수 없습니다.');return}
-        r=await SUPA.from('asset_history').insert({
-          asset_id:aid,
-          event_type:v.party,
-          description:'MAINT::'+JSON.stringify(data),
-          worker_name:v.vendor,
-          cost:v.cost,
-          event_date:v.date
-        });
-      }
-      if(r.error)throw r.error;
-
-      await refresh();
-      if(mode==='complete'){
-        const rs=m.querySelector('#jf_result');if(rs)rs.value='조치완료';
-        const end=m.querySelector('#jf_end');if(end&&!end.value)end.value=new Date().toISOString().slice(0,10);
-      }else{
-        m.remove();
-      }
-    }catch(e){
-      console.error(e);
-      alert((hid?'유지관리 이력 수정':'유지관리 이력 등록')+' 실패\n'+(e?.message||''));
-    }finally{
-      if(btn){btn.disabled=false;btn.textContent=mode==='complete'?'조치완료':mode==='edit'?'수정':'등록'}
-      updateButtons();
-    }
-  }
-
-  async function removeHistory(){
-    const m=modal(),id=V(m?.dataset.historyId);
-    if(!id){alert('삭제할 기존 이력을 먼저 선택하세요.');return}
-    if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
-    if(!confirm('선택한 유지관리 이력을 삭제할까요?\n삭제 후 복구할 수 없습니다.'))return;
-    const b=m.querySelector('.delete');if(b){b.disabled=true;b.textContent='삭제 중…'}
-    try{
-      const r=await SUPA.from('asset_history').delete().eq('id',id);
-      if(r.error)throw r.error;
-      m.remove();
-      await refresh();
-    }catch(e){
-      console.error(e);alert('유지관리 이력 삭제 실패\n'+(e?.message||''));
-    }finally{if(b){b.disabled=false;b.textContent='삭제'}}
-  }
-
-  function updateButtons(){
-    const m=modal();if(!m)return;
-    cleanTypeSelect();
-    const exists=!!V(m.dataset.historyId);
-    const c=m.querySelector('.complete'),d=m.querySelector('.delete'),e=m.querySelector('.edit'),s=m.querySelector('.save');
-    if(c)c.disabled=!exists;
-    if(d)d.disabled=!exists;
-    if(e)e.disabled=!exists;
-    if(s)s.disabled=exists;
-  }
-
-  function bindModal(){
-    const m=modal();if(!m)return;
-    cleanTypeSelect();
-    const a=m.querySelector('.jgb-modal-final-actions');if(!a)return;
-    // 기존 onclick/이벤트와 충돌하지 않도록 버튼을 복제하여 이벤트를 단일화
-    ['complete','delete','edit','save'].forEach(cls=>{
-      const old=a.querySelector('.'+cls);
-      if(!old)return;
-      const n=old.cloneNode(true);
-      n.removeAttribute('onclick');
-      n.addEventListener('click',function(ev){
-        ev.preventDefault();ev.stopImmediatePropagation();
-        if(cls==='complete')save('complete');
-        else if(cls==='delete')removeHistory();
-        else if(cls==='edit')save('edit');
-        else save('register');
-      },true);
-      old.replaceWith(n);
+  function addButton(){
+    if(document.getElementById('jgbEamGlossaryButton')) return;
+    const candidates=[...document.querySelectorAll('button,a')];
+    const target=candidates.find(el=>{
+      const s=(el.textContent||'').trim();
+      return s.includes('등록') && (el.closest('header')||el.closest('.card')||el.parentElement);
     });
-    updateButtons();
+    if(!target) return;
+    const b=document.createElement('button');
+    b.id='jgbEamGlossaryButton';
+    b.type='button';
+    b.className='jgb-eam-glossary-btn';
+    b.textContent='📘 EAM 용어 안내';
+    b.onclick=openGlossary;
+    target.parentElement.appendChild(b);
+  }
+  const mo=new MutationObserver(addButton);
+  mo.observe(document.body,{childList:true,subtree:true});
+  setTimeout(addButton,300);
+  setTimeout(addButton,1200);
+})();
+</script>
+
+
+<style id="JGB_EAM_CLICK_FINAL_20260908">
+/* EAM 버튼 클릭 최종 보정 */
+.jgb-modal-final,
+.jgb-modal-final *{pointer-events:auto}
+.jgb-modal-final{z-index:100000!important}
+.jgb-modal-final-actions{position:relative;z-index:100001!important}
+.jgb-modal-final-actions button,
+.jgb-maint-table .manage button{position:relative;z-index:100002!important;pointer-events:auto!important}
+.jgb-maint-table .manage{position:relative;z-index:20!important}
+</style>
+<script id="JGB_EAM_CLICK_FINAL_20260908">
+(function(){
+  function idOf(el){
+    return el?.getAttribute('data-history-id') ||
+           el?.closest('tr')?.getAttribute('data-history-id') || '';
   }
 
-  // 행의 수정/삭제도 최종 함수로 고정
-  window.eamEditMaintenanceHistory=function(id){
-    const h=getHistory(id);
-    if(!h){alert('수정할 유지관리 이력을 찾을 수 없습니다.');return}
-    document.getElementById('jgbMaintFinalModal')?.remove();
-    if(typeof window.eamOpenMaintenanceEdit==='function')window.eamOpenMaintenanceEdit(id);
-    setTimeout(bindModal,0);
-  };
-  window.eamDeleteMaintenanceHistory=async function(id){
-    const h=getHistory(id);
-    if(!h){alert('삭제할 유지관리 이력을 찾을 수 없습니다.');return}
-    document.getElementById('jgbMaintFinalModal')?.remove();
-    if(typeof window.eamOpenMaintenanceEdit==='function')window.eamOpenMaintenanceEdit(id);
-    setTimeout(removeHistory,30);
-  };
+  // 인라인 onclick/기존 이벤트와 무관하게 최종 함수로 연결
+  document.addEventListener('click', function(ev){
+    const b=ev.target.closest('button');
+    if(!b)return;
 
-  const obs=new MutationObserver(()=>bindModal());
-  obs.observe(document.body,{childList:true,subtree:true});
-  setTimeout(bindModal,100);
-  setTimeout(bindModal,500);
-  setTimeout(bindModal,1200);
+    // 유지관리 이력 표의 수정
+    if(b.classList.contains('jgb-hbtn') && b.classList.contains('edit')){
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      const onclick=b.getAttribute('onclick')||'';
+      const m=onclick.match(/eamEditMaintenanceHistory\('([^']+)'/);
+      const id=m?.[1] || idOf(b);
+      if(id && typeof window.eamOpenMaintenanceEdit==='function'){
+        window.eamOpenMaintenanceEdit(id);
+      } else if(id && typeof window.eamEditMaintenanceHistory==='function'){
+        window.eamEditMaintenanceHistory(id);
+      } else {
+        alert('수정할 유지관리 이력을 찾을 수 없습니다.');
+      }
+      return;
+    }
+
+    // 유지관리 이력 표의 삭제
+    if(b.classList.contains('jgb-hbtn') && b.classList.contains('del')){
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      const onclick=b.getAttribute('onclick')||'';
+      const m=onclick.match(/eamDeleteMaintenanceHistory\('([^']+)'/);
+      const id=m?.[1] || idOf(b);
+      if(id && typeof window.eamDeleteMaintenanceHistory==='function'){
+        window.eamDeleteMaintenanceHistory(id);
+      } else {
+        alert('삭제할 유지관리 이력을 찾을 수 없습니다.');
+      }
+      return;
+    }
+
+    // 유지관리 영역의 + 등록 버튼
+    const txt=(b.textContent||'').replace(/\s+/g,'').trim();
+    if((txt==='등록'||txt==='+등록') &&
+       (b.closest('.jgb-maint-section') || b.closest('.jgb-maintenance') ||
+        b.closest('.jgb-maint-table') || /유지관리|정비/i.test(b.parentElement?.parentElement?.textContent||''))){
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      if(typeof window.eamOpenMaintenanceRegister==='function'){
+        window.eamOpenMaintenanceRegister();
+      } else {
+        alert('유지관리 이력 등록 기능을 찾을 수 없습니다.');
+      }
+      return;
+    }
+
+    // 모달 등록
+    if(b.closest('#jgbMaintFinalModal') && b.classList.contains('save') && !b.disabled){
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      if(typeof window.eamSaveMaintenanceFinal==='function')window.eamSaveMaintenanceFinal();
+      return;
+    }
+
+    // 모달 수정
+    if(b.closest('#jgbMaintFinalModal') && b.classList.contains('edit') && !b.disabled){
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      if(typeof window.eamEditMaintenanceFromForm==='function')window.eamEditMaintenanceFromForm();
+      return;
+    }
+
+    // 모달 삭제
+    if(b.closest('#jgbMaintFinalModal') && b.classList.contains('delete') && !b.disabled){
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      if(typeof window.eamDeleteMaintenanceFromForm==='function')window.eamDeleteMaintenanceFromForm();
+      return;
+    }
+
+    // 모달 조치완료
+    if(b.closest('#jgbMaintFinalModal') && b.classList.contains('complete') && !b.disabled){
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      if(typeof window.eamCompleteMaintenanceFromForm==='function')window.eamCompleteMaintenanceFromForm();
+      return;
+    }
+  }, true);
 })();
 </script>
