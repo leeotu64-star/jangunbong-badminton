@@ -2583,6 +2583,10 @@ if(typeof window.eamPage==='function'){
     .jgb-history-card .source-grid b{display:block!important;font-size:14px!important;color:#183652!important;line-height:1.4!important;word-break:break-word!important}
     .jgb-history-card .jgb-card-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;width:100%!important}
     .jgb-history-card .jgb-card-edit{float:none!important;margin:0!important;border:1px solid #8db9e5!important;background:#fff!important;color:#1769aa!important;border-radius:8px!important;padding:7px 13px!important;font-weight:800!important;cursor:pointer!important}
+    /* 수정 모드에서는 source-grid 안에 편집 그리드를 넣어도 전체 폭을 사용 */
+    .jgb-history-card[data-editing="1"] .source-grid{display:block!important;background:#fff!important}
+    .jgb-history-card[data-editing="1"] .jgb-inline-grid{display:grid!important;width:100%!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;background:#fff!important}
+    .jgb-history-card[data-editing="1"] .jgb-inline-actions{display:flex!important;width:100%!important;box-sizing:border-box!important;justify-content:flex-end!important;align-items:center!important;flex-direction:row!important}
     .jgb-history-card .jgb-inline-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;background:#fff!important}
     .jgb-history-card .jgb-inline-grid label{box-sizing:border-box!important;min-width:0!important}
     .jgb-history-card .jgb-inline-grid label.wide{grid-column:1/-1!important}
