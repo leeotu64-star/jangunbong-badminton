@@ -2878,7 +2878,7 @@ if(typeof window.eamPage==='function'){
       <label>결과<select id="jf_result"><option>정상</option><option selected>조치완료</option><option>교체완료</option><option>추적관찰</option></select></label>
       <label class="full">비고<textarea id="jf_note" placeholder="기타 사항"></textarea></label>
       <div class="full"><b style="display:block;color:#4f6679;font-size:11px;margin-bottom:6px">작업사진 · 사진은 나중에 등록할 수 있도록 공간만 제공합니다.</b><div class="jgb-work-photos">${photoBox('작업 전')}${photoBox('작업 중')}${photoBox('작업 후')}${photoBox('완료 확인')}</div></div>
-    </div><div class="jgb-modal-final-actions"><button class="cancel" onclick="this.closest('#jgbMaintFinalModal').remove()">취소</button><button class="save" onclick="eamSaveMaintenanceFinal('${E(s.reg.id)}')">등록</button></div></div></div>`);
+    </div><div class="jgb-modal-final-actions"><button type="button" class="delete" onclick="eamDeleteMaintenanceFromForm('${E(s.reg.id)}')">삭제</button><button type="button" class="edit" onclick="eamEditMaintenanceFromForm('${E(s.reg.id)}')">수정</button><button type="button" class="save" onclick="eamSaveMaintenanceFinal('${E(s.reg.id)}')">등록</button></div></div></div>`);
   };
   window.eamSaveMaintenanceFinal=async function(assetId){
     if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
@@ -3869,3 +3869,64 @@ if(typeof window.eamPage==='function'){
 })();
 </script>
 
+
+<script id="JGB_MAINT_FORM_EDIT_DELETE_FINAL">
+(function(){
+  const V=x=>String(x??'').trim();
+  function selectedHistory(){
+    const id=window.__eamSelectedHistoryId || window.__eamSelectedMaintenanceId || '';
+    if(id)return id;
+    const rows=document.querySelectorAll('.jgb-maint-table tbody tr');
+    const selected=document.querySelector('.jgb-maint-table tbody tr.selected');
+    if(selected)return selected.dataset.historyId||'';
+    return '';
+  }
+  window.eamEditMaintenanceFromForm=async function(id){
+    id=id||selectedHistory();
+    if(id && typeof window.eamEditMaintenanceHistory==='function'){
+      return window.eamEditMaintenanceHistory(id);
+    }
+    alert('수정할 유지관리 이력을 먼저 선택하세요.');
+  };
+  window.eamDeleteMaintenanceFromForm=async function(id){
+    id=id||selectedHistory();
+    if(id && typeof window.eamDeleteMaintenanceHistory==='function'){
+      return window.eamDeleteMaintenanceHistory(id);
+    }
+    alert('삭제할 유지관리 이력을 먼저 선택하세요.');
+  };
+})();
+</script>
+
+<style id="JGB_MAINT_PHOTO_4SQUARE_FINAL">
+.jgb-work-photos{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:14px !important;
+  width:100% !important;
+}
+.jgb-work-photos .jgb-work-photo,
+.jgb-work-photos > div{
+  width:5cm !important;
+  height:5cm !important;
+  min-width:5cm !important;
+  min-height:5cm !important;
+  max-width:5cm !important;
+  max-height:5cm !important;
+  position:relative !important;
+}
+.jgb-work-photo-title{
+  position:absolute !important;
+  top:0 !important;
+  left:0 !important;
+  right:0 !important;
+  z-index:3 !important;
+  padding:7px 4px !important;
+  font-size:16px !important;
+  font-weight:900 !important;
+  line-height:1.1 !important;
+  text-align:center !important;
+  background:rgba(255,255,255,.94) !important;
+  border-bottom:2px solid #6f8da8 !important;
+}
+</style>
