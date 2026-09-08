@@ -3224,3 +3224,228 @@ if(typeof window.eamPage==='function'){
   new MutationObserver(bindMaintenanceRegister).observe(document.body,{childList:true,subtree:true});
 })();
 </script>
+
+
+<style id="JGB_EAM_LAST_REAL_FIX">
+/* ===== 유지관리 이력 표 정렬 완전 고정 ===== */
+.jgb-maint-final .jgb-maint-table-wrap{
+  width:100%!important;
+  overflow-x:auto!important;
+  box-sizing:border-box!important;
+}
+.jgb-maint-final .jgb-maint-table{
+  width:100%!important;
+  min-width:0!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+}
+.jgb-maint-final .jgb-maint-table th,
+.jgb-maint-final .jgb-maint-table td{
+  box-sizing:border-box!important;
+  vertical-align:middle!important;
+  text-align:center!important;
+  word-break:keep-all!important;
+}
+.jgb-maint-final .jgb-maint-table td.issue,
+.jgb-maint-final .jgb-maint-table td.action{
+  text-align:left!important;
+  word-break:break-word!important;
+}
+.jgb-maint-final .jgb-maint-table th.num,.jgb-maint-final .jgb-maint-table td.num{width:4%!important}
+.jgb-maint-final .jgb-maint-table th.date,.jgb-maint-final .jgb-maint-table td.date{width:10%!important}
+.jgb-maint-final .jgb-maint-table th.type,.jgb-maint-final .jgb-maint-table td.type{width:8%!important}
+.jgb-maint-final .jgb-maint-table th.subtype,.jgb-maint-final .jgb-maint-table td.subtype{width:10%!important}
+.jgb-maint-final .jgb-maint-table th.issue,.jgb-maint-final .jgb-maint-table td.issue{width:15%!important}
+.jgb-maint-final .jgb-maint-table th.action,.jgb-maint-final .jgb-maint-table td.action{width:23%!important}
+.jgb-maint-final .jgb-maint-table th.vendor,.jgb-maint-final .jgb-maint-table td.vendor{width:12%!important}
+.jgb-maint-final .jgb-maint-table th.cost,.jgb-maint-final .jgb-maint-table td.cost{width:8%!important}
+.jgb-maint-final .jgb-maint-table th.result,.jgb-maint-final .jgb-maint-table td.result{width:8%!important}
+.jgb-maint-final .jgb-maint-table th.arrow,.jgb-maint-final .jgb-maint-table td.arrow{width:2%!important}
+.jgb-maint-final .jgb-maint-table th{white-space:normal!important;line-height:1.25!important}
+.jgb-maint-final .jgb-maint-table td{white-space:normal!important;line-height:1.35!important}
+
+/* ===== 카드 수정 버튼: 현재 사용 중인 카드 구조에 맞춰 직접 편집창 연결 ===== */
+.jgb-eam-card-final .jgb-card-top button{
+  position:relative!important;
+  z-index:50!important;
+  pointer-events:auto!important;
+}
+
+/* 편집창 */
+#jgbAssetEditFinal{
+  position:fixed!important;
+  inset:0!important;
+  z-index:9999999!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:20px!important;
+  background:rgba(7,24,44,.58)!important;
+}
+#jgbAssetEditFinal .jgb-aef-card{
+  width:min(980px,96vw)!important;
+  max-height:92vh!important;
+  overflow:auto!important;
+  background:#fff!important;
+  border-radius:16px!important;
+  box-shadow:0 25px 80px rgba(0,0,0,.3)!important;
+}
+.jgb-aef-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:#edf6ff;border-bottom:1px solid #cfdeeb}
+.jgb-aef-head h3{margin:0;font-size:20px;color:#173b5d}
+.jgb-aef-head button{border:0;background:none;font-size:26px;cursor:pointer}
+.jgb-aef-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:16px;background:#f6f9fc}
+.jgb-aef-grid label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:800;color:#466078}
+.jgb-aef-grid label.wide{grid-column:1/-1}
+.jgb-aef-grid input,.jgb-aef-grid select,.jgb-aef-grid textarea{width:100%;box-sizing:border-box;border:1px solid #c5d5e4;border-radius:8px;padding:9px 10px;font-size:13px;background:#fff}
+.jgb-aef-grid textarea{min-height:70px;resize:vertical}
+.jgb-aef-actions{display:flex;justify-content:flex-end;gap:8px;padding:13px 16px;border-top:1px solid #d5e0ea}
+.jgb-aef-actions button{border:0;border-radius:8px;padding:9px 16px;font-weight:800;cursor:pointer}
+.jgb-aef-cancel{background:#e9eef3;color:#40566b}
+.jgb-aef-save{background:#0878c9;color:#fff}
+@media(max-width:800px){.jgb-aef-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:550px){.jgb-aef-grid{grid-template-columns:1fr}.jgb-aef-grid label.wide{grid-column:auto}}
+</style>
+
+<script id="JGB_EAM_LAST_REAL_FIX_JS">
+(function(){
+  const esc= s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const val=s=>String(s??'').trim();
+
+  window.eamHistoryCardEdit=function(){
+    const code=val(window.__eamSelCode);
+    const cats=typeof window.eamCategoryDefs==='function'?window.eamCategoryDefs():{};
+    const A=Array.isArray(window.__eamA)?window.__eamA:[];
+    if(!code){
+      alert('먼저 수정할 자산을 선택하세요.');
+      return;
+    }
+    const src=Object.values(cats).flatMap(x=>x.items||[]).find(x=>val(x.code)===code)||{};
+    const a=A.find(x=>val(x.asset_code)===code)||{};
+    const meta=(window.__eamMetaByCode&&window.__eamMetaByCode[code])||{};
+    const m=Object.assign({},src,a,meta);
+    const category=m.category||'기타설비';
+    const fire=category==='소방·방재';
+    const lc=fire?'E':(typeof placeCode==='function'?placeCode(m.place):'A');
+    const places={
+      A:['1번 코트(좌측)','1번 코트(우측)','2번 코트(좌측)','2번 코트(우측)','3번 코트(좌측)','3번 코트(우측)','4번 코트(좌측)','4번 코트(우측)','5번 코트(좌측)','5번 코트(우측)','코트'],
+      B:['복도'],C:['사무실'],D:['옥상'],E:['유수장치실']
+    };
+    const html=`<div id="jgbAssetEditFinal" onclick="if(event.target===this)this.remove()">
+      <div class="jgb-aef-card">
+        <div class="jgb-aef-head"><h3>📋 주요설비 이력카드 수정</h3><button type="button" onclick="document.getElementById('jgbAssetEditFinal').remove()">×</button></div>
+        <div class="jgb-aef-grid">
+          <label>자산코드<input id="jaf_code" value="${esc(code)}" readonly></label>
+          <label>자산명<input id="jaf_name" value="${esc(m.name||'')}"></label>
+          <label>설비 종류<select id="jaf_category" onchange="window.jgbAefLocChange()">${['냉난방','소방·방재','보일러·온수','전기설비','코트조명','방수','기타설비'].map(x=>`<option ${x===category?'selected':''}>${esc(x)}</option>`).join('')}</select></label>
+          <label>위치코드<select id="jaf_loc">${['A','B','C','D','E'].map(x=>`<option ${x===lc?'selected':''}>${x}</option>`).join('')}</select></label>
+          <label>세부 위치<select id="jaf_place">${(places[lc]||places.A).map(x=>`<option ${val(m.place)===x?'selected':''}>${esc(x)}</option>`).join('')}</select></label>
+          <label>모델·규격<input id="jaf_model" value="${esc(m.model||'')}"></label>
+          <label>용량<input id="jaf_capacity" value="${esc(m.capacity||'')}"></label>
+          <label>수량<input id="jaf_qty" value="${esc(m.qty??m.quantity??'')}"></label>
+          <label>제조사<input id="jaf_maker" value="${esc(m.maker||m.vendor||'')}"></label>
+          <label>A/S 연락처<input id="jaf_as" value="${esc(m.asContact||'')}"></label>
+          <label>제조일<input id="jaf_date" value="${esc(m.date||m.manufactureDate||'')}"></label>
+          <label>설치일<input id="jaf_install" value="${esc(m.installDate||'')}"></label>
+          <label>내용연수<input id="jaf_life" value="${esc(m.life||'')}"></label>
+          <label>평가등급<input id="jaf_grade" value="${esc(m.grade||'')}"></label>
+          <label>보증<input id="jaf_warranty" value="${esc(m.warranty||'')}"></label>
+          <label>기존 A/S 기록<input id="jaf_asHistory" value="${esc(m.asHistory||'')}"></label>
+          <label>상태<select id="jaf_status"><option ${val(m.status||'정상')==='정상'?'selected':''}>정상</option><option ${val(m.status)==='점검필요'?'selected':''}>점검필요</option><option ${val(m.status)==='조치필요'?'selected':''}>조치필요</option></select></label>
+          <label class="wide">시설개선계획<textarea id="jaf_plan">${esc(m.improvementPlan||'')}</textarea></label>
+          <label class="wide">특이사항<textarea id="jaf_note">${esc(m.note||'')}</textarea></label>
+        </div>
+        <div class="jgb-aef-actions"><button type="button" class="jgb-aef-cancel" onclick="document.getElementById('jgbAssetEditFinal').remove()">취소</button><button type="button" class="jgb-aef-save" id="jaf_save" onclick="window.jgbAefSave('${esc(code)}')">저장</button></div>
+      </div></div>`;
+    document.getElementById('jgbAssetEditFinal')?.remove();
+    document.body.insertAdjacentHTML('beforeend',html);
+    window.jgbAefLocChange();
+  };
+
+  window.jgbAefLocChange=function(){
+    const cat=document.getElementById('jaf_category')?.value||'';
+    const loc=document.getElementById('jaf_loc');
+    const place=document.getElementById('jaf_place');
+    if(!loc||!place)return;
+    const lc=cat==='소방·방재'?'E':(loc.value||'A');
+    loc.value=lc;
+    const places={A:['1번 코트(좌측)','1번 코트(우측)','2번 코트(좌측)','2번 코트(우측)','3번 코트(좌측)','3번 코트(우측)','4번 코트(좌측)','4번 코트(우측)','5번 코트(좌측)','5번 코트(우측)','코트'],B:['복도'],C:['사무실'],D:['옥상'],E:['유수장치실']};
+    const old=place.value;
+    place.innerHTML=(places[lc]||places.A).map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+    if(lc==='E')place.value='유수장치실';
+    else if([...place.options].some(o=>o.value===old))place.value=old;
+  };
+
+  window.jgbAefSave=async function(code){
+    const a=(window.__eamA||[]).find(x=>val(x.asset_code)===val(code));
+    if(!a){alert('등록된 EAM 자산을 찾을 수 없습니다.');return}
+    if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
+    const g=id=>document.getElementById(id)?.value?.trim()||'';
+    const name=g('jaf_name'),category=g('jaf_category')||'기타설비';
+    let loc=g('jaf_loc')||'A',place=g('jaf_place')||'';
+    if(category==='소방·방재'){loc='E';place='유수장치실'}
+    if(!name){alert('자산명을 입력하세요.');return}
+    const meta={asset_code:String(code),name,category,locationCode:loc,place,model:g('jaf_model'),capacity:g('jaf_capacity'),qty:g('jaf_qty'),quantity:g('jaf_qty'),maker:g('jaf_maker'),vendor:g('jaf_maker'),asContact:g('jaf_as'),date:g('jaf_date'),manufactureDate:g('jaf_date'),installDate:g('jaf_install'),life:g('jaf_life'),grade:g('jaf_grade'),warranty:g('jaf_warranty'),asHistory:g('jaf_asHistory'),status:g('jaf_status')||'정상',improvementPlan:g('jaf_plan'),note:g('jaf_note')};
+    const btn=document.getElementById('jaf_save');if(btn){btn.disabled=true;btn.textContent='저장 중…'}
+    try{
+      const r=await SUPA.from('assets').update({name,category,place,status:meta.status,product_name:meta.model||category}).eq('id',a.id);
+      if(r.error)throw r.error;
+      const old=(window.__eamMetaByCode&&window.__eamMetaByCode)||{};
+      const all=Object.assign({},old,{[String(code)]:meta});
+      try{localStorage.setItem('JGB_EAM_ASSET_META_V39',JSON.stringify(all))}catch(e){}
+      window.__eamMetaByCode=all;
+      const h=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'자산정보수정',description:'META::'+JSON.stringify(meta),worker_name:'관리자',cost:0,event_date:new Date().toISOString().slice(0,10)});
+      if(h.error)throw h.error;
+      document.getElementById('jgbAssetEditFinal')?.remove();
+      await window.eamLoad();
+      window.__eamSelCode=String(code);
+      render();
+    }catch(e){
+      console.error(e);
+      alert('자산정보 저장에 실패했습니다.\n'+(e?.message||''));
+    }finally{
+      if(btn){btn.disabled=false;btn.textContent='저장'}
+    }
+  };
+
+  /* 등록 버튼은 선택 자산 코드를 현재 상태에서 다시 확인 */
+  window.jgbOpenMaintenanceSafe=function(){
+    const code=val(window.__eamSelCode);
+    if(!code){alert('먼저 등록할 자산을 선택하세요.');return}
+    if(typeof window.eamOpenMaintenanceRegister==='function')window.eamOpenMaintenanceRegister();
+  };
+  setTimeout(function(){
+    const b=document.getElementById('jgbMaintRegisterBtn');
+    if(b){
+      b.onclick=function(e){e.preventDefault();e.stopPropagation();window.jgbOpenMaintenanceSafe()};
+    }
+  },0);
+})();
+</script>
+
+
+<style id="JGB_EAM_PHOTO_6X6_FINAL">
+/* 설비 사진 최종 크기: 가로 6cm × 세로 6cm */
+.jgb-eam-card-final .jgb-eam-card-body{
+  grid-template-columns:minmax(0,1fr) 6cm!important;
+}
+.jgb-eam-card-final .jgb-eam-photo{
+  width:6cm!important;
+  min-width:6cm!important;
+  max-width:6cm!important;
+}
+.jgb-eam-card-final .jgb-photo-box{
+  width:6cm!important;
+  height:6cm!important;
+  min-width:6cm!important;
+  min-height:6cm!important;
+  max-width:6cm!important;
+  max-height:6cm!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+}
+@media(max-width:900px){
+  .jgb-eam-card-final .jgb-eam-card-body{
+    grid-template-columns:minmax(0,1fr) 6cm!important;
+  }
+}
+</style>
