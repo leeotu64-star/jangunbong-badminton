@@ -1093,7 +1093,7 @@ function body(){
  if(page==="qr")return qrRequestPage(); if(page==="qr_done")return qrDonePage();
  if(page==="dashboard2")return dashboard2();
   if(page==="process")return processPage();
- if(page==="basic")return window.basicPage(); if(page==="eam")return (typeof window.eamPage==="function"?window.eamPage():eamPage()); if(page==="leakage")return leakagePage(); if(page==="schedule")return schedulePage(); if(page==="external")return (typeof window.eamPage==="function"?window.eamPage():eamPage());
+ if(page==="basic")return window.basicPage(); if(page==="eam")return eamPage(); if(page==="leakage")return leakagePage(); if(page==="schedule")return schedulePage(); if(page==="external")return eamPage();
  if(page==="stats")return statsPage();
  if(page==="workers")return workerPage();
  if(page==="pending")return pendingPage();
@@ -1714,7 +1714,7 @@ async function eamSaveFullEdit(code){
   const meta={asset_code:code,name,category:cat,place,model:document.getElementById('editModel').value.trim(),qty:document.getElementById('editQty').value.trim(),vendor:document.getElementById('editVendor').value.trim(),asContact:document.getElementById('editAs').value.trim(),installDate:document.getElementById('editInstall').value.trim(),warranty:document.getElementById('editWarranty').value.trim(),asHistory:document.getElementById('editAsHistory').value.trim(),note:document.getElementById('editNote').value.trim()};
   const payload={name,category:cat,place,status:document.getElementById('editStatus').value,product_name:meta.model||cat};
   const r=await SUPA.from('assets').update(payload).eq('id',a.id); if(r.error){console.error(r.error);alert('자산 기본정보 저장에 실패했습니다.');return}
-  const h=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'자산정보수정',description:'META::'+JSON.stringify(meta),worker_name:'관리자',cost:0,event_date:new Date().toISOString().slice(0,10)});
+  const h=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'자산정보수정',description:'META::'+JSON.stringify(meta),worker_name:'관리자',action_type:'자산마스터수정',cost:0,event_date:new Date().toISOString().slice(0,10)});
   if(h.error){console.warn(h.error);alert('기본정보는 저장됐지만 상세 메모 저장에 실패했습니다.');}
   document.getElementById('eamEditModal')?.remove(); await eamLoad(); window.__eamSelCode=code; const map={'냉난방':'cooling','소방·방재':'fire','온수·난방':'water','전기설비':'electrical','코트조명':'lighting','방수':'waterproof','기타설비':'other'}; window.__eamCat=map[cat]||'other'; render();
 }
@@ -1746,7 +1746,7 @@ async function eamRetireSelectedAsset(){
   const date=prompt('폐기일을 입력하세요. (YYYY-MM-DD)',new Date().toISOString().slice(0,10)); if(date===null)return;
   const ur=await SUPA.from('assets').update({status:'폐기'}).eq('id',a.id);
   if(ur.error){console.error(ur.error);alert('폐기 처리에 실패했습니다.');return}
-  const hr=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'폐기',description:`자산 폐기 · ${String(reason).trim()||'사유 미기재'}`,worker_name:'',cost:0,event_date:date});
+  const hr=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'폐기',description:`자산 폐기 · ${String(reason).trim()||'사유 미기재'}`,worker_name:'',action_type:'자산수명주기',cost:0,event_date:date});
   if(hr.error){console.error(hr.error);alert('폐기 이력 저장에 실패했습니다.');return}
   await eamLoad(); render();
 }
@@ -1765,7 +1765,7 @@ async function eamRegisterReplacementAsset(){
   const newA=ar.data;
   if(old){
     const desc=`신규 자산 ${newA.asset_code} 등록 · ${installDate} 설치 · 기존 자산 ${old.asset_code} 교체`;
-    const hr=await SUPA.from('asset_history').insert({asset_id:old.id,event_type:'자산교체',description:desc,worker_name:'',cost:0,event_date:installDate});
+    const hr=await SUPA.from('asset_history').insert({asset_id:old.id,event_type:'자산교체',description:desc,worker_name:'',action_type:'자산수명주기',cost:0,event_date:installDate});
     if(hr.error){console.error(hr.error);alert('교체 관계 이력 저장에 실패했습니다. 새 자산은 등록되었으니 확인하세요.');return}
   }
   window.__eamSelCode=newA.asset_code; await eamLoad(); render();
@@ -1783,7 +1783,7 @@ async function eamAddConsumableReplacement(){
   const desc=prompt('작업내용',`${String(part).trim()} 교체`); if(desc===null)return;
   if(!String(part).trim()){alert('소모품·부품명을 입력하세요.');return}
   const detail=`소모품·부품: ${String(part).trim()} · 수량: ${String(qty).trim()||'1'} · 업체: ${String(vendor).trim()||'-'} · ${String(desc).trim()||'교체'}`;
-  const hr=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'소모품교체',description:detail,worker_name:String(vendor).trim(),cost:Number(String(cost).replace(/[^0-9.-]/g,''))||0,event_date:date});
+  const hr=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'소모품교체',description:detail,worker_name:String(vendor).trim(),action_type:'유지보수',cost:Number(String(cost).replace(/[^0-9.-]/g,''))||0,event_date:date});
   if(hr.error){console.error(hr.error);alert('소모품 교체 이력 저장에 실패했습니다.');return}
   await eamLoad(); render();
 }
@@ -2359,7 +2359,7 @@ if(SUPA){syncFromSupabase();startRealtime();setInterval(syncFromSupabase,5000);}
     try{
       const r=await SUPA.from('assets').update({name,category,place,status:meta.status,product_name:meta.model||category}).eq('id',a.id);if(r.error)throw r.error;
       const all=Object.assign({},readMeta(),{[String(code)]:meta});writeMeta(all);window.__eamMetaByCode=all;
-      const h=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'자산정보수정',description:'META::'+JSON.stringify(meta),worker_name:'관리자',cost:0,event_date:new Date().toISOString().slice(0,10)});if(h.error)throw h.error;
+      const h=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'자산정보수정',description:'META::'+JSON.stringify(meta),worker_name:'관리자',action_type:'자산마스터수정',cost:0,event_date:new Date().toISOString().slice(0,10)});if(h.error)throw h.error;
       document.getElementById('eamEditModal')?.remove();await window.eamLoad();window.__eamSelCode=String(code);window.__eamCat=CATMAP[category]||'other';render();
     }catch(e){console.error(e);alert('자산 저장에 실패했습니다.\n'+(e?.message||''))}finally{if(btn){btn.disabled=false;btn.textContent='저장'}}
   };
@@ -2367,7 +2367,7 @@ if(SUPA){syncFromSupabase();startRealtime();setInterval(syncFromSupabase,5000);}
     if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
     const a=(window.__eamA||[]).find(v=>String(v.id)===String(assetId));if(!a){alert('등록된 EAM 자산을 찾을 수 없습니다.');return}
     const vendor=prompt('정비업체명','');if(vendor===null)return;const desc=prompt('외부정비 조치내용','');if(desc===null||!v(desc)){alert('조치내용은 필수입니다.');return}const cost=prompt('정비비용(원)','0');if(cost===null)return;const date=prompt('외부정비일 (YYYY-MM-DD)',new Date().toISOString().slice(0,10));if(date===null)return;
-    const r=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'외부정비',description:v(desc),worker_name:v(vendor),cost:Number(String(cost).replace(/[^0-9.-]/g,''))||0,event_date:date});if(r.error){console.error(r.error);alert('외부정비 이력 저장에 실패했습니다.');return}await window.eamLoad();render();
+    const r=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'외부정비',description:v(desc),worker_name:v(vendor),action_type:'외부정비',cost:Number(String(cost).replace(/[^0-9.-]/g,''))||0,event_date:date});if(r.error){console.error(r.error);alert('외부정비 이력 저장에 실패했습니다.');return}await window.eamLoad();render();
   };
 })();
 </script>
@@ -2535,10 +2535,55 @@ if(typeof window.eamPage==='function'){
     const summary=card.querySelector('summary');
     if(summary){summary.innerHTML=`<div class="jgb-card-head"><span>📋 주요설비 이력카드</span><button type="button" class="jgb-card-edit" onclick="event.preventDefault();event.stopPropagation();eamHistoryCardEdit()">✏️ 수정</button></div>`}
   }
+  const obs=new MutationObserver(()=>requestAnimationFrame(decorate));
+  obs.observe(document.body,{childList:true,subtree:true});
   document.addEventListener('DOMContentLoaded',decorate);
   setTimeout(decorate,300);
 })();
 </script>
+
+<style id="JGB_EAM_TABLE_ALIGNMENT_FINAL">
+/* 유지관리 이력 표: 헤더와 본문 열을 동일한 10열 기준으로 강제 */
+.jgb-maint-table{
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+}
+.jgb-maint-table col:nth-child(1){width:4%!important}
+.jgb-maint-table col:nth-child(2){width:10%!important}
+.jgb-maint-table col:nth-child(3){width:8%!important}
+.jgb-maint-table col:nth-child(4){width:10%!important}
+.jgb-maint-table col:nth-child(5){width:15%!important}
+.jgb-maint-table col:nth-child(6){width:23%!important}
+.jgb-maint-table col:nth-child(7){width:12%!important}
+.jgb-maint-table col:nth-child(8){width:8%!important}
+.jgb-maint-table col:nth-child(9){width:8%!important}
+.jgb-maint-table col:nth-child(10){width:2%!important}
+.jgb-maint-table th,.jgb-maint-table td{
+  box-sizing:border-box!important;
+  vertical-align:middle!important;
+  overflow:hidden!important;
+}
+.jgb-maint-table th{white-space:normal!important;text-align:center!important}
+.jgb-maint-table td{white-space:nowrap!important;text-overflow:ellipsis!important}
+.jgb-maint-table th.issue,.jgb-maint-table td.issue,
+.jgb-maint-table th.action,.jgb-maint-table td.action{
+  text-align:left!important;
+}
+.jgb-maint-table th.num,.jgb-maint-table td.num,
+.jgb-maint-table th.date,.jgb-maint-table td.date,
+.jgb-maint-table th.type,.jgb-maint-table td.type,
+.jgb-maint-table th.subtype,.jgb-maint-table td.subtype,
+.jgb-maint-table th.vendor,.jgb-maint-table td.vendor,
+.jgb-maint-table th.cost,.jgb-maint-table td.cost,
+.jgb-maint-table th.result,.jgb-maint-table td.result,
+.jgb-maint-table th.arrow,.jgb-maint-table td.arrow{
+  text-align:center!important;
+}
+.jgb-maint-table th.cost,.jgb-maint-table td.cost{white-space:nowrap!important}
+</style>
 </body></html>
 
 <style id="JGB_EAM_CARD_HISTORY_FINAL_CSS">
@@ -2623,7 +2668,7 @@ if(typeof window.eamPage==='function'){
       <div class="eam-innovation-layout"><aside class="eam-assets-panel"><div class="eam-assets-head"><div><b>${C.ico} ${E(C.label)}</b><span>${list.length}개 자산</span></div><div class="eam-filter-row"><input id="eamProSearch" placeholder="🔎 자산코드 또는 자산명" oninput="eamProFilter(this.value,document.getElementById('eamProLocationFilter')?.value||'')"><select id="eamProLocationFilter" onchange="eamProFilter(document.getElementById('eamProSearch')?.value||'',this.value)"><option value="">전체 위치</option><option value="A">A · 코트</option><option value="B">B · 복도</option><option value="C">C · 사무실</option><option value="D">D · 옥상</option><option value="E">E · 유수장치실</option></select></div></div><div id="eamproGrid" class="eam-asset-list">${list.map(x=>{const m=meta[x.code]||{},a=A.find(z=>V(z.asset_code)===V(x.code))||null,merged=Object.assign({},x,a||{},m);if(cat==='fire')merged.place='유수장치실';const st=a?.status||m.status||'원본';return `<button type="button" class="eam-asset-row ${V(x.code)===V(sel)?'on':''}" data-code="${E(x.code)}" data-loc="${E(typeof placeCode==='function'?placeCode(merged.place):'')}" onclick="eamPick('${cat}','${E(x.code)}')"><span class="row-code">${E(window.eamUnifiedCode?window.eamUnifiedCode(merged):x.code)}</span><span class="row-copy"><b>${E(window.eamDisplayName?window.eamDisplayName(merged):merged.name||'-')}</b><small>${E(window.placeLabel?window.placeLabel(merged.place):merged.place||'-')}</small></span><i class="${st==='정상'?'ok':st==='원본'?'source':'bad'}">${E(st)}</i></button>`}).join('')||'<div class="eam-empty">등록된 자산이 없습니다.</div>'}</div></aside>
       <main class="eam-detail-panel">${src?`<div class="eam-detail-hero"><div><div class="hero-code">${E(window.eamUnifiedCode?window.eamUnifiedCode(cur):sel)}</div><h2>${E(window.eamDisplayName?window.eamDisplayName(cur):cur.name||'-')}</h2><div class="hero-meta"><span>${E(C.label)}</span><b>${E(window.placeLabel?window.placeLabel(cur.place):cur.place||'-')}</b><span>위치코드 ${E(typeof placeCode==='function'?placeCode(cur.place):'-')}</span></div></div><span class="hero-status ${String(cur.status||'원본')==='정상'?'good':'source'}">${E(cur.status||'원본')}</span></div>
         <section class="jgb-eam-card-final"><div class="jgb-card-top"><span>📋 주요설비 이력카드</span><button onclick="event.preventDefault();event.stopPropagation();eamHistoryCardEdit()">✏️ 수정</button></div><div class="jgb-eam-card-body"><div class="jgb-eam-info"><div class="jgb-eam-info-title">📄 기본정보</div><div class="jgb-eam-info-grid">${infoHtml}</div><div class="jgb-eam-note"><small>시설개선계획</small><b>${E(cur.improvementPlan||'-')}</b></div><div class="jgb-eam-note"><small>특이사항</small><b>${E(cur.note||'-')}</b></div></div>${photo}</div><div class="jgb-eam-auto"><div><small>최근 점검일</small><b>${E(lastInspection)}</b></div><div><small>최근 외부정비일</small><b>${E(recentExt?.event_date||'-')}</b></div><div><small>누적 외부정비 건수</small><b>${ext.length}건</b></div><div><small>최근 조치내용</small><b>${E(recentExt?((detailFor(recentExt).action)||recentExt.description||'-'):'-')}</b></div><div><small>차기 점검일</small><b>${E(next)}</b></div><div><small>교체·폐기 예정 여부</small><b>${E(replacement)}</b></div></div></section>
-        <section class="jgb-maint-final"><div class="jgb-maint-head"><h3>🔧 유지관리 이력</h3><span class="counts">외부정비 ${ext.length}건 · 전체 ${hs.length}건 · 점검 ${hs.filter(h=>inferType(h)==='점검').length}건</span><button type="button" id="jgbMaintRegisterBtn" class="jgb-maint-register-btn">＋ 등록</button></div><div class="jgb-maint-table-wrap"><table class="jgb-maint-table"><thead><tr><th class="num">No</th><th class="date">작업일자</th><th class="type">정비구분</th><th class="subtype">정비유형</th><th class="issue">고장·이상내용</th><th class="action">조치내용</th><th class="vendor">정비업체</th><th class="cost">비용</th><th class="result">결과</th><th class="arrow"></th></tr></thead><tbody>${rows||`<tr><td colspan="10"><div class="jgb-maint-empty">등록된 유지관리 이력이 없습니다.</div></td></tr>`}</tbody></table></div>${detail}</section>
+        <section class="jgb-maint-final"><div class="jgb-maint-head"><h3>🔧 유지관리 이력</h3><span class="counts">외부정비 ${ext.length}건 · 전체 ${hs.length}건 · 점검 ${hs.filter(h=>inferType(h)==='점검').length}건</span><button type="button" id="jgbMaintRegisterBtn" class="jgb-maint-register-btn">＋ 등록</button></div><div class="jgb-maint-table-wrap"><table class="jgb-maint-table"><colgroup><col style="width:4%"><col style="width:10%"><col style="width:8%"><col style="width:10%"><col style="width:15%"><col style="width:23%"><col style="width:12%"><col style="width:8%"><col style="width:8%"><col style="width:2%"></colgroup><thead><tr><th class="num">No</th><th class="date">작업일자</th><th class="type">정비구분</th><th class="subtype">정비유형</th><th class="issue">고장·이상내용</th><th class="action">조치내용</th><th class="vendor">정비업체</th><th class="cost">비용</th><th class="result">결과</th><th class="arrow"></th></tr></thead><tbody>${rows||`<tr><td colspan="10"><div class="jgb-maint-empty">등록된 유지관리 이력이 없습니다.</div></td></tr>`}</tbody></table></div>${detail}</section>
       </main></div></div>`:'<div class="eam-empty">설비 종류에서 자산을 선택하세요.</div>'}</main></div></div>`;
   };
   if(typeof eamPage==='function'){try{eamPage=window.eamPage}catch(e){}}
@@ -3448,167 +3493,3 @@ if(typeof window.eamPage==='function'){
 }
 </style>
 
-<style id="JGB_EAM_UI_ALIGNMENT_FINAL">
-/* ===== EAM 최종 화면 가독성/정렬 강화 ===== */
-.jgb-eam-card-final .jgb-card-top{
-  background:#e8f1fb!important;
-  border-bottom:2px solid #8fa9c3!important;
-}
-.jgb-eam-card-final .jgb-card-top>span{
-  color:#173b5f!important;
-  font-weight:900!important;
-  font-size:17px!important;
-}
-.jgb-eam-card-final .jgb-card-top button{
-  background:#1769aa!important;
-  color:#fff!important;
-  border:1px solid #0f568c!important;
-  border-radius:7px!important;
-  font-weight:900!important;
-  box-shadow:0 2px 5px rgba(0,0,0,.14)!important;
-}
-
-/* 설비 사진 영역: 제목과 박스 대비 강화 / 6×6 유지 */
-.jgb-eam-card-final .jgb-eam-photo{
-  background:#f7fafc!important;
-  border:1px solid #9db4c9!important;
-  border-radius:8px!important;
-  padding:0!important;
-  overflow:hidden!important;
-}
-.jgb-eam-card-final .jgb-eam-photo-title{
-  background:#dce9f5!important;
-  color:#183b5b!important;
-  font-weight:900!important;
-  font-size:14px!important;
-  padding:10px 11px!important;
-  border-bottom:1px solid #9db4c9!important;
-}
-.jgb-eam-card-final .jgb-photo-box{
-  border:2px dashed #8ea9c0!important;
-  background:#fdfefe!important;
-}
-.jgb-eam-card-final .jgb-photo-caption{
-  color:#24435d!important;
-  font-weight:800!important;
-  padding:8px!important;
-  background:#edf4fa!important;
-  border-top:1px solid #c2d1df!important;
-}
-
-/* 유지관리 이력 헤더를 확실하게 강조 */
-.jgb-maint-final{
-  border:1px solid #91abc0!important;
-  border-radius:10px!important;
-  overflow:hidden!important;
-  background:#fff!important;
-  box-shadow:0 2px 7px rgba(32,65,90,.08)!important;
-}
-.jgb-maint-final .jgb-maint-head{
-  background:#d7e8f7!important;
-  border-bottom:2px solid #7898b4!important;
-  min-height:58px!important;
-  display:flex!important;
-  align-items:center!important;
-  gap:12px!important;
-}
-.jgb-maint-final .jgb-maint-head h3{
-  color:#173b5f!important;
-  font-size:21px!important;
-  font-weight:900!important;
-}
-.jgb-maint-final .jgb-maint-head .counts{
-  color:#36566f!important;
-  font-weight:800!important;
-  margin-left:auto!important;
-}
-.jgb-maint-final .jgb-maint-register-btn{
-  background:#0d78c8!important;
-  color:#fff!important;
-  border:1px solid #095f9f!important;
-  border-radius:7px!important;
-  font-size:15px!important;
-  font-weight:900!important;
-  min-width:78px!important;
-  min-height:40px!important;
-  padding:8px 15px!important;
-  box-shadow:0 2px 5px rgba(0,0,0,.16)!important;
-}
-.jgb-maint-final .jgb-maint-register-btn:hover{background:#075f9e!important}
-
-/* 유지관리 표: 10개 열을 고정 비율로 강제하여 헤더/본문 동일 정렬 */
-.jgb-maint-final .jgb-maint-table-wrap{
-  width:100%!important;
-  overflow-x:auto!important;
-  background:#fff!important;
-}
-.jgb-maint-final .jgb-maint-table{
-  width:100%!important;
-  min-width:980px!important;
-  max-width:none!important;
-  table-layout:fixed!important;
-  border-collapse:collapse!important;
-  border-spacing:0!important;
-}
-.jgb-maint-final .jgb-maint-table th,
-.jgb-maint-final .jgb-maint-table td{
-  box-sizing:border-box!important;
-  border-right:1px solid #c7d5e1!important;
-  border-bottom:1px solid #c7d5e1!important;
-  vertical-align:middle!important;
-  overflow:hidden!important;
-}
-.jgb-maint-final .jgb-maint-table th:last-child,
-.jgb-maint-final .jgb-maint-table td:last-child{border-right:0!important}
-.jgb-maint-final .jgb-maint-table th{
-  background:#315a7c!important;
-  color:#fff!important;
-  font-size:13px!important;
-  font-weight:900!important;
-  height:48px!important;
-  padding:8px 5px!important;
-  white-space:normal!important;
-  line-height:1.2!important;
-}
-.jgb-maint-final .jgb-maint-table td{
-  background:#fff!important;
-  color:#20384c!important;
-  font-size:13px!important;
-  font-weight:600!important;
-  height:50px!important;
-  padding:8px 7px!important;
-  white-space:normal!important;
-  line-height:1.35!important;
-}
-.jgb-maint-final .jgb-maint-table tbody tr:nth-child(even) td{background:#f5f8fb!important}
-.jgb-maint-final .jgb-maint-table tbody tr:hover td{background:#e8f2fa!important}
-.jgb-maint-final .jgb-maint-table td.issue,
-.jgb-maint-final .jgb-maint-table td.action{
-  text-align:left!important;
-  word-break:keep-all!important;
-  overflow-wrap:anywhere!important;
-}
-
-/* 정확한 10열 폭: 합계 100% */
-.jgb-maint-final .jgb-maint-table th:nth-child(1),.jgb-maint-final .jgb-maint-table td:nth-child(1){width:4%!important;text-align:center!important}
-.jgb-maint-final .jgb-maint-table th:nth-child(2),.jgb-maint-final .jgb-maint-table td:nth-child(2){width:9%!important;text-align:center!important}
-.jgb-maint-final .jgb-maint-table th:nth-child(3),.jgb-maint-final .jgb-maint-table td:nth-child(3){width:8%!important;text-align:center!important}
-.jgb-maint-final .jgb-maint-table th:nth-child(4),.jgb-maint-final .jgb-maint-table td:nth-child(4){width:9%!important;text-align:center!important}
-.jgb-maint-final .jgb-maint-table th:nth-child(5),.jgb-maint-final .jgb-maint-table td:nth-child(5){width:15%!important;text-align:left!important}
-.jgb-maint-final .jgb-maint-table th:nth-child(6),.jgb-maint-final .jgb-maint-table td:nth-child(6){width:22%!important;text-align:left!important}
-.jgb-maint-final .jgb-maint-table th:nth-child(7),.jgb-maint-final .jgb-maint-table td:nth-child(7){width:12%!important;text-align:center!important}
-.jgb-maint-final .jgb-maint-table th:nth-child(8),.jgb-maint-final .jgb-maint-table td:nth-child(8){width:9%!important;text-align:right!important}
-.jgb-maint-final .jgb-maint-table th:nth-child(9),.jgb-maint-final .jgb-maint-table td:nth-child(9){width:8%!important;text-align:center!important}
-.jgb-maint-final .jgb-maint-table th:nth-child(10),.jgb-maint-final .jgb-maint-table td:nth-child(10){width:4%!important;text-align:center!important}
-
-/* 빈 상태도 표 안에서 정돈 */
-.jgb-maint-final .jgb-maint-empty{
-  min-height:72px!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  color:#647d91!important;
-  font-size:14px!important;
-  font-weight:700!important;
-}
-</style>
