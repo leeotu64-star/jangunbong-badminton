@@ -2632,3 +2632,490 @@ if(typeof window.eamPage==='function'){
   setTimeout(()=>{if(typeof eamPage==='function'&&window.__eamSelCode)try{render()}catch(e){console.warn(e)}},250);
 })();
 </script>
+
+
+<style id="JGB_EAM_LAYOUT_COMPACT_MAINT_BIG_V1">
+/* 좌측 자산목록은 줄이고, 우측 EAM 상세/유지관리 영역을 넓힘 */
+.eam-innovation{padding:16px 18px 30px!important}
+.eam-innovation-layout{grid-template-columns:300px minmax(0,1fr)!important;gap:16px!important;align-items:start!important}
+.eam-assets-panel{min-width:0!important}
+.eam-assets-head{padding:12px 13px!important}
+.eam-assets-head b{font-size:16px!important}
+.eam-assets-head span{font-size:12px!important}
+.eam-filter-row{grid-template-columns:1fr!important;gap:7px!important}
+.eam-filter-row input,.eam-filter-row select{height:36px!important;font-size:12px!important}
+.eam-asset-list{max-height:680px!important;padding:8px!important}
+.eam-asset-row{grid-template-columns:58px minmax(0,1fr) auto!important;min-height:68px!important;padding:9px!important}
+.row-code{font-size:12px!important;padding:7px 5px!important}
+.row-copy b{font-size:14px!important;line-height:1.25!important}
+.row-copy small{font-size:11px!important}
+.eam-detail-panel{min-width:0!important}
+.eam-detail-hero{padding:16px 20px!important}
+.eam-detail-hero h2{font-size:30px!important}
+/* 중복 자산 기본정보는 숨기고 주요설비 이력카드가 단일 기준이 되도록 함 */
+.eam-detail-panel>.eam-master{display:none!important}
+/* 주요설비 이력카드 */
+.jgb-history-card{margin:0 0 12px!important}
+.jgb-history-card summary{padding:10px 14px!important;font-size:15px!important}
+.jgb-card-head{min-height:30px!important}
+.jgb-history-card .jgb-card-edit{font-size:13px!important;padding:6px 12px!important}
+.jgb-history-card .source-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.jgb-history-card .source-grid>div{min-height:62px!important;padding:10px 12px!important}
+.jgb-history-card .source-grid small{font-size:11px!important}
+.jgb-history-card .source-grid b{font-size:14px!important;line-height:1.35!important}
+/* 유지관리 이력: 작성/열람 글씨를 확실히 크게 */
+.jgb-maint-final{margin-top:10px!important;border-radius:9px!important}
+.jgb-maint-head{padding:11px 14px!important}
+.jgb-maint-head h3{font-size:20px!important;line-height:1.25!important}
+.jgb-maint-head .counts{font-size:12px!important}
+.jgb-maint-head button{font-size:14px!important;padding:8px 15px!important;min-width:72px!important}
+.jgb-maint-table{font-size:13px!important}
+.jgb-maint-table th{font-size:12px!important;padding:9px 5px!important;line-height:1.25!important}
+.jgb-maint-table td{font-size:13px!important;padding:9px 6px!important;line-height:1.35!important}
+.jgb-maint-table .num{width:38px!important}
+.jgb-maint-table .date{width:92px!important}
+.jgb-maint-table .type{width:74px!important}
+.jgb-maint-table .subtype{width:78px!important}
+.jgb-maint-table .issue{width:150px!important}
+.jgb-maint-table .action{width:220px!important}
+.jgb-maint-table .vendor{width:105px!important}
+.jgb-maint-table .cost{width:92px!important}
+.jgb-maint-table .result{width:72px!important}
+.jgb-maint-table .arrow{width:30px!important;font-size:17px!important}
+/* 선택된 유지관리 이력 상세 */
+.jgb-history-detail{grid-template-columns:300px minmax(0,1fr)!important;gap:12px!important;padding:12px!important}
+.jgb-detail-row{min-height:34px!important;grid-template-columns:88px minmax(0,1fr)!important}
+.jgb-detail-row small{font-size:12px!important;padding:8px!important}
+.jgb-detail-row b{font-size:13px!important;padding:8px!important;line-height:1.35!important}
+.jgb-work-photo{height:105px!important;font-size:11px!important}
+.jgb-work-photo span{font-size:25px!important}
+/* 유지관리 등록창도 읽기 어려운 작은 글씨를 개선 */
+.jgb-maint-form{gap:12px!important;padding:16px!important}
+.jgb-maint-form label{font-size:13px!important;gap:5px!important}
+.jgb-maint-form input,.jgb-maint-form select,.jgb-maint-form textarea{font-size:14px!important;padding:9px 10px!important}
+.jgb-maint-form textarea{min-height:86px!important}
+.jgb-modal-final-head h3{font-size:18px!important}
+@media(max-width:1050px){
+  .eam-innovation-layout{grid-template-columns:260px minmax(0,1fr)!important}
+  .jgb-history-card .source-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .jgb-maint-table{min-width:900px!important}
+}
+@media(max-width:750px){
+  .eam-innovation-layout{grid-template-columns:1fr!important}
+  .eam-assets-panel{max-height:none!important}
+  .eam-asset-list{max-height:360px!important}
+  .jgb-history-card .source-grid{grid-template-columns:1fr!important}
+  .jgb-history-detail{grid-template-columns:1fr!important}
+}
+</style>
+
+<style id="JGB_EAM_COMPACT_PHOTO_FINAL">
+/* 사진 영역은 작게, 유지관리 영역은 넓고 읽기 쉽게 */
+.jgb-eam-card-final .jgb-eam-photo{min-width:0}
+.jgb-eam-card-final .jgb-photo-box{height:135px!important;margin:8px!important;gap:5px!important}
+.jgb-eam-card-final .jgb-photo-box .cam{font-size:25px!important}
+.jgb-eam-card-final .jgb-photo-box strong{font-size:12px!important}
+.jgb-eam-card-final .jgb-photo-box span{font-size:10px!important}
+.jgb-eam-card-final .jgb-photo-caption{font-size:10px!important;padding-bottom:7px!important}
+.jgb-history-detail .jgb-work-photo{height:76px!important}
+.jgb-history-detail .jgb-work-photo span{font-size:19px!important}
+.jgb-history-detail .jgb-work-photo b{font-size:10px!important}
+.jgb-history-detail .jgb-work-photo small{font-size:9px!important}
+/* 우측 사진 폭을 과하게 차지하지 않도록 */
+.jgb-eam-card-final .jgb-eam-card-body{grid-template-columns:minmax(0,1.9fr) minmax(210px,.62fr)!important}
+/* 유지관리 표는 사진보다 시선 우선순위를 높임 */
+.jgb-maint-final{margin-top:10px!important}
+.jgb-maint-head h3{font-size:18px!important}
+.jgb-maint-head{padding:9px 12px!important}
+.jgb-maint-table{font-size:13px!important}
+.jgb-maint-table th{font-size:12px!important;padding:7px 4px!important}
+.jgb-maint-table td{font-size:13px!important;padding:7px 5px!important}
+.jgb-detail-row b{font-size:12px!important}
+.jgb-detail-row small{font-size:11px!important}
+</style>
+
+
+<style id="JGB_EAM_4CM_LAYOUT_FINAL">
+/* 사진은 4cm × 4cm, 남는 화면은 정보/유지관리 이력에 배분 */
+.jgb-eam-final .jgb-eam-layout{grid-template-columns:270px minmax(0,1fr)!important}
+.jgb-eam-final .jgb-main{padding:12px!important}
+.jgb-eam-final .jgb-master-photo{
+  grid-template-columns:minmax(0,1fr) 4cm!important;
+  align-items:start!important;
+  gap:14px!important;
+}
+.jgb-eam-final .jgb-photo-placeholder{
+  width:4cm!important;
+  height:4cm!important;
+  min-height:4cm!important;
+  box-sizing:border-box!important;
+  padding:8px!important;
+}
+.jgb-eam-final .jgb-photo-placeholder .cam{font-size:24px!important}
+.jgb-eam-final .jgb-photo-placeholder b{font-size:11px!important}
+.jgb-eam-final .jgb-photo-placeholder small{font-size:9px!important}
+.jgb-eam-final .jgb-photo-placeholder button{font-size:11px!important;padding:6px 9px!important;margin-top:6px!important}
+
+/* 이력카드 글씨 확대 */
+.jgb-eam-final .jgb-card-head h4{font-size:17px!important}
+.jgb-eam-final .jgb-card-head small{font-size:11px!important}
+.jgb-eam-final .jgb-table{font-size:13px!important}
+.jgb-eam-final .jgb-table th{font-size:12px!important;padding:8px 9px!important}
+.jgb-eam-final .jgb-table td{font-size:13px!important;padding:8px 9px!important}
+
+/* 유지관리 이력은 가장 넓게 사용 */
+.jgb-eam-final .jgb-history-table{font-size:13px!important}
+.jgb-eam-final .jgb-history-table th{font-size:12px!important;padding:9px 8px!important}
+.jgb-eam-final .jgb-history-table td{font-size:13px!important;padding:10px 8px!important;line-height:1.45!important}
+.jgb-eam-final .jgb-history-head{font-size:13px!important}
+.jgb-eam-final .jgb-history-summary{font-size:12px!important}
+.jgb-eam-final .jgb-btn{font-size:12px!important;padding:8px 12px!important}
+
+/* 작업사진은 4cm보다 작게, 화면을 잡아먹지 않도록 */
+.jgb-eam-final .jgb-photos-grid{grid-template-columns:repeat(4,1fr)!important}
+.jgb-eam-final .jgb-slot{min-height:82px!important}
+.jgb-eam-final .jgb-slot .cam{font-size:20px!important}
+.jgb-eam-final .jgb-slot b{font-size:10px!important}
+
+/* 상단 설비명도 공간에 맞춰 조금 키움 */
+.jgb-eam-final .jgb-hero h3{font-size:20px!important}
+.jgb-eam-final .jgb-hero small{font-size:11px!important}
+</style>
+
+
+<style id="JGB_EAM_ACTUAL_APPLY_V2">
+/* ===== 실제 EAM DOM에 적용되는 최종 레이아웃 ===== */
+.eam-innovation-layout{
+  grid-template-columns:270px minmax(0,1fr)!important;
+  gap:14px!important;
+}
+.eam-assets-panel{min-width:0!important}
+.eam-detail-panel{min-width:0!important}
+
+/* 주요설비 이력카드: 오른쪽 사진을 정확히 4cm × 4cm */
+.jgb-eam-card-final .jgb-card-body{
+  grid-template-columns:minmax(0,1fr) 4cm!important;
+  gap:14px!important;
+  align-items:start!important;
+}
+.jgb-eam-card-final .jgb-eam-photo{
+  width:4cm!important;
+  min-width:4cm!important;
+  max-width:4cm!important;
+}
+.jgb-eam-card-final .jgb-photo-box{
+  width:4cm!important;
+  height:4cm!important;
+  min-height:4cm!important;
+  max-height:4cm!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+  gap:5px!important;
+  padding:6px!important;
+}
+.jgb-eam-card-final .jgb-photo-box .cam{font-size:23px!important}
+.jgb-eam-card-final .jgb-photo-box strong{font-size:11px!important}
+.jgb-eam-card-final .jgb-photo-box span{font-size:9px!important;line-height:1.25!important}
+.jgb-eam-card-final .jgb-photo-caption{
+  font-size:10px!important;
+  padding:6px 2px!important;
+}
+
+/* 이력카드 정보 글씨 확대 + 공간 활용 */
+.jgb-eam-card-final .jgb-eam-info-title,
+.jgb-eam-card-final .jgb-eam-photo-title{
+  font-size:14px!important;
+  padding:9px 10px!important;
+}
+.jgb-eam-card-final .jgb-eam-info-cell{
+  grid-template-columns:90px minmax(0,1fr)!important;
+  min-height:38px!important;
+}
+.jgb-eam-card-final .jgb-eam-info-cell small{
+  font-size:12px!important;
+  padding:9px!important;
+}
+.jgb-eam-card-final .jgb-eam-info-cell b{
+  font-size:13px!important;
+  padding:9px!important;
+}
+
+/* 자동 산출 유지관리 정보 */
+.jgb-eam-card-final .jgb-eam-auto>div{
+  min-height:66px!important;
+  padding:9px 10px!important;
+}
+.jgb-eam-card-final .jgb-eam-auto small{font-size:11px!important}
+.jgb-eam-card-final .jgb-eam-auto b{font-size:13px!important}
+
+/* 유지관리 이력: 남는 가로공간을 표가 전부 사용 */
+.jgb-maint-final{width:100%!important}
+.jgb-maint-head{padding:11px 14px!important}
+.jgb-maint-head h3{font-size:20px!important}
+.jgb-maint-head .counts{font-size:12px!important}
+.jgb-maint-head button{font-size:13px!important;padding:8px 15px!important}
+.jgb-maint-table{font-size:14px!important;table-layout:fixed!important}
+.jgb-maint-table th{
+  font-size:12px!important;
+  padding:9px 6px!important;
+  height:40px!important;
+}
+.jgb-maint-table td{
+  font-size:14px!important;
+  padding:10px 7px!important;
+  line-height:1.4!important;
+  height:44px!important;
+}
+.jgb-maint-table .num{width:38px!important}
+.jgb-maint-table .date{width:96px!important}
+.jgb-maint-table .type{width:78px!important}
+.jgb-maint-table .subtype{width:86px!important}
+.jgb-maint-table .issue{width:18%!important}
+.jgb-maint-table .action{width:28%!important}
+.jgb-maint-table .vendor{width:110px!important}
+.jgb-maint-table .cost{width:95px!important}
+.jgb-maint-table .result{width:72px!important}
+.jgb-maint-table .arrow{width:30px!important}
+
+/* 상세 영역도 공간을 충분히 사용 */
+.jgb-history-detail{
+  grid-template-columns:300px minmax(0,1fr)!important;
+  gap:14px!important;
+  padding:14px!important;
+}
+.jgb-detail-row{min-height:38px!important}
+.jgb-detail-row small{font-size:12px!important;padding:9px!important}
+.jgb-detail-row b{font-size:13px!important;padding:9px!important}
+.jgb-history-detail .jgb-work-photo{height:90px!important}
+.jgb-history-detail .jgb-work-photo span{font-size:21px!important}
+.jgb-history-detail .jgb-work-photo b{font-size:11px!important}
+.jgb-history-detail .jgb-work-photo small{font-size:10px!important}
+
+/* 화면이 좁아지면 기존 반응형 유지 */
+@media(max-width:1050px){
+  .eam-innovation-layout{grid-template-columns:250px minmax(0,1fr)!important}
+  .jgb-eam-card-final .jgb-card-body{grid-template-columns:minmax(0,1fr) 4cm!important}
+  .jgb-maint-table{min-width:900px!important}
+}
+@media(max-width:750px){
+  .eam-innovation-layout{grid-template-columns:1fr!important}
+  .jgb-eam-card-final .jgb-card-body{grid-template-columns:1fr!important}
+  .jgb-eam-card-final .jgb-eam-photo{width:4cm!important}
+}
+</style>
+
+
+<style id="JGB_EAM_FINAL_WIDE_5X6">
+/* =========================================================
+   장군봉 EAM 최종 기준
+   - 화면 좌우 공간 최대 활용
+   - 좌측 자산목록 축소
+   - 우측 EAM 영역 확대
+   - 설비사진 5cm × 6cm
+   - 주요설비 이력카드 / 유지관리 이력 글씨 확대
+   ========================================================= */
+
+/* 전체 EAM */
+.eam-innovation{
+  padding:14px 14px 28px!important;
+}
+.eam-innovation-head,
+.eam-type-row,
+.eam-innovation-layout{
+  max-width:none!important;
+  width:100%!important;
+}
+.eam-innovation-layout{
+  grid-template-columns:260px minmax(0,1fr)!important;
+  gap:12px!important;
+}
+
+/* 좌측 자산목록은 좁게 */
+.eam-assets-panel{
+  min-width:0!important;
+}
+.eam-assets-head{
+  padding:12px!important;
+}
+.eam-assets-head b{
+  font-size:17px!important;
+}
+.eam-asset-list{
+  padding:8px!important;
+  gap:7px!important;
+}
+.eam-asset-row{
+  grid-template-columns:52px minmax(0,1fr) auto!important;
+  gap:8px!important;
+  padding:9px!important;
+  min-height:74px!important;
+}
+.row-copy b{font-size:14px!important}
+.row-copy small{font-size:11px!important}
+
+/* 우측 전체 상세영역 */
+.eam-detail-panel{
+  min-width:0!important;
+}
+.eam-detail-hero{
+  padding:18px 20px!important;
+}
+.eam-detail-hero h2{
+  font-size:30px!important;
+}
+.hero-meta{
+  font-size:14px!important;
+}
+
+/* 주요설비 이력카드: 사진 5×6cm */
+.jgb-eam-card-final .jgb-card-body{
+  grid-template-columns:minmax(0,1fr) 5cm!important;
+  gap:16px!important;
+  padding:12px!important;
+  align-items:start!important;
+}
+.jgb-eam-card-final .jgb-eam-photo{
+  width:5cm!important;
+  min-width:5cm!important;
+  max-width:5cm!important;
+}
+.jgb-eam-card-final .jgb-photo-box{
+  width:5cm!important;
+  height:6cm!important;
+  min-width:5cm!important;
+  min-height:6cm!important;
+  max-width:5cm!important;
+  max-height:6cm!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+  padding:8px!important;
+}
+.jgb-eam-card-final .jgb-photo-box .cam{
+  font-size:28px!important;
+}
+.jgb-eam-card-final .jgb-photo-box strong{
+  font-size:12px!important;
+}
+.jgb-eam-card-final .jgb-photo-box span{
+  font-size:10px!important;
+  line-height:1.35!important;
+}
+.jgb-eam-card-final .jgb-photo-caption{
+  font-size:11px!important;
+  padding:7px 2px!important;
+}
+
+/* 이력카드 글씨 확대 */
+.jgb-eam-card-final .jgb-eam-info-title,
+.jgb-eam-card-final .jgb-eam-photo-title{
+  font-size:15px!important;
+  padding:10px 11px!important;
+}
+.jgb-eam-card-final .jgb-eam-info-cell{
+  grid-template-columns:96px minmax(0,1fr)!important;
+  min-height:40px!important;
+}
+.jgb-eam-card-final .jgb-eam-info-cell small{
+  font-size:12px!important;
+  padding:10px!important;
+}
+.jgb-eam-card-final .jgb-eam-info-cell b{
+  font-size:14px!important;
+  padding:10px!important;
+}
+
+/* 자동 산출 정보 */
+.jgb-eam-card-final .jgb-eam-auto>div{
+  min-height:70px!important;
+  padding:10px 11px!important;
+}
+.jgb-eam-card-final .jgb-eam-auto small{font-size:12px!important}
+.jgb-eam-card-final .jgb-eam-auto b{font-size:14px!important}
+
+/* 유지관리 이력 - 오른쪽 폭을 전부 사용 */
+.jgb-maint-final{
+  width:100%!important;
+  margin-top:14px!important;
+}
+.jgb-maint-head{
+  padding:12px 15px!important;
+}
+.jgb-maint-head h3{
+  font-size:21px!important;
+}
+.jgb-maint-head .counts{
+  font-size:13px!important;
+}
+.jgb-maint-head button{
+  font-size:14px!important;
+  padding:9px 16px!important;
+}
+.jgb-maint-table{
+  width:100%!important;
+  min-width:0!important;
+  font-size:14px!important;
+  table-layout:fixed!important;
+}
+.jgb-maint-table th{
+  font-size:13px!important;
+  padding:10px 7px!important;
+  height:42px!important;
+}
+.jgb-maint-table td{
+  font-size:14px!important;
+  padding:11px 8px!important;
+  line-height:1.45!important;
+  height:46px!important;
+}
+
+/* 상세 */
+.jgb-history-detail{
+  grid-template-columns:310px minmax(0,1fr)!important;
+  gap:16px!important;
+  padding:15px!important;
+}
+.jgb-detail-row{
+  min-height:40px!important;
+  grid-template-columns:92px minmax(0,1fr)!important;
+}
+.jgb-detail-row small{
+  font-size:13px!important;
+  padding:10px!important;
+}
+.jgb-detail-row b{
+  font-size:14px!important;
+  padding:10px!important;
+}
+.jgb-history-detail .jgb-work-photo{
+  height:100px!important;
+}
+.jgb-history-detail .jgb-work-photo span{font-size:23px!important}
+.jgb-history-detail .jgb-work-photo b{font-size:12px!important}
+.jgb-history-detail .jgb-work-photo small{font-size:10px!important}
+
+/* 큰 화면에서는 좌우 여백을 더 줄임 */
+@media(min-width:1400px){
+  .eam-innovation{
+    padding-left:10px!important;
+    padding-right:10px!important;
+  }
+  .eam-innovation-layout{
+    grid-template-columns:260px minmax(0,1fr)!important;
+  }
+}
+
+/* 좁은 화면 대응 */
+@media(max-width:900px){
+  .eam-innovation-layout{
+    grid-template-columns:1fr!important;
+  }
+  .jgb-eam-card-final .jgb-card-body{
+    grid-template-columns:minmax(0,1fr) 5cm!important;
+  }
+}
+@media(max-width:650px){
+  .jgb-eam-card-final .jgb-card-body{
+    grid-template-columns:1fr!important;
+  }
+}
+</style>
