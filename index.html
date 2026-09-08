@@ -3783,3 +3783,43 @@ if(typeof window.eamPage==='function'){
   setTimeout(bind,50);
 })();
 </script>
+
+
+<style id="JGB_MAINT_COLUMN_FINAL">
+/* 유지관리 이력 칸을 실제 화면 폭에 맞춰 강제 정렬 */
+.jgb-maint-final{width:100%!important;max-width:none!important;overflow:hidden!important}
+.jgb-maint-final .jgb-maint-table-wrap{width:100%!important;max-width:none!important;overflow-x:auto!important;overflow-y:visible!important}
+.jgb-maint-final table.jgb-maint-table{width:100%!important;min-width:980px!important;max-width:none!important;table-layout:fixed!important}
+.jgb-maint-final table.jgb-maint-table th,
+.jgb-maint-final table.jgb-maint-table td{box-sizing:border-box!important;text-align:center!important;vertical-align:middle!important;white-space:normal!important;overflow:hidden!important;text-overflow:ellipsis!important;word-break:keep-all!important;height:48px!important;padding:9px 7px!important;line-height:1.25!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(1),.jgb-maint-final table.jgb-maint-table td:nth-child(1){width:4%!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(2),.jgb-maint-final table.jgb-maint-table td:nth-child(2){width:10%!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(3),.jgb-maint-final table.jgb-maint-table td:nth-child(3){width:9%!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(4),.jgb-maint-final table.jgb-maint-table td:nth-child(4){width:10%!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(5),.jgb-maint-final table.jgb-maint-table td:nth-child(5){width:16%!important;text-align:left!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(6),.jgb-maint-final table.jgb-maint-table td:nth-child(6){width:24%!important;text-align:left!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(7),.jgb-maint-final table.jgb-maint-table td:nth-child(7){width:11%!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(8),.jgb-maint-final table.jgb-maint-table td:nth-child(8){width:8%!important;text-align:right!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(9),.jgb-maint-final table.jgb-maint-table td:nth-child(9){width:7%!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(10),.jgb-maint-final table.jgb-maint-table td:nth-child(10){width:1%!important;padding-left:2px!important;padding-right:2px!important}
+.jgb-maint-final table.jgb-maint-table th{font-size:13px!important;font-weight:800!important;color:#294a65!important;background:#edf5fa!important}
+.jgb-maint-final table.jgb-maint-table td{font-size:14px!important;color:#24445e!important}
+.jgb-maint-final table.jgb-maint-table th:nth-child(5),.jgb-maint-final table.jgb-maint-table th:nth-child(6){text-align:center!important}
+@media(max-width:1100px){.jgb-maint-final table.jgb-maint-table{min-width:900px!important}}
+</style>
+<script id="JGB_MAINT_COLUMN_FINAL_JS">
+(function(){
+ function fix(){
+   document.querySelectorAll('.jgb-maint-final table.jgb-maint-table').forEach(function(tb){
+     var old=tb.querySelector('colgroup[data-final-cols]');
+     if(old)old.remove();
+     var cg=document.createElement('colgroup');cg.dataset.finalCols='1';
+     ['4%','10%','9%','10%','16%','24%','11%','8%','7%','1%'].forEach(function(w){var c=document.createElement('col');c.style.width=w;cg.appendChild(c)});
+     tb.insertBefore(cg,tb.firstChild);
+   });
+ }
+ fix();
+ new MutationObserver(fix).observe(document.body,{childList:true,subtree:true});
+ setTimeout(fix,100);setTimeout(fix,500);setTimeout(fix,1500);
+})();
+</script>
