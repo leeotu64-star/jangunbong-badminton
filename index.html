@@ -1079,7 +1079,7 @@ function render(){
  const app=document.getElementById("app");
  if(!app)return;
  try{
- app.innerHTML=`<div class="jgb-shell"><aside class="jgb-nav"><div class="jgb-brand">🛡 장군봉체육관<br>관리시스템</div><div class="jgb-group">운영</div>${nav("dashboard","🏠 운영 대시보드")}${nav("process","🛠 작업관리")}<div class="jgb-group">EAM</div>${nav("eam","🏢 자산 EAM 관리")}${nav("leakage","💧 누수관리")}${nav("dashboard2","📊 EAM 현황")}<div class="jgb-group">직원</div>${nav("basic","🧹 기본업무")}${nav("schedule","📅 근무편성")}${nav("stats","📈 직원실적")}<div class="jgb-group">관리</div>${nav("settings","⚙ 설정")}</aside><main class="jgb-main"><header class="jgb-top"><div><h1>장군봉체육관 시설관리 <span style="font-size:10px;vertical-align:middle;background:#eaf3ff;color:#1769c1;padding:4px 6px;border-radius:6px">v24</span></h1><small>신고 접수 → 작업관리 → 조치완료</small></div><div style="text-align:right"><span id="clock"></span><div class="jgb-live">● 실시간 동기화</div></div></header><section class="jgb-content">${body()}</section></main></div>`;app.querySelectorAll("[data-page]").forEach(el=>el.addEventListener("click",()=>go(el.dataset.page)));tick();clearInterval(window.__clock);window.__clock=setInterval(tick,1000);
+ app.innerHTML=`<div class="jgb-shell"><aside class="jgb-nav"><div class="jgb-brand">🛡 장군봉체육관<br>관리시스템</div><div class="jgb-group">운영</div>${nav("dashboard","🏠 운영 대시보드")}${nav("process","🛠 작업관리")}<div class="jgb-group">EAM</div>${nav("eam","🏢 자산 EAM 관리")}${nav("dashboard2","📊 EAM 현황")}<div class="jgb-sub-divider"></div>${nav("leakage","💧 누수관리")}<div class="jgb-group">직원</div>${nav("basic","🧹 기본업무")}${nav("schedule","📅 근무편성")}${nav("stats","📈 직원실적")}<div class="jgb-group">관리</div>${nav("settings","⚙ 설정")}</aside><main class="jgb-main"><header class="jgb-top"><div><h1>장군봉체육관 시설관리 <span style="font-size:10px;vertical-align:middle;background:#eaf3ff;color:#1769c1;padding:4px 6px;border-radius:6px">v24</span></h1><small>신고 접수 → 작업관리 → 조치완료</small></div><div style="text-align:right"><span id="clock"></span><div class="jgb-live">● 실시간 동기화</div></div></header><section class="jgb-content">${body()}</section></main></div>`;app.querySelectorAll("[data-page]").forEach(el=>el.addEventListener("click",()=>go(el.dataset.page)));tick();clearInterval(window.__clock);window.__clock=setInterval(tick,1000);
  }catch(err){
    console.error("화면 렌더링 오류",err);
    app.innerHTML=`<div class="panel" style="margin:20px"><h2>화면을 불러오지 못했습니다.</h2><div class="small" style="margin-top:8px">오류: ${String(err?.message||err)}</div><button class="btn blue" style="margin-top:12px" onclick="location.reload()">새로고침</button></div>`;
@@ -1093,7 +1093,7 @@ function body(){
  if(page==="qr")return qrRequestPage(); if(page==="qr_done")return qrDonePage();
  if(page==="dashboard2")return dashboard2();
   if(page==="process")return processPage();
- if(page==="basic")return window.basicPage(); if(page==="eam")return eamPage(); if(page==="leakage")return leakagePage(); if(page==="schedule")return schedulePage(); if(page==="external")return eamPage();
+ if(page==="basic")return window.basicPage(); if(page==="eam")return (typeof window.eamPage==="function"?window.eamPage():eamPage()); if(page==="leakage")return leakagePage(); if(page==="schedule")return schedulePage(); if(page==="external")return eamPage();
  if(page==="stats")return statsPage();
  if(page==="workers")return workerPage();
  if(page==="pending")return pendingPage();
@@ -3821,5 +3821,42 @@ if(typeof window.eamPage==='function'){
  fix();
  new MutationObserver(fix).observe(document.body,{childList:true,subtree:true});
  setTimeout(fix,100);setTimeout(fix,500);setTimeout(fix,1500);
+})();
+</script>
+
+
+<style id="JGB_EAM_ROUTING_FINAL_FIX">
+/* 누수관리는 EAM 두 메뉴 아래에 별도 배치 */
+.jgb-sub-divider{
+  height:1px;
+  margin:8px 10px 4px;
+  background:rgba(255,255,255,.10);
+}
+</style>
+<script id="JGB_EAM_ROUTING_FINAL_FIX_JS">
+(function(){
+  // 원본 body()의 EAM 호출이 구버전 lexical 함수로 남아 있어도 최종 EAM 렌더러를 사용
+  try{
+    if(typeof window.eamPage==='function'){
+      eamPage=window.eamPage;
+    }
+  }catch(e){}
+
+  // 현재 화면에 EAM이 열려 있으면 최종 렌더러로 즉시 한 번 다시 그림
+  function forceEam(){
+    try{
+      const p=new URLSearchParams(location.search).get('page');
+      if(p==='eam' && typeof window.eamPage==='function'){
+        window.__eamForceFinal=1;
+        const app=document.getElementById('app');
+        if(app && typeof render==='function'){
+          app.innerHTML=app.innerHTML; // 기존 화면 상태를 건드리지 않음
+          const content=app.querySelector('.jgb-content');
+          if(content) content.innerHTML=window.eamPage();
+        }
+      }
+    }catch(e){console.warn('EAM 최종 렌더 보정 실패',e)}
+  }
+  setTimeout(forceEam,400);
 })();
 </script>
