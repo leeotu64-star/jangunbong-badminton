@@ -903,6 +903,126 @@ html,body{overflow-x:hidden!important}
 .eam-asset-row .row-copy small{font-size:12px!important;color:#4d6480!important;line-height:1.45!important}
 .eam-asset-row .row-origin{font-size:10px!important;color:#7d8da0!important}
 </style>
+
+<style id="JGB_EAM_PHOTO_9X12_TABLE_FINAL">
+/* ===== 사용자 요청 최종 고정: 설비사진 9cm × 12cm ===== */
+.jgb-eam-card-final .jgb-eam-card-body{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 9cm!important;
+  gap:16px!important;
+  align-items:start!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+.jgb-eam-card-final .jgb-eam-photo{
+  width:9cm!important;
+  min-width:9cm!important;
+  max-width:9cm!important;
+  box-sizing:border-box!important;
+}
+.jgb-eam-card-final .jgb-photo-box{
+  width:9cm!important;
+  height:12cm!important;
+  min-width:9cm!important;
+  max-width:9cm!important;
+  min-height:12cm!important;
+  max-height:12cm!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+}
+
+/* ===== 유지관리 이력: 헤더/본문을 동일한 10열 비율로 강제 ===== */
+.jgb-maint-final .jgb-maint-table-wrap{
+  width:100%!important;
+  overflow-x:hidden!important;
+  box-sizing:border-box!important;
+}
+.jgb-maint-final .jgb-maint-table{
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+  box-sizing:border-box!important;
+}
+.jgb-maint-final .jgb-maint-table th,
+.jgb-maint-final .jgb-maint-table td{
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  vertical-align:middle!important;
+  white-space:normal!important;
+  word-break:keep-all!important;
+}
+.jgb-maint-final .jgb-maint-table th:nth-child(1),
+.jgb-maint-final .jgb-maint-table td:nth-child(1){width:4%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(2),
+.jgb-maint-final .jgb-maint-table td:nth-child(2){width:10%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(3),
+.jgb-maint-final .jgb-maint-table td:nth-child(3){width:8%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(4),
+.jgb-maint-final .jgb-maint-table td:nth-child(4){width:10%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(5),
+.jgb-maint-final .jgb-maint-table td:nth-child(5){width:15%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(6),
+.jgb-maint-final .jgb-maint-table td:nth-child(6){width:23%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(7),
+.jgb-maint-final .jgb-maint-table td:nth-child(7){width:12%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(8),
+.jgb-maint-final .jgb-maint-table td:nth-child(8){width:8%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(9),
+.jgb-maint-final .jgb-maint-table td:nth-child(9){width:8%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(10),
+.jgb-maint-final .jgb-maint-table td:nth-child(10){width:2%!important}
+
+.jgb-maint-final .jgb-maint-table th{
+  height:44px!important;
+  padding:8px 5px!important;
+  text-align:center!important;
+  line-height:1.25!important;
+}
+.jgb-maint-final .jgb-maint-table td{
+  min-width:0!important;
+  padding:9px 6px!important;
+  line-height:1.35!important;
+  text-align:center!important;
+}
+.jgb-maint-final .jgb-maint-table td:nth-child(5),
+.jgb-maint-final .jgb-maint-table td:nth-child(6){
+  text-align:left!important;
+  word-break:break-word!important;
+}
+.jgb-maint-final .jgb-maint-table th:nth-child(10),
+.jgb-maint-final .jgb-maint-table td:nth-child(10){
+  padding-left:2px!important;
+  padding-right:2px!important;
+}
+
+/* 기존 px 폭 지정 규칙보다 최종 규칙이 우선 */
+.jgb-maint-final .jgb-maint-table .num,
+.jgb-maint-final .jgb-maint-table .date,
+.jgb-maint-final .jgb-maint-table .type,
+.jgb-maint-final .jgb-maint-table .subtype,
+.jgb-maint-final .jgb-maint-table .issue,
+.jgb-maint-final .jgb-maint-table .action,
+.jgb-maint-final .jgb-maint-table .vendor,
+.jgb-maint-final .jgb-maint-table .cost,
+.jgb-maint-final .jgb-maint-table .result,
+.jgb-maint-final .jgb-maint-table .arrow{
+  min-width:0!important;
+  max-width:none!important;
+}
+
+/* 9×12 사진을 유지하면서 좁은 화면에서는 세로 배치 */
+@media(max-width:850px){
+  .jgb-eam-card-final .jgb-eam-card-body{
+    grid-template-columns:1fr!important;
+  }
+  .jgb-eam-card-final .jgb-eam-photo{
+    width:9cm!important;
+    max-width:9cm!important;
+  }
+}
+</style>
 </head><body><div id="app"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -2541,49 +2661,6 @@ if(typeof window.eamPage==='function'){
   setTimeout(decorate,300);
 })();
 </script>
-
-<style id="JGB_EAM_TABLE_ALIGNMENT_FINAL">
-/* 유지관리 이력 표: 헤더와 본문 열을 동일한 10열 기준으로 강제 */
-.jgb-maint-table{
-  width:100%!important;
-  min-width:0!important;
-  max-width:100%!important;
-  table-layout:fixed!important;
-  border-collapse:collapse!important;
-}
-.jgb-maint-table col:nth-child(1){width:4%!important}
-.jgb-maint-table col:nth-child(2){width:10%!important}
-.jgb-maint-table col:nth-child(3){width:8%!important}
-.jgb-maint-table col:nth-child(4){width:10%!important}
-.jgb-maint-table col:nth-child(5){width:15%!important}
-.jgb-maint-table col:nth-child(6){width:23%!important}
-.jgb-maint-table col:nth-child(7){width:12%!important}
-.jgb-maint-table col:nth-child(8){width:8%!important}
-.jgb-maint-table col:nth-child(9){width:8%!important}
-.jgb-maint-table col:nth-child(10){width:2%!important}
-.jgb-maint-table th,.jgb-maint-table td{
-  box-sizing:border-box!important;
-  vertical-align:middle!important;
-  overflow:hidden!important;
-}
-.jgb-maint-table th{white-space:normal!important;text-align:center!important}
-.jgb-maint-table td{white-space:nowrap!important;text-overflow:ellipsis!important}
-.jgb-maint-table th.issue,.jgb-maint-table td.issue,
-.jgb-maint-table th.action,.jgb-maint-table td.action{
-  text-align:left!important;
-}
-.jgb-maint-table th.num,.jgb-maint-table td.num,
-.jgb-maint-table th.date,.jgb-maint-table td.date,
-.jgb-maint-table th.type,.jgb-maint-table td.type,
-.jgb-maint-table th.subtype,.jgb-maint-table td.subtype,
-.jgb-maint-table th.vendor,.jgb-maint-table td.vendor,
-.jgb-maint-table th.cost,.jgb-maint-table td.cost,
-.jgb-maint-table th.result,.jgb-maint-table td.result,
-.jgb-maint-table th.arrow,.jgb-maint-table td.arrow{
-  text-align:center!important;
-}
-.jgb-maint-table th.cost,.jgb-maint-table td.cost{white-space:nowrap!important}
-</style>
 </body></html>
 
 <style id="JGB_EAM_CARD_HISTORY_FINAL_CSS">
@@ -2668,7 +2745,7 @@ if(typeof window.eamPage==='function'){
       <div class="eam-innovation-layout"><aside class="eam-assets-panel"><div class="eam-assets-head"><div><b>${C.ico} ${E(C.label)}</b><span>${list.length}개 자산</span></div><div class="eam-filter-row"><input id="eamProSearch" placeholder="🔎 자산코드 또는 자산명" oninput="eamProFilter(this.value,document.getElementById('eamProLocationFilter')?.value||'')"><select id="eamProLocationFilter" onchange="eamProFilter(document.getElementById('eamProSearch')?.value||'',this.value)"><option value="">전체 위치</option><option value="A">A · 코트</option><option value="B">B · 복도</option><option value="C">C · 사무실</option><option value="D">D · 옥상</option><option value="E">E · 유수장치실</option></select></div></div><div id="eamproGrid" class="eam-asset-list">${list.map(x=>{const m=meta[x.code]||{},a=A.find(z=>V(z.asset_code)===V(x.code))||null,merged=Object.assign({},x,a||{},m);if(cat==='fire')merged.place='유수장치실';const st=a?.status||m.status||'원본';return `<button type="button" class="eam-asset-row ${V(x.code)===V(sel)?'on':''}" data-code="${E(x.code)}" data-loc="${E(typeof placeCode==='function'?placeCode(merged.place):'')}" onclick="eamPick('${cat}','${E(x.code)}')"><span class="row-code">${E(window.eamUnifiedCode?window.eamUnifiedCode(merged):x.code)}</span><span class="row-copy"><b>${E(window.eamDisplayName?window.eamDisplayName(merged):merged.name||'-')}</b><small>${E(window.placeLabel?window.placeLabel(merged.place):merged.place||'-')}</small></span><i class="${st==='정상'?'ok':st==='원본'?'source':'bad'}">${E(st)}</i></button>`}).join('')||'<div class="eam-empty">등록된 자산이 없습니다.</div>'}</div></aside>
       <main class="eam-detail-panel">${src?`<div class="eam-detail-hero"><div><div class="hero-code">${E(window.eamUnifiedCode?window.eamUnifiedCode(cur):sel)}</div><h2>${E(window.eamDisplayName?window.eamDisplayName(cur):cur.name||'-')}</h2><div class="hero-meta"><span>${E(C.label)}</span><b>${E(window.placeLabel?window.placeLabel(cur.place):cur.place||'-')}</b><span>위치코드 ${E(typeof placeCode==='function'?placeCode(cur.place):'-')}</span></div></div><span class="hero-status ${String(cur.status||'원본')==='정상'?'good':'source'}">${E(cur.status||'원본')}</span></div>
         <section class="jgb-eam-card-final"><div class="jgb-card-top"><span>📋 주요설비 이력카드</span><button onclick="event.preventDefault();event.stopPropagation();eamHistoryCardEdit()">✏️ 수정</button></div><div class="jgb-eam-card-body"><div class="jgb-eam-info"><div class="jgb-eam-info-title">📄 기본정보</div><div class="jgb-eam-info-grid">${infoHtml}</div><div class="jgb-eam-note"><small>시설개선계획</small><b>${E(cur.improvementPlan||'-')}</b></div><div class="jgb-eam-note"><small>특이사항</small><b>${E(cur.note||'-')}</b></div></div>${photo}</div><div class="jgb-eam-auto"><div><small>최근 점검일</small><b>${E(lastInspection)}</b></div><div><small>최근 외부정비일</small><b>${E(recentExt?.event_date||'-')}</b></div><div><small>누적 외부정비 건수</small><b>${ext.length}건</b></div><div><small>최근 조치내용</small><b>${E(recentExt?((detailFor(recentExt).action)||recentExt.description||'-'):'-')}</b></div><div><small>차기 점검일</small><b>${E(next)}</b></div><div><small>교체·폐기 예정 여부</small><b>${E(replacement)}</b></div></div></section>
-        <section class="jgb-maint-final"><div class="jgb-maint-head"><h3>🔧 유지관리 이력</h3><span class="counts">외부정비 ${ext.length}건 · 전체 ${hs.length}건 · 점검 ${hs.filter(h=>inferType(h)==='점검').length}건</span><button type="button" id="jgbMaintRegisterBtn" class="jgb-maint-register-btn">＋ 등록</button></div><div class="jgb-maint-table-wrap"><table class="jgb-maint-table"><colgroup><col style="width:4%"><col style="width:10%"><col style="width:8%"><col style="width:10%"><col style="width:15%"><col style="width:23%"><col style="width:12%"><col style="width:8%"><col style="width:8%"><col style="width:2%"></colgroup><thead><tr><th class="num">No</th><th class="date">작업일자</th><th class="type">정비구분</th><th class="subtype">정비유형</th><th class="issue">고장·이상내용</th><th class="action">조치내용</th><th class="vendor">정비업체</th><th class="cost">비용</th><th class="result">결과</th><th class="arrow"></th></tr></thead><tbody>${rows||`<tr><td colspan="10"><div class="jgb-maint-empty">등록된 유지관리 이력이 없습니다.</div></td></tr>`}</tbody></table></div>${detail}</section>
+        <section class="jgb-maint-final"><div class="jgb-maint-head"><h3>🔧 유지관리 이력</h3><span class="counts">외부정비 ${ext.length}건 · 전체 ${hs.length}건 · 점검 ${hs.filter(h=>inferType(h)==='점검').length}건</span><button type="button" id="jgbMaintRegisterBtn" class="jgb-maint-register-btn">＋ 등록</button></div><div class="jgb-maint-table-wrap"><table class="jgb-maint-table"><thead><tr><th class="num">No</th><th class="date">작업일자</th><th class="type">정비구분</th><th class="subtype">정비유형</th><th class="issue">고장·이상내용</th><th class="action">조치내용</th><th class="vendor">정비업체</th><th class="cost">비용</th><th class="result">결과</th><th class="arrow"></th></tr></thead><tbody>${rows||`<tr><td colspan="10"><div class="jgb-maint-empty">등록된 유지관리 이력이 없습니다.</div></td></tr>`}</tbody></table></div>${detail}</section>
       </main></div></div>`:'<div class="eam-empty">설비 종류에서 자산을 선택하세요.</div>'}</main></div></div>`;
   };
   if(typeof eamPage==='function'){try{eamPage=window.eamPage}catch(e){}}
@@ -3490,112 +3567,5 @@ if(typeof window.eamPage==='function'){
   .jgb-eam-card-final .jgb-eam-card-body{
     grid-template-columns:minmax(0,1fr) 6cm!important;
   }
-}
-</style>
-
-<style id="JGB_EAM_MAINT_GRID_ALIGNMENT_REAL">
-/* 유지관리 이력: HTML table의 기존 폭 규칙 충돌을 완전히 차단하고
-   헤더/본문을 동일한 CSS Grid 열 구조로 강제 */
-.jgb-maint-final .jgb-maint-table{
-  display:grid!important;
-  grid-template-columns:4% 10% 8% 10% 15% 23% 12% 8% 8% 2%!important;
-  width:100%!important;
-  min-width:0!important;
-  max-width:none!important;
-  table-layout:auto!important;
-  border-collapse:collapse!important;
-  border-spacing:0!important;
-}
-.jgb-maint-final .jgb-maint-table thead,
-.jgb-maint-final .jgb-maint-table tbody,
-.jgb-maint-final .jgb-maint-table tfoot{
-  display:contents!important;
-}
-.jgb-maint-final .jgb-maint-table tr{
-  display:grid!important;
-  grid-template-columns:subgrid!important;
-  width:100%!important;
-  min-width:0!important;
-}
-.jgb-maint-final .jgb-maint-table thead tr{
-  background:#2f5f82!important;
-}
-.jgb-maint-final .jgb-maint-table th,
-.jgb-maint-final .jgb-maint-table td{
-  width:auto!important;
-  min-width:0!important;
-  max-width:none!important;
-  box-sizing:border-box!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  vertical-align:middle!important;
-  border-right:1px solid #c8d7e3!important;
-  border-bottom:1px solid #c8d7e3!important;
-}
-.jgb-maint-final .jgb-maint-table th{
-  background:#2f5f82!important;
-  color:#fff!important;
-  font-weight:800!important;
-  text-align:center!important;
-  white-space:normal!important;
-  word-break:keep-all!important;
-  line-height:1.25!important;
-  height:42px!important;
-  padding:8px 5px!important;
-}
-.jgb-maint-final .jgb-maint-table td{
-  background:#fff!important;
-  color:#29465e!important;
-  text-align:center!important;
-  white-space:normal!important;
-  word-break:keep-all!important;
-  line-height:1.35!important;
-  min-height:42px!important;
-  padding:8px 6px!important;
-}
-.jgb-maint-final .jgb-maint-table td.issue,
-.jgb-maint-final .jgb-maint-table td.action{
-  text-align:left!important;
-  word-break:break-word!important;
-  white-space:normal!important;
-}
-.jgb-maint-final .jgb-maint-table th.issue,
-.jgb-maint-final .jgb-maint-table th.action{
-  text-align:center!important;
-}
-.jgb-maint-final .jgb-maint-table td.num,
-.jgb-maint-final .jgb-maint-table td.date,
-.jgb-maint-final .jgb-maint-table td.type,
-.jgb-maint-final .jgb-maint-table td.subtype,
-.jgb-maint-final .jgb-maint-table td.vendor,
-.jgb-maint-final .jgb-maint-table td.cost,
-.jgb-maint-final .jgb-maint-table td.result,
-.jgb-maint-final .jgb-maint-table td.arrow{
-  text-align:center!important;
-}
-.jgb-maint-final .jgb-maint-table tbody tr:hover td{
-  background:#f4f9fd!important;
-}
-.jgb-maint-final .jgb-maint-table tbody tr.selected td{
-  background:#eaf4fb!important;
-}
-.jgb-maint-final .jgb-maint-table tbody tr:has(td[colspan]){
-  display:grid!important;
-  grid-template-columns:1fr!important;
-}
-.jgb-maint-final .jgb-maint-table tbody tr:has(td[colspan]) td{
-  grid-column:1!important;
-  width:100%!important;
-  text-align:center!important;
-}
-.jgb-maint-final .jgb-maint-table .jgb-maint-empty{
-  width:100%!important;
-  box-sizing:border-box!important;
-  text-align:center!important;
-  padding:28px 10px!important;
-}
-@media(max-width:900px){
-  .jgb-maint-final .jgb-maint-table-wrap{overflow-x:auto!important}
-  .jgb-maint-final .jgb-maint-table{min-width:900px!important}
 }
 </style>
