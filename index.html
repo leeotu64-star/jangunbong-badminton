@@ -1093,7 +1093,7 @@ function body(){
  if(page==="qr")return qrRequestPage(); if(page==="qr_done")return qrDonePage();
  if(page==="dashboard2")return dashboard2();
   if(page==="process")return processPage();
- if(page==="basic")return window.basicPage(); if(page==="eam")return eamPage(); if(page==="leakage")return leakagePage(); if(page==="schedule")return schedulePage(); if(page==="external")return eamPage();
+ if(page==="basic")return window.basicPage(); if(page==="eam")return (typeof window.eamPage==="function"?window.eamPage():eamPage()); if(page==="leakage")return leakagePage(); if(page==="schedule")return schedulePage(); if(page==="external")return (typeof window.eamPage==="function"?window.eamPage():eamPage());
  if(page==="stats")return statsPage();
  if(page==="workers")return workerPage();
  if(page==="pending")return pendingPage();
@@ -1714,7 +1714,7 @@ async function eamSaveFullEdit(code){
   const meta={asset_code:code,name,category:cat,place,model:document.getElementById('editModel').value.trim(),qty:document.getElementById('editQty').value.trim(),vendor:document.getElementById('editVendor').value.trim(),asContact:document.getElementById('editAs').value.trim(),installDate:document.getElementById('editInstall').value.trim(),warranty:document.getElementById('editWarranty').value.trim(),asHistory:document.getElementById('editAsHistory').value.trim(),note:document.getElementById('editNote').value.trim()};
   const payload={name,category:cat,place,status:document.getElementById('editStatus').value,product_name:meta.model||cat};
   const r=await SUPA.from('assets').update(payload).eq('id',a.id); if(r.error){console.error(r.error);alert('자산 기본정보 저장에 실패했습니다.');return}
-  const h=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'자산정보수정',description:'META::'+JSON.stringify(meta),worker_name:'관리자',action_type:'자산마스터수정',cost:0,event_date:new Date().toISOString().slice(0,10)});
+  const h=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'자산정보수정',description:'META::'+JSON.stringify(meta),worker_name:'관리자',cost:0,event_date:new Date().toISOString().slice(0,10)});
   if(h.error){console.warn(h.error);alert('기본정보는 저장됐지만 상세 메모 저장에 실패했습니다.');}
   document.getElementById('eamEditModal')?.remove(); await eamLoad(); window.__eamSelCode=code; const map={'냉난방':'cooling','소방·방재':'fire','온수·난방':'water','전기설비':'electrical','코트조명':'lighting','방수':'waterproof','기타설비':'other'}; window.__eamCat=map[cat]||'other'; render();
 }
@@ -1746,7 +1746,7 @@ async function eamRetireSelectedAsset(){
   const date=prompt('폐기일을 입력하세요. (YYYY-MM-DD)',new Date().toISOString().slice(0,10)); if(date===null)return;
   const ur=await SUPA.from('assets').update({status:'폐기'}).eq('id',a.id);
   if(ur.error){console.error(ur.error);alert('폐기 처리에 실패했습니다.');return}
-  const hr=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'폐기',description:`자산 폐기 · ${String(reason).trim()||'사유 미기재'}`,worker_name:'',action_type:'자산수명주기',cost:0,event_date:date});
+  const hr=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'폐기',description:`자산 폐기 · ${String(reason).trim()||'사유 미기재'}`,worker_name:'',cost:0,event_date:date});
   if(hr.error){console.error(hr.error);alert('폐기 이력 저장에 실패했습니다.');return}
   await eamLoad(); render();
 }
@@ -1765,7 +1765,7 @@ async function eamRegisterReplacementAsset(){
   const newA=ar.data;
   if(old){
     const desc=`신규 자산 ${newA.asset_code} 등록 · ${installDate} 설치 · 기존 자산 ${old.asset_code} 교체`;
-    const hr=await SUPA.from('asset_history').insert({asset_id:old.id,event_type:'자산교체',description:desc,worker_name:'',action_type:'자산수명주기',cost:0,event_date:installDate});
+    const hr=await SUPA.from('asset_history').insert({asset_id:old.id,event_type:'자산교체',description:desc,worker_name:'',cost:0,event_date:installDate});
     if(hr.error){console.error(hr.error);alert('교체 관계 이력 저장에 실패했습니다. 새 자산은 등록되었으니 확인하세요.');return}
   }
   window.__eamSelCode=newA.asset_code; await eamLoad(); render();
@@ -1783,7 +1783,7 @@ async function eamAddConsumableReplacement(){
   const desc=prompt('작업내용',`${String(part).trim()} 교체`); if(desc===null)return;
   if(!String(part).trim()){alert('소모품·부품명을 입력하세요.');return}
   const detail=`소모품·부품: ${String(part).trim()} · 수량: ${String(qty).trim()||'1'} · 업체: ${String(vendor).trim()||'-'} · ${String(desc).trim()||'교체'}`;
-  const hr=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'소모품교체',description:detail,worker_name:String(vendor).trim(),action_type:'유지보수',cost:Number(String(cost).replace(/[^0-9.-]/g,''))||0,event_date:date});
+  const hr=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'소모품교체',description:detail,worker_name:String(vendor).trim(),cost:Number(String(cost).replace(/[^0-9.-]/g,''))||0,event_date:date});
   if(hr.error){console.error(hr.error);alert('소모품 교체 이력 저장에 실패했습니다.');return}
   await eamLoad(); render();
 }
@@ -2359,7 +2359,7 @@ if(SUPA){syncFromSupabase();startRealtime();setInterval(syncFromSupabase,5000);}
     try{
       const r=await SUPA.from('assets').update({name,category,place,status:meta.status,product_name:meta.model||category}).eq('id',a.id);if(r.error)throw r.error;
       const all=Object.assign({},readMeta(),{[String(code)]:meta});writeMeta(all);window.__eamMetaByCode=all;
-      const h=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'자산정보수정',description:'META::'+JSON.stringify(meta),worker_name:'관리자',action_type:'자산마스터수정',cost:0,event_date:new Date().toISOString().slice(0,10)});if(h.error)throw h.error;
+      const h=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'자산정보수정',description:'META::'+JSON.stringify(meta),worker_name:'관리자',cost:0,event_date:new Date().toISOString().slice(0,10)});if(h.error)throw h.error;
       document.getElementById('eamEditModal')?.remove();await window.eamLoad();window.__eamSelCode=String(code);window.__eamCat=CATMAP[category]||'other';render();
     }catch(e){console.error(e);alert('자산 저장에 실패했습니다.\n'+(e?.message||''))}finally{if(btn){btn.disabled=false;btn.textContent='저장'}}
   };
@@ -2367,7 +2367,7 @@ if(SUPA){syncFromSupabase();startRealtime();setInterval(syncFromSupabase,5000);}
     if(typeof SUPA==='undefined'||!SUPA){alert('Supabase 연결이 필요합니다.');return}
     const a=(window.__eamA||[]).find(v=>String(v.id)===String(assetId));if(!a){alert('등록된 EAM 자산을 찾을 수 없습니다.');return}
     const vendor=prompt('정비업체명','');if(vendor===null)return;const desc=prompt('외부정비 조치내용','');if(desc===null||!v(desc)){alert('조치내용은 필수입니다.');return}const cost=prompt('정비비용(원)','0');if(cost===null)return;const date=prompt('외부정비일 (YYYY-MM-DD)',new Date().toISOString().slice(0,10));if(date===null)return;
-    const r=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'외부정비',description:v(desc),worker_name:v(vendor),action_type:'외부정비',cost:Number(String(cost).replace(/[^0-9.-]/g,''))||0,event_date:date});if(r.error){console.error(r.error);alert('외부정비 이력 저장에 실패했습니다.');return}await window.eamLoad();render();
+    const r=await SUPA.from('asset_history').insert({asset_id:a.id,event_type:'외부정비',description:v(desc),worker_name:v(vendor),cost:Number(String(cost).replace(/[^0-9.-]/g,''))||0,event_date:date});if(r.error){console.error(r.error);alert('외부정비 이력 저장에 실패했습니다.');return}await window.eamLoad();render();
   };
 })();
 </script>
@@ -2535,8 +2535,6 @@ if(typeof window.eamPage==='function'){
     const summary=card.querySelector('summary');
     if(summary){summary.innerHTML=`<div class="jgb-card-head"><span>📋 주요설비 이력카드</span><button type="button" class="jgb-card-edit" onclick="event.preventDefault();event.stopPropagation();eamHistoryCardEdit()">✏️ 수정</button></div>`}
   }
-  const obs=new MutationObserver(()=>requestAnimationFrame(decorate));
-  obs.observe(document.body,{childList:true,subtree:true});
   document.addEventListener('DOMContentLoaded',decorate);
   setTimeout(decorate,300);
 })();
