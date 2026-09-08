@@ -3453,3 +3453,45 @@ if(typeof window.eamPage==='function'){
   }
 }
 </style>
+
+<style id="JGB_MAINT_ONLY_FINAL_ALIGNMENT">
+/* 유지관리 이력 표만 수정: 전역 .issue{display:grid} 충돌 차단 */
+.jgb-maint-final .jgb-maint-table,
+.jgb-maint-final .jgb-maint-table thead,
+.jgb-maint-final .jgb-maint-table tbody,
+.jgb-maint-final .jgb-maint-table tr{
+  width:100%!important;
+}
+.jgb-maint-final .jgb-maint-table{
+  display:table!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+}
+.jgb-maint-final .jgb-maint-table thead{display:table-header-group!important}
+.jgb-maint-final .jgb-maint-table tbody{display:table-row-group!important}
+.jgb-maint-final .jgb-maint-table tr{display:table-row!important}
+.jgb-maint-final .jgb-maint-table th,
+.jgb-maint-final .jgb-maint-table td{
+  display:table-cell!important;
+  box-sizing:border-box!important;
+  position:static!important;
+  float:none!important;
+  vertical-align:middle!important;
+  overflow:hidden!important;
+}
+/* 이 표의 10개 열은 헤더와 본문이 정확히 같은 폭 */
+.jgb-maint-final .jgb-maint-table th.num,.jgb-maint-final .jgb-maint-table td.num{width:4%!important}
+.jgb-maint-final .jgb-maint-table th.date,.jgb-maint-final .jgb-maint-table td.date{width:10%!important}
+.jgb-maint-final .jgb-maint-table th.type,.jgb-maint-final .jgb-maint-table td.type{width:8%!important}
+.jgb-maint-final .jgb-maint-table th.subtype,.jgb-maint-final .jgb-maint-table td.subtype{width:10%!important}
+.jgb-maint-final .jgb-maint-table th.issue,.jgb-maint-final .jgb-maint-table td.issue{width:15%!important;display:table-cell!important}
+.jgb-maint-final .jgb-maint-table th.action,.jgb-maint-final .jgb-maint-table td.action{width:23%!important}
+.jgb-maint-final .jgb-maint-table th.vendor,.jgb-maint-final .jgb-maint-table td.vendor{width:12%!important}
+.jgb-maint-final .jgb-maint-table th.cost,.jgb-maint-final .jgb-maint-table td.cost{width:8%!important}
+.jgb-maint-final .jgb-maint-table th.result,.jgb-maint-final .jgb-maint-table td.result{width:8%!important}
+.jgb-maint-final .jgb-maint-table th.arrow,.jgb-maint-final .jgb-maint-table td.arrow{width:2%!important}
+.jgb-maint-final .jgb-maint-table th{white-space:normal!important;text-align:center!important;line-height:1.25!important}
+.jgb-maint-final .jgb-maint-table td{white-space:normal!important;text-align:center!important;line-height:1.35!important}
+.jgb-maint-final .jgb-maint-table td.issue,
+.jgb-maint-final .jgb-maint-table td.action{text-align:left!important;word-break:break-word!important}
+</style>
