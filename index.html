@@ -2547,6 +2547,169 @@ if(typeof window.eamPage==='function'){
   setTimeout(decorate,300);
 })();
 </script>
+
+<style id="JGB_EAM_MAINT_PHOTO5X5_TABLE_FINAL">
+/* ===== 유지관리 이력 표: 10개 열을 정확히 100%로 고정 ===== */
+.jgb-maint-final .jgb-maint-table-wrap{
+  width:100%!important;
+  overflow-x:auto!important;
+  box-sizing:border-box!important;
+}
+.jgb-maint-final .jgb-maint-table{
+  width:100%!important;
+  min-width:0!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+  border:1px solid #b9cddd!important;
+}
+.jgb-maint-final .jgb-maint-table th,
+.jgb-maint-final .jgb-maint-table td{
+  box-sizing:border-box!important;
+  vertical-align:middle!important;
+  text-align:center!important;
+  border:1px solid #c5d4e1!important;
+  overflow:hidden!important;
+}
+.jgb-maint-final .jgb-maint-table th{
+  background:#e7f0f7!important;
+  color:#24445e!important;
+  font-size:13px!important;
+  font-weight:900!important;
+  padding:10px 6px!important;
+  line-height:1.25!important;
+  white-space:normal!important;
+}
+.jgb-maint-final .jgb-maint-table td{
+  background:#fff!important;
+  color:#29465e!important;
+  font-size:13px!important;
+  padding:10px 7px!important;
+  line-height:1.35!important;
+  white-space:normal!important;
+  word-break:keep-all!important;
+}
+.jgb-maint-final .jgb-maint-table td.issue,
+.jgb-maint-final .jgb-maint-table td.action{
+  text-align:left!important;
+  word-break:break-word!important;
+}
+
+/* 열 폭 합계 100% */
+.jgb-maint-final .jgb-maint-table th:nth-child(1),
+.jgb-maint-final .jgb-maint-table td:nth-child(1){width:4%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(2),
+.jgb-maint-final .jgb-maint-table td:nth-child(2){width:9%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(3),
+.jgb-maint-final .jgb-maint-table td:nth-child(3){width:8%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(4),
+.jgb-maint-final .jgb-maint-table td:nth-child(4){width:10%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(5),
+.jgb-maint-final .jgb-maint-table td:nth-child(5){width:15%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(6),
+.jgb-maint-final .jgb-maint-table td:nth-child(6){width:24%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(7),
+.jgb-maint-final .jgb-maint-table td:nth-child(7){width:10%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(8),
+.jgb-maint-final .jgb-maint-table td:nth-child(8){width:7%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(9),
+.jgb-maint-final .jgb-maint-table td:nth-child(9){width:7%!important}
+.jgb-maint-final .jgb-maint-table th:nth-child(10),
+.jgb-maint-final .jgb-maint-table td:nth-child(10){width:6%!important}
+
+/* ===== 유지관리 등록 작업사진: 각 5cm × 5cm ===== */
+.jgb-modal-final-card{
+  width:min(860px,96vw)!important;
+}
+.jgb-work-photos{
+  display:grid!important;
+  grid-template-columns:repeat(4,5cm)!important;
+  gap:8px!important;
+  justify-content:center!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+.jgb-work-photo{
+  width:5cm!important;
+  min-width:5cm!important;
+  max-width:5cm!important;
+  height:5cm!important;
+  min-height:5cm!important;
+  max-height:5cm!important;
+  box-sizing:border-box!important;
+  border:1px dashed #8eacc5!important;
+  border-radius:7px!important;
+  background:#fff!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex-direction:column!important;
+}
+.jgb-work-photo span{font-size:25px!important;margin-bottom:5px!important}
+.jgb-work-photo b{font-size:11px!important}
+.jgb-work-photo small{font-size:10px!important}
+
+@media(max-width:850px){
+  .jgb-work-photos{
+    grid-template-columns:repeat(2,5cm)!important;
+  }
+}
+@media(max-width:430px){
+  .jgb-work-photos{
+    grid-template-columns:5cm!important;
+  }
+}
+</style>
+
+
+<style id="JGB_MAINT_FINAL_VISUAL_V2">
+/* 유지관리 이력: 선 굵게 + 헤더 색상 강화 */
+.jgb-maint-final .jgb-maint-table{
+  width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+  border:2px solid #6f8da8!important;
+}
+.jgb-maint-final .jgb-maint-table th,
+.jgb-maint-final .jgb-maint-table td{
+  border:1.5px solid #8fa8bd!important;
+}
+.jgb-maint-final .jgb-maint-table th{
+  background:linear-gradient(#dcecf9,#c8e0f2)!important;
+  color:#123a5b!important;
+  font-weight:900!important;
+  border:1.5px solid #6f8da8!important;
+}
+.jgb-maint-final .jgb-maint-table td{
+  background:#fbfdff!important;
+}
+.jgb-maint-final .jgb-maint-table tbody tr:nth-child(even) td{
+  background:#f1f7fc!important;
+}
+.jgb-maint-final .jgb-maint-table tbody tr:hover td{
+  background:#e5f2ff!important;
+}
+.jgb-maint-final .jgb-maint-manage button{
+  border:1.5px solid #6f9bc0!important;
+  box-shadow:0 1px 2px rgba(20,55,85,.10)!important;
+}
+.jgb-maint-final .jgb-maint-manage button.delete{
+  border-color:#d47b7b!important;
+  background:#fff5f5!important;
+}
+
+/* 작업사진: 최소 5×5cm */
+.jgb-work-photo{
+  width:5cm!important;
+  height:5cm!important;
+  min-width:5cm!important;
+  min-height:5cm!important;
+  max-width:5cm!important;
+  max-height:5cm!important;
+  border:2px dashed #829fba!important;
+  background:linear-gradient(145deg,#f7fbff,#edf5fb)!important;
+}
+</style>
+
 </body></html>
 
 <style id="JGB_EAM_CARD_HISTORY_FINAL_CSS">
