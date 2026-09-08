@@ -3493,3 +3493,109 @@ if(typeof window.eamPage==='function'){
 }
 </style>
 
+<style id="JGB_EAM_MAINT_GRID_ALIGNMENT_REAL">
+/* 유지관리 이력: HTML table의 기존 폭 규칙 충돌을 완전히 차단하고
+   헤더/본문을 동일한 CSS Grid 열 구조로 강제 */
+.jgb-maint-final .jgb-maint-table{
+  display:grid!important;
+  grid-template-columns:4% 10% 8% 10% 15% 23% 12% 8% 8% 2%!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  table-layout:auto!important;
+  border-collapse:collapse!important;
+  border-spacing:0!important;
+}
+.jgb-maint-final .jgb-maint-table thead,
+.jgb-maint-final .jgb-maint-table tbody,
+.jgb-maint-final .jgb-maint-table tfoot{
+  display:contents!important;
+}
+.jgb-maint-final .jgb-maint-table tr{
+  display:grid!important;
+  grid-template-columns:subgrid!important;
+  width:100%!important;
+  min-width:0!important;
+}
+.jgb-maint-final .jgb-maint-table thead tr{
+  background:#2f5f82!important;
+}
+.jgb-maint-final .jgb-maint-table th,
+.jgb-maint-final .jgb-maint-table td{
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  vertical-align:middle!important;
+  border-right:1px solid #c8d7e3!important;
+  border-bottom:1px solid #c8d7e3!important;
+}
+.jgb-maint-final .jgb-maint-table th{
+  background:#2f5f82!important;
+  color:#fff!important;
+  font-weight:800!important;
+  text-align:center!important;
+  white-space:normal!important;
+  word-break:keep-all!important;
+  line-height:1.25!important;
+  height:42px!important;
+  padding:8px 5px!important;
+}
+.jgb-maint-final .jgb-maint-table td{
+  background:#fff!important;
+  color:#29465e!important;
+  text-align:center!important;
+  white-space:normal!important;
+  word-break:keep-all!important;
+  line-height:1.35!important;
+  min-height:42px!important;
+  padding:8px 6px!important;
+}
+.jgb-maint-final .jgb-maint-table td.issue,
+.jgb-maint-final .jgb-maint-table td.action{
+  text-align:left!important;
+  word-break:break-word!important;
+  white-space:normal!important;
+}
+.jgb-maint-final .jgb-maint-table th.issue,
+.jgb-maint-final .jgb-maint-table th.action{
+  text-align:center!important;
+}
+.jgb-maint-final .jgb-maint-table td.num,
+.jgb-maint-final .jgb-maint-table td.date,
+.jgb-maint-final .jgb-maint-table td.type,
+.jgb-maint-final .jgb-maint-table td.subtype,
+.jgb-maint-final .jgb-maint-table td.vendor,
+.jgb-maint-final .jgb-maint-table td.cost,
+.jgb-maint-final .jgb-maint-table td.result,
+.jgb-maint-final .jgb-maint-table td.arrow{
+  text-align:center!important;
+}
+.jgb-maint-final .jgb-maint-table tbody tr:hover td{
+  background:#f4f9fd!important;
+}
+.jgb-maint-final .jgb-maint-table tbody tr.selected td{
+  background:#eaf4fb!important;
+}
+.jgb-maint-final .jgb-maint-table tbody tr:has(td[colspan]){
+  display:grid!important;
+  grid-template-columns:1fr!important;
+}
+.jgb-maint-final .jgb-maint-table tbody tr:has(td[colspan]) td{
+  grid-column:1!important;
+  width:100%!important;
+  text-align:center!important;
+}
+.jgb-maint-final .jgb-maint-table .jgb-maint-empty{
+  width:100%!important;
+  box-sizing:border-box!important;
+  text-align:center!important;
+  padding:28px 10px!important;
+}
+@media(max-width:900px){
+  .jgb-maint-final .jgb-maint-table-wrap{overflow-x:auto!important}
+  .jgb-maint-final .jgb-maint-table{min-width:900px!important}
+}
+</style>
