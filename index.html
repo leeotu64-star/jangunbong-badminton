@@ -1079,7 +1079,7 @@ function render(){
  const app=document.getElementById("app");
  if(!app)return;
  try{
- app.innerHTML=`<div class="jgb-shell"><aside class="jgb-nav"><div class="jgb-brand">🛡 장군봉체육관<br>관리시스템</div><div class="jgb-group">운영</div>${nav("dashboard","🏠 운영 대시보드")}${nav("process","🛠 작업관리")}<div class="jgb-group">EAM</div>${nav("eam","🏢 자산 EAM 관리")}${nav("dashboard2","📊 EAM 현황")}<div class="jgb-sub-divider"></div>${nav("leakage","💧 누수관리")}<div class="jgb-group">직원</div>${nav("basic","🧹 기본업무")}${nav("schedule","📅 근무편성")}${nav("stats","📈 직원실적")}<div class="jgb-group">관리</div>${nav("settings","⚙ 설정")}</aside><main class="jgb-main"><header class="jgb-top"><div><h1>장군봉체육관 시설관리 <span style="font-size:10px;vertical-align:middle;background:#eaf3ff;color:#1769c1;padding:4px 6px;border-radius:6px">v24</span></h1><small>신고 접수 → 작업관리 → 조치완료</small></div><div style="text-align:right"><span id="clock"></span><div class="jgb-live">● 실시간 동기화</div></div></header><section class="jgb-content">${body()}</section></main></div>`;app.querySelectorAll("[data-page]").forEach(el=>el.addEventListener("click",()=>go(el.dataset.page)));tick();clearInterval(window.__clock);window.__clock=setInterval(tick,1000);
+ app.innerHTML=`<div class="jgb-shell"><aside class="jgb-nav"><div class="jgb-brand">🛡 장군봉체육관<br>관리시스템</div><div class="jgb-group">운영</div>${nav("dashboard","🏠 운영 대시보드")}${nav("process","🛠 작업관리")}<div class="jgb-group">EAM</div>${nav("eam","🏢 자산 EAM 관리")}${nav("dashboard2","📊 EAM 현황")}<div class="jgb-group">시설관리</div>${nav("leakage","💧 누수관리")}<div class="jgb-group">직원</div>${nav("basic","🧹 기본업무")}${nav("schedule","📅 근무편성")}${nav("stats","📈 직원실적")}<div class="jgb-group">관리</div>${nav("settings","⚙ 설정")}</aside><main class="jgb-main"><header class="jgb-top"><div><h1>장군봉체육관 시설관리 <span style="font-size:10px;vertical-align:middle;background:#eaf3ff;color:#1769c1;padding:4px 6px;border-radius:6px">v24</span></h1><small>신고 접수 → 작업관리 → 조치완료</small></div><div style="text-align:right"><span id="clock"></span><div class="jgb-live">● 실시간 동기화</div></div></header><section class="jgb-content">${body()}</section></main></div>`;app.querySelectorAll("[data-page]").forEach(el=>el.addEventListener("click",()=>go(el.dataset.page)));tick();clearInterval(window.__clock);window.__clock=setInterval(tick,1000);
  }catch(err){
    console.error("화면 렌더링 오류",err);
    app.innerHTML=`<div class="panel" style="margin:20px"><h2>화면을 불러오지 못했습니다.</h2><div class="small" style="margin-top:8px">오류: ${String(err?.message||err)}</div><button class="btn blue" style="margin-top:12px" onclick="location.reload()">새로고침</button></div>`;
@@ -1525,14 +1525,14 @@ function eamRegisterNewAsset(defaultCategory){
   document.getElementById('eamRegisterModal')?.remove();
   document.body.insertAdjacentHTML('beforeend',`<div id="eamRegisterModal" class="eam-modal">
     <div class="eam-modal-card">
-      <div class="eam-modal-head"><div><span>EAM ASSET MASTER</span><h3>신규 자산 등록</h3><small>실제 신규 시설·설비 또는 신규 누수 항목만 등록합니다.</small></div><button type="button" onclick="closeEamRegisterModal()">×</button></div>
+      <div class="eam-modal-head"><div><span>EAM ASSET MASTER</span><h3>신규 자산 등록</h3><small>실제 신규 시설·설비만 등록합니다.</small></div><button type="button" onclick="closeEamRegisterModal()">×</button></div>
       <div class="eam-modal-grid">
         <label>시설·설비명 *<input id="eamRegName" placeholder="구매한 실제 제품명"></label>
-        <label>분류 *<select id="eamRegCat"><option>냉난방</option><option>소방설비</option><option>보일러·온수</option><option>전기설비</option><option>코트조명</option><option>방수</option><option>기타설비</option><option>누수관리</option></select></label>
+        <label>분류 *<select id="eamRegCat"><option>냉난방</option><option>소방설비</option><option>보일러·온수</option><option>전기설비</option><option>코트조명</option><option>방수</option><option>기타설비</option></select></label>
         <label>설치 위치 *<select id="eamRegPlaceSelect" onchange="eamRegPlaceMode(this.value)"><option value="">기존 위치 선택</option>${['유수장치실','기계실','사무실','휴게실','옥상','코트 1','코트 2','코트 3','코트 4','코트 5','남자 탈의실','여자 탈의실','남자 샤워실','여자 샤워실','남자 화장실','여자 화장실','복도','기타'].map(p=>`<option value="${p}">${p}</option>`).join('')}<option value="__new__">＋ 신규 위치 직접 입력</option></select><input id="eamRegPlace" placeholder="신규 위치 입력" style="display:none;margin-top:7px"></label>
         <label>설치일<input id="eamRegDate" type="date" value="${new Date().toISOString().slice(0,10)}"></label>
       </div>
-      <div class="eam-modal-note">기존 자산은 자동으로 추가하지 않습니다. 신규 구매·설치 자산 또는 신규 누수 항목만 직접 등록합니다.</div>
+      <div class="eam-modal-note">기존 자산은 자동으로 추가하지 않습니다. 신규 구매·설치 자산만 직접 등록합니다.</div>
       <div class="eam-modal-actions"><button class="btn gray" type="button" onclick="closeEamRegisterModal()">취소</button><button class="btn blue" id="eamRegSubmit" type="button" onclick="submitEamRegister()">EAM 자산 생성</button></div>
     </div></div>`);
   const cat=document.getElementById('eamRegCat');
@@ -3860,3 +3860,4 @@ if(typeof window.eamPage==='function'){
   setTimeout(forceEam,400);
 })();
 </script>
+\n<style id="JGB_SIDEBAR_GROUP_FINAL">\n/* EAM과 누수관리를 별도 기능군으로 분리 */\n.jgb-nav .jgb-group{letter-spacing:.02em}\n.jgb-nav .jgb-link{display:flex!important;align-items:center!important;gap:8px!important}\n.jgb-nav .jgb-group + .jgb-link{margin-top:2px}\n</style>\n<script id="JGB_LEAKAGE_SEPARATE_FINAL">\n(function(){\n  // EAM 화면의 카테고리/자산 목록에는 누수 항목을 절대 포함하지 않음\n  try{\n    const old=window.eamSourceAssets;\n    if(typeof old==='function') window.eamSourceAssets=function(){return old().filter(x=>!String(x?.type||x?.category||x?.name||'').includes('누수'));};\n  }catch(e){}\n})();\n</script>\n
