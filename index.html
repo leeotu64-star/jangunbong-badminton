@@ -2710,6 +2710,115 @@ if(typeof window.eamPage==='function'){
 }
 </style>
 
+
+<style id="JGB_EAM_DASHBOARD_INNOVATION_FINAL">
+/* EAM 현황판 최종 개편: 큰 글씨 / 그래프 중심 / 내부·외부 유지 / 중복 최소화 */
+.eam-dashboard,
+.eam-dashboard * { box-sizing:border-box; }
+
+.eam-dashboard .stat-card,
+.eam-dashboard .summary-card {
+  min-height:92px !important;
+  padding:18px 20px !important;
+}
+.eam-dashboard .stat-card .value,
+.eam-dashboard .summary-card .value,
+.eam-dashboard .stat-card strong,
+.eam-dashboard .summary-card strong {
+  font-size:32px !important;
+  line-height:1.05 !important;
+  font-weight:900 !important;
+}
+.eam-dashboard .stat-card .label,
+.eam-dashboard .summary-card .label {
+  font-size:15px !important;
+  font-weight:800 !important;
+}
+.eam-dashboard .stat-card small,
+.eam-dashboard .summary-card small {
+  font-size:12px !important;
+}
+
+/* 기존의 넓은 빈 박스 느낌을 줄이고 그래프 영역을 크게 */
+.eam-dashboard .chart-card,
+.eam-dashboard .graph-card,
+.eam-dashboard .dashboard-card {
+  min-height:340px !important;
+  padding:18px 20px !important;
+}
+.eam-dashboard .chart-card h3,
+.eam-dashboard .graph-card h3,
+.eam-dashboard .dashboard-card h3 {
+  font-size:19px !important;
+  font-weight:900 !important;
+}
+.eam-dashboard .chart-card .sub,
+.eam-dashboard .graph-card .sub,
+.eam-dashboard .dashboard-card .sub {
+  font-size:13px !important;
+}
+
+/* 그래프 자체를 크게 */
+.eam-dashboard canvas,
+.eam-dashboard svg {
+  font-size:14px !important;
+}
+.eam-dashboard .chart-wrap,
+.eam-dashboard .graph-wrap {
+  min-height:255px !important;
+}
+
+/* 내부·외부 정비는 유지하되 핵심 비교 카드로 명확하게 */
+.eam-dashboard .repair-split,
+.eam-dashboard .maintenance-split,
+.eam-dashboard .internal-external {
+  min-height:145px !important;
+}
+.eam-dashboard .repair-split .value,
+.eam-dashboard .maintenance-split .value,
+.eam-dashboard .internal-external .value {
+  font-size:38px !important;
+  font-weight:900 !important;
+}
+
+/* 불필요하게 작은 텍스트 축소 금지 */
+.eam-dashboard .chart-label,
+.eam-dashboard .axis-label,
+.eam-dashboard .legend,
+.eam-dashboard .legend-item {
+  font-size:13px !important;
+  font-weight:700 !important;
+}
+
+/* 우선순위 영역은 숫자를 크게 */
+.eam-dashboard .priority-rank {
+  font-size:24px !important;
+  font-weight:900 !important;
+}
+.eam-dashboard .priority-name {
+  font-size:15px !important;
+  font-weight:800 !important;
+}
+
+/* 좁은 카드가 여러 개 생기지 않도록 주요 그래프를 넓게 */
+.eam-dashboard .main-chart {
+  grid-column:1 / -1 !important;
+  min-height:390px !important;
+}
+
+/* 현황판 헤더 */
+.eam-dashboard .dashboard-title {
+  font-size:28px !important;
+  font-weight:950 !important;
+}
+</style>
+
+<style id="JGB_EAM_DASHBOARD_FALLBACK_FINAL">
+/* EAM 현황판의 차트/카드가 실제 DOM에서 다른 클래스명을 사용할 경우를 위한 최소 보정 */
+[id*="eam"] canvas { min-height:240px; }
+[id*="eam"] svg { overflow:visible; }
+</style>
+
 </body></html>
 
 <style id="JGB_EAM_CARD_HISTORY_FINAL_CSS">
