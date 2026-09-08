@@ -2277,7 +2277,6 @@ if(SUPA){syncFromSupabase();startRealtime();setInterval(syncFromSupabase,5000);}
     const code=v(window.__eamSelCode);
     document.body.insertAdjacentHTML('beforeend',`<div id="eamManageModal" class="eam-modal" onclick="if(event.target===this)this.remove()"><div class="eam-modal-card"><div class="eam-modal-head"><div><span>EAM ASSET MANAGEMENT</span><h3>자산 관리</h3><small>신규 등록부터 유지관리 이력까지 한 곳에서 관리합니다.</small></div><button type="button" onclick="this.closest('#eamManageModal')?.remove()">×</button></div><div class="eam-manage-grid">
       <button type="button" class="eam-manage-btn blue" onclick="eamRegisterNewAsset();document.getElementById('eamManageModal')?.remove()">＋ 신규 자산 등록</button>
-      <button type="button" class="eam-manage-btn" onclick="eamEditSelectedAsset();document.getElementById('eamManageModal')?.remove()">✏️ 주요설비 이력카드 수정</button>
       <button type="button" class="eam-manage-btn" onclick="eamRegisterMaintenance((window.__eamA||[]).find(a=>String(a.asset_code)===String(window.__eamSelCode))?.id,'external');document.getElementById('eamManageModal')?.remove()">🛠️ 외부정비 등록</button>
       <button type="button" class="eam-manage-btn" onclick="eamShowHistory();document.getElementById('eamManageModal')?.remove()">📋 정비 이력</button>
       <button type="button" class="eam-manage-btn" onclick="eamRetireSelectedAsset();document.getElementById('eamManageModal')?.remove()">♻️ 폐기·교체</button>
