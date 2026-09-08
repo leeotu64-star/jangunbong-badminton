@@ -930,10 +930,10 @@ const SUPABASE_URL="https://uadyitdlyponeilywacr.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_uJl-AIFKhucxDzgst9JxJA_0FjvYKB9";
 const SUPA=(window.supabase&&typeof window.supabase.createClient==="function")?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY):null;
 const PLACE_GROUPS={
-  시설:["유수장치실","기계실","사무실","휴게실","코트 1","코트 2","코트 3","코트 4","코트 5","옥상","남자 탈의실","여자 탈의실","남자 샤워실","여자 샤워실","남자 화장실","여자 화장실","복도","기타"],
-  환경:["남자 화장실","여자 화장실","남자 탈의실","여자 탈의실","남자 샤워실","여자 샤워실","코트 1","코트 2","코트 3","코트 4","코트 5","복도","휴게실","사무실","기타"],
-  안전:["유수장치실","기계실","옥상","코트 1","코트 2","코트 3","코트 4","코트 5","남자 탈의실","여자 탈의실","남자 샤워실","여자 샤워실","남자 화장실","여자 화장실","복도","휴게실","사무실","기타"],
-  기타:["사무실","휴게실","코트 1","코트 2","코트 3","코트 4","코트 5","옥상","기계실","유수장치실","남자 탈의실","여자 탈의실","남자 샤워실","여자 샤워실","남자 화장실","여자 화장실","복도","기타"]
+  시설:["유수장치실","기계실","사무실","휴게실","1번 코트(좌측)","1번 코트(우측)","2번 코트(좌측)","2번 코트(우측)","3번 코트(좌측)","3번 코트(우측)","4번 코트(좌측)","4번 코트(우측)","5번 코트(좌측)","5번 코트(우측)","옥상","남자 탈의실","여자 탈의실","남자 샤워실","여자 샤워실","남자 화장실","여자 화장실","복도","기타"],
+  환경:["남자 화장실","여자 화장실","남자 탈의실","여자 탈의실","남자 샤워실","여자 샤워실","1번 코트(좌측)","1번 코트(우측)","2번 코트(좌측)","2번 코트(우측)","3번 코트(좌측)","3번 코트(우측)","4번 코트(좌측)","4번 코트(우측)","5번 코트(좌측)","5번 코트(우측)","복도","휴게실","사무실","기타"],
+  안전:["유수장치실","기계실","옥상","1번 코트(좌측)","1번 코트(우측)","2번 코트(좌측)","2번 코트(우측)","3번 코트(좌측)","3번 코트(우측)","4번 코트(좌측)","4번 코트(우측)","5번 코트(좌측)","5번 코트(우측)","남자 탈의실","여자 탈의실","남자 샤워실","여자 샤워실","남자 화장실","여자 화장실","복도","휴게실","사무실","기타"],
+  기타:["사무실","휴게실","1번 코트(좌측)","1번 코트(우측)","2번 코트(좌측)","2번 코트(우측)","3번 코트(좌측)","3번 코트(우측)","4번 코트(좌측)","4번 코트(우측)","5번 코트(좌측)","5번 코트(우측)","옥상","기계실","유수장치실","남자 탈의실","여자 탈의실","남자 샤워실","여자 샤워실","남자 화장실","여자 화장실","복도","기타"]
 };
 const PLACE_OPTIONS=[...new Set(Object.values(PLACE_GROUPS).flat())];
 const ISSUE_PRESETS={
@@ -1529,7 +1529,7 @@ function eamRegisterNewAsset(defaultCategory){
       <div class="eam-modal-grid">
         <label>시설·설비명 *<input id="eamRegName" placeholder="구매한 실제 제품명"></label>
         <label>분류 *<select id="eamRegCat"><option>냉난방</option><option>소방설비</option><option>보일러·온수</option><option>전기설비</option><option>코트조명</option><option>방수</option><option>기타설비</option><option>누수관리</option></select></label>
-        <label>설치 위치 *<select id="eamRegPlaceSelect" onchange="eamRegPlaceMode(this.value)"><option value="">기존 위치 선택</option>${['유수장치실','기계실','사무실','휴게실','옥상','코트 1','코트 2','코트 3','코트 4','코트 5','남자 탈의실','여자 탈의실','남자 샤워실','여자 샤워실','남자 화장실','여자 화장실','복도','기타'].map(p=>`<option value="${p}">${p}</option>`).join('')}<option value="__new__">＋ 신규 위치 직접 입력</option></select><input id="eamRegPlace" placeholder="신규 위치 입력" style="display:none;margin-top:7px"></label>
+        <label>설치 위치 *<select id="eamRegPlaceSelect" onchange="eamRegPlaceMode(this.value)"><option value="">기존 위치 선택</option>${['유수장치실','기계실','사무실','휴게실','옥상','1번 코트(좌측)','1번 코트(우측)','2번 코트(좌측)','2번 코트(우측)','3번 코트(좌측)','3번 코트(우측)','4번 코트(좌측)','4번 코트(우측)','5번 코트(좌측)','5번 코트(우측)','남자 탈의실','여자 탈의실','남자 샤워실','여자 샤워실','남자 화장실','여자 화장실','복도','기타'].map(p=>`<option value="${p}">${p}</option>`).join('')}<option value="__new__">＋ 신규 위치 직접 입력</option></select><input id="eamRegPlace" placeholder="신규 위치 입력" style="display:none;margin-top:7px"></label>
         <label>설치일<input id="eamRegDate" type="date" value="${new Date().toISOString().slice(0,10)}"></label>
       </div>
       <div class="eam-modal-note">기존 자산은 자동으로 추가하지 않습니다. 신규 구매·설치 자산 또는 신규 누수 항목만 직접 등록합니다.</div>
@@ -3503,3 +3503,49 @@ if(typeof window.eamPage==='function'){
 .jgb-maint-final .jgb-maint-table td.issue,
 .jgb-maint-final .jgb-maint-table td.action{text-align:left!important;word-break:break-word!important}
 </style>
+<script id="JGB_LOCATION_CANONICAL_FINAL">
+(function(){
+  const COURT_PLACES=[
+    '1번 코트(좌측)','1번 코트(우측)',
+    '2번 코트(좌측)','2번 코트(우측)',
+    '3번 코트(좌측)','3번 코트(우측)',
+    '4번 코트(좌측)','4번 코트(우측)',
+    '5번 코트(좌측)','5번 코트(우측)'
+  ];
+  const OTHER_PLACES=['유수장치실','기계실','사무실','휴게실','옥상','남자 탈의실','여자 탈의실','남자 샤워실','여자 샤워실','남자 화장실','여자 화장실','복도','기타'];
+  const ALL_PLACES=[...COURT_PLACES,...OTHER_PLACES];
+  const norm=(v)=>{
+    const x=String(v||'').trim();
+    let m=x.match(/^(?:코트\s*)?([1-5])(?:번)?\s*코트?\s*[- ]*\(?\s*(좌|좌측|우|우측)\s*\)?$/);
+    if(m) return `${m[1]}번 코트(${m[2].startsWith('좌')?'좌측':'우측'})`;
+    m=x.match(/^([1-5])번?\s*코트\s*\((좌측|우측)\)$/);
+    if(m) return `${m[1]}번 코트(${m[2]})`;
+    return x;
+  };
+  window.JGB_CANONICAL_PLACES=ALL_PLACES.slice();
+  window.JGB_NORMALIZE_PLACE=norm;
+  function normalizeAssets(){
+    const arr=window.__eamA;
+    if(Array.isArray(arr)) arr.forEach(a=>{ if(a && a.place) a.place=norm(a.place); });
+    const maps=['__eamMetaByCode','__eamMeta'];
+    maps.forEach(k=>{ const obj=window[k]; if(obj&&typeof obj==='object') Object.values(obj).forEach(a=>{ if(a&&a.place) a.place=norm(a.place); }); });
+  }
+  function normalizeSelect(sel){
+    if(!sel) return;
+    const current=norm(sel.value);
+    const has=ALL_PLACES.some(p=>p===current);
+    if(sel.id==='eamRegPlaceSelect' || sel.id==='editDetailPlace' || sel.id==='eamEditPlace' || /Place$/i.test(sel.id||'')){
+      const keepNew=[...sel.options].some(o=>o.value==='__new__');
+      sel.innerHTML=ALL_PLACES.map(p=>`<option value="${p}">${p}</option>`).join('')+(keepNew?'<option value="__new__">＋ 신규 위치 직접 입력</option>':'');
+      if(current && ALL_PLACES.includes(current)) sel.value=current;
+    }
+  }
+  function run(){
+    normalizeAssets();
+    document.querySelectorAll('select').forEach(normalizeSelect);
+  }
+  window.addEventListener('DOMContentLoaded',()=>setTimeout(run,0));
+  setTimeout(run,300);
+  setTimeout(run,1200);
+})();
+</script>
