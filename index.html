@@ -3564,4 +3564,272 @@ body.customer-display .activeTime{
 </style>
 
 
+
+<style id="JGB_ORIGINAL_5x5_40_60_FINAL">
+/* ===== 원본 기능 유지 / 관제판 디자인만 전면 재배치 ===== */
+html,body{width:100%;height:100%;margin:0;padding:0;overflow:hidden}
+body.customer-display{overflow:hidden}
+body.customer-display #app,
+body:has(.customerHeader) #app{width:100%;height:100%;max-width:none}
+
+/* 상단 */
+body:has(.customerHeader) .customerHeader,
+body.customer-display .customerHeader{
+  height:72px!important;
+  width:100%!important;
+  padding:7px 12px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  background:#092945!important;
+}
+
+/* 전체 관제 영역 */
+body:has(.customerHeader) .customerWrap,
+body.customer-display .customerWrap{
+  width:100%!important;
+  height:calc(100vh - 72px)!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:8px 7px 8px!important;
+  display:grid!important;
+  grid-template-rows:40% 60%!important;
+  gap:7px!important;
+  overflow:hidden!important;
+}
+
+/* 위/아래 섹션 자체 */
+body:has(.customerHeader) .customerWrap>section,
+body.customer-display .customerWrap>section{
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+
+/* 섹션 제목 */
+body:has(.customerHeader) .displaySectionTitle,
+body.customer-display .displaySectionTitle,
+body:has(.customerHeader) .waitDashboardTitle,
+body.customer-display .waitDashboardTitle{
+  flex:0 0 29px!important;
+  height:29px!important;
+  min-height:29px!important;
+  margin:0 0 5px!important;
+  padding:0 5px!important;
+  display:flex!important;
+  align-items:center!important;
+  border-bottom:2px solid #092945!important;
+  font-size:15px!important;
+  font-weight:950!important;
+  color:#102d48!important;
+}
+
+/* ===== 위 : 진행 5개 / 한 줄 ===== */
+body:has(.customerHeader) .activeCourts,
+body.customer-display .activeCourts{
+  flex:1 1 auto!important;
+  width:100%!important;
+  height:auto!important;
+  min-width:0!important;
+  min-height:0!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  gap:7px!important;
+}
+
+body:has(.customerHeader) .activeCourts>.activeCard,
+body.customer-display .activeCourts>.activeCard{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  border-radius:7px!important;
+  box-shadow:none!important;
+}
+
+/* 위 카드 내부 */
+body:has(.customerHeader) .activeHead,
+body.customer-display .activeHead{
+  height:38px!important;
+  padding:0 7px!important;
+}
+body:has(.customerHeader) .activeNum,
+body.customer-display .activeNum{
+  width:27px!important;height:27px!important;
+  font-size:15px!important;
+}
+body:has(.customerHeader) .activeHead>span,
+body.customer-display .activeHead>span{
+  font-size:12px!important;font-weight:900!important;
+}
+body:has(.customerHeader) .status,
+body.customer-display .status{
+  font-size:8px!important;padding:4px 7px!important;
+}
+body:has(.customerHeader) .activeBody,
+body.customer-display .activeBody{
+  height:calc(100% - 38px)!important;
+  padding:8px 10px!important;
+  overflow:hidden!important;
+}
+body:has(.customerHeader) .activeTeam,
+body.customer-display .activeTeam{
+  font-size:25px!important;
+  line-height:1.05!important;
+  margin-top:6px!important;
+}
+body:has(.customerHeader) .activeLabel,
+body.customer-display .activeLabel{
+  font-size:9px!important;margin-top:10px!important;
+}
+body:has(.customerHeader) .activeTime,
+body.customer-display .activeTime{
+  font-size:16px!important;
+}
+body:has(.customerHeader) .activeGame,
+body.customer-display .activeGame{
+  font-size:10px!important;
+}
+body:has(.customerHeader) .courtGraphic,
+body.customer-display .courtGraphic{
+  display:none!important;
+}
+
+/* ===== 아래 : 대기 5개 / 한 줄 ===== */
+body:has(.customerHeader) .waitDashboard,
+body.customer-display .waitDashboard{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  display:flex!important;
+  flex-direction:column!important;
+  overflow:hidden!important;
+}
+
+body:has(.customerHeader) .waitDashboardTitle,
+body.customer-display .waitDashboardTitle{
+  flex:0 0 29px!important;
+  width:100%!important;
+  margin:0 0 5px!important;
+  background:transparent!important;
+}
+
+/* 안내 문구는 카드 5개 옆으로 들어오지 않게 완전히 숨김 */
+body:has(.customerHeader) .displayNotice,
+body.customer-display .displayNotice{
+  display:none!important;
+}
+
+/* 핵심: 5개를 정확히 한 줄 */
+body:has(.customerHeader) .waitGrid,
+body.customer-display .waitGrid{
+  flex:1 1 auto!important;
+  width:100%!important;
+  height:auto!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-height:none!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  grid-template-areas:none!important;
+  gap:7px!important;
+  overflow:hidden!important;
+}
+
+/* 1~5 전부 같은 칸 */
+body:has(.customerHeader) .waitGrid>.waitCard,
+body.customer-display .waitGrid>.waitCard{
+  grid-area:auto!important;
+  grid-row:1!important;
+  grid-column:auto!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:0!important;
+  border-radius:7px!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+}
+
+/* 대기 카드 헤더 */
+body:has(.customerHeader) .waitCardTitle,
+body.customer-display .waitCardTitle{
+  height:38px!important;
+  min-height:38px!important;
+  padding:0 8px!important;
+  display:flex!important;
+  align-items:center!important;
+  font-size:12px!important;
+  font-weight:950!important;
+}
+body:has(.customerHeader) .waitTableHead,
+body.customer-display .waitTableHead{
+  height:27px!important;
+  min-height:27px!important;
+  font-size:8px!important;
+}
+body:has(.customerHeader) .waitRow,
+body.customer-display .waitRow{
+  min-height:34px!important;
+  height:34px!important;
+  padding:2px 4px!important;
+  font-size:9px!important;
+}
+body:has(.customerHeader) .waitRow>*,
+body.customer-display .waitRow>*{
+  font-size:9px!important;
+}
+body:has(.customerHeader) .waitRow strong,
+body.customer-display .waitRow strong{
+  font-size:10px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+body:has(.customerHeader) .waitRow em,
+body.customer-display .waitRow em{
+  font-size:9px!important;
+}
+body:has(.customerHeader) .waitEmpty,
+body.customer-display .waitEmpty{
+  height:calc(100% - 65px)!important;
+  min-height:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+body:has(.customerHeader) .waitEmpty .emptyFace,
+body.customer-display .waitEmpty .emptyFace{
+  font-size:30px!important;
+}
+body:has(.customerHeader) .waitEmpty b,
+body.customer-display .waitEmpty b{
+  font-size:16px!important;
+}
+
+/* 양쪽 끝까지 정확히 폭 사용 */
+body:has(.customerHeader) .activeCourts>*,
+body:has(.customerHeader) .waitGrid>*,
+body.customer-display .activeCourts>*,
+body.customer-display .waitGrid>*{
+  min-width:0!important;
+  max-width:none!important;
+}
+</style>
+
 </body></html>
