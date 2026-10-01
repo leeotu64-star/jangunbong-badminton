@@ -15206,7 +15206,7 @@ function jgbV47GoWpByLeak(leakCode){
         const a=A.find(x=>String(x.asset_code||'').trim()===c)||null;
         const merged=Object.assign({},s||{},a||{},m||{});
         /* 주펌프 운영·관리정보 기본값: 기존 저장값이 있을 경우 그대로 유지 */
-        if(String(merged.name||'').trim()==='주펌프' || c==='FI-09'){
+        if(String(merged.name||'').trim()==='주펌프' || c==='FI-09' || c==='FI-01'){
           if(!merged.operationMethod) merged.operationMethod='자동운전 상태로 유지하며, 점검 시 수동 기동상태를 확인';
           if(!merged.usageMethod) merged.usageMethod='소방용수 공급이 필요한 경우 자동 기동되도록 운전상태를 유지';
           if(!merged.caution) merged.caution='점검 후 자동운전 상태로 복귀하고, 누수·이상소음 등 이상 여부를 확인';
