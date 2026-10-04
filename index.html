@@ -365,7 +365,7 @@ body.customer-display, body:has(.customerHeader){background:#eef4fb!important;co
 .waitGrid{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-template-areas:"a a b b c c" "d d d e e e"!important;gap:9px!important;width:100%!important}
 .waitCard{min-width:0!important;height:245px!important;background:#fff!important;border:2px solid var(--court)!important;border-radius:8px!important;overflow:hidden!important}.waitCard:nth-child(1){grid-area:a}.waitCard:nth-child(2){grid-area:b}.waitCard:nth-child(3){grid-area:c}.waitCard:nth-child(4){grid-area:d}.waitCard:nth-child(5){grid-area:e}
 .waitCardTitle{height:43px!important;background:var(--court)!important;color:#fff!important;font-size:18px!important;font-weight:950!important;padding:6px 10px!important;display:flex!important;align-items:center!important}
-.waitTableHead{height:31px!important;display:grid!important;grid-template-columns:48px 1.35fr 1fr 1.05fr!important;align-items:center!important;background:#f0f4f8!important;border-bottom:1px solid #cbd6e3!important;font-size:10px!important;font-weight:950!important;padding:2px 7px!important}.waitRow{min-height:42px!important;display:grid!important;grid-template-columns:48px 1.35fr 1fr 1.05fr!important;align-items:center!important;border-top:1px solid #dbe3ec!important;padding:3px 7px!important;font-size:13px!important}.waitRow b{width:28px!important;height:28px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#edf2f7!important;border-radius:5px!important;font-size:14px!important}.waitRow strong{font-size:14px!important;font-weight:950!important}.waitRow em{font-size:16px!important;font-style:normal!important;font-weight:950!important;color:var(--court)!important}.waitEmpty{height:165px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;font-size:18px!important;font-weight:900!important}.emptyFace{font-size:48px!important;margin-bottom:8px!important}
+.waitTableHead{height:31px!important;display:grid!important;grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;align-items:center!important;background:#f0f4f8!important;border-bottom:1px solid #cbd6e3!important;font-size:10px!important;font-weight:950!important;padding:2px 7px!important}.waitRow{min-height:42px!important;display:grid!important;grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;align-items:center!important;border-top:1px solid #dbe3ec!important;padding:3px 7px!important;font-size:13px!important}.waitRow b{width:28px!important;height:28px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#edf2f7!important;border-radius:5px!important;font-size:14px!important}.waitRow strong{font-size:14px!important;font-weight:950!important}.waitRow em{font-size:16px!important;font-style:normal!important;font-weight:950!important;color:var(--court)!important}.waitEmpty{height:165px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;font-size:18px!important;font-weight:900!important}.emptyFace{font-size:48px!important;margin-bottom:8px!important}
 .displayNotice{margin-top:9px!important;border:2px solid #c4d6ea!important;background:#e8f3ff!important;border-radius:8px!important;padding:10px 13px!important;font-size:13px!important;line-height:1.55!important;color:#253653!important;display:grid!important;grid-template-columns:1.15fr 1fr 1fr!important;gap:14px!important}.displayNotice b{font-size:15px!important;color:#145fe5!important}
 @media(max-width:1200px){.customerBrand{min-width:250px!important}.customerBrand .brand{font-size:22px!important}.customerStats{height:60px!important}.topStat b{font-size:21px!important}.activeCard{height:285px!important}.activeTeam{font-size:20px!important}.activeTime{font-size:23px!important}.waitCard{height:220px!important}.waitCardTitle{font-size:15px!important}.waitRow strong{font-size:12px!important}.waitRow em{font-size:14px!important}}
 @media(max-width:900px){.customerHeader{height:auto!important;flex-wrap:wrap!important}.customerBrand{min-width:100%!important}.customerStats{width:100%!important}.customerRight{position:absolute!important;right:12px!important;top:10px!important}.waitGrid{grid-template-columns:1fr 1fr!important;grid-template-areas:none!important}.waitCard{grid-area:auto!important}.displayNotice{grid-template-columns:1fr!important}}
@@ -699,7 +699,7 @@ body:has(.customerHeader){background:#f3f7fb!important;overflow-x:hidden!importa
 /* 대기현황 표 머리글 */
 body:has(.customerHeader) .waitTableHead{
   display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;
   width:100%!important;
   min-height:60px!important;
   height:60px!important;
@@ -740,7 +740,7 @@ body:has(.customerHeader) .waitTableHead > *:first-child{
 /* 실제 대기자 행 */
 body:has(.customerHeader) .waitRow{
   display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;
   width:100%!important;
   min-width:0!important;
   min-height:72px!important;
@@ -1530,7 +1530,7 @@ body.customer-display .waitCard:hover{transform:none!important}
 
 <style id="JGB_WAIT_ALIGNMENT_FIX">
 body:has(.customerHeader) .waitRow{
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;
   width:100%!important;
   box-sizing:border-box!important;
 }
@@ -1559,7 +1559,7 @@ body:has(.customerHeader) .waitRow .waitControl b{
 body:has(.customerHeader) .waitTableHead,
 body:has(.customerHeader) .waitRow{
   display:grid!important;
-  grid-template-columns:48px 1.35fr 1fr 1.05fr!important;
+  grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;
   width:100%!important;
   box-sizing:border-box!important;
   padding-left:0!important;
@@ -1590,6 +1590,23 @@ body:has(.customerHeader) .waitRow .waitControl{
 
 body:has(.customerHeader) .waitRow .waitControl b{
   margin:0!important;
+}
+</style>
+
+<style id="JGB_FINAL_EXACT_COLUMN_ALIGNMENT">
+body:has(.customerHeader) .waitTableHead,
+body:has(.customerHeader) .waitRow {
+  display:grid!important;
+  grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+body:has(.customerHeader) .waitTableHead > *,
+body:has(.customerHeader) .waitRow > * {
+  box-sizing:border-box!important;
+  min-width:0!important;
 }
 </style>
 </head><body>
@@ -2110,7 +2127,7 @@ function renderCustomer(s){
         waitSec=Math.max(0,waitSec);
         const wm=Math.floor(waitSec/60), ws=waitSec%60;
         const waitText=wm>0?`${wm}분 ${String(ws).padStart(2,"0")}초`:`${ws}초`;
-        return `<div class="waitRow" style="grid-template-columns:48px 1.35fr 1fr 1.05fr!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>`;
+        return `<div class="waitRow" style="grid-template-columns:13.07% 22.39% 27.45% 37.09%!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>`;
       }).join(""):`<div class="waitEmpty"><div class="emptyFace" style="color:${color}">☺</div><b>대기 중인 팀이 없습니다.</b></div>`}
     </article>`;
   }).join("")+`
@@ -2792,7 +2809,7 @@ function management(){
 /* 대기현황 카드 안의 표 머리글 */
 body:has(.customerHeader) .waitTableHead{
   display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;
   width:100%!important;
   box-sizing:border-box!important;
   height:48px!important;
@@ -2843,7 +2860,7 @@ body:has(.customerHeader) .waitTableHead > *:first-child{
 /* 실제 대기자 행 */
 body:has(.customerHeader) .waitRow{
   display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;
   width:100%!important;
   min-width:0!important;
   box-sizing:border-box!important;
@@ -3069,7 +3086,7 @@ body:has(.customerHeader) .waitTableHead{
 height:38px!important;
 min-height:38px!important;
 font-size:16px!important;
-grid-template-columns:repeat(4,minmax(0,1fr))!important;
+grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;
 }
 
 body:has(.customerHeader) .waitRow{
@@ -3077,7 +3094,7 @@ height:48px!important;
 min-height:48px!important;
 max-height:48px!important;
 font-size:40px!important;
-grid-template-columns:repeat(4,minmax(0,1fr))!important;
+grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;
 padding:0!important;
 }
 
@@ -3162,7 +3179,7 @@ setInterval(jgbLock,1000);
 
 <style id="JGB_FORCE_EXIT_BUTTON">
 body:has(.customerHeader) .waitRow{
-grid-template-columns:78px repeat(3,minmax(0,1fr))!important;
+grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;
 }
 body:has(.customerHeader) .waitControl{
 width:100%!important;
@@ -3212,7 +3229,7 @@ font-size:24px!important;
 
 <style id="JGB_FORCE_EXIT_VISIBLE_FINAL">
 body:has(.customerHeader) .waitRow{
-  grid-template-columns:78px repeat(3,minmax(0,1fr))!important;
+  grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;
 }
 body:has(.customerHeader) .waitControl{
   width:100%!important;
@@ -3431,7 +3448,7 @@ async function resetHistoryOnServer(){
   body:has(.customerHeader) .waitTableHead,
   body:has(.customerHeader) .waitRow{
     display:grid!important;
-    grid-template-columns:78px 0.82fr 1fr 1.35fr!important;
+    grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;
     width:100%!important;
     min-height:60px!important;
     height:60px!important;
@@ -3523,7 +3540,7 @@ async function resetHistoryOnServer(){
   body:has(.customerHeader) .waitRow,
   body:has(.customerHeader) #waitList .waitRow{
     display:grid!important;
-    grid-template-columns:78px 0.82fr 1fr 1.35fr!important;
+    grid-template-columns:13.07% 22.39% 27.45% 37.09%!important;
     width:100%!important;
     box-sizing:border-box!important;
     margin:0!important;
