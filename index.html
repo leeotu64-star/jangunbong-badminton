@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>장군봉 배드민턴</title>
@@ -1527,6 +1527,33 @@ body:has(.customerHeader) .waitCard:hover,
 body.customer-display .waitCard:hover{transform:none!important}
 </style>
 
+
+<style id="JGB_WAIT_ALIGNMENT_FIX">
+body:has(.customerHeader) .waitRow{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+body:has(.customerHeader) .waitRow > *{
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+body:has(.customerHeader) .waitRow .waitControl{
+  width:100%!important;
+  height:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+body:has(.customerHeader) .waitRow .waitControl b{
+  margin:0 auto!important;
+}
+</style>
 </head><body>
 <div id="app"></div>
 <script>
@@ -2045,7 +2072,7 @@ function renderCustomer(s){
         waitSec=Math.max(0,waitSec);
         const wm=Math.floor(waitSec/60), ws=waitSec%60;
         const waitText=wm>0?`${wm}분 ${String(ws).padStart(2,"0")}초`:`${ws}초`;
-        return `<div class="waitRow" style="grid-template-columns:48px 0.82fr 1fr 1.35fr!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>`;
+        return `<div class="waitRow" style="grid-template-columns:repeat(4,minmax(0,1fr))!important"><div class="waitControl" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><b style="background:${color}22;color:${color}">${j+1}</b></div><strong>${esc(x.nickname)}</strong><span>${esc(x.game)}</span><em>${waitText}</em></div>`;
       }).join(""):`<div class="waitEmpty"><div class="emptyFace" style="color:${color}">☺</div><b>대기 중인 팀이 없습니다.</b></div>`}
     </article>`;
   }).join("")+`
