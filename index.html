@@ -1554,6 +1554,44 @@ body:has(.customerHeader) .waitRow .waitControl b{
   margin:0 auto!important;
 }
 </style>
+
+<style id="JGB_WAIT_HEADER_ROW_EXACT_ALIGN">
+body:has(.customerHeader) .waitTableHead,
+body:has(.customerHeader) .waitRow{
+  display:grid!important;
+  grid-template-columns:48px 1.35fr 1fr 1.05fr!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+
+body:has(.customerHeader) .waitTableHead > *,
+body:has(.customerHeader) .waitRow > *{
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+
+body:has(.customerHeader) .waitTableHead > *{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+
+body:has(.customerHeader) .waitRow .waitControl{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0!important;
+  padding:0!important;
+}
+
+body:has(.customerHeader) .waitRow .waitControl b{
+  margin:0!important;
+}
+</style>
 </head><body>
 <div id="app"></div>
 <script>
