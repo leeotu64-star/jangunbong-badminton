@@ -1612,16 +1612,13 @@ body:has(.customerHeader) .waitRow > * {
 </head><body>
 <div id="app"></div>
 <script>
-/* 장군봉 5코트 전용 저장소 설정. 다른 시설/8코트 상태와 분리하여 사용합니다. */
-
+/* Supabase 설정: 아래 2개만 본인 프로젝트 값으로 교체 */
 </script>
 <style id="JGB_INSIGHT_REPORT_STYLE">
 .insightToolbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}.reportBtn{border:0;border-radius:7px;padding:9px 13px;background:#1769e8;color:#fff;font-weight:900;cursor:pointer}.reportBtn.secondary{background:#0b8f72}.reportBtn.danger{background:#b4232c}.insightHistoryHead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}.insightHistoryHead h2{margin:0;font-size:18px}.insightHistoryHead p{margin:5px 0 0;color:#64748b;font-size:11px}.historyBtns{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.historyBtns select{padding:8px 10px;border:1px solid #cfd8e5;border-radius:7px;background:#fff}.historyTabs{display:flex;gap:5px;margin-bottom:10px}.historyTabs button{border:1px solid #cfd8e5;background:#fff;padding:8px 14px;border-radius:7px;font-weight:900;cursor:pointer}.historyTabs button.on{background:#061b4f;color:#fff;border-color:#061b4f}#jgbHistoryBody{margin-top:14px;background:#fff;border:1px solid #dfe5ee;border-radius:12px;padding:16px}.insightBarValue{font-size:14px;font-weight:900}.insightBarLabel{font-size:12px;font-weight:800}.insightChart{height:205px}@media(max-width:900px){.insightHistoryHead{align-items:flex-start;flex-direction:column}}
 @media print{.insightHeader,.insightSide,.insightToolbar,.historyBtns{display:none!important}.insightLayout{display:block}.insightMain{padding:0;max-width:none}.insightPanel,#jgbHistoryBody{break-inside:avoid}}
 </style>
 <script>
-const SUPABASE_URL="https://jvurwckjumnzzecazgku.supabase.co";
-const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
 const SB_HEADERS={"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"};
 async function sbGet(){
   const url=SUPABASE_URL+"/rest/v1/waiting_state?id=eq.jgb_waiting_state&select=*";
@@ -1641,7 +1638,7 @@ async function sbGet(){
 }
 async function sbUpsert(row){
   const payload={
-    id: row.id || ROOT,
+    id:ROOT,
     settings:row.settings||{"난타":15,"4인 복식":15,"2인 단식":15},
     max_per_court:Number(row.max_per_court||5),
     re_register_minutes:Math.max(1,Math.min(20,Number(row.re_register_minutes||5))),
@@ -1662,9 +1659,22 @@ async function sbUpsert(row){
   });
   const text=await r.text();
   if(!r.ok) throw new Error("저장 오류 "+r.status+" : "+text);
-  const rows=text?JSON.parse(text):[];
+  let rows=text?JSON.parse(text):[];
+  if(!Array.isArray(rows)||rows.length===0){
+    const ins=await fetch(SUPABASE_URL+"/rest/v1/waiting_state",{
+      method:"POST",
+      headers:{
+        ...SB_HEADERS,
+        "Prefer":"resolution=merge-duplicates,return=representation"
+      },
+      body:JSON.stringify(payload)
+    });
+    const it=await ins.text();
+    if(!ins.ok) throw new Error("장군봉 저장 오류 "+ins.status+" : "+it);
+    rows=it?JSON.parse(it):[];
+  }
   if(!Array.isArray(rows)||rows.length===0)
-    throw new Error("저장 오류 : 장군봉 전용 waiting_state가 수정되지 않았습니다.");
+    throw new Error("장군봉 저장 오류 : 저장된 데이터가 없습니다.");
   return true;
 }const ROOT="jgb_waiting_state";
 const params=new URLSearchParams(location.search);
@@ -3351,6 +3361,8 @@ async function resetHistoryOnServer(){
 <script id="JGB_ACCESS_GATE">
 (function(){
   const AUTH_KEY="jgb_route_auth_v1";
+  const SUPABASE_URL="https://jvurwckjumnzzecazgku.supabase.co";
+  const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
 
   function targetRoute(){
     const p=new URLSearchParams(location.search);
