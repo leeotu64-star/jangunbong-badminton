@@ -1659,24 +1659,28 @@ async function sbUpsert(row){
     },
     body:JSON.stringify(payload)
   });
-  const text=await r.text();
+  let text=await r.text();
   if(!r.ok) throw new Error("저장 오류 "+r.status+" : "+text);
   let rows=text?JSON.parse(text):[];
   if(!Array.isArray(rows)||rows.length===0){
-    const ins=await fetch(SUPABASE_URL+"/rest/v1/waiting_state",{
+    const createUrl=SUPABASE_URL+"/rest/v1/waiting_state";
+    r=await fetch(createUrl,{
       method:"POST",
       headers:{
-        ...SB_HEADERS,
-        "Prefer":"resolution=merge-duplicates,return=representation"
+        "apikey":SUPABASE_ANON_KEY,
+        "Authorization":"Bearer "+SUPABASE_ANON_KEY,
+        "Content-Type":"application/json",
+        "Accept":"application/json",
+        "Prefer":"return=representation"
       },
       body:JSON.stringify(payload)
     });
-    const it=await ins.text();
-    if(!ins.ok) throw new Error("장군봉 저장 오류 "+ins.status+" : "+it);
-    rows=it?JSON.parse(it):[];
+    text=await r.text();
+    if(!r.ok) throw new Error("장군봉 저장 오류 "+r.status+" : "+text);
+    rows=text?JSON.parse(text):[];
   }
   if(!Array.isArray(rows)||rows.length===0)
-    throw new Error("장군봉 저장 오류 : 저장된 데이터가 없습니다.");
+    throw new Error("장군봉 저장 오류 : 전용 waiting_state가 생성/수정되지 않았습니다.");
   return true;
 }const ROOT="jgb_waiting_state";
 const params=new URLSearchParams(location.search);
