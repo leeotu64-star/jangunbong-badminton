@@ -1640,6 +1640,7 @@ async function sbGet(){
 }
 async function sbUpsert(row){
   const payload={
+    id: row.id || ROOT,
     settings:row.settings||{"난타":15,"4인 복식":15,"2인 단식":15},
     max_per_court:Number(row.max_per_court||5),
     re_register_minutes:Math.max(1,Math.min(20,Number(row.re_register_minutes||5))),
