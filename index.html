@@ -1988,7 +1988,7 @@ function sub(fn){
   if(liveTimer) clearInterval(liveTimer);
   const refresh=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
   refresh();
-  liveTimer=setInterval(refresh,1000);
+  liveTimer=setInterval(refresh,2000);
 }
 
 /* 관리자 설정 화면은 2초 자동 갱신으로 사용자가 누른 +/− 값을 덮어쓰지 않도록
