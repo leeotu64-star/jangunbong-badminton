@@ -1988,7 +1988,7 @@ function sub(fn){
   if(liveTimer) clearInterval(liveTimer);
   const refresh=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
   refresh();
-  liveTimer=setInterval(refresh,10000);
+  liveTimer=setInterval(refresh,60000);
 }
 
 /* 관리자 설정 화면은 10초 자동 갱신으로 사용자가 누른 +/− 값을 덮어쓰지 않도록
@@ -2014,7 +2014,7 @@ function subAdmin(fn){
     }
   };
   refresh();
-  liveTimer=setInterval(refresh,10000);
+  liveTimer=setInterval(refresh,60000);
 }
 let adminDraft={g1:15,g2:15,g3:15,mx:5,rc:5};
 
@@ -2027,7 +2027,7 @@ function route(){
   const path=location.pathname.replace(/\/+$/,"");
   const page=params.get("page")||"";
   if(page==="management") return "management";
-  if(page==="insight") return "insight";
+  if(page==="insight") return "admin";
   if(path==="/admin" || path.endsWith("/admin") || page==="admin") return "admin";
   if(path==="/register" || path.endsWith("/register") || page==="register") return "register";
   if(path==="/waiting" || path.endsWith("/waiting") || page==="waiting" || ticket) return "waiting";
@@ -2530,7 +2530,7 @@ function renderInsight(s){const body=document.getElementById("jgbInsightBody");i
 
 function admin(){
   const app=document.getElementById("app");
-  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=management&view=display">고객 화면으로</a></div></header><div class="admin admin-clean"><aside class="side"><h2>관리자 모드</h2><a class="nav" href="?page=insight">운영 인사이트</a><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main admin-main-clean"><section class="panel admin-lock-panel" id="courtManage"><div class="admin-section-head"><div><h2>코트 사용 · 잠금</h2><div class="hint">중간 코트를 막아야 할 때 가장 먼저 여기서 조작합니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel force-panel" id="forceCustomers"><div class="admin-section-head force-head"><div><h2>고객 예약 강제퇴장</h2><div class="hint">기존 대기 화면과 같은 고객 정보를 표시하고, 각 고객 오른쪽의 <b>✕</b>로 해당 고객만 강제 퇴장합니다.</div></div><div class="force-badge">1~5번 코트</div></div><div class="force-grid" id="qq"></div></section><section class="panel compact-settings" id="settingsAll"><div class="admin-section-head"><div><h2>운영 설정</h2><div class="hint">기존 설정 기능은 그대로 유지합니다.</div></div></div><div class="settings-grid-clean"><div class="controlBox" id="gameTime"><h3>게임 시간</h3><div class="setting-lines"><div><span>4인 복식</span><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div><span>2인 단식</span><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div><span>난타</span><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div><button class="save adminSave" onclick="saveGameTime()">게임 시간 저장</button></div><div class="controlBox" id="waitMax"><h3>대기 정원</h3><div class="hint setting-note">전체 코트 동일 적용 · 1~20명</div><div class="big-stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div><button class="save adminSave" onclick="saveWaitMax()">대기 정원 저장</button></div><div class="controlBox" id="reRegister"><h3>재등록 제한</h3><div class="hint setting-note">게임 종료 후 다시 예약 가능 시간</div><div class="big-stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div><button class="save adminSave" onclick="saveCooldown()">재등록 시간 저장</button></div></div><div class="admin-actions"><button class="save secondary-save" type="button" onclick="saveAdmin()">전체 설정 저장</button><button class="save reset-btn" type="button" onclick="resetOperationalState()">오늘 운영 상태 초기화</button><button class="save history-btn" type="button" onclick="resetHistoryOnServer()">이용 기록 수동 삭제</button></div></section></main></div>`;
+  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=management&view=display">고객 화면으로</a></div></header><div class="admin admin-clean"><aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main admin-main-clean"><section class="panel admin-lock-panel" id="courtManage"><div class="admin-section-head"><div><h2>코트 사용 · 잠금</h2><div class="hint">중간 코트를 막아야 할 때 가장 먼저 여기서 조작합니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel force-panel" id="forceCustomers"><div class="admin-section-head force-head"><div><h2>고객 예약 강제퇴장</h2><div class="hint">기존 대기 화면과 같은 고객 정보를 표시하고, 각 고객 오른쪽의 <b>✕</b>로 해당 고객만 강제 퇴장합니다.</div></div><div class="force-badge">1~5번 코트</div></div><div class="force-grid" id="qq"></div></section><section class="panel compact-settings" id="settingsAll"><div class="admin-section-head"><div><h2>운영 설정</h2><div class="hint">기존 설정 기능은 그대로 유지합니다.</div></div></div><div class="settings-grid-clean"><div class="controlBox" id="gameTime"><h3>게임 시간</h3><div class="setting-lines"><div><span>4인 복식</span><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div><span>2인 단식</span><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div><span>난타</span><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div><button class="save adminSave" onclick="saveGameTime()">게임 시간 저장</button></div><div class="controlBox" id="waitMax"><h3>대기 정원</h3><div class="hint setting-note">전체 코트 동일 적용 · 1~20명</div><div class="big-stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div><button class="save adminSave" onclick="saveWaitMax()">대기 정원 저장</button></div><div class="controlBox" id="reRegister"><h3>재등록 제한</h3><div class="hint setting-note">게임 종료 후 다시 예약 가능 시간</div><div class="big-stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div><button class="save adminSave" onclick="saveCooldown()">재등록 시간 저장</button></div></div><div class="admin-actions"><button class="save secondary-save" type="button" onclick="saveAdmin()">전체 설정 저장</button><button class="save reset-btn" type="button" onclick="resetOperationalState()">오늘 운영 상태 초기화</button><button class="save history-btn" type="button" onclick="resetHistoryOnServer()">이용 기록 수동 삭제</button></div></section></main></div>`;
   adminSettingsDirty=false;
   renderAdmin(cloneDef()); subAdmin(renderAdmin);
 }
@@ -2744,7 +2744,6 @@ function management(){
 (function(){
   const r=route();
   if(r==="management")management();
-  else if(r==="insight")jgbInsight();
   else if(r==="admin")admin();
   else if(r==="register")register();
   else if(r==="waiting")waiting();
