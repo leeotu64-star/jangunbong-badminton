@@ -1984,11 +1984,26 @@ async function advance(s,doSave=true){
   return s;
 }
 let liveTimer=null;
+let liveRefreshFn=null;
+let liveRefreshMs=10000;
+function restartLiveRefresh(runNow=false){
+  if(liveTimer){clearInterval(liveTimer);liveTimer=null;}
+  if(document.hidden || !liveRefreshFn)return;
+  if(runNow)liveRefreshFn();
+  liveTimer=setInterval(liveRefreshFn,liveRefreshMs);
+}
+if(!window.jgbVisibilityRefreshBound){
+  document.addEventListener("visibilitychange",()=>{
+    if(document.hidden){if(liveTimer){clearInterval(liveTimer);liveTimer=null;}}
+    else restartLiveRefresh(true);
+  });
+  window.jgbVisibilityRefreshBound=true;
+}
 function sub(fn){
   if(liveTimer) clearInterval(liveTimer);
-  const refresh=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
-  refresh();
-  liveTimer=setInterval(refresh,60000);
+  liveRefreshMs=10000;
+  liveRefreshFn=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
+  restartLiveRefresh(true);
 }
 
 /* 관리자 설정 화면은 10초 자동 갱신으로 사용자가 누른 +/− 값을 덮어쓰지 않도록
@@ -2013,8 +2028,9 @@ function subAdmin(fn){
       showError(e);
     }
   };
-  refresh();
-  liveTimer=setInterval(refresh,60000);
+  liveRefreshMs=60000;
+  liveRefreshFn=refresh;
+  restartLiveRefresh(true);
 }
 let adminDraft={g1:15,g2:15,g3:15,mx:5,rc:5};
 
@@ -2236,7 +2252,7 @@ async function loadRegisterDuration(){
   };
   game.addEventListener("change",sync);
   await sync();
-  timer=setInterval(sync,30000);
+  timer=setInterval(()=>{if(!document.hidden)sync()},60000);
   window.addEventListener("beforeunload",()=>{if(timer)clearInterval(timer)},{once:true});
 }
 
