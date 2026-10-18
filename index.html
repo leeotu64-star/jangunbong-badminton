@@ -1988,10 +1988,10 @@ function sub(fn){
   if(liveTimer) clearInterval(liveTimer);
   const refresh=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
   refresh();
-  liveTimer=setInterval(refresh,10000);
+  liveTimer=setInterval(refresh,60000);
 }
 
-/* 관리자 설정 화면은 10초 자동 갱신으로 사용자가 누른 +/− 값을 덮어쓰지 않도록
+/* 관리자 설정 화면은 60초 자동 갱신으로 사용자가 누른 +/− 값을 덮어쓰지 않도록
    서버에서 읽기만 합니다. 저장 버튼을 눌렀을 때만 설정값이 서버에 반영됩니다. */
 let adminSettingsDirty=false;
 function subAdmin(fn){
@@ -2014,7 +2014,7 @@ function subAdmin(fn){
     }
   };
   refresh();
-  liveTimer=setInterval(refresh,10000);
+  liveTimer=setInterval(refresh,60000);
 }
 let adminDraft={g1:15,g2:15,g3:15,mx:5,rc:5};
 
