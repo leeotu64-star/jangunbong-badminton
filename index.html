@@ -1648,7 +1648,7 @@ async function sbUpsert(row){
     courts:Array.isArray(row.courts)?row.courts:[]
   };
   const url=SUPABASE_URL+"/rest/v1/waiting_state?id=eq.jgb_waiting_state";
-  const r=await fetch(url,{
+  let r=await fetch(url,{
     method:"PATCH",
     headers:{
       "apikey":SUPABASE_ANON_KEY,
@@ -1988,10 +1988,10 @@ function sub(fn){
   if(liveTimer) clearInterval(liveTimer);
   const refresh=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
   refresh();
-  liveTimer=setInterval(refresh,60000);
+  liveTimer=setInterval(refresh,10000);
 }
 
-/* 관리자 설정 화면은 60초 자동 갱신으로 사용자가 누른 +/− 값을 덮어쓰지 않도록
+/* 관리자 설정 화면은 10초 자동 갱신으로 사용자가 누른 +/− 값을 덮어쓰지 않도록
    서버에서 읽기만 합니다. 저장 버튼을 눌렀을 때만 설정값이 서버에 반영됩니다. */
 let adminSettingsDirty=false;
 function subAdmin(fn){
@@ -2014,7 +2014,7 @@ function subAdmin(fn){
     }
   };
   refresh();
-  liveTimer=setInterval(refresh,60000);
+  liveTimer=setInterval(refresh,10000);
 }
 let adminDraft={g1:15,g2:15,g3:15,mx:5,rc:5};
 
@@ -2675,13 +2675,29 @@ async function saveAdmin(){
   }catch(e){showError(e)}
 }
 async function block(id,b){
+  const buttons=[...document.querySelectorAll('#cs button')];
+  buttons.forEach(x=>x.disabled=true);
   try{
     let s=await get();
-    const c=s.courts.find(c=>c.id===id);
-    if(!c)return;
-    c.blocked=!!b;
+    if(!s || !Array.isArray(s.courts)) s=cloneDef();
+    const c=s.courts.find(c=>Number(c.id)===Number(id));
+    if(!c) throw new Error(id+'번 코트 정보를 찾지 못했습니다.');
+    c.blocked=Boolean(b);
     await save(s);
-  }catch(e){showError(e)}
+    const saved=await get();
+    const savedCourt=(saved.courts||[]).find(x=>Number(x.id)===Number(id));
+    if(!savedCourt || Boolean(savedCourt.blocked)!==Boolean(b)){
+      throw new Error('서버 저장 확인에 실패했습니다. Supabase waiting_state 권한과 저장 상태를 확인해주세요.');
+    }
+    renderAdmin(saved);
+    if(window.jgbInsightState){ window.jgbInsightState=saved; }
+    alert(id+'번 코트 '+(b?'잠금':'잠금 해제')+' 완료');
+  }catch(e){
+    showError(e);
+    alert('코트 상태 변경 실패: '+(e?.message||e));
+  }finally{
+    buttons.forEach(x=>x.disabled=false);
+  }
 }
 window.jgbBlock=function(id,b){ return block(id,b); };
 async function force(id){
