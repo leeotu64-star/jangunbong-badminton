@@ -1609,11 +1609,9 @@ body:has(.customerHeader) .waitRow > * {
   min-width:0!important;
 }
 </style>
-<style id="adminForceCleanFinal">.admin-main-clean{padding:16px 20px 28px!important;max-width:1800px!important}.admin-clean .panel{margin-bottom:10px!important;padding:12px 14px!important;border-radius:11px!important}.admin-clean .panel h2{font-size:17px!important;margin:0 0 3px!important}.admin-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}.admin-clean .hint{font-size:11px!important;margin:0!important}.admin-lock-panel .lockGrid{gap:8px!important}.admin-lock-panel .lockCard{padding:9px 10px!important;border-radius:9px!important}.admin-lock-panel .lockCard h3{font-size:15px!important;margin:0 0 4px!important}.admin-lock-panel .lockCard p{font-size:10px!important;margin:2px 0 6px!important}.admin-lock-panel .lockCard button{min-height:31px!important;padding:5px 7px!important;font-size:11px!important}.force-panel{border:2px solid #d6e1f0!important;background:#fff!important}.force-badge{background:#071b45;color:#fff;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:900;white-space:nowrap}.force-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.force-card{border:1px solid #d8e2ef;border-radius:9px;overflow:hidden;background:#f9fbfe;min-width:0}.force-card-head{height:36px;padding:0 9px;display:flex;align-items:center;justify-content:space-between;font-weight:950;font-size:14px;background:#eef4fb;border-bottom:1px solid #dbe4ef}.force-card-head b{font-size:10px;color:#64748b}.force-card.court-1 .force-card-head{border-top:3px solid #079455}.force-card.court-2 .force-card-head{border-top:3px solid #1769e8}.force-card.court-3 .force-card-head{border-top:3px solid #6734d4}.force-card.court-4 .force-card-head{border-top:3px solid #f97316}.force-card.court-5 .force-card-head{border-top:3px solid #e51d35}.force-list{padding:5px}.force-row{min-height:35px;display:flex;align-items:center;justify-content:space-between;gap:5px;padding:4px 5px;background:#fff;border:1px solid #e3e9f1;border-radius:6px;margin-bottom:4px}.force-row:last-child{margin-bottom:0}.active-row{background:#eef5ff;border-color:#bfd5f5}.force-info{display:grid;grid-template-columns:22px minmax(0,1fr);grid-template-rows:auto auto;column-gap:5px;min-width:0;align-items:center}.force-no{grid-row:1/3;font-size:10px;color:#52627a;text-align:center}.force-info strong{font-size:11px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.force-info span{font-size:9px;color:#667085;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.force-x{width:25px;height:25px;flex:0 0 25px;border:0;border-radius:6px;background:#e51e2a;color:#fff;font-size:15px;line-height:25px;font-weight:950;cursor:pointer}.empty-row{padding:10px 6px;text-align:center;color:#8a96a8;font-size:10px}.settings-grid-clean{display:grid;grid-template-columns:1.35fr .82fr .82fr;gap:8px}.settings-grid-clean .controlBox{padding:10px!important;border-radius:9px!important;background:#f9fbfe!important}.settings-grid-clean .controlBox h3{font-size:13px!important;margin:0 0 7px!important}.setting-lines>div{display:flex;align-items:center;justify-content:space-between;gap:7px;padding:3px 0;border-bottom:1px solid #e9eef5}.setting-lines>div:last-child{border-bottom:0}.setting-lines>div>span{font-size:11px;font-weight:800}.setting-lines .stepper{gap:4px!important}.setting-lines .stepper button,.big-stepper button{width:28px!important;height:27px!important;font-size:15px!important}.setting-lines .stepper strong,.big-stepper strong{min-width:27px!important;font-size:15px!important}.setting-lines .stepper span,.big-stepper span{font-size:10px}.big-stepper{display:flex;align-items:center;justify-content:center;gap:6px;margin:11px 0 8px}.setting-note{font-size:10px!important}.admin-clean .adminSave{margin-top:7px!important;padding:7px 12px!important;font-size:11px!important;min-width:0!important}.admin-actions{display:flex;align-items:center;gap:7px;margin-top:8px;flex-wrap:wrap}.admin-actions .save{padding:7px 12px;font-size:11px}.secondary-save{background:#1769e8!important}.reset-btn{background:#f57c00!important}.history-btn{background:#e51e2a!important}@media(max-width:1100px){.force-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.settings-grid-clean{grid-template-columns:1fr 1fr}.settings-grid-clean .controlBox:first-child{grid-column:1/-1}}@media(max-width:700px){.force-grid{grid-template-columns:1fr 1fr}.settings-grid-clean{grid-template-columns:1fr}.settings-grid-clean .controlBox:first-child{grid-column:auto}}</style></head><body>
+</head><body>
 <div id="app"></div>
 <script>
-/* 사용량 절감 최종 점검: 고객 조회 10초, 관리자 조회 60초, 숨김 탭 조회 중지, 중복 조회 겹침 방지.
-   CORS OPTIONS 요청과 Supabase 서버 로그 수집량은 HTML만으로 직접 끌 수 없으며 대시보드 설정/서버 측 원인 확인이 필요합니다. */
 /* Supabase 설정: 아래 2개만 본인 프로젝트 값으로 교체 */
 const SUPABASE_URL="https://jvurwckjumnzzecazgku.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
@@ -1625,7 +1623,7 @@ const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
 <script>
 const SB_HEADERS={"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"};
 async function sbGet(){
-  const url=SUPABASE_URL+"/rest/v1/waiting_state?id=eq.jgb_waiting_state&select=id,settings,max_per_court,re_register_minutes,finished,courts";
+  const url=SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state&select=*";
   const r=await fetch(url,{
     method:"GET",
     headers:{
@@ -1641,31 +1639,32 @@ async function sbGet(){
   return rows[0]||null;
 }
 async function sbUpsert(row){
-  /* 한 번의 upsert로 저장하고, 저장 결과 전체를 다시 전송하지 않아 egress를 줄입니다. */
   const payload={
-    id:"jgb_waiting_state",
     settings:row.settings||{"난타":15,"4인 복식":15,"2인 단식":15},
     max_per_court:Number(row.max_per_court||5),
     re_register_minutes:Math.max(1,Math.min(20,Number(row.re_register_minutes||5))),
     finished:row.finished||{},
     courts:Array.isArray(row.courts)?row.courts:[]
   };
-  const url=SUPABASE_URL+"/rest/v1/waiting_state?on_conflict=id";
+  const url=SUPABASE_URL+"/rest/v1/waiting_state?id=eq.waiting_state";
   const r=await fetch(url,{
-    method:"POST",
+    method:"PATCH",
     headers:{
       "apikey":SUPABASE_ANON_KEY,
       "Authorization":"Bearer "+SUPABASE_ANON_KEY,
       "Content-Type":"application/json",
       "Accept":"application/json",
-      "Prefer":"resolution=merge-duplicates,return=minimal"
+      "Prefer":"return=representation"
     },
     body:JSON.stringify(payload)
   });
-  if(!r.ok){const text=await r.text();throw new Error("저장 오류 "+r.status+" : "+text);}
+  const text=await r.text();
+  if(!r.ok) throw new Error("저장 오류 "+r.status+" : "+text);
+  const rows=text?JSON.parse(text):[];
+  if(!Array.isArray(rows)||rows.length===0)
+    throw new Error("저장 오류 : waiting_state가 수정되지 않았습니다.");
   return true;
-}
-const ROOT="jgb_waiting_state";
+}const ROOT="waiting_state";
 const params=new URLSearchParams(location.search);
 const REGISTER_URL=location.origin+location.pathname+"#register";
 const ticket=params.get("ticket")||"";
@@ -1872,30 +1871,15 @@ async function get(){
   const data=await sbGet();
   return data?data:cloneDef();
 }
-/* 운영 인사이트를 제거한 상태에서는 과거 이용기록을 서버에 계속 쌓지 않습니다.
-   단, 재등록 제한 확인에 필요한 최근 기록은 제한시간이 끝날 때까지 보존합니다. */
-function compactFinished(s){
-  if(!s || !s.finished || typeof s.finished!=="object") { if(s) s.finished={}; return false; }
-  let changed=false;
-  const now=Date.now();
-  for(const [key,record] of Object.entries(s.finished)){
-    if(key.startsWith("_")) { delete s.finished[key]; changed=true; continue; }
-    if(!record || typeof record!=="object") { delete s.finished[key]; changed=true; continue; }
-    const until=Number(record.reRegisterUntil||0);
-    const ended=Number(record.endedAt||0);
-    const keepUntil=until || (ended ? ended+20*60000 : 0);
-    if(!keepUntil || keepUntil<=now){ delete s.finished[key]; changed=true; }
-  }
-  return changed;
-}
 async function save(s){
-  /* 변경 직전 get()한 상태를 저장합니다. 별도 재조회 없이 한 번에 upsert하여 요청 수를 줄입니다. */
-  compactFinished(s);
+  /* 다른 고객 기기의 오래된 상태가 관리자 설정을 덮어쓰지 않도록
+     저장 직전에 서버의 최신 설정값을 가져와 설정은 최신값을 보존합니다. */
+  const latest=await sbGet();
   const payload={
     id:ROOT,
-    settings:s.settings||{"난타":15,"4인 복식":15,"2인 단식":15},
-    max_per_court:Number(s.max_per_court||5),
-    re_register_minutes:Math.max(1,Math.min(20,Number(s.re_register_minutes||5))),
+    settings:latest?.settings||s.settings||{"난타":15,"4인 복식":15,"2인 단식":15},
+    max_per_court:Number(latest?.max_per_court||s.max_per_court||5),
+    re_register_minutes:Math.max(1,Math.min(20,Number(latest?.re_register_minutes||s.re_register_minutes||5))),
     finished:s.finished||{},
     courts:Array.isArray(s.courts)?s.courts:[]
   };
@@ -1923,8 +1907,32 @@ function kstDateKey(t=Date.now()){
   return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Seoul",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(t));
 }
 function resetHistoryForNewDay(s){
-  // 과거 운영 통계는 더 이상 누적하지 않고 재등록 제한에 필요한 최근 기록만 남깁니다.
-  return compactFinished(s);
+  s.finished=s.finished||{};
+  const today=kstDateKey();
+  if(s.finished._historyDate!==today){
+    const oldDate=s.finished._historyDate;
+    const oldHistory=s.finished._history||{};
+    s.finished._insightHistory=s.finished._insightHistory||{};
+    if(oldDate && Object.keys(oldHistory).length){
+      const recs=Object.values(oldHistory).filter(v=>v&&typeof v==="object");
+      let games=0,qr=0,waitSum=0,waitN=0,used=0;
+      for(const r of recs){if(r.source==="qr"||r.deviceId)qr++;if(r.startAt){games++;if(r.createdAt){waitSum+=Math.max(0,(Number(r.startAt)-Number(r.createdAt))/60000);waitN++}}}
+      s.finished._insightHistory[oldDate]={date:oldDate,teams:recs.length,games,qr,queue:0,avgWait:waitN?Math.round(waitSum/waitN):0,util:0,courts:5};
+    }
+    const keep={};
+    for(const [k,v] of Object.entries(s.finished)){
+      if(k==="_historyDate"||k==="_history")continue;
+      if(v && typeof v==="object" && v.source!=="qr") keep[k]=v;
+    }
+    keep._insightHistory=s.finished._insightHistory||{};
+    s.finished=keep;
+    s.finished._historyDate=today;
+    s.finished._history={};
+    return true;
+  }
+  if(!s.finished._history) s.finished._history={};
+  if(!s.finished._insightHistory) s.finished._insightHistory={};
+  return false;
 }
 async function advance(s,doSave=true){
   s.finished=s.finished||{};
@@ -1958,36 +1966,14 @@ async function advance(s,doSave=true){
   return s;
 }
 let liveTimer=null;
-let liveRefreshFn=null;
-let liveRefreshMs=10000;
-let liveRefreshInFlight=false;
-async function guardedLiveRefresh(){
-  if(document.hidden || !liveRefreshFn || liveRefreshInFlight) return;
-  liveRefreshInFlight=true;
-  try { await liveRefreshFn(); }
-  finally { liveRefreshInFlight=false; }
-}
-function restartLiveRefresh(runNow=false){
-  if(liveTimer){clearInterval(liveTimer);liveTimer=null;}
-  if(document.hidden || !liveRefreshFn)return;
-  if(runNow)guardedLiveRefresh();
-  liveTimer=setInterval(guardedLiveRefresh,liveRefreshMs);
-}
-if(!window.jgbVisibilityRefreshBound){
-  document.addEventListener("visibilitychange",()=>{
-    if(document.hidden){if(liveTimer){clearInterval(liveTimer);liveTimer=null;}}
-    else restartLiveRefresh(true);
-  });
-  window.jgbVisibilityRefreshBound=true;
-}
 function sub(fn){
   if(liveTimer) clearInterval(liveTimer);
-  liveRefreshMs=10000;
-  liveRefreshFn=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
-  restartLiveRefresh(true);
+  const refresh=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
+  refresh();
+  liveTimer=setInterval(refresh,1000);
 }
 
-/* 관리자 설정 화면은 60초 자동 갱신으로 사용자가 누른 +/− 값을 덮어쓰지 않도록
+/* 관리자 설정 화면은 2초 자동 갱신으로 사용자가 누른 +/− 값을 덮어쓰지 않도록
    서버에서 읽기만 합니다. 저장 버튼을 눌렀을 때만 설정값이 서버에 반영됩니다. */
 let adminSettingsDirty=false;
 function subAdmin(fn){
@@ -2009,9 +1995,8 @@ function subAdmin(fn){
       showError(e);
     }
   };
-  liveRefreshMs=60000;
-  liveRefreshFn=refresh;
-  restartLiveRefresh(true);
+  refresh();
+  liveTimer=setInterval(refresh,2000);
 }
 let adminDraft={g1:15,g2:15,g3:15,mx:5,rc:5};
 
@@ -2024,7 +2009,7 @@ function route(){
   const path=location.pathname.replace(/\/+$/,"");
   const page=params.get("page")||"";
   if(page==="management") return "management";
-  if(page==="insight") return "admin";
+  if(page==="insight") return "insight";
   if(path==="/admin" || path.endsWith("/admin") || page==="admin") return "admin";
   if(path==="/register" || path.endsWith("/register") || page==="register") return "register";
   if(path==="/waiting" || path.endsWith("/waiting") || page==="waiting" || ticket) return "waiting";
@@ -2233,7 +2218,7 @@ async function loadRegisterDuration(){
   };
   game.addEventListener("change",sync);
   await sync();
-  timer=setInterval(()=>{if(!document.hidden)sync()},60000);
+  timer=setInterval(sync,2000);
   window.addEventListener("beforeunload",()=>{if(timer)clearInterval(timer)},{once:true});
 }
 
@@ -2522,12 +2507,17 @@ function jgbDownloadMonthly(){const year=document.getElementById("jgbYearSelect"
 function jgbDownloadYearly(){const rows=jgbYearRows(window.jgbInsightState||{});jgbCsvDownload(`장군봉_연도별운영집계.csv`,rows.map(x=>({연도:x.year,"이용팀":x.teams,"게임수":x.games,"QR등록":x.qr,"대기팀":x.queue,"평균대기(분)":x.avgWait,"평균가동률(%)":x.util})))}
 function jgbDailyReport(){const s=window.jgbInsightState||{},now=jgbKstNow(),m=jgbInsightMetrics(s,now),sch=m.sch,data=jgbHourlyData(m,now),monthRows=jgbMonthlyRows(s,String(now.getFullYear()));const win=window.open("","_blank","width=1200,height=900");if(!win){alert("팝업 차단을 해제해주세요.");return}const bars=data.map(x=>`<div class="rb"><b>${x.teams}</b><i style="height:${Math.max(4,(x.teams/Math.max(1,...data.map(y=>y.teams)))*170)}px"></i><span>${x.label}</span></div>`).join("");win.document.write(`<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>장군봉 배드민턴장 QR 대기 운영 일일보고서</title><style>@page{size:A4 landscape;margin:10mm}*{box-sizing:border-box}body{font-family:Arial,'Noto Sans KR',sans-serif;color:#071633;margin:0;font-size:11px}.top{border-bottom:3px solid #061b4f;padding-bottom:8px}.title{font-size:25px;font-weight:900}.sub{margin-top:4px;color:#52627a}.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}.k{border:1px solid #cfd8e5;border-radius:6px;padding:9px}.k b{display:block;color:#53627b;font-size:10px}.k strong{display:block;font-size:22px;margin-top:4px}.grid{display:grid;grid-template-columns:1.25fr 1fr;gap:10px}.panel{border:1px solid #cfd8e5;border-radius:6px;padding:10px;margin-bottom:10px}.panel h2{font-size:14px;margin:0 0 8px}.chart{height:205px;display:flex;align-items:flex-end;gap:12px;border-bottom:1px solid #bfc9d8;padding:10px}.rb{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px}.rb i{display:block;width:28px;background:#1769e8;border-radius:4px 4px 0 0}.rb b{font-size:14px}.rb span{font-size:12px;font-weight:800}.tbl{width:100%;border-collapse:collapse}.tbl th,.tbl td{border:1px solid #d6deea;padding:6px;text-align:center}.tbl th{background:#f1f5f9}.note{padding:8px;background:#eef5ff;border:1px solid #cbdcff;border-radius:5px;line-height:1.5}.footer{margin-top:8px;color:#53627b;text-align:right}@media print{button{display:none}}</style></head><body><div class="top"><div class="title">장군봉 배드민턴장 QR 대기 운영 일일보고서</div><div class="sub">운영일자: ${m.today} · ${sch.label} · 5코트 · ${sch.start}~${sch.end}</div></div><div class="kpis"><div class="k"><b>이용 팀</b><strong>${m.recs.filter(r=>!r._waiting).length}팀</strong></div><div class="k"><b>게임 수</b><strong>${m.games}게임</strong></div><div class="k"><b>평균 대기</b><strong>${Math.round(m.avgWait)}분</strong></div><div class="k"><b>코트 가동률</b><strong>${Math.round(m.utilElapsed)}%</strong></div><div class="k"><b>QR 대기·등록</b><strong>${m.queueCount}팀 · ${m.qr}건</strong></div></div><div class="grid"><section class="panel"><h2>시간대별 이용 현황</h2><div class="chart">${bars}</div></section><section class="panel"><h2>1~5코트 운영 현황</h2><table class="tbl"><thead><tr><th>코트</th><th>현재 이용</th><th>현재 대기</th><th>상태</th></tr></thead><tbody>${(s.courts||[]).slice(0,5).map(c=>`<tr><td>${c.id}번</td><td>${c.active?"이용 중":"-"}</td><td>${(c.queue||[]).length}팀</td><td>${c.blocked?"잠금":c.active?"이용 중":"대기/미사용"}</td></tr>`).join("")}</tbody></table><div class="note" style="margin-top:8px">QR 대기: ${m.qr}건 · 현재 대기: ${m.queueCount}팀 · 운영 경과: ${jgbFormatMin(m.elapsed)} / ${jgbFormatMin(sch.minutes)}</div></section></div><section class="panel"><h2>금일 운영 요약</h2><table class="tbl"><tbody><tr><th>운영 기준</th><td>${sch.label}</td><th>운영 코트</th><td>5코트</td></tr><tr><th>운영 시간</th><td>${sch.start}~${sch.end}</td><th>실제 코트 사용</th><td>${jgbFormatMin(m.used)}</td></tr><tr><th>평균 대기 목표</th><td>17분 이하</td><th>평균 대기</th><td>${Math.round(m.avgWait)}분</td></tr></tbody></table></section><div class="footer">장군봉 배드민턴장 · 당일 실시간 계산 · ${m.today}</div></body></html>`);win.document.close();setTimeout(()=>win.print(),500)}
 function jgbRenderMonthlyYearly(s){const body=document.getElementById("jgbHistoryBody");if(!body)return;const now=jgbKstNow(),year=String(now.getFullYear()),months=jgbMonthlyRows(s,year),years=jgbYearRows(s),opts=[...new Set([year,...months.map(x=>String(x.month).slice(0,4))])].sort().map(y=>`<option value="${y}">${y}년</option>`).join("");body.innerHTML=`<div class="insightHistoryHead"><div><h2>월별·연도별 이용 집계</h2><p>현재 시스템에서 누적된 운영 이력만 집계합니다. 신규 적용 전 과거 데이터는 소급되지 않습니다.</p></div><div class="historyBtns"><select id="jgbYearSelect" onchange="jgbRenderMonthlyYearly(window.jgbInsightState||{})">${opts}</select><button class="reportBtn" onclick="jgbDownloadMonthly()">엑셀 다운로드</button><button class="reportBtn secondary" onclick="jgbDownloadYearly()">연도별 엑셀</button></div></div><div class="historyTabs"><button class="on" onclick="document.getElementById('jgbMonthly').style.display='block';document.getElementById('jgbYearly').style.display='none';this.classList.add('on');this.nextElementSibling.classList.remove('on')">월별</button><button onclick="document.getElementById('jgbMonthly').style.display='none';document.getElementById('jgbYearly').style.display='block';this.classList.add('on');this.previousElementSibling.classList.remove('on')">연도별</button></div><div id="jgbMonthly"><table class="insightTable"><thead><tr><th>월</th><th>이용팀</th><th>게임수</th><th>QR등록</th><th>대기팀</th><th>평균대기</th><th>평균가동률</th></tr></thead><tbody>${months.length?months.map(x=>`<tr><td>${x.month}</td><td>${x.teams}팀</td><td>${x.games}게임</td><td>${x.qr}건</td><td>${x.queue}팀</td><td>${x.avgWait}분</td><td>${x.util}%</td></tr>`).join(""):`<tr><td colspan="7">누적된 월별 데이터가 없습니다.</td></tr>`}</tbody></table></div><div id="jgbYearly" style="display:none"><table class="insightTable"><thead><tr><th>연도</th><th>이용팀</th><th>게임수</th><th>QR등록</th><th>대기팀</th><th>평균대기</th><th>평균가동률</th></tr></thead><tbody>${years.length?years.map(x=>`<tr><td>${x.year}</td><td>${x.teams}팀</td><td>${x.games}게임</td><td>${x.qr}건</td><td>${x.queue}팀</td><td>${x.avgWait}분</td><td>${x.util}%</td></tr>`).join(""):`<tr><td colspan="7">누적된 연도별 데이터가 없습니다.</td></tr>`}</tbody></table></div>`}
-function jgbInsight(){const app=document.getElementById("app");app.innerHTML=`<div class="insightPage"><header class="insightHeader"><div><div class="insightBrand">장군봉 배드민턴 · 운영 인사이트</div><div class="insightSub">실시간 운영 · QR 대기 · 일일보고서 · 월별·연도별 집계</div></div><div class="insightHeadRight"><span id="jgbInsightClock"></span><button class="insightHeadBtn" onclick="jgbDailyReport()">📄 일일보고서</button><button class="insightHeadBtn" onclick="jgbDownloadMonthly()">📊 엑셀</button><button class="insightHeadBtn" onclick="resetOperationalState()">↻ 리셋</button><button class="insightHeadBtn" onclick="location.href='?page=admin'">관리자</button></div></header><div class="insightLayout"><aside class="insightSide"><h2>운영 관리</h2><a class="insightNav" href="?page=management&view=display">실시간 현황</a><a class="insightNav" href="?page=admin">대기·코트 관리</a><a class="insightNav on" href="?page=insight">운영 인사이트</a><a class="insightNav" href="?page=admin#gameTime">설정 관리</a></aside><main class="insightMain"><div id="jgbInsightBody">불러오는 중...</div><div id="jgbHistoryBody"></div></main></div></div>`;if(window.jgbInsightTimer)clearInterval(window.jgbInsightTimer);const tick=async()=>{try{const s=await advance(await get(),true);if(!window.jgbInsightHistoryBooted){await jgbUpdateInsightHistory(s,true);window.jgbInsightHistoryBooted=true}else if(new Date().getSeconds()===0)await jgbUpdateInsightHistory(s);window.jgbInsightState=s;renderInsight(s);jgbRenderMonthlyYearly(s);const c=document.getElementById("jgbInsightClock");if(c)c.textContent=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"})}catch(e){showError(e)}};tick();window.jgbInsightTimer=setInterval(tick,10000)}
+function jgbInsight(){const app=document.getElementById("app");app.innerHTML=`<div class="insightPage"><header class="insightHeader"><div><div class="insightBrand">장군봉 배드민턴 · 운영 인사이트</div><div class="insightSub">실시간 운영 · QR 대기 · 일일보고서 · 월별·연도별 집계</div></div><div class="insightHeadRight"><span id="jgbInsightClock"></span><button class="insightHeadBtn" onclick="jgbDailyReport()">📄 일일보고서</button><button class="insightHeadBtn" onclick="jgbDownloadMonthly()">📊 엑셀</button><button class="insightHeadBtn" onclick="resetOperationalState()">↻ 리셋</button><button class="insightHeadBtn" onclick="location.href='?page=admin'">관리자</button></div></header><div class="insightLayout"><aside class="insightSide"><h2>운영 관리</h2><a class="insightNav" href="?page=management&view=display">실시간 현황</a><a class="insightNav" href="?page=admin">대기·코트 관리</a><a class="insightNav on" href="?page=insight">운영 인사이트</a><a class="insightNav" href="?page=admin#gameTime">설정 관리</a></aside><main class="insightMain"><div id="jgbInsightBody">불러오는 중...</div><div id="jgbHistoryBody"></div></main></div></div>`;if(window.jgbInsightTimer)clearInterval(window.jgbInsightTimer);const tick=async()=>{try{const s=await advance(await get(),true);if(!window.jgbInsightHistoryBooted){await jgbUpdateInsightHistory(s,true);window.jgbInsightHistoryBooted=true}else if(new Date().getSeconds()===0)await jgbUpdateInsightHistory(s);window.jgbInsightState=s;renderInsight(s);jgbRenderMonthlyYearly(s);const c=document.getElementById("jgbInsightClock");if(c)c.textContent=new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"})}catch(e){showError(e)}};tick();window.jgbInsightTimer=setInterval(tick,1000)}
 function renderInsight(s){const body=document.getElementById("jgbInsightBody");if(!body)return;const now=jgbKstNow(),m=jgbInsightMetrics(s,now),sch=m.sch,data=jgbHourlyData(m,now),maxTeams=Math.max(1,...data.map(x=>x.teams)),activeCount=(s.courts||[]).filter(c=>c.active).length,status=m.elapsed<=0?"운영 전":m.elapsed>=sch.minutes?"운영 종료":"운영 중";const bars=data.map(x=>`<div class="insightBarCol"><div class="insightBarValue">${x.teams}</div><div class="insightBar" style="height:${Math.max(4,x.teams/maxTeams*150)}px"></div><div class="insightBarLabel">${x.label}</div></div>`).join("");const start=jgbClockDate(now,sch.start),end=jgbClockDate(now,sch.end);const courtRows=(s.courts||[]).slice(0,5).map(c=>{let used=0;for(const r of m.recs.filter(r=>Number(r.court)===Number(c.id))){if(r.startAt)used+=jgbOverlapMinutes(r.startAt,r.endedAt||r.endAt||Date.now(),start,end)}const pct=Math.min(100,used/Math.max(1,m.elapsed)*100);return `<div class="insightCourt"><div class="insightCourtName">${c.id}번 코트</div><div class="insightTrack"><div class="insightFill" style="width:${pct}%"></div></div><div class="insightPct">${Math.round(pct)}%</div></div>`}).join("");body.innerHTML=`<div class="insightToolbar"><button class="reportBtn" onclick="jgbDailyReport()">📄 일일 운영보고서</button><button class="reportBtn" onclick="jgbDownloadMonthly()">📊 월별 엑셀</button><button class="reportBtn secondary" onclick="jgbDownloadYearly()">📊 연도별 엑셀</button><button class="reportBtn danger" onclick="resetOperationalState()">↻ 오늘 운영 리셋</button></div><div class="insightKpis"><div class="insightKpi"><div class="insightKpiTitle">오늘 운영 기준</div><div class="insightKpiValue">${sch.label}</div><div class="insightKpiSub">${sch.courts}코트 · ${sch.start} ~ ${sch.end} · ${jgbFormatMin(sch.minutes)}</div></div><div class="insightKpi"><div class="insightKpiTitle">이용 팀</div><div class="insightKpiValue">${m.recs.filter(r=>!r._waiting).length}팀</div><div class="insightKpiSub">오늘 현재 기준</div></div><div class="insightKpi"><div class="insightKpiTitle">게임 수</div><div class="insightKpiValue">${m.games}게임</div><div class="insightKpiSub">완료 + 현재 이용</div></div><div class="insightKpi"><div class="insightKpiTitle">평균 대기</div><div class="insightKpiValue">${Math.round(m.avgWait)}분</div><div class="insightKpiSub">등록 → 게임 시작 기준</div></div><div class="insightKpi"><div class="insightKpiTitle">QR 대기</div><div class="insightKpiValue">${m.qr}건</div><div class="insightKpiSub">현재 대기 ${m.queueCount}팀 · 가동률 ${Math.round(m.utilElapsed)}%</div></div></div><div class="insightGrid"><section class="insightPanel"><h2>시간대별 이용 현황 <span class="insightHint">오늘</span></h2><div class="insightChart">${bars}</div><div class="insightNotice"><b>${sch.label}</b> 기준 · 평일 19:00~21:50 / 주말·공휴일 16:00~21:50</div></section><section class="insightPanel"><h2>5코트 가동 현황</h2>${courtRows}<div class="insightStatus">${status} · ${m.elapsed<=0?sch.start+"부터 운영 시작":m.elapsed>=sch.minutes?"오늘 운영시간 종료":jgbFormatMin(m.elapsed)+" 경과"}</div></section><section class="insightPanel"><h2>오늘 운영 기준</h2><div class="insightSchedule"><div class="insightScheduleBox"><b>평일</b><span>5코트 운영<br>19:00 ~ 21:50<br>2시간 50분</span></div><div class="insightScheduleBox weekend"><b>주말·공휴일</b><span>5코트 운영<br>16:00 ~ 21:50<br>5시간 50분</span></div></div><div class="insightNotice">오늘은 <b>${sch.label}</b> 기준으로 자동 계산 중입니다.</div></section></div><div class="insightGrid"><section class="insightPanel"><h2>운영 시간별 효율 비교</h2><table class="insightTable"><thead><tr><th>구분</th><th>코트</th><th>운영시간</th><th>총 운영시간</th></tr></thead><tbody><tr><td>평일</td><td>5코트</td><td>19:00~21:50</td><td>2시간 50분</td></tr><tr><td>주말·공휴일</td><td>5코트</td><td>16:00~21:50</td><td>5시간 50분</td></tr></tbody></table></section><section class="insightPanel"><h2>오늘 운영 지표</h2><table class="insightTable"><tbody><tr><th>평균 대기</th><td>${Math.round(m.avgWait)}분</td></tr><tr><th>운영 경과</th><td>${jgbFormatMin(m.elapsed)} / ${jgbFormatMin(sch.minutes)}</td></tr><tr><th>실제 코트 사용</th><td>${jgbFormatMin(m.used)}</td></tr><tr><th>QR 등록</th><td>${m.qr}건</td></tr><tr><th>대기 팀</th><td>${m.queueCount}팀</td></tr><tr><th>이용 중 코트</th><td>${activeCount}개</td></tr></tbody></table></section><section class="insightPanel"><h2>월별·연도별 집계</h2><div class="insightNotice">아래 표에서 월별·연도별 이용팀, 게임, QR 등록, 평균 대기, 평균 가동률을 확인할 수 있습니다.</div><div class="insightStatus">신규 적용일부터 운영 이력이 누적됩니다.</div></section></div><div class="insightFoot"><span>장군봉 배드민턴 운영 인사이트 · ${jgbDateKey(now)}</span><span>실시간 · QR 대기 · 일일/월별/연도별</span></div>`}
 
 function admin(){
   const app=document.getElementById("app");
-  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=management&view=display">고객 화면으로</a></div></header><div class="admin admin-clean"><aside class="side"><h2>관리자 모드</h2><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main admin-main-clean"><section class="panel admin-lock-panel" id="courtManage"><div class="admin-section-head"><div><h2>코트 사용 · 잠금</h2><div class="hint">중간 코트를 막아야 할 때 가장 먼저 여기서 조작합니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel force-panel" id="forceCustomers"><div class="admin-section-head force-head"><div><h2>고객 예약 강제퇴장</h2><div class="hint">기존 대기 화면과 같은 고객 정보를 표시하고, 각 고객 오른쪽의 <b>✕</b>로 해당 고객만 강제 퇴장합니다.</div></div><div class="force-badge">1~5번 코트</div></div><div class="force-grid" id="qq"></div></section><section class="panel compact-settings" id="settingsAll"><div class="admin-section-head"><div><h2>운영 설정</h2><div class="hint">기존 설정 기능은 그대로 유지합니다.</div></div></div><div class="settings-grid-clean"><div class="controlBox" id="gameTime"><h3>게임 시간</h3><div class="setting-lines"><div><span>4인 복식</span><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div><span>2인 단식</span><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div><span>난타</span><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div><button class="save adminSave" onclick="saveGameTime()">게임 시간 저장</button></div><div class="controlBox" id="waitMax"><h3>대기 정원</h3><div class="hint setting-note">전체 코트 동일 적용 · 1~20명</div><div class="big-stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div><button class="save adminSave" onclick="saveWaitMax()">대기 정원 저장</button></div><div class="controlBox" id="reRegister"><h3>재등록 제한</h3><div class="hint setting-note">게임 종료 후 다시 예약 가능 시간</div><div class="big-stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div><button class="save adminSave" onclick="saveCooldown()">재등록 시간 저장</button></div></div><div class="admin-actions"><button class="save secondary-save" type="button" onclick="saveAdmin()">전체 설정 저장</button><button class="save reset-btn" type="button" onclick="resetOperationalState()">오늘 운영 상태 초기화</button><button class="save history-btn" type="button" onclick="resetHistoryOnServer()">이용 기록 수동 삭제</button></div></section></main></div>`;
+  app.innerHTML=`<header class="header"><div><div class="brand">장군봉 통합관리</div><div class="sub">통합관리 시스템</div></div><div class="adminTop"><a href="?page=management&view=display">고객 화면으로</a></div></header><div class="admin"><div id="viewSwitch" class="view-switch" aria-label="관리자 화면 전환">
+  <button id="switchCustomer" type="button" onclick="switchManagementView('display')">고객용</button>
+  <button id="switchAdmin" class="secondary" type="button" onclick="switchManagementView('admin')">관리자 모드</button>
+</div>
+<aside class="side"><h2>관리자 모드</h2><a class="nav" href="?page=insight">운영 인사이트</a><a class="nav on" href="#courtManage">코트 관리</a><a class="nav" href="#gameTime">게임 시간 설정</a><a class="nav" href="#waitMax">대기 정원 설정</a><a class="nav" href="#reRegister">재등록 제한 설정</a></aside><main class="main"><section class="panel" id="courtManage"><div class="adminSectionTitle"><div><h2>코트 관리</h2><div class="hint">사용하지 않을 코트는 잠금할 수 있습니다.</div></div></div><div class="lockGrid" id="cs"></div></section><section class="panel" id="gameTime"><div class="adminSectionTitle"><div><h2>게임 시간 설정</h2><div class="hint">기본 15분 · 1분씩 조절 · 최대 20분</div></div></div><div class="controlRow"><div class="controlBox"><h3>4인 복식</h3><div class="stepper"><button onclick="changeTime('4인 복식',-1)">−</button><strong id="g2">15</strong><span>분</span><button onclick="changeTime('4인 복식',1)">+</button></div></div><div class="controlBox"><h3>2인 단식</h3><div class="stepper"><button onclick="changeTime('2인 단식',-1)">−</button><strong id="g3">15</strong><span>분</span><button onclick="changeTime('2인 단식',1)">+</button></div></div><div class="controlBox"><h3>난타</h3><div class="stepper"><button onclick="changeTime('난타',-1)">−</button><strong id="g1">15</strong><span>분</span><button onclick="changeTime('난타',1)">+</button></div></div></div><button class="save adminSave" onclick="saveGameTime()">게임 시간 변경사항 저장</button></section><section class="panel" id="waitMax"><div class="adminSectionTitle"><div><h2>대기 정원 설정</h2><div class="hint">전체 코트에 동일하게 적용됩니다.</div></div></div><div class="controlRow"><div class="controlBox"><h3>대기자 최대 정원</h3><div class="hint" style="margin-bottom:10px">전체 코트 동일 적용 · 1명~20명 (사람 수)</div><div class="stepper"><button onclick="changeMax(-1)">−</button><strong id="mx">5</strong><span>명</span><button onclick="changeMax(1)">+</button></div></div></div><button class="save adminSave" onclick="saveWaitMax()">변경사항 저장</button></section><section class="panel cooldownPanel" id="reRegister"><div class="cooldownInner"><div><div class="cooldownTitle">재등록 제한 시간 설정 (대기 후 다시 예약 가능 시간)</div><div class="cooldownHint">게임 종료 후 다시 예약할 수 있는 시간을 1분~20분으로 조절합니다.</div><div class="cooldownBox"><div class="stepper"><button onclick="changeCooldown(-1)">−</button><strong id="rc">5</strong><span>분</span><button onclick="changeCooldown(1)">+</button></div></div><button class="save adminSave" onclick="saveCooldown()">변경사항 저장</button><button class="save adminSave jgbOperationalReset" type="button" onclick="resetOperationalState()">오늘 운영 상태 초기화</button><button class="save adminSave jgbHistoryManual" type="button" onclick="resetHistoryOnServer()">이용 기록 수동 삭제</button></div><div class="cooldownInfo"><b>ⓘ 안내</b><br>• 설정한 시간이 지나야 같은 스마트폰에서 다시 예약할 수 있습니다.<br>• 예) <b>6분</b>으로 설정하면 게임 종료 후 6분이 지나야 재등록 가능합니다.<br>• 고객용 화면의 안내 문구도 설정값에 맞춰 자동으로 표시됩니다.</div></div></section>
+<section class="panel adminTable"><h2>현재 대기 현황</h2><div class="grid" id="qq"></div></section></main></div>`;
   adminSettingsDirty=false;
   renderAdmin(cloneDef()); subAdmin(renderAdmin);
 }
@@ -2553,11 +2543,7 @@ function renderAdmin(s){
       +'</tbody></table></div>'
     : '<div style="padding:22px;text-align:center;color:#718096;border:1px dashed #cbd5e1;border-radius:10px">오늘 이용 기록이 없습니다.</div>';
 
-  qq.innerHTML=s.courts.slice(0,5).map(c=>{
-    const active=c.active?`<div class="force-row active-row"><div class="force-info"><b class="force-no">이용중</b><strong>${esc(c.active.nickname||'고객')}</strong><span>${esc(c.active.game||'')}</span></div><button class="force-x" type="button" onclick="force(${c.id})">✕</button></div>`:'<div class="empty-row">현재 이용 중인 고객 없음</div>';
-    const queue=(c.queue||[]).map((x,i)=>`<div class="force-row"><div class="force-info"><b class="force-no">${i+1}</b><strong>${esc(x.nickname||'고객')}</strong><span>${esc(x.game||'')}</span></div><button class="force-x" type="button" onclick="forceCustomer(${c.id},${JSON.stringify(x.ticket||'')})">✕</button></div>`).join('');
-    return `<div class="force-card court-${c.id}"><div class="force-card-head"><span>${c.id}번 코트</span><b>${(c.active?1:0)+(c.queue||[]).length}명</b></div><div class="force-list">${active}${queue}</div></div>`;
-  }).join('');
+  qq.innerHTML=s.courts.map(c=>'<div class="card"><h3>'+c.id+'번 코트</h3>'+(c.active?'<p>이용 중: '+esc(c.active.nickname)+' <button class="smallbtn" onclick="force('+c.id+')">강제 퇴장</button></p>':'<p>이용 중 없음</p>')+(c.queue||[]).map((x,i)=>'<p>'+String(i+1)+'. '+esc(x.nickname)+' / '+esc(x.game)+'</p>').join('')+'</div>').join('');
 }
 async function resetHistory(){
   if(!confirm("오늘 이용 기록을 모두 초기화할까요?\n현재 이용 중/대기 중인 팀은 삭제하지 않습니다."))return;
@@ -2672,29 +2658,13 @@ async function saveAdmin(){
   }catch(e){showError(e)}
 }
 async function block(id,b){
-  const buttons=[...document.querySelectorAll('#cs button')];
-  buttons.forEach(x=>x.disabled=true);
   try{
     let s=await get();
-    if(!s || !Array.isArray(s.courts)) s=cloneDef();
-    const c=s.courts.find(c=>Number(c.id)===Number(id));
-    if(!c) throw new Error(id+'번 코트 정보를 찾지 못했습니다.');
-    c.blocked=Boolean(b);
+    const c=s.courts.find(c=>c.id===id);
+    if(!c)return;
+    c.blocked=!!b;
     await save(s);
-    const saved=await get();
-    const savedCourt=(saved.courts||[]).find(x=>Number(x.id)===Number(id));
-    if(!savedCourt || Boolean(savedCourt.blocked)!==Boolean(b)){
-      throw new Error('서버 저장 확인에 실패했습니다. Supabase waiting_state 권한과 저장 상태를 확인해주세요.');
-    }
-    renderAdmin(saved);
-    if(window.jgbInsightState){ window.jgbInsightState=saved; }
-    alert(id+'번 코트 '+(b?'잠금':'잠금 해제')+' 완료');
-  }catch(e){
-    showError(e);
-    alert('코트 상태 변경 실패: '+(e?.message||e));
-  }finally{
-    buttons.forEach(x=>x.disabled=false);
-  }
+  }catch(e){showError(e)}
 }
 window.jgbBlock=function(id,b){ return block(id,b); };
 async function force(id){
@@ -2712,10 +2682,6 @@ async function force(id){
     await advance(s); await save(s);
   }catch(e){showError(e)}
 }
-
-
-async function forceCustomer(courtId,ticket){
-  try{let s=await get(),c=s.courts.find(c=>Number(c.id)===Number(courtId));if(!c)return;const q=(c.queue||[]).find(x=>x.ticket===ticket);if(!q)return;if(!confirm((q.nickname||'고객')+' 고객을 강제 퇴장할까요?'))return;s.finished=s.finished||{};resetHistoryForNewDay(s);const endedAt=Date.now(),record={...q,court:c.id,endedAt,deviceId:(q.deviceId||getDeviceToken()),forced:true,reRegisterUntil:endedAt+getReRegisterMinutes(s)*60000};s.finished[ticket]=record;s.finished._history=s.finished._history||{};s.finished._history[ticket]=record;c.queue=(c.queue||[]).filter(x=>x.ticket!==ticket);await advance(s);await save(s);renderAdmin(s)}catch(e){showError(e)}}
 
 
 function management(){
@@ -2741,6 +2707,7 @@ function management(){
 (function(){
   const r=route();
   if(r==="management")management();
+  else if(r==="insight")jgbInsight();
   else if(r==="admin")admin();
   else if(r==="register")register();
   else if(r==="waiting")waiting();
@@ -3206,10 +3173,7 @@ if(i<5)x.style.setProperty('grid-area',['a','b','c','d','e'][i],'important');
 }
 jgbLock();
 window.addEventListener('load',jgbLock);
-const jgbWaitGrid=document.querySelector('.waitGrid');
-if(jgbWaitGrid && window.MutationObserver){
-  new MutationObserver(()=>jgbLock()).observe(jgbWaitGrid,{childList:true});
-}
+setInterval(jgbLock,1000);
 })();
 </script>
 
