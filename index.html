@@ -1626,46 +1626,19 @@ const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
 const SB_HEADERS={"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"};
 async function sbGet(){
   const url=SUPABASE_URL+"/rest/v1/waiting_state?id=eq.jgb_waiting_state&select=id,settings,max_per_court,re_register_minutes,finished,courts";
-  let lastError=null;
-  /* 일시적인 통신 끊김/서버 5xx에 대비해 읽기 요청만 최대 3회 재시도합니다.
-     등록·저장 요청은 중복 실행을 피하기 위해 자동 재시도하지 않습니다. */
-  for(let attempt=1;attempt<=3;attempt++){
-    try{
-      const controller=new AbortController();
-      const timeout=setTimeout(()=>controller.abort(),12000);
-      let r;
-      try{
-        r=await fetch(url,{
-          method:"GET",
-          headers:{
-            "apikey":SUPABASE_ANON_KEY,
-            "Authorization":"Bearer "+SUPABASE_ANON_KEY,
-            "Accept":"application/json"
-          },
-          cache:"no-store",
-          signal:controller.signal
-        });
-      }finally{clearTimeout(timeout);}
-      const text=await r.text();
-      if(!r.ok){
-        const e=new Error("조회 오류 "+r.status+" : "+text);
-        e.status=r.status;
-        if(r.status>=500 && attempt<3){lastError=e;await new Promise(resolve=>setTimeout(resolve,700*attempt));continue;}
-        throw e;
-      }
-      const rows=text?JSON.parse(text):[];
-      return rows[0]||null;
-    }catch(e){
-      lastError=e;
-      const retryable=!e.status || e.status>=500;
-      if(!retryable || attempt===3)break;
-      await new Promise(resolve=>setTimeout(resolve,700*attempt));
-    }
-  }
-  if(lastError?.name==="AbortError") throw new Error("서버 응답 시간 초과(12초). Supabase 연결 상태를 확인해 주세요.");
-  if(lastError?.status>=500) throw new Error("Supabase 서버 응답 오류("+lastError.status+"). 잠시 후 다시 시도해 주세요.");
-  if(lastError && !lastError.status) throw new Error("서버 연결 실패: "+(lastError.message||"네트워크 또는 CORS 연결을 확인해 주세요."));
-  throw lastError||new Error("데이터 조회에 실패했습니다.");
+  const r=await fetch(url,{
+    method:"GET",
+    headers:{
+      "apikey":SUPABASE_ANON_KEY,
+      "Authorization":"Bearer "+SUPABASE_ANON_KEY,
+      "Accept":"application/json"
+    },
+    cache:"no-store"
+  });
+  const text=await r.text();
+  if(!r.ok) throw new Error("조회 오류 "+r.status+" : "+text);
+  const rows=text?JSON.parse(text):[];
+  return rows[0]||null;
 }
 async function sbUpsert(row){
   /* 한 번의 upsert로 저장하고, 저장 결과 전체를 다시 전송하지 않아 egress를 줄입니다. */
@@ -3409,87 +3382,7 @@ async function resetHistoryOnServer(){
 })();
 </script>
 
-<script id="JGB_ACCESS_GATE">
-(function(){
-  const AUTH_KEY="jgb_route_auth_v1";
-  const SUPABASE_URL="https://jvurwckjumnzzecazgku.supabase.co";
-  const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
-
-  function targetRoute(){
-    const p=new URLSearchParams(location.search);
-    const page=p.get("page")||"";
-    if(page==="admin" || page==="insight") return "admin";
-    if(page==="management" && (p.get("view")||"display")==="display") return "display";
-    return "";
-  }
-
-  function authKey(route){ return AUTH_KEY+"_"+route; }
-
-  function isAuthed(route){
-    return localStorage.getItem(authKey(route))==="ok";
-  }
-
-  function showGate(route){
-    if(document.getElementById("jgbAccessGate")) return;
-    const gate=document.createElement("div");
-    gate.id="jgbAccessGate";
-    gate.style.cssText="position:fixed;inset:0;z-index:2147483647;background:#fff;display:flex;align-items:center;justify-content:center;font-family:inherit;";
-    gate.innerHTML='<div style="width:min(420px,88vw);text-align:center;padding:28px;box-sizing:border-box;">'
-      +'<div style="font-size:28px;margin-bottom:12px;">🔒</div>'
-      +'<div style="font-size:22px;font-weight:700;margin-bottom:8px;">접근 확인</div>'
-      +'<div style="font-size:14px;margin-bottom:18px;">비밀번호를 입력해주세요.</div>'
-      +'<input id="jgbGatePw" type="password" inputmode="numeric" autocomplete="off" style="width:100%;box-sizing:border-box;padding:12px;font-size:18px;text-align:center;border:1px solid #ccc;border-radius:8px;">'
-      +'<button id="jgbGateBtn" type="button" style="width:100%;margin-top:12px;padding:12px;font-size:16px;border:0;border-radius:8px;cursor:pointer;">확인</button>'
-      +'<div id="jgbGateErr" style="min-height:20px;margin-top:10px;font-size:13px;"></div>'
-      +'</div>';
-    document.body.appendChild(gate);
-
-    const input=gate.querySelector("#jgbGatePw");
-    const btn=gate.querySelector("#jgbGateBtn");
-    const err=gate.querySelector("#jgbGateErr");
-
-    async function verify(){
-      btn.disabled=true;
-      err.textContent="";
-      try{
-        const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/verify_jgb_route_password",{
-          method:"POST",
-          headers:{
-            "apikey":SUPABASE_ANON_KEY,
-            "Authorization":"Bearer "+SUPABASE_ANON_KEY,
-            "Content-Type":"application/json"
-          },
-          body:JSON.stringify({p_route:route,p_password:input.value})
-        });
-        const raw=await r.text();
-        let ok=false;
-        try{ ok=raw==="true" || JSON.parse(raw)===true; }catch(_){}
-        if(!r.ok || !ok) throw new Error("비밀번호가 올바르지 않습니다.");
-        localStorage.setItem(authKey(route),"ok");
-        gate.remove();
-      }catch(e){
-        err.textContent=e.message||"인증에 실패했습니다.";
-        input.value="";
-        input.focus();
-      }finally{
-        btn.disabled=false;
-      }
-    }
-    btn.addEventListener("click",verify);
-    input.addEventListener("keydown",e=>{if(e.key==="Enter")verify()});
-    input.focus();
-  }
-
-  function run(){
-    const route=targetRoute();
-    if(!route || isAuthed(route)) return;
-    showGate(route);
-  }
-
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",run);
-  else run();
-})();
-</script>
+<!-- JGB_ACCESS_GATE: 사용자 요청에 따라 비밀번호 접근 차단 기능 비활성화 -->
 
 <script id="JGB_PAGE_CLASS_MARKER">
 (function(){
