@@ -1626,19 +1626,46 @@ const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
 const SB_HEADERS={"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"};
 async function sbGet(){
   const url=SUPABASE_URL+"/rest/v1/waiting_state?id=eq.jgb_waiting_state&select=id,settings,max_per_court,re_register_minutes,finished,courts";
-  const r=await fetch(url,{
-    method:"GET",
-    headers:{
-      "apikey":SUPABASE_ANON_KEY,
-      "Authorization":"Bearer "+SUPABASE_ANON_KEY,
-      "Accept":"application/json"
-    },
-    cache:"no-store"
-  });
-  const text=await r.text();
-  if(!r.ok) throw new Error("조회 오류 "+r.status+" : "+text);
-  const rows=text?JSON.parse(text):[];
-  return rows[0]||null;
+  let lastError=null;
+  /* 일시적인 통신 끊김/서버 5xx에 대비해 읽기 요청만 최대 3회 재시도합니다.
+     등록·저장 요청은 중복 실행을 피하기 위해 자동 재시도하지 않습니다. */
+  for(let attempt=1;attempt<=3;attempt++){
+    try{
+      const controller=new AbortController();
+      const timeout=setTimeout(()=>controller.abort(),12000);
+      let r;
+      try{
+        r=await fetch(url,{
+          method:"GET",
+          headers:{
+            "apikey":SUPABASE_ANON_KEY,
+            "Authorization":"Bearer "+SUPABASE_ANON_KEY,
+            "Accept":"application/json"
+          },
+          cache:"no-store",
+          signal:controller.signal
+        });
+      }finally{clearTimeout(timeout);}
+      const text=await r.text();
+      if(!r.ok){
+        const e=new Error("조회 오류 "+r.status+" : "+text);
+        e.status=r.status;
+        if(r.status>=500 && attempt<3){lastError=e;await new Promise(resolve=>setTimeout(resolve,700*attempt));continue;}
+        throw e;
+      }
+      const rows=text?JSON.parse(text):[];
+      return rows[0]||null;
+    }catch(e){
+      lastError=e;
+      const retryable=!e.status || e.status>=500;
+      if(!retryable || attempt===3)break;
+      await new Promise(resolve=>setTimeout(resolve,700*attempt));
+    }
+  }
+  if(lastError?.name==="AbortError") throw new Error("서버 응답 시간 초과(12초). Supabase 연결 상태를 확인해 주세요.");
+  if(lastError?.status>=500) throw new Error("Supabase 서버 응답 오류("+lastError.status+"). 잠시 후 다시 시도해 주세요.");
+  if(lastError && !lastError.status) throw new Error("서버 연결 실패: "+(lastError.message||"네트워크 또는 CORS 연결을 확인해 주세요."));
+  throw lastError||new Error("데이터 조회에 실패했습니다.");
 }
 async function sbUpsert(row){
   /* 한 번의 upsert로 저장하고, 저장 결과 전체를 다시 전송하지 않아 egress를 줄입니다. */
