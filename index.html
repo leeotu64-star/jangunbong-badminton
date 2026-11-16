@@ -1610,7 +1610,7 @@ body:has(.customerHeader) .waitRow > * {
 <div id="app"></div>
 <script>
 /* Supabase 요청 절감: 고객/대기 화면 자동 조회를 60초로 완화하고 오류 시 조회 간격을 단계적으로 늘림하고, 등록 화면 최초 설정 조회를 1회로 통합합니다.
-   관리자 자동 조회는 60초 유지. 서버 자체의 연결 풀 장애는 이 조치만으로 복구되지 않을 수 있습니다. */
+   관리자 자동 조회는 2분부터 시작하고 오류 시 최대 8분까지 간격을 늘립니다. 서버 자체의 연결 풀 장애는 이 조치만으로 복구되지 않을 수 있습니다. */
 /* Supabase 설정: 아래 2개만 본인 프로젝트 값으로 교체 */
 const SUPABASE_URL="https://jvurwckjumnzzecazgku.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
@@ -2018,10 +2018,13 @@ function sub(fn){
 let adminSettingsDirty=false;
 function subAdmin(fn){
   if(liveTimer) clearInterval(liveTimer);
+  let failures=0;
   const refresh=async()=>{
     try{
       const s=await get();
       fn(s);
+      failures=0;
+      liveRefreshMs=120000;
       /* +/−로 수정 중이면 입력값은 renderAdmin이 덮어쓰지 않게 유지 */
       if(adminSettingsDirty){
         const g1=document.getElementById("g1"),g2=document.getElementById("g2"),g3=document.getElementById("g3"),mx=document.getElementById("mx"),rc=document.getElementById("rc");
@@ -2032,10 +2035,13 @@ function subAdmin(fn){
         if(rc)rc.textContent=adminDraft.rc;
       }
     }catch(e){
-      showError(e);
+      failures++;
+      liveRefreshMs=Math.min(600000,120000*Math.pow(2,Math.min(failures-1,2)));
+      console.warn("관리자 자동조회 실패 - 현재 화면 유지, 다음 조회 간격 "+Math.round(liveRefreshMs/60000)+"분:",e);
     }
+    if(liveTimer){clearInterval(liveTimer);liveTimer=setInterval(guardedLiveRefresh,liveRefreshMs);}
   };
-  liveRefreshMs=60000;
+  liveRefreshMs=120000;
   liveRefreshFn=refresh;
   restartLiveRefresh(true);
 }
@@ -2622,9 +2628,8 @@ async function saveGameTime(){
     s.settings["2인 단식"]=Math.max(1,Math.min(20,Number(document.getElementById("g3").textContent||15)));
     await saveWithSettings(s);
     adminSettingsDirty=false;
-    const saved=await get();
-    renderAdmin(saved);
-    alert("게임 시간 설정이 저장되었습니다.");
+    renderAdmin(s);
+    alert("게임 시간 설정 저장 요청을 완료했습니다.");
   }catch(e){showError(e)}
 }
 
@@ -2639,12 +2644,8 @@ async function saveWaitMax(){
 
     await saveWithSettings(s);
     adminSettingsDirty=false;
-
-    // 저장 후 서버값으로 다시 읽어 5명으로 되돌아가는 현상 방지
-    const saved=await get();
-    renderAdmin(saved);
-
-    alert("대기 정원 설정이 저장되었습니다. 현재 정원: "+Number(saved.max_per_court||value)+"명");
+    renderAdmin(s);
+    alert("대기 정원 저장 요청을 완료했습니다. 설정값: "+value+"명");
   }catch(e){showError(e)}
 }
 
@@ -2654,9 +2655,8 @@ async function saveCooldown(){
     s.re_register_minutes=Math.max(1,Math.min(20,Number(document.getElementById("rc").textContent||5)));
     await saveWithSettings(s);
     adminSettingsDirty=false;
-    const saved=await get();
-    renderAdmin(saved);
-    alert("재등록 제한 시간이 저장되었습니다.");
+    renderAdmin(s);
+    alert("재등록 제한 시간 저장 요청을 완료했습니다.");
   }catch(e){showError(e)}
 }
 
@@ -2671,13 +2671,11 @@ async function saveAdmin(){
     s.max_per_court=Math.max(1,Math.min(20,Number(document.getElementById("mx").textContent||5)));
     s.re_register_minutes=reRegisterMinutes;
 
-    // 게임시간/정원과 함께 재등록 제한시간도 waiting_state에 확실히 저장
+    // 게임시간/정원과 함께 재등록 제한시간도 waiting_state에 한 번 저장
     await save(s);
-
-    // 저장 직후 DB에서 다시 읽어 화면을 갱신하여 5분으로 되돌아가는 현상 방지
-    const saved=await get();
-    renderAdmin(saved);
-    alert("변경사항이 저장되었습니다.");
+    adminSettingsDirty=false;
+    renderAdmin(s);
+    alert("전체 설정 저장 요청을 완료했습니다.");
   }catch(e){showError(e)}
 }
 async function block(id,b){
@@ -2690,13 +2688,8 @@ async function block(id,b){
     if(!c) throw new Error(id+'번 코트 정보를 찾지 못했습니다.');
     c.blocked=Boolean(b);
     await save(s);
-    const saved=await get();
-    const savedCourt=(saved.courts||[]).find(x=>Number(x.id)===Number(id));
-    if(!savedCourt || Boolean(savedCourt.blocked)!==Boolean(b)){
-      throw new Error('서버 저장 확인에 실패했습니다. Supabase waiting_state 권한과 저장 상태를 확인해주세요.');
-    }
-    renderAdmin(saved);
-    alert(id+'번 코트 '+(b?'잠금':'잠금 해제')+' 완료');
+    renderAdmin(s);
+    alert(id+'번 코트 '+(b?'잠금':'잠금 해제')+' 저장 요청을 완료했습니다.');
   }catch(e){
     showError(e);
     alert('코트 상태 변경 실패: '+(e?.message||e));
