@@ -2150,23 +2150,7 @@ async function register(){
   const app=document.getElementById("app");
   if(!app)return;
 
-  try{
-    const s0=await get();
-    const fin0=findFinishedForDevice(s0,getDeviceToken());
-    if(fin0){
-      const until0=getReRegisterUntil(s0,fin0.fin);
-      if(until0>Date.now()){
-        renderReRegisterWait(app,until0);
-        return;
-      }
-      delete s0.finished[fin0.ticket];
-      if(s0.finished._history)delete s0.finished._history[fin0.ticket];
-      await save(s0);
-    }
-  }catch(e){
-    console.error("재등록 확인 오류:",e);
-  }
-
+  /* 서버 응답을 기다리지 않고 고객 등록 화면부터 즉시 표시합니다. */
   app.innerHTML=`
   <div style="min-height:100vh;background:#f4f7fb;padding:14px 12px 28px">
     <div style="max-width:430px;margin:0 auto">
@@ -2210,6 +2194,26 @@ async function register(){
     </div>
   </div>`;
   loadRegisterDuration();
+
+  /* 재등록 제한 확인은 화면 표시 이후 비동기로 처리합니다.
+     서버가 지연되거나 장애가 있어도 등록 화면 자체는 백지로 남지 않습니다. */
+  try{
+    const s0=await get();
+    const fin0=findFinishedForDevice(s0,getDeviceToken());
+    if(fin0){
+      const until0=getReRegisterUntil(s0,fin0.fin);
+      if(until0>Date.now()){
+        renderReRegisterWait(app,until0);
+        return;
+      }
+      delete s0.finished[fin0.ticket];
+      if(s0.finished._history)delete s0.finished._history[fin0.ticket];
+      await save(s0);
+    }
+  }catch(e){
+    console.error("재등록 확인 오류:",e);
+    /* 등록 폼은 유지합니다. 실제 등록 시 서버 연결 상태를 다시 확인합니다. */
+  }
 }
 
 async function loadRegisterDuration(){
@@ -2716,7 +2720,9 @@ function management(){
   else if(r==="register")register();
   else if(r==="waiting")waiting();
   else customer();
-  ensure().catch(e=>console.error(e));
+  /* 고객 등록 페이지는 register()에서 필요한 데이터를 비동기로 조회하므로
+     별도의 ensure() 조회/초기 저장을 중복 실행하지 않습니다. */
+  if(r!=="register") ensure().catch(e=>console.error(e));
 })();
 </script>
 
