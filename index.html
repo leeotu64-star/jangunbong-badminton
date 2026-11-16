@@ -1609,17 +1609,30 @@ body:has(.customerHeader) .waitRow > * {
 <style id="adminForceCleanFinal">.admin-main-clean{padding:16px 20px 28px!important;max-width:1800px!important}.admin-clean .panel{margin-bottom:10px!important;padding:12px 14px!important;border-radius:11px!important}.admin-clean .panel h2{font-size:17px!important;margin:0 0 3px!important}.admin-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}.admin-clean .hint{font-size:11px!important;margin:0!important}.admin-lock-panel .lockGrid{gap:8px!important}.admin-lock-panel .lockCard{padding:9px 10px!important;border-radius:9px!important}.admin-lock-panel .lockCard h3{font-size:15px!important;margin:0 0 4px!important}.admin-lock-panel .lockCard p{font-size:10px!important;margin:2px 0 6px!important}.admin-lock-panel .lockCard button{min-height:31px!important;padding:5px 7px!important;font-size:11px!important}.force-panel{border:2px solid #d6e1f0!important;background:#fff!important}.force-badge{background:#071b45;color:#fff;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:900;white-space:nowrap}.force-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.force-card{border:1px solid #d8e2ef;border-radius:9px;overflow:hidden;background:#f9fbfe;min-width:0}.force-card-head{height:36px;padding:0 9px;display:flex;align-items:center;justify-content:space-between;font-weight:950;font-size:14px;background:#eef4fb;border-bottom:1px solid #dbe4ef}.force-card-head b{font-size:10px;color:#64748b}.force-card.court-1 .force-card-head{border-top:3px solid #079455}.force-card.court-2 .force-card-head{border-top:3px solid #1769e8}.force-card.court-3 .force-card-head{border-top:3px solid #6734d4}.force-card.court-4 .force-card-head{border-top:3px solid #f97316}.force-card.court-5 .force-card-head{border-top:3px solid #e51d35}.force-list{padding:5px}.force-row{min-height:35px;display:flex;align-items:center;justify-content:space-between;gap:5px;padding:4px 5px;background:#fff;border:1px solid #e3e9f1;border-radius:6px;margin-bottom:4px}.force-row:last-child{margin-bottom:0}.active-row{background:#eef5ff;border-color:#bfd5f5}.force-info{display:grid;grid-template-columns:22px minmax(0,1fr);grid-template-rows:auto auto;column-gap:5px;min-width:0;align-items:center}.force-no{grid-row:1/3;font-size:10px;color:#52627a;text-align:center}.force-info strong{font-size:11px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.force-info span{font-size:9px;color:#667085;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.force-x{width:25px;height:25px;flex:0 0 25px;border:0;border-radius:6px;background:#e51e2a;color:#fff;font-size:15px;line-height:25px;font-weight:950;cursor:pointer}.empty-row{padding:10px 6px;text-align:center;color:#8a96a8;font-size:10px}.settings-grid-clean{display:grid;grid-template-columns:1.35fr .82fr .82fr;gap:8px}.settings-grid-clean .controlBox{padding:10px!important;border-radius:9px!important;background:#f9fbfe!important}.settings-grid-clean .controlBox h3{font-size:13px!important;margin:0 0 7px!important}.setting-lines>div{display:flex;align-items:center;justify-content:space-between;gap:7px;padding:3px 0;border-bottom:1px solid #e9eef5}.setting-lines>div:last-child{border-bottom:0}.setting-lines>div>span{font-size:11px;font-weight:800}.setting-lines .stepper{gap:4px!important}.setting-lines .stepper button,.big-stepper button{width:28px!important;height:27px!important;font-size:15px!important}.setting-lines .stepper strong,.big-stepper strong{min-width:27px!important;font-size:15px!important}.setting-lines .stepper span,.big-stepper span{font-size:10px}.big-stepper{display:flex;align-items:center;justify-content:center;gap:6px;margin:11px 0 8px}.setting-note{font-size:10px!important}.admin-clean .adminSave{margin-top:7px!important;padding:7px 12px!important;font-size:11px!important;min-width:0!important}.admin-actions{display:flex;align-items:center;gap:7px;margin-top:8px;flex-wrap:wrap}.admin-actions .save{padding:7px 12px;font-size:11px}.secondary-save{background:#1769e8!important}.reset-btn{background:#f57c00!important}.history-btn{background:#e51e2a!important}@media(max-width:1100px){.force-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.settings-grid-clean{grid-template-columns:1fr 1fr}.settings-grid-clean .controlBox:first-child{grid-column:1/-1}}@media(max-width:700px){.force-grid{grid-template-columns:1fr 1fr}.settings-grid-clean{grid-template-columns:1fr}.settings-grid-clean .controlBox:first-child{grid-column:auto}}</style></head><body>
 <div id="app"></div>
 <script>
-/* 사용량 절감 점검: 고객 조회 10초, 관리자 조회 60초, 인사이트는 진입 시 1회 조회 후 자동 재조회하지 않음.
-   CORS OPTIONS 요청과 Supabase 서버 로그 수집량은 HTML만으로 직접 끌 수 없으며 대시보드 설정/서버 측 원인 확인이 필요합니다. */
+/* Supabase 요청 절감: 고객/대기 화면 자동 조회를 30초로 완화하고, 등록 화면 최초 설정 조회를 1회로 통합합니다.
+   관리자 자동 조회는 60초 유지. 서버 자체의 연결 풀 장애는 이 조치만으로 복구되지 않을 수 있습니다. */
 /* Supabase 설정: 아래 2개만 본인 프로젝트 값으로 교체 */
 const SUPABASE_URL="https://jvurwckjumnzzecazgku.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_ATg2EbcVch2360kEit3w4g_IcHAWHIL";
 </script>
 <script>
 const SB_HEADERS={"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+SUPABASE_ANON_KEY,"Content-Type":"application/json"};
+/* 서버 응답이 없을 때 고객 화면과 등록 버튼이 무한 대기하지 않도록 요청 시간 제한 */
+async function sbFetchWithTimeout(url,options,timeoutMs=10000){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),timeoutMs);
+  try{
+    return await fetch(url,{...options,signal:controller.signal});
+  }catch(e){
+    if(e && e.name==="AbortError") throw new Error("서버 응답이 10초 동안 없습니다. 인터넷 또는 서버 연결을 확인한 뒤 다시 등록해주세요.");
+    throw e;
+  }finally{
+    clearTimeout(timer);
+  }
+}
 async function sbGet(){
   const url=SUPABASE_URL+"/rest/v1/waiting_state?id=eq.jgb_waiting_state&select=id,settings,max_per_court,re_register_minutes,finished,courts";
-  const r=await fetch(url,{
+  const r=await sbFetchWithTimeout(url,{
     method:"GET",
     headers:{
       "apikey":SUPABASE_ANON_KEY,
@@ -1644,7 +1657,7 @@ async function sbUpsert(row){
     courts:Array.isArray(row.courts)?row.courts:[]
   };
   const url=SUPABASE_URL+"/rest/v1/waiting_state?on_conflict=id";
-  const r=await fetch(url,{
+  const r=await sbFetchWithTimeout(url,{
     method:"POST",
     headers:{
       "apikey":SUPABASE_ANON_KEY,
@@ -1975,7 +1988,7 @@ if(!window.jgbVisibilityRefreshBound){
 }
 function sub(fn){
   if(liveTimer) clearInterval(liveTimer);
-  liveRefreshMs=10000;
+  liveRefreshMs=30000;
   liveRefreshFn=async()=>{try{fn(await advance(await get()))}catch(e){showError(e)}};
   restartLiveRefresh(true);
 }
@@ -2199,6 +2212,8 @@ async function register(){
      서버가 지연되거나 장애가 있어도 등록 화면 자체는 백지로 남지 않습니다. */
   try{
     const s0=await get();
+    registerSettingsCache=s0;
+    syncRegisterDuration();
     const fin0=findFinishedForDevice(s0,getDeviceToken());
     if(fin0){
       const until0=getReRegisterUntil(s0,fin0.fin);
@@ -2216,22 +2231,20 @@ async function register(){
   }
 }
 
-async function loadRegisterDuration(){
+let registerSettingsCache=null;
+function syncRegisterDuration(){
   const game=document.getElementById("g"), out=document.getElementById("duration");
   if(!game||!out)return;
-  let timer=null;
-  const sync=async()=>{
-    try{
-      const s=await get();
-      out.textContent=(s.settings?.[game.value]||15)+"분";
-      const cm=document.getElementById("cooldownMinutes");
-      if(cm) cm.textContent=(Number(s.re_register_minutes)||5)+"분";
-    }catch(e){}
-  };
-  game.addEventListener("change",sync);
-  await sync();
-  timer=setInterval(()=>{if(!document.hidden)sync()},60000);
-  window.addEventListener("beforeunload",()=>{if(timer)clearInterval(timer)},{once:true});
+  const settings=registerSettingsCache?.settings||{};
+  out.textContent=(settings[game.value]||15)+"분";
+  const cm=document.getElementById("cooldownMinutes");
+  if(cm) cm.textContent=(Number(registerSettingsCache?.re_register_minutes)||5)+"분";
+}
+function loadRegisterDuration(){
+  const game=document.getElementById("g");
+  if(!game)return;
+  game.addEventListener("change",syncRegisterDuration);
+  syncRegisterDuration();
 }
 
 function nextAutoLabel(state){
